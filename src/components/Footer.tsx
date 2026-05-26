@@ -1,172 +1,87 @@
 import { Link } from "react-router-dom";
-import { Shield, Mail, Linkedin, Twitter, Github } from "lucide-react";
+import { Linkedin, Twitter, Github } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary border-t border-secondary/20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="overflow-hidden group bg-[#050505] w-full border-white/5 border-t relative">
+      <div className="pointer-events-none z-0 absolute top-0 right-0 bottom-0 left-0">
+        <div className="opacity-30 absolute top-0 right-0 bottom-0 left-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/80"></div>
+      </div>
+      
+      <div className="md:px-10 max-w-7xl relative mx-auto w-full pt-16 pr-6 pb-16 pl-6 z-10 flex flex-col">
+        <div className="flex flex-col md:flex-row gap-12 md:gap-8 justify-between border-b border-white/5 pb-16">
+          
           {/* Brand */}
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <Shield className="h-8 w-8 text-secondary" />
-              <span className="text-xl font-bold text-primary-foreground">
-                Cy<span className="text-secondary">Def</span>
-              </span>
+          <div className="flex flex-col gap-4 max-w-sm">
+            <Link to="/" className="flex items-center gap-3 group cursor-pointer">
+              <div className="flex bg-gradient-to-tr from-orange-500 to-amber-500 w-8 h-8 rounded-full items-center justify-center relative">
+                <div className="w-2.5 h-2.5 bg-black rounded-full relative"></div>
+              </div>
+              <span className="text-xl font-bold tracking-tight text-white">CyDef<span className="text-orange-500">Nexus</span></span>
             </Link>
-            <p className="text-primary-foreground/70 text-sm">
+            <p className="text-sm leading-relaxed text-neutral-400 mt-2">
               Segurança que evolui com você. Protegendo organizações através de
               tecnologia avançada e expertise em cibersegurança.
             </p>
           </div>
 
-          {/* Serviços */}
-          <div>
-            <h3 className="font-semibold text-primary-foreground mb-4">Serviços</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/servicos#soc"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  SOC as a Service
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/servicos#blue-team"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Blue Team Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/servicos#consultoria"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Consultoria
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/servicos#hardening"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Hardening & Compliance
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Links Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            {/* Serviços */}
+            <div className="flex flex-col gap-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Serviços</span>
+              <div className="flex flex-col gap-2">
+                <Link to="/servicos#soc" className="text-sm text-neutral-400 hover:text-white transition-colors">SOC as a Service</Link>
+                <Link to="/servicos#blue-team" className="text-sm text-neutral-400 hover:text-white transition-colors">Blue Team</Link>
+                <Link to="/servicos#consultoria" className="text-sm text-neutral-400 hover:text-white transition-colors">Consultoria</Link>
+                <Link to="/servicos#hardening" className="text-sm text-neutral-400 hover:text-white transition-colors">Hardening & Compliance</Link>
+              </div>
+            </div>
 
-          {/* Academy */}
-          <div>
-            <h3 className="font-semibold text-primary-foreground mb-4">CyDef Academy</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/academy"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Todos os Cursos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/cursos/cybersecurity-fundamentals"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Cybersecurity Fundamentals
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/cursos/soc-analyst"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  SOC Analyst
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/cursos/blue-team-advanced"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Blue Team Advanced
-                </Link>
-              </li>
-            </ul>
-          </div>
+            {/* Academy */}
+            <div className="flex flex-col gap-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Academy</span>
+              <div className="flex flex-col gap-2">
+                <Link to="/academy" className="text-sm text-neutral-400 hover:text-white transition-colors">Todos os Cursos</Link>
+                <Link to="/cursos/cybersecurity-fundamentals" className="text-sm text-neutral-400 hover:text-white transition-colors">Fundamentos</Link>
+                <Link to="/cursos/soc-analyst" className="text-sm text-neutral-400 hover:text-white transition-colors">SOC Analyst</Link>
+                <Link to="/cursos/blue-team-advanced" className="text-sm text-neutral-400 hover:text-white transition-colors">Blue Team Adv</Link>
+              </div>
+            </div>
 
-          {/* Empresa */}
-          <div>
-            <h3 className="font-semibold text-primary-foreground mb-4">Empresa</h3>
-            <ul className="space-y-2 mb-4">
-              <li>
-                <Link
-                  to="/sobre"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Sobre a CyDef
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/blog"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contato"
-                  className="text-primary-foreground/70 hover:text-secondary transition-colors text-sm"
-                >
-                  Contato
-                </Link>
-              </li>
-            </ul>
-            <div className="flex gap-4">
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground/70 hover:text-secondary transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground/70 hover:text-secondary transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground/70 hover:text-secondary transition-colors"
-              >
-                <Github className="h-5 w-5" />
-              </a>
+            {/* Empresa */}
+            <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Empresa</span>
+              <div className="flex flex-col gap-2">
+                <Link to="/sobre" className="text-sm text-neutral-400 hover:text-white transition-colors">Sobre</Link>
+                <Link to="/blog" className="text-sm text-neutral-400 hover:text-white transition-colors">Blog</Link>
+                <Link to="/contato" className="text-sm text-neutral-400 hover:text-white transition-colors">Contato</Link>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-secondary/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-primary-foreground/50 text-sm">
-            © 2025 CyDef. Todos os direitos reservados.
+        {/* Bottom */}
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-neutral-500 font-medium">
+            © 2025 CyDefNexus. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-primary-foreground/50 hover:text-secondary text-sm">
-              Política de Privacidade
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+              <Linkedin className="h-4 w-4" />
             </a>
-            <a href="#" className="text-primary-foreground/50 hover:text-secondary text-sm">
-              Termos de Uso
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+              <Twitter className="h-4 w-4" />
             </a>
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+              <Github className="h-4 w-4" />
+            </a>
+          </div>
+          <div className="flex gap-4 text-xs font-medium text-neutral-500">
+            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+            <span className="text-neutral-700">|</span>
+            <a href="#" className="hover:text-white transition-colors">Termos</a>
           </div>
         </div>
       </div>

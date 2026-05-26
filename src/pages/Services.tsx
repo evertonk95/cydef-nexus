@@ -1,7 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import {
   Eye,
@@ -14,428 +13,211 @@ import {
   Clock,
   Users,
   BarChart,
+  Code,
 } from "lucide-react";
-import socServices from "@/assets/soc-services.jpg";
 
 const Services = () => {
+  useScrollReveal();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4 bg-gradient-hero">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold text-primary-foreground mb-6">
-            Serviços de Segurança
+      <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+        <div className="container mx-auto text-center relative z-10 animate-on-scroll">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
+            <Shield className="h-4 w-4" />
+            Nossos Serviços
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
+            Serviços de <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">Segurança</span>
           </h1>
-          <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto">
+          <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium">
             Soluções completas de cibersegurança para proteger sua organização
-            contra ameaças avançadas e garantir conformidade.
+            contra ameaças avançadas e garantir conformidade contínua.
           </p>
         </div>
       </section>
 
       {/* SOC as a Service */}
-      <section id="soc" className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium mb-6">
+      <section id="soc" className="py-24 px-4 relative">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="animate-on-scroll">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-sm font-medium mb-6">
                 <Eye className="h-4 w-4" />
                 SOC as a Service
               </div>
-              <h2 className="text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
                 Monitoramento 24x7 com Resposta Especializada
               </h2>
-              <p className="text-muted-foreground text-lg mb-8">
+              <p className="text-white/60 text-lg mb-8 leading-relaxed">
                 Centro de Operações de Segurança completo, com monitoramento
-                contínuo, detecção avançada e resposta rápida a incidentes.
+                contínuo, detecção avançada e resposta rápida a incidentes em tempo real.
               </p>
 
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
+              <div className="space-y-6 mb-10">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-white/5 p-2 rounded-lg border border-white/10">
+                    <Clock className="h-5 w-5 text-orange-500" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">
+                    <h4 className="font-semibold text-white mb-1">
                       Monitoramento Contínuo
                     </h4>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-neutral-400 text-sm">
                       Vigilância 24x7 de logs, eventos e alertas de segurança
                       em toda sua infraestrutura
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-white/5 p-2 rounded-lg border border-white/10">
+                    <Target className="h-5 w-5 text-orange-500" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">
+                    <h4 className="font-semibold text-white mb-1">
                       Classificação e Resposta
                     </h4>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-neutral-400 text-sm">
                       Triagem inteligente de incidentes com resposta baseada em
                       playbooks personalizados
                     </p>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-1">
-                      Integração Completa
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Conectamos com SIEM, EDR, Cloud e outras ferramentas do
-                      seu ambiente
-                    </p>
+              <Link to="/contato" className="inline-block">
+                <button className="button-custom" type="button">
+                  <div className="points_wrapper">
+                    <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
+                  </div>
+                  <span className="inner flex items-center gap-2">Solicitar Proposta <ArrowRight className="w-4 h-4"/></span>
+                </button>
+              </Link>
+            </div>
+            
+            <div className="relative animate-on-scroll">
+              <div className="absolute -inset-4 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-2xl blur-xl opacity-50"></div>
+              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 relative shadow-2xl">
+                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+                  <span className="text-sm font-medium text-neutral-400">Status do SOC</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span className="text-xs font-mono text-green-500">Operacional</span>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-1">
-                      Playbooks e Runbooks
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Procedimentos customizados para detecção e resposta
-                      alinhados ao seu negócio
-                    </p>
+                <div className="space-y-4">
+                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full bg-orange-500 w-[85%]"></div>
+                  </div>
+                  <div className="flex justify-between text-xs text-neutral-500">
+                    <span>Taxa de Detecção</span>
+                    <span className="text-white">99.9%</span>
                   </div>
                 </div>
               </div>
-
-              <Link to="/contato">
-                <Button variant="cyber" size="lg">
-                  Solicitar Proposta
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-            <div>
-              <img
-                src={socServices}
-                alt="SOC Services"
-                className="rounded-lg shadow-card"
-              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Blue Team Services */}
-      <section id="blue-team" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium mb-6">
-                <Shield className="h-4 w-4" />
-                Blue Team Services
+      <section id="blue-team" className="py-24 px-4 bg-white/[0.02] border-y border-white/5 relative">
+        <div className="container mx-auto max-w-7xl">
+          <div className="max-w-4xl mx-auto text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-sm font-medium mb-6">
+              <Shield className="h-4 w-4" />
+              Blue Team Services
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
+              Defesa Proativa e Threat Hunting
+            </h2>
+            <p className="text-white/60 text-lg">
+              Serviços especializados de defesa cibernética com foco em
+              detecção avançada e caça proativa a ameaças.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 animate-on-scroll">
+            {[
+              { icon: Shield, title: "Threat Hunting", desc: "Caça proativa a ameaças ocultas no ambiente, utilizando hipóteses baseadas em inteligência e comportamento de adversários." },
+              { icon: FileSearch, title: "Análise de Logs Avançada", desc: "Investigação profunda de logs com correlação de eventos e identificação de padrões maliciosos complexos." },
+              { icon: Target, title: "MITRE ATT&CK Mapping", desc: "Implementação de regras de detecção mapeadas nas técnicas e táticas do framework MITRE ATT&CK." },
+              { icon: Lock, title: "Defesa em Profundidade", desc: "Estratégias de defesa em múltiplas camadas para proteção abrangente de ativos críticos." }
+            ].map((item, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                <div className="w-12 h-12 bg-neutral-900 rounded-lg flex items-center justify-center mb-6 border border-white/5 group-hover:border-orange-500/50 transition-colors">
+                  <item.icon className="w-6 h-6 text-orange-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                <p className="text-neutral-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
-              <h2 className="text-4xl font-bold text-foreground mb-4">
-                Defesa Proativa e Threat Hunting
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                Serviços especializados de defesa cibernética com foco em
-                detecção avançada e caça proativa a ameaças.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-border/50">
-                <CardContent className="p-6 space-y-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    Threat Hunting
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Caça proativa a ameaças ocultas no ambiente, utilizando
-                    hipóteses baseadas em inteligência e comportamento de
-                    adversários.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardContent className="p-6 space-y-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    Análise de Logs Avançada
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Investigação profunda de logs com correlação de eventos e
-                    identificação de padrões maliciosos complexos.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardContent className="p-6 space-y-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    MITRE ATT&CK Mapping
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Implementação de regras de detecção mapeadas nas técnicas e
-                    táticas do framework MITRE ATT&CK.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardContent className="p-6 space-y-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    Defesa em Profundidade
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Estratégias de defesa em múltiplas camadas para proteção
-                    abrangente de ativos críticos.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Consultoria */}
-      <section id="consultoria" className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium mb-6">
-              <Target className="h-4 w-4" />
-              Consultoria de Segurança
+      <section id="consultoria" className="py-24 px-4 relative">
+        <div className="container mx-auto max-w-7xl">
+          <div className="max-w-4xl mx-auto text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-sm font-medium mb-6">
+              <BarChart className="h-4 w-4" />
+              Consultoria Estratégica
             </div>
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Governança e Estratégia de Segurança
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
+              Governança e Segurança
             </h2>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-white/60 text-lg">
               Assessoria especializada para estruturação, governança e
               implementação de programas de segurança robustos.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <BarChart className="h-6 w-6 text-foreground" />
+          <div className="grid md:grid-cols-3 gap-6 animate-on-scroll">
+            {[
+              { icon: BarChart, title: "Governança", desc: "Estruturação de políticas, processos e controles de segurança alinhados aos objetivos de negócio." },
+              { icon: CheckCircle, title: "ISO 27001", desc: "Implementação e adequação completa aos requisitos da norma ISO 27001 para SGSI." },
+              { icon: Shield, title: "Segurança em Cloud", desc: "Assessoria especializada em AWS com foco em arquitetura segura e conformidade." },
+              { icon: Users, title: "Revisão de Políticas", desc: "Análise e atualização de políticas de segurança para alinhamento com melhores práticas." },
+              { icon: Eye, title: "Criação de SOC", desc: "Estruturação completa de SOC interno com processos, pessoas e tecnologia." },
+              { icon: Target, title: "Roadmap de Segurança", desc: "Planejamento estratégico de evolução da maturidade de segurança da organização." }
+            ].map((item, i) => (
+              <div key={i} className="bg-neutral-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:-translate-y-1 transition-all duration-300">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500/20 to-amber-500/20 flex items-center justify-center mb-6">
+                  <item.icon className="w-5 h-5 text-orange-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  Governança
-                </h3>
-                <p className="text-muted-foreground">
-                  Estruturação de políticas, processos e controles de segurança
-                  alinhados aos objetivos de negócio.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <CheckCircle className="h-6 w-6 text-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  ISO 27001
-                </h3>
-                <p className="text-muted-foreground">
-                  Implementação e adequação completa aos requisitos da norma ISO
-                  27001 para SGSI.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  Segurança em Cloud
-                </h3>
-                <p className="text-muted-foreground">
-                  Assessoria especializada em AWS com foco em arquitetura
-                  segura e conformidade.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <Users className="h-6 w-6 text-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  Revisão de Políticas
-                </h3>
-                <p className="text-muted-foreground">
-                  Análise e atualização de políticas de segurança para
-                  alinhamento com melhores práticas.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <Eye className="h-6 w-6 text-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  Criação de SOC
-                </h3>
-                <p className="text-muted-foreground">
-                  Estruturação completa de SOC interno com processos, pessoas e
-                  tecnologia.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 hover:border-secondary transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="h-12 w-12 rounded-lg bg-gradient-cyber flex items-center justify-center">
-                  <Target className="h-6 w-6 text-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  Roadmap de Segurança
-                </h3>
-                <p className="text-muted-foreground">
-                  Planejamento estratégico de evolução da maturidade de
-                  segurança da organização.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Vulnerabilities and Hardening */}
-      <section id="vulnerabilidades" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Gestão de Vulnerabilidades */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium mb-6">
-                <FileSearch className="h-4 w-4" />
-                Gestão de Vulnerabilidades
+                <h3 className="text-lg font-semibold text-white mb-3">{item.title}</h3>
+                <p className="text-neutral-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">
-                Identificação e Priorização de Riscos
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Programa completo de gestão de vulnerabilidades com scans
-                periódicos, análise de risco e remediação priorizada.
-              </p>
-
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Clock className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      Scans Periódicos
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Varreduras automatizadas em infraestrutura, aplicações e
-                      cloud
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <BarChart className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      Priorização por Risco
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Análise contextual com classificação baseada em impacto
-                      real ao negócio
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <FileSearch className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      Relatórios Detalhados
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Documentação técnica e executiva com recomendações claras
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            {/* Hardening */}
-            <div id="hardening">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium mb-6">
-                <Lock className="h-4 w-4" />
-                Hardening & Compliance
-              </div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">
-                Fortificação de Sistemas e Conformidade
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Implementação de baselines de segurança com base em CIS
-                Benchmarks e validações técnicas contínuas.
-              </p>
-
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Shield className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      CIS Benchmarks
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Configurações seguras baseadas em padrões reconhecidos
-                      globalmente
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      Baselines de Segurança
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Criação e implementação de linhas de base para SO, cloud e
-                      aplicações
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Target className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">
-                      Validações Contínuas
-                    </h4>
-                    <p className="text-muted-foreground text-sm">
-                      Monitoramento de desvios e adequação periódica aos padrões
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="bg-gradient-hero rounded-2xl p-12 text-center">
-            <h2 className="text-4xl font-bold text-primary-foreground mb-6">
+      <section className="py-24 px-4 relative overflow-hidden border-t border-white/5">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-orange-500/5 blur-[150px] -z-10 pointer-events-none"></div>
+        <div className="container mx-auto max-w-4xl">
+          <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 md:p-20 text-center relative backdrop-blur-md animate-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
               Proteja sua organização com especialistas
             </h2>
-            <p className="text-primary-foreground/80 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-white/70 text-lg mb-10 max-w-2xl mx-auto">
               Agende uma conversa com nosso time para entender como podemos
-              elevar a segurança da sua empresa.
+              elevar a segurança da sua empresa ao próximo nível.
             </p>
-            <Link to="/contato">
-              <Button variant="hero" size="lg">
-                Solicitar Proposta
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+            <Link to="/contato" className="inline-block">
+              <button className="button-custom" type="button">
+                <div className="points_wrapper">
+                  <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
+                </div>
+                <span className="inner flex items-center gap-2">Solicitar Proposta <ArrowRight className="w-4 h-4"/></span>
+              </button>
             </Link>
           </div>
         </div>

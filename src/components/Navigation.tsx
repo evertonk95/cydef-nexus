@@ -1,66 +1,60 @@
 import { Link } from "react-router-dom";
-import { Shield, Menu, X, GraduationCap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-secondary/20">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/5 animate-fadeSlideIn">
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between py-4 px-6 md:px-10">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <Shield className="h-8 w-8 text-secondary group-hover:text-accent transition-colors" />
-            <span className="text-xl font-bold text-primary-foreground">
-              Cy<span className="text-secondary">Def</span>
-            </span>
+          <Link to="/" className="flex items-center gap-3 group cursor-pointer">
+            <div 
+              className="flex bg-gradient-to-tr from-orange-500 to-amber-500 w-8 h-8 rounded-full items-center justify-center relative" 
+            >
+              <div className="w-2.5 h-2.5 bg-black rounded-full relative"></div>
+            </div>
+            <span className="text-lg font-semibold tracking-tight text-white">CyDef<span className="text-orange-500">Nexus</span></span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link
-              to="/"
-              className="text-primary-foreground hover:text-secondary transition-colors font-medium"
-            >
+            <Link to="/" className="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors text-neutral-400">
               Home
             </Link>
-            <Link
-              to="/sobre"
-              className="text-primary-foreground hover:text-secondary transition-colors font-medium"
-            >
+            <Link to="/sobre" className="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors text-neutral-400">
               Sobre
             </Link>
-            <Link
-              to="/servicos"
-              className="text-primary-foreground hover:text-secondary transition-colors font-medium"
-            >
+            <Link to="/servicos" className="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors text-neutral-400">
               Serviços
             </Link>
-            <Link
-              to="/academy"
-              className="flex items-center gap-1 text-primary-foreground hover:text-secondary transition-colors font-medium"
-            >
-              <GraduationCap className="h-4 w-4" />
+            <Link to="/academy" className="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors text-neutral-400">
               Academy
             </Link>
-            <Link
-              to="/blog"
-              className="text-primary-foreground hover:text-secondary transition-colors font-medium"
-            >
+            <Link to="/blog" className="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors text-neutral-400">
               Blog
             </Link>
+          </div>
+
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/contato" className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
+              Entrar
+            </Link>
             <Link to="/contato">
-              <Button variant="cyber" size="sm">
-                Contato
-              </Button>
+              <button className="button-custom scale-95" type="button">
+                <div className="points_wrapper">
+                  <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
+                </div>
+                <span className="inner">Obter Acesso</span>
+              </button>
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-primary-foreground"
+            className="md:hidden text-white hover:text-orange-500 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -69,47 +63,30 @@ export const Navigation = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-secondary/20">
-            <div className="flex flex-col gap-4">
-              <Link
-                to="/"
-                className="text-primary-foreground hover:text-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+          <div className="md:hidden py-4 border-t border-white/5 bg-[#050505]">
+            <div className="flex flex-col gap-4 px-6">
+              <Link to="/" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Home
               </Link>
-              <Link
-                to="/sobre"
-                className="text-primary-foreground hover:text-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/sobre" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Sobre
               </Link>
-              <Link
-                to="/servicos"
-                className="text-primary-foreground hover:text-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/servicos" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Serviços
               </Link>
-              <Link
-                to="/academy"
-                className="text-primary-foreground hover:text-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/academy" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Academy
               </Link>
-              <Link
-                to="/blog"
-                className="text-primary-foreground hover:text-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/blog" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Blog
               </Link>
               <Link to="/contato" onClick={() => setIsOpen(false)}>
-                <Button variant="cyber" size="sm" className="w-full">
-                  Contato
-                </Button>
+                <button className="button-custom w-full mt-4" type="button">
+                  <div className="points_wrapper">
+                    <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
+                  </div>
+                  <span className="inner">Obter Acesso</span>
+                </button>
               </Link>
             </div>
           </div>

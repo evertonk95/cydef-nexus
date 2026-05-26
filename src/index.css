@@ -2,88 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 210 100% 8%;
+    --background: 0 0% 2%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 100% 8%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 100% 8%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 100% 12%;
+    --primary: 24 95% 53%; /* orange-500 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 190 100% 50%;
-    --secondary-foreground: 210 100% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 185 100% 60%;
-    --accent-foreground: 210 100% 8%;
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
-    --ring: 185 100% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 24 95% 53%;
 
     --radius: 0.5rem;
 
-    /* Custom cyber design tokens */
-    --cyber-blue: 210 100% 12%;
-    --cyber-cyan: 190 100% 50%;
-    --cyber-accent: 185 100% 60%;
-    --cyber-glow: 185 100% 70%;
+    /* Custom Lumina tokens */
+    --lumina-orange: 24 95% 53%;
+    --lumina-amber: 38 92% 50%;
+    --lumina-dark: 0 0% 2%;
     
-    --gradient-hero: linear-gradient(135deg, hsl(210 100% 12%) 0%, hsl(210 80% 20%) 100%);
-    --gradient-cyber: linear-gradient(90deg, hsl(185 100% 60%) 0%, hsl(190 100% 50%) 100%);
-    --gradient-dark: linear-gradient(180deg, hsl(210 100% 8%) 0%, hsl(210 100% 12%) 100%);
+    --gradient-lumina: linear-gradient(135deg, hsl(24 95% 53%) 0%, hsl(38 92% 50%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 2%) 0%, hsl(0 0% 5%) 100%);
     
-    --shadow-glow: 0 0 30px hsl(185 100% 60% / 0.3);
-    --shadow-card: 0 4px 20px hsl(210 100% 12% / 0.1);
+    --shadow-glow: 0 0 30px hsl(24 95% 53% / 0.3);
+    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.5);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 210 100% 8%;
+    --background: 0 0% 2%;
     --foreground: 0 0% 100%;
 
-    --card: 210 90% 12%;
+    --card: 0 0% 5%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 210 90% 12%;
+    --popover: 0 0% 5%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 210 100% 12%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 190 100% 50%;
-    --secondary-foreground: 210 100% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 50% 18%;
-    --muted-foreground: 210 20% 70%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 185 100% 60%;
-    --accent-foreground: 210 100% 8%;
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 50% 20%;
-    --input: 210 50% 20%;
-    --ring: 185 100% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 24 95% 53%;
     
-    --shadow-glow: 0 0 40px hsl(185 100% 60% / 0.4);
+    --shadow-glow: 0 0 40px hsl(24 95% 53% / 0.4);
     --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.5);
   }
 }
@@ -94,6 +88,59 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground selection:bg-orange-500/30 font-sans antialiased;
   }
 }
+
+@layer components {
+  /* Custom Lumina Button */
+  .button-custom {
+    @apply relative flex items-center justify-center px-6 py-2.5 overflow-hidden font-medium text-white bg-neutral-950 rounded-full border border-white/10 shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:scale-105 hover:border-orange-500/50;
+  }
+
+  .button-custom .inner {
+    @apply relative z-10;
+  }
+
+  .button-custom .points_wrapper {
+    @apply absolute inset-0 z-0 flex items-center justify-center opacity-0 transition-opacity duration-300;
+  }
+
+  .button-custom:hover .points_wrapper {
+    @apply opacity-100;
+  }
+
+  .button-custom .point {
+    @apply absolute w-1 h-1 bg-orange-500 rounded-full animate-ping;
+  }
+
+  .button-custom .point:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+  .button-custom .point:nth-child(2) { top: 70%; left: 80%; animation-delay: 0.2s; }
+  .button-custom .point:nth-child(3) { top: 80%; left: 30%; animation-delay: 0.4s; }
+  .button-custom .point:nth-child(4) { top: 30%; left: 70%; animation-delay: 0.6s; }
+
+  /* Interactive Steps */
+  .step-item {
+    @apply cursor-pointer transition-all duration-300 bg-white/5 rounded-lg p-2 shadow-xl backdrop-blur-md flex items-center gap-4 hover:bg-white/10;
+    position: relative;
+    --border-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    --border-radius-before: 8px;
+  }
+  .step-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius-before);
+    padding: 1px;
+    background: var(--border-gradient);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  .card-stack-item {
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease-out;
+  }
+}
+

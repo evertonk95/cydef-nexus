@@ -1,8 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Calendar, User, ArrowRight, Tag } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { Calendar, ArrowRight, Tag } from "lucide-react";
 
 const blogPosts = [
   {
@@ -99,17 +98,24 @@ const categories = [
 ];
 
 const Blog = () => {
+  useScrollReveal();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4 bg-gradient-hero">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold text-primary-foreground mb-6">
-            Blog CyDef
+      <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+        <div className="container mx-auto text-center relative z-10 animate-on-scroll">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
+            <Tag className="h-4 w-4" />
+            Insights & Artigos
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
+            Blog <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">CyDef</span>
           </h1>
-          <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto">
+          <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium">
             Artigos técnicos, guias práticos e insights sobre cibersegurança,
             Blue Team e SOC escritos por especialistas.
           </p>
@@ -117,16 +123,16 @@ const Blog = () => {
       </section>
 
       {/* Categories */}
-      <section className="py-8 px-4 border-b border-border">
-        <div className="container mx-auto">
-          <div className="flex flex-wrap gap-2 justify-center">
+      <section className="py-8 px-4 border-b border-white/5 relative z-20">
+        <div className="container mx-auto animate-on-scroll">
+          <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category) => (
               <button
                 key={category}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
                   category === "Todos"
-                    ? "bg-gradient-cyber text-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-secondary/20 hover:text-secondary"
+                    ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
+                    : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {category}
@@ -137,84 +143,83 @@ const Blog = () => {
       </section>
 
       {/* Blog Posts */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-24 px-4 relative">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
             {blogPosts.map((post) => (
-              <Card
+              <div
                 key={post.id}
-                className="border-border/50 hover:border-secondary transition-all hover:shadow-card group"
+                className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)] transition-all duration-300 group flex flex-col h-full cursor-pointer"
               >
-                <CardContent className="p-6 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Tag className="h-4 w-4 text-secondary" />
-                    <span className="text-sm text-secondary font-medium">
-                      {post.category}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">
+                    {post.category}
+                  </span>
+                </div>
 
-                  <h3 className="text-xl font-semibold text-foreground group-hover:text-secondary transition-colors">
-                    {post.title}
-                  </h3>
+                <h3 className="text-xl font-bold text-white mb-4 leading-tight group-hover:text-orange-400 transition-colors">
+                  {post.title}
+                </h3>
 
-                  <p className="text-muted-foreground">{post.excerpt}</p>
+                <p className="text-neutral-400 text-sm leading-relaxed mb-6 flex-grow">
+                  {post.excerpt}
+                </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>{post.date}</span>
-                      </div>
-                      <span>{post.readTime}</span>
+                <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
+                  <div className="flex items-center gap-4 text-xs font-medium text-neutral-500">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5" />
+                      <span>{post.date}</span>
                     </div>
+                    <span>{post.readTime}</span>
                   </div>
-
-                  <button className="inline-flex items-center text-secondary hover:text-accent transition-colors font-medium">
-                    Ler artigo
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
 
-          {/* Pagination placeholder */}
-          <div className="mt-12 flex justify-center gap-2">
-            <button className="px-4 py-2 rounded bg-gradient-cyber text-foreground font-medium">
+          {/* Pagination */}
+          <div className="mt-16 flex justify-center gap-2 animate-on-scroll">
+            <button className="w-10 h-10 rounded-lg bg-orange-500 text-white font-bold flex items-center justify-center shadow-[0_0_15px_-3px_rgba(249,115,22,0.4)]">
               1
             </button>
-            <button className="px-4 py-2 rounded bg-muted text-muted-foreground hover:bg-secondary/20 hover:text-secondary transition-all">
+            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
               2
             </button>
-            <button className="px-4 py-2 rounded bg-muted text-muted-foreground hover:bg-secondary/20 hover:text-secondary transition-all">
+            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
               3
+            </button>
+            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <h2 className="text-4xl font-bold text-foreground">
+      <section className="py-24 px-4 relative overflow-hidden border-t border-white/5">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-orange-500/5 blur-[150px] -z-10 pointer-events-none"></div>
+        <div className="container mx-auto max-w-4xl">
+          <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 text-center relative backdrop-blur-md animate-on-scroll">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
               Receba conteúdo exclusivo
             </h2>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
               Cadastre-se para receber artigos, guias e novidades sobre
               cibersegurança diretamente no seu e-mail.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-4" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
                 placeholder="Seu melhor e-mail"
-                className="flex-1 px-4 py-3 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-secondary"
+                className="flex-1 px-5 py-4 rounded-xl border border-white/10 bg-black/50 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
+                required
               />
-              <button className="px-6 py-3 bg-gradient-cyber text-foreground font-semibold rounded-md hover:shadow-glow hover:scale-105 transition-all">
+              <button type="submit" className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] whitespace-nowrap">
                 Inscrever-se
               </button>
-            </div>
-            <p className="text-xs text-muted-foreground">
+            </form>
+            <p className="text-sm text-neutral-500 font-medium">
               Sem spam. Apenas conteúdo de qualidade.
             </p>
           </div>
