@@ -21,6 +21,13 @@ const Index = () => {
     <div className="bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30 flex flex-col min-h-screen relative">
       <Navigation />
 
+      {/* background-image-overlay */}
+      <div className="fixed z-0 top-0 right-0 bottom-0 left-0 pointer-events-none -z-20">
+        <img alt="Paisagem" className="w-full h-full object-cover opacity-20 mix-blend-luminosity" src="/assets/2b5079f4-4ddd-433b-a936-fc8f7d_7da21e998877.webp" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/60 to-[#050505]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/0 to-[#050505]/0"></div>
+      </div>
+
       {/* aura-background */}
       <div 
         className="fixed top-0 w-full h-screen -z-10 hue-rotate-0 saturate-100 mix-blend-screen opacity-50"
@@ -100,13 +107,15 @@ const Index = () => {
             <div className="relative mb-12 mr-4 w-64 md:w-72 aspect-video group perspective-1000 animate-on-scroll">
               <div className="absolute -inset-8 bg-orange-500/20 blur-3xl -z-10 opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
               <div className="relative w-full h-full transform-style-3d">
-                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 ${activeStep === 3 ? 'translate-y-0 scale-100 z-30 opacity-100' : 'translate-y-6 scale-90 z-10 opacity-40'}`}>
+                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 transition-all duration-500 ${activeStep === 3 ? 'translate-y-0 scale-100 z-30 opacity-100' : activeStep === 1 ? 'translate-y-6 scale-90 z-10 opacity-40' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
+                  <img alt="Resposta Imediata" className="w-full h-full object-cover opacity-60" src="/assets/c3337c33-82ae-4ad6-9c83-f9f1a5_1ba1c854e7ba.webp" />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                     <Lock className="w-12 h-12 text-orange-500/50" />
                   </div>
                   <div className="absolute top-3 right-3 px-2 py-1 bg-orange-500 text-black text-[10px] font-bold rounded uppercase">Blindado</div>
                 </div>
-                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 ${activeStep === 2 ? 'translate-y-0 scale-100 z-30 opacity-100' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
+                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 transition-all duration-500 ${activeStep === 2 ? 'translate-y-0 scale-100 z-30 opacity-100' : activeStep === 3 ? 'translate-y-6 scale-90 z-10 opacity-40' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
+                  <img alt="Detecção por IA" className="w-full h-full object-cover opacity-70" src="/assets/6e8af32c-e155-4b33-9e0a-eb91a9_c1c7ef5e7858.webp" />
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                     <ScanLine className="w-12 h-12 text-orange-400/50" />
                   </div>
@@ -115,7 +124,8 @@ const Index = () => {
                     <span className="text-[10px] font-mono text-white/80">Analisando ameaças...</span>
                   </div>
                 </div>
-                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 ${activeStep === 1 ? 'translate-y-0 scale-100 z-30 opacity-100' : 'translate-y-0 scale-100 z-30 opacity-100'}`}>
+                <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 transition-all duration-500 ${activeStep === 1 ? 'translate-y-0 scale-100 z-30 opacity-100' : activeStep === 2 ? 'translate-y-6 scale-90 z-10 opacity-40' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
+                  <img alt="Monitoramento Ativo" className="w-full h-full object-cover opacity-90" src="/assets/2b5079f4-4ddd-433b-a936-fc8f7d_8dea34ffc1ee.webp" />
                   <div className="flex absolute top-0 right-0 bottom-0 left-0 items-center justify-center bg-black/60">
                     <div className="flex transition-transform hover:scale-110 bg-gradient-to-br from-white/10 via-white/0 to-white/10 w-12 h-12 rounded-full shadow-2xl backdrop-blur-md items-center justify-center border border-white/20">
                       <Shield className="w-5 h-5 text-white" />
