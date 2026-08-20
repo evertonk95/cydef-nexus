@@ -10,8 +10,7 @@ const sections = [
         <p>A <strong>CyDef</strong> é uma empresa de cibersegurança que oferece serviços de SOC, Blue Team, Hardening, Consultoria e educação por meio da CyDef Academy.</p>
         <ul className="list-disc pl-5 space-y-1">
           <li><strong>Site:</strong> https://www.cydef.com.br</li>
-          <li><strong>Contato para privacidade:</strong> [e-mail do encarregado — ex.: privacidade@cydef.com.br]</li>
-          <li><strong>Razão social / CNPJ:</strong> [preencher]</li>
+          <li><strong>Contato para privacidade (DPO):</strong> dpo@cydef.com.br</li>
         </ul>
         <p>Esta Política explica como tratamos seus dados pessoais, em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong>.</p>
       </>
@@ -95,7 +94,7 @@ const sections = [
           <li>Revogação do consentimento;</li>
           <li>Informação sobre compartilhamento com terceiros.</li>
         </ol>
-        <p>Para exercer seus direitos, envie e-mail para <strong>[e-mail do encarregado]</strong> com o assunto "LGPD — Solicitação de titular". Responderemos em até <strong>15 dias</strong>.</p>
+        <p>Para exercer seus direitos, envie e-mail para <strong>dpo@cydef.com.br</strong> com o assunto "LGPD — Solicitação de titular". Responderemos em até <strong>15 dias</strong>.</p>
       </>
     ),
   },
@@ -137,7 +136,7 @@ const sections = [
     body: (
       <>
         <ul className="list-disc pl-5 space-y-1">
-          <li><strong>E-mail:</strong> [e-mail do encarregado]</li>
+          <li><strong>E-mail:</strong> dpo@cydef.com.br</li>
           <li><strong>Prazo de resposta:</strong> até 15 dias</li>
         </ul>
       </>
@@ -146,7 +145,7 @@ const sections = [
   {
     title: "13. Foro",
     body: (
-      <p>Esta Política é regida pela legislação brasileira. Fica eleito o foro de [cidade/UF] para dirimir dúvidas ou controvérsias, sem prejuízo de reclamações junto à <strong>ANPD</strong> (Autoridade Nacional de Proteção de Dados).</p>
+      <p>Esta Política é regida pela legislação brasileira. Fica eleito o foro de Brasília/DF para dirimir dúvidas ou controvérsias, sem prejuízo de reclamações junto à <strong>ANPD</strong> (Autoridade Nacional de Proteção de Dados).</p>
     ),
   },
 ];
@@ -177,7 +176,7 @@ const Privacy = () => {
 
         <div className="mt-16 pt-8 border-t border-white/10 text-sm text-neutral-500">
           <p>
-            Dúvidas sobre esta Política? Fale com nosso encarregado: <span className="text-orange-400">[e-mail do encarregado]</span>
+            Dúvidas sobre esta Política? Fale com nosso encarregado: <span className="text-orange-400">dpo@cydef.com.br</span>
           </p>
         </div>
       </main>
