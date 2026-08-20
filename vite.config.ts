@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
-  base: mode === "development" ? "/" : "/cydef-nexus/",
+  // Domínio custom (www.cydef.com.br) serve na raiz — assets sem prefixo
+  base: mode === "development" ? "/" : "/",
   resolve: {
     alias: {
       "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "./src"),
