@@ -77,7 +77,7 @@ export const Footer = () => {
             </a>
           </div>
           <div className="flex gap-4 text-xs font-medium text-neutral-500">
-            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+            <a href="/privacidade" className="hover:text-white transition-colors">Privacidade</a>
             <span className="text-neutral-700">|</span>
             <a href="#" className="hover:text-white transition-colors">Termos</a>
           </div>
