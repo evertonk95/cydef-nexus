@@ -10,13 +10,9 @@ export const Navigation = () => {
       <div className="container mx-auto">
         <div className="flex items-center justify-between py-4 px-6 md:px-10">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group cursor-pointer">
-            <div 
-              className="flex bg-gradient-to-tr from-orange-500 to-amber-500 w-8 h-8 rounded-full items-center justify-center relative" 
-            >
-              <div className="w-2.5 h-2.5 bg-black rounded-full relative"></div>
-            </div>
-            <span className="text-lg font-semibold tracking-tight text-white">CyDef<span className="text-orange-500">Nexus</span></span>
+          <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
+            <img src="/assets/cydef-icon.png" alt="CyDef" className="h-9 w-9 rounded-full" />
+            <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-7 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

@@ -14,11 +14,9 @@ export const Footer = () => {
           
           {/* Brand */}
           <div className="flex flex-col gap-4 max-w-sm">
-            <Link to="/" className="flex items-center gap-3 group cursor-pointer">
-              <div className="flex bg-gradient-to-tr from-orange-500 to-amber-500 w-8 h-8 rounded-full items-center justify-center relative">
-                <div className="w-2.5 h-2.5 bg-black rounded-full relative"></div>
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">CyDef<span className="text-orange-500">Nexus</span></span>
+            <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
+              <img src="/assets/cydef-icon.png" alt="CyDef" className="h-10 w-10 rounded-full" />
+              <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-8 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-neutral-400 mt-2">
               Segurança que evolui com você. Protegendo organizações através de
@@ -65,7 +63,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-neutral-500 font-medium">
-            © 2025 CyDefNexus. Todos os direitos reservados.
+            © 2025 CyDef. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
             <a href="#" className="text-neutral-500 hover:text-white transition-colors">
