@@ -11,7 +11,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between py-4 px-6 md:px-10">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
-            <img src="/assets/cydef-icon.png" alt="CyDef" className="h-9 w-9 rounded-full" />
+            <img src="/assets/cydef-icon.webp" alt="CyDef" className="h-9 w-9 rounded-full" />
             <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-7 w-auto" />
           </Link>
 

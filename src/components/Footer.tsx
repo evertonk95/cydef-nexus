@@ -15,7 +15,7 @@ export const Footer = () => {
           {/* Brand */}
           <div className="flex flex-col gap-4 max-w-sm">
             <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
-              <img src="/assets/cydef-icon.png" alt="CyDef" className="h-10 w-10 rounded-full" />
+              <img src="/assets/cydef-icon.webp" alt="CyDef" className="h-10 w-10 rounded-full" />
               <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-8 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-neutral-400 mt-2">
