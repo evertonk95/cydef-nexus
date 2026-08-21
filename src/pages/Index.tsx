@@ -23,7 +23,7 @@ const Index = () => {
 
       {/* background-image-overlay */}
       <div className="fixed top-0 right-0 bottom-0 left-0 pointer-events-none -z-20">
-        <img alt="Paisagem" className="w-full h-full object-cover opacity-20 mix-blend-luminosity" src="/assets/cydef-hero-bg.webp" />
+        <img alt="Centro de Operações de Segurança" className="w-full h-full object-cover opacity-40 mix-blend-screen" src="/assets/cydef-hero-bg.webp" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/60 to-[#050505]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/0 to-[#050505]/0"></div>
       </div>
