@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Twitter, Github } from "lucide-react";
+import { Linkedin } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -66,14 +66,8 @@ export const Footer = () => {
             © 2025 CyDef. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/company/cydef-group/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
               <Linkedin className="h-4 w-4" />
-            </a>
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="Twitter">
-              <Twitter className="h-4 w-4" />
-            </a>
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="GitHub">
-              <Github className="h-4 w-4" />
             </a>
           </div>
           <div className="flex gap-4 text-xs font-medium text-neutral-500">
