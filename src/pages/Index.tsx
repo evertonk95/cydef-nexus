@@ -23,7 +23,7 @@ const Index = () => {
 
       {/* background-image-overlay */}
       <div className="fixed top-0 right-0 bottom-0 left-0 pointer-events-none -z-20">
-        <img alt="Centro de Operações de Segurança" className="w-full h-full object-cover opacity-65" src="/assets/cydef-hero-bg.webp" />
+        <img alt="Centro de Operações de Segurança" className="w-full h-full object-cover opacity-65" src="/assets/cydef-hero-bg.webp" fetchpriority="high" loading="eager" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/45 to-[#050505]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/0 to-[#050505]/0"></div>
       </div>
@@ -95,7 +95,7 @@ const Index = () => {
                   </span>
                 </div>
               </Link>
-              <div className="flex items-center gap-2 text-xs font-medium text-neutral-500">
+              <div className="flex items-center gap-2 text-xs font-medium text-neutral-400">
                 <Check className="w-3.5 h-3.5 text-orange-500" />
                 <span>Análise de risco gratuita</span>
               </div>
@@ -138,17 +138,17 @@ const Index = () => {
             {/* interactive-steps */}
             <div className="flex flex-col gap-3 w-full max-w-xs mr-0 lg:mr-8">
               <div className={`step-item ${activeStep === 1 ? 'translate-x-[-10px] bg-white/10 ring-1 ring-orange-500/50' : ''} animate-on-scroll`} onClick={() => setActiveStep(1)}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 1 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-500'}`}>01</div>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 1 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-400'}`}>01</div>
                 <span className={`text-sm font-medium transition-colors duration-300 ${activeStep === 1 ? 'text-white' : 'text-neutral-400'}`}>Monitoramento Ativo</span>
                 <Shield className={`w-3 h-3 ml-auto transition-all duration-300 ${activeStep === 1 ? 'text-orange-500 opacity-100' : 'opacity-0'}`} />
               </div>
               <div className={`step-item ${activeStep === 2 ? 'translate-x-[-10px] bg-white/10 ring-1 ring-orange-500/50' : ''} animate-on-scroll`} onClick={() => setActiveStep(2)}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 2 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-500'}`}>02</div>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 2 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-400'}`}>02</div>
                 <span className={`text-sm font-medium transition-colors duration-300 ${activeStep === 2 ? 'text-white' : 'text-neutral-400'}`}>Detecção por IA</span>
                 <ScanLine className={`w-3 h-3 ml-auto transition-all duration-300 ${activeStep === 2 ? 'text-orange-500 opacity-100' : 'opacity-0'}`} />
               </div>
               <div className={`step-item ${activeStep === 3 ? 'translate-x-[-10px] bg-white/10 ring-1 ring-orange-500/50' : ''} animate-on-scroll`} onClick={() => setActiveStep(3)}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 3 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-500'}`}>03</div>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 3 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-400'}`}>03</div>
                 <span className={`text-sm font-medium transition-colors duration-300 ${activeStep === 3 ? 'text-white' : 'text-neutral-400'}`}>Resposta Imediata</span>
                 <Lock className={`w-3 h-3 ml-auto transition-all duration-300 ${activeStep === 3 ? 'text-orange-500 opacity-100' : 'opacity-0'}`} />
               </div>
@@ -198,19 +198,19 @@ const Index = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-24 pt-12 border-t border-white/5 pb-24 relative z-20">
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">24/7</div>
-            <div className="text-xl font-medium pl-1 text-neutral-500">Monitoramento SOC</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Monitoramento SOC</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">99%</div>
-            <div className="text-xl font-medium pl-1 text-neutral-500">Mitigação Automática</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Mitigação Automática</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">500+</div>
-            <div className="text-xl font-medium pl-1 text-neutral-500">Alunos Formados</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Alunos Formados</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">0</div>
-            <div className="text-xl font-medium pl-1 text-neutral-500">Falhas Críticas</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Falhas Críticas</div>
           </div>
         </div>
 

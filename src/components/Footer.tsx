@@ -66,13 +66,13 @@ export const Footer = () => {
             © 2025 CyDef. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
               <Linkedin className="h-4 w-4" />
             </a>
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="Twitter">
               <Twitter className="h-4 w-4" />
             </a>
-            <a href="#" className="text-neutral-500 hover:text-white transition-colors">
+            <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="GitHub">
               <Github className="h-4 w-4" />
             </a>
           </div>
