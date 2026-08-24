@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Env e segredos (endurecimento S-07 — repo público: nunca commitar env real)
+.env
+.env.*
+!.env.example
+
+# Cobertura de testes
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

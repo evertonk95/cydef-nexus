@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/Navigation";
+﻿import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowRight, Play, Check, Shield, ScanLine, Lock, Sparkles, Quote } from "lucide-react";
@@ -23,7 +23,7 @@ const Index = () => {
 
       {/* background-image-overlay */}
       <div className="fixed top-0 right-0 bottom-0 left-0 pointer-events-none -z-20">
-        <img alt="Centro de Operações de Segurança" className="w-full h-full object-cover opacity-65" src="/assets/cydef-hero-bg.webp" fetchpriority="high" loading="eager" />
+        <img alt="Centro de OperaÃ§Ãµes de SeguranÃ§a" className="w-full h-full object-cover opacity-65" src="/assets/cydef-hero-bg.webp" fetchPriority="high" loading="eager" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/45 to-[#050505]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/0 to-[#050505]/0"></div>
       </div>
@@ -73,11 +73,11 @@ const Index = () => {
               <span className="text-xs font-bold tracking-widest uppercase text-orange-500/80">Cybersecurity 2.0</span>
             </div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tighter text-white font-medium mb-6 animate-on-scroll">
-              Segurança que
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600 block mt-2">evolui com você.</span>
+              SeguranÃ§a que
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600 block mt-2">evolui com vocÃª.</span>
             </h1>
             <p className="leading-relaxed text-lg font-medium text-white/60 max-w-lg animate-on-scroll">
-              Protegemos sua organização com serviços avançados de SOC, Blue Team e educação em cibersegurança de classe mundial. A CyDef automatiza a defesa para que você possa focar no seu negócio.
+              Protegemos sua organizaÃ§Ã£o com serviÃ§os avanÃ§ados de SOC, Blue Team e educaÃ§Ã£o em ciberseguranÃ§a de classe mundial. A CyDef automatiza a defesa para que vocÃª possa focar no seu negÃ³cio.
             </p>
             <div className="mt-10 flex flex-wrap gap-6 items-center animate-on-scroll">
               <Link className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_10px_rgba(249,115,22,0.45)] bg-gradient-to-b from-white/20 via-white/0 to-white/5 rounded-full relative shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)]" to="/contato">
@@ -97,7 +97,7 @@ const Index = () => {
               </Link>
               <div className="flex items-center gap-2 text-xs font-medium text-neutral-400">
                 <Check className="w-3.5 h-3.5 text-orange-500" />
-                <span>Análise de risco gratuita</span>
+                <span>AnÃ¡lise de risco gratuita</span>
               </div>
             </div>
           </div>
@@ -115,13 +115,13 @@ const Index = () => {
                   <div className="absolute top-3 right-3 px-2 py-1 bg-orange-500 text-black text-[10px] font-bold rounded uppercase">Blindado</div>
                 </div>
                 <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 transition-all duration-500 ${activeStep === 2 ? 'translate-y-0 scale-100 z-30 opacity-100' : activeStep === 3 ? 'translate-y-6 scale-90 z-10 opacity-40' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
-                  <img alt="Detecção por IA" className="w-full h-full object-cover opacity-70" src="/assets/cydef-card-deteccao.webp" />
+                  <img alt="DetecÃ§Ã£o por IA" className="w-full h-full object-cover opacity-70" src="/assets/cydef-card-deteccao.webp" />
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                     <ScanLine className="w-12 h-12 text-orange-400/50" />
                   </div>
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-[10px] font-mono text-white/80">Analisando ameaças...</span>
+                    <span className="text-[10px] font-mono text-white/80">Analisando ameaÃ§as...</span>
                   </div>
                 </div>
                 <div className={`card-stack-item absolute inset-0 rounded-lg overflow-hidden border border-white/10 shadow-2xl origin-bottom bg-neutral-900 transition-all duration-500 ${activeStep === 1 ? 'translate-y-0 scale-100 z-30 opacity-100' : activeStep === 2 ? 'translate-y-6 scale-90 z-10 opacity-40' : 'translate-y-3 scale-95 z-20 opacity-60'}`}>
@@ -144,7 +144,7 @@ const Index = () => {
               </div>
               <div className={`step-item ${activeStep === 2 ? 'translate-x-[-10px] bg-white/10 ring-1 ring-orange-500/50' : ''} animate-on-scroll`} onClick={() => setActiveStep(2)}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-300 ${activeStep === 2 ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-transparent text-neutral-400'}`}>02</div>
-                <span className={`text-sm font-medium transition-colors duration-300 ${activeStep === 2 ? 'text-white' : 'text-neutral-400'}`}>Detecção por IA</span>
+                <span className={`text-sm font-medium transition-colors duration-300 ${activeStep === 2 ? 'text-white' : 'text-neutral-400'}`}>DetecÃ§Ã£o por IA</span>
                 <ScanLine className={`w-3 h-3 ml-auto transition-all duration-300 ${activeStep === 2 ? 'text-orange-500 opacity-100' : 'opacity-0'}`} />
               </div>
               <div className={`step-item ${activeStep === 3 ? 'translate-x-[-10px] bg-white/10 ring-1 ring-orange-500/50' : ''} animate-on-scroll`} onClick={() => setActiveStep(3)}>
@@ -171,11 +171,11 @@ const Index = () => {
                   <Quote className="w-5 h-5 text-black/40 fill-black/20" />
                 </div>
                 <div>
-                  <p className="text-lg font-semibold leading-snug tracking-tight max-w-[80%]">"A CyDef mudou todo o nosso fluxo de segurança e compliance."</p>
+                  <p className="text-lg font-semibold leading-snug tracking-tight max-w-[80%]">"A CyDef mudou todo o nosso fluxo de seguranÃ§a e compliance."</p>
                   <div className="mt-4 pt-4 border-t border-black/10 flex items-center gap-2 text-xs font-medium uppercase tracking-wide opacity-70">
                     <span>CISO Verificado</span>
                     <span className="w-1 h-1 bg-black rounded-full"></span>
-                    <span>Avaliação 5.0</span>
+                    <span>AvaliaÃ§Ã£o 5.0</span>
                   </div>
                 </div>
               </div>
@@ -187,8 +187,8 @@ const Index = () => {
                 <span>Blue Team & SOC</span>
               </div>
               <h2 className="text-4xl lg:text-5xl font-normal tracking-tighter text-white animate-on-scroll">
-                Proteção inteligente de
-                <span className="text-white/60 block">próxima geração.</span>
+                ProteÃ§Ã£o inteligente de
+                <span className="text-white/60 block">prÃ³xima geraÃ§Ã£o.</span>
               </h2>
             </div>
           </div>
@@ -202,7 +202,7 @@ const Index = () => {
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">99%</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">Mitigação Automática</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">MitigaÃ§Ã£o AutomÃ¡tica</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">500+</div>
@@ -210,7 +210,7 @@ const Index = () => {
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">0</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">Falhas Críticas</div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Falhas CrÃ­ticas</div>
           </div>
         </div>
 
