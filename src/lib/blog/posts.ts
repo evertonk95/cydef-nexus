@@ -18,6 +18,7 @@ export interface BlogSection {
   paragraphs: string[];
   lists?: { title?: string; items: string[] }[];
   paragraphsAfter?: string[];
+  code?: string;
   note?: string;
 }
 
@@ -26,6 +27,8 @@ export interface BlogSection {
  * Pacotes completos (dossiê + SEO + revisão) em:
  * Documents/Squads100/squads/cydef-security-editorial/output/
  */
+import { extraPosts } from "./posts-extra.generated";
+
 export const blogPosts: BlogPost[] = [
   {
     slug: "como-estruturar-um-soc-do-zero",
@@ -192,6 +195,7 @@ export const blogPosts: BlogPost[] = [
       "2026-08-24: primeira versão, baseada no dossiê verificado (evergreen-soc-01, READY).",
     ],
   },
+  ...extraPosts,
 ];
 
 export const getPostBySlug = (slug: string): BlogPost | undefined =>

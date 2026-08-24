@@ -20,6 +20,35 @@ const BlogPost = () => {
     };
   }, [post]);
 
+  // Renderiza **negrito** e [texto](url) inline
+  const renderInline = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\))/g);
+    return parts.map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={i} className="text-white font-semibold">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+      if (link) {
+        return (
+          <a
+            key={i}
+            href={link[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-orange-400 hover:text-orange-300 underline underline-offset-2 transition-colors"
+          >
+            {link[1]}
+          </a>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
+
   if (!post) {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -101,7 +130,7 @@ const BlogPost = () => {
               )}
               {section.paragraphs.map((p, j) => (
                 <p key={j} className="text-neutral-300 leading-relaxed mb-5 text-[17px]">
-                  {p}
+                  {renderInline(p)}
                 </p>
               ))}
               {section.lists && (
@@ -120,7 +149,7 @@ const BlogPost = () => {
                         {list.items.map((item, m) => (
                           <li key={m} className="flex gap-3 text-neutral-300 leading-relaxed">
                             <span className="text-orange-500 mt-1.5 shrink-0">▸</span>
-                            <span>{item}</span>
+                            <span>{renderInline(item)}</span>
                           </li>
                         ))}
                       </ul>
@@ -130,9 +159,14 @@ const BlogPost = () => {
               )}
               {section.paragraphsAfter?.map((p, j) => (
                 <p key={`after-${j}`} className="text-neutral-300 leading-relaxed mb-5 text-[17px]">
-                  {p}
+                  {renderInline(p)}
                 </p>
               ))}
+              {section.code && (
+                <pre className="bg-black/60 border border-white/10 rounded-xl p-5 my-5 overflow-x-auto text-sm text-neutral-300 leading-relaxed font-mono">
+                  {section.code}
+                </pre>
+              )}
               {section.note && (
                 <p className="text-sm text-neutral-500 border-l-2 border-orange-500/50 pl-4 italic">
                   {section.note}

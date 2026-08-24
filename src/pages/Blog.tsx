@@ -5,72 +5,6 @@ import { Calendar, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { blogPosts } from "@/lib/blog/posts";
 
-const upcomingPosts = [
-  {
-    id: "2",
-    title: "MITRE ATT&CK na prática: Detectando técnicas de adversários",
-    excerpt:
-      "Entenda como usar o framework MITRE ATT&CK para mapear ameaças e criar regras de detecção eficazes no seu ambiente.",
-    category: "Blue Team",
-    date: "Em breve",
-    readTime: "10 min",
-  },
-  {
-    id: "3",
-    title: "Threat Hunting: Por onde começar?",
-    excerpt:
-      "Introdução ao threat hunting com metodologias, ferramentas e dicas práticas para caçar ameaças proativamente.",
-    category: "Detecção e Resposta",
-    date: "Em breve",
-    readTime: "7 min",
-  },
-  {
-    id: "4",
-    title: "Hardening de servidores Linux com CIS Benchmarks",
-    excerpt:
-      "Passo a passo para implementar hardening em servidores Linux seguindo as recomendações do CIS Benchmark.",
-    category: "Hardening",
-    date: "Em breve",
-    readTime: "12 min",
-  },
-  {
-    id: "5",
-    title: "Carreira em Cibersegurança: Certificações que fazem diferença",
-    excerpt:
-      "Análise das principais certificações de segurança e como escolher as mais adequadas para seu momento profissional.",
-    category: "Carreira e Certificações",
-    date: "Em breve",
-    readTime: "6 min",
-  },
-  {
-    id: "6",
-    title: "Segurança em Cloud AWS: Melhores práticas essenciais",
-    excerpt:
-      "Guia prático de segurança para ambientes AWS com foco em IAM, VPC, CloudTrail e outros serviços críticos.",
-    category: "Cloud Security",
-    date: "Em breve",
-    readTime: "9 min",
-  },
-  {
-    id: "7",
-    title: "Análise de logs: Identificando comportamentos maliciosos",
-    excerpt:
-      "Aprenda a correlacionar eventos de log e identificar padrões que indicam atividades suspeitas ou maliciosas.",
-    category: "SOC",
-    date: "Em breve",
-    readTime: "11 min",
-  },
-  {
-    id: "8",
-    title: "Inteligência de Ameaças: Como usar IOCs efetivamente",
-    excerpt:
-      "Entenda como coletar, validar e aplicar Indicadores de Comprometimento no contexto de defesa proativa.",
-    category: "Inteligência de Ameaças",
-    date: "Em breve",
-    readTime: "8 min",
-  },
-];
-
 const categories = [
   "Todos",
   "SOC",
@@ -170,37 +104,6 @@ const Blog = () => {
                   <ArrowRight className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </Link>
-            ))}
-
-            {upcomingPosts.map((post) => (
-              <div
-                key={post.id}
-                className="bg-neutral-900/50 border border-white/5 rounded-2xl p-6 flex flex-col h-full opacity-70"
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-white/5 text-neutral-400 border border-white/10 rounded-full text-xs font-semibold uppercase tracking-wider">
-                    {post.category}
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-bold text-white/70 mb-4 leading-tight">
-                  {post.title}
-                </h3>
-
-                <p className="text-neutral-500 text-sm leading-relaxed mb-6 flex-grow">
-                  {post.excerpt}
-                </p>
-
-                <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-                  <div className="flex items-center gap-4 text-xs font-medium text-neutral-500">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" />
-                      <span>{post.date}</span>
-                    </div>
-                    <span>{post.readTime}</span>
-                  </div>
-                </div>
-              </div>
             ))}
           </div>
 
