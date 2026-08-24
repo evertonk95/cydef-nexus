@@ -49,6 +49,9 @@ jobs:
           path: ./dist
 
   deploy:
+    # Ambiente já declarado (F-02): os REVIEWERS e as branches de deploy são
+    # configurados em Settings → Environments (ação admin — ver .github/REPO-PROTECTION.md).
+    # Até essa configuração, nenhum merge em main é autorizado (gate S-10).
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

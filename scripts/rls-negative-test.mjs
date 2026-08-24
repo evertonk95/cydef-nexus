@@ -34,7 +34,7 @@ const CASOS = [
   { id: 2, nome: "SELECT consentimentos/tokens (anon)", metodo: "GET", tabela: "consentimentos" },
   { id: 3, nome: "INSERT leads (anon)", metodo: "POST", tabela: "leads" },
   { id: 4, nome: "anon de outro projeto (cross-tenant)", metodo: "GET", tabela: "leads", chave: ANON_OTHER },
-  { id: 5, nome: "SELECT aviso_privacidade (anon)", metodo: "GET", tabela: "aviso_privacidade" },
+  { id: 5, nome: "SELECT aviso_privacidade (anon)", metodo: "GET", tabela: "aviso_privacidade", coluna: "versao" },
   { id: 6, nome: "UPDATE consentimentos (role de função)", metodo: "PATCH", tabela: "consentimentos", chave: SERVICE },
 ];
 
@@ -64,14 +64,16 @@ async function main() {
     let corpo = "";
     try {
       if (caso.metodo === "GET") {
-        const r = await fetch(`${URL}/rest/v1/${caso.tabela}?select=id&limit=1`, { headers });
+        const r = await fetch(`${URL}/rest/v1/${caso.tabela}?select=${caso.coluna ?? "id"}&limit=1`, { headers });
         status = r.status;
         corpo = await r.text();
       } else {
-        const r = await fetch(`${URL}/rest/v1/${caso.tabela}`, {
+        const uuid = crypto.randomUUID();
+        const filtro = caso.metodo === "POST" ? "" : `?id=eq.${uuid}`;
+        const r = await fetch(`${URL}/rest/v1/${caso.tabela}${filtro}`, {
           method: caso.metodo,
           headers: { ...headers, "Content-Type": "application/json" },
-          body: JSON.stringify({ id: crypto.randomUUID() }),
+          body: JSON.stringify({ id: uuid }),
         });
         status = r.status;
         corpo = await r.text();

@@ -18,4 +18,23 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "./src"),
     },
   },
+  // F-04 (Low, perf): chunk único de 552 kB acima do limite de aviso (500 kB).
+  // Divisão de vendor (react/router/ui) — mudança apenas de build/rollup, sem
+  // alteração de comportamento em runtime; mantém cache por bloco no GH Pages.
+  // NÃO é substituição de lazy-loading por rota (registrado para o MVP).
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (!id.includes("node_modules")) return undefined;
+          if (id.includes("react-router")) return "router";
+          if (id.includes("recharts") || id.includes("/d3-") || id.includes("/victory-vendor/")) return "charts";
+          if (id.includes("/react-dom/") || id.includes("/scheduler/")) return "react-vendor";
+          if (id.includes("/@radix-ui/")) return "radix";
+          if (id.includes("/cmdk/") || id.includes("/vaul/") || id.includes("/embla-carousel")) return "ui-widgets";
+          return "vendor";
+        },
+      },
+    },
+  },
 }));
