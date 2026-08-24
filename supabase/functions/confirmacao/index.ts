@@ -1,16 +1,16 @@
 ﻿/**
- * GET /api/confirmacao?token=â€¦ â€” verificaÃ§Ã£o do token de confirmaÃ§Ã£o (S-05).
+ * GET /api/confirmacao?token=… â€” verificação do token de confirmação (S-05).
  *
  * HEL-M02/M05:
- * - TTL 48h (fixado); token de uso Ãºnico (hash SHA-256 armazenado);
- * - TODOS os desfechos (vÃ¡lido/invÃ¡lido/expirado/reutilizado) â†’ MESMO 302 para
- *   a pÃ¡gina neutra `/academy/status-confirmacao` SEM query string;
+ * - TTL 48h (fixado); token de uso único (hash SHA-256 armazenado);
+ * - TODOS os desfechos (válido/inválido/expirado/reutilizado) â†’ MESMO 302 para
+ *   a página neutra `/academy/status-confirmacao` SEM query string;
  * - header `Referrer-Policy: no-referrer` + `Cache-Control: no-store` no 302;
  * - token FORA de logs (nunca loga req.url/query; loga evento + resultado);
- * - rate limit: 5/h por token e 10/15min por IP (429 â€” sem informaÃ§Ã£o de estado);
+ * - rate limit: 5/h por token e 10/15min por IP (429 â€” sem informação de estado);
  * - 20 falhas no mesmo token â†’ token invalidado (RPC, HEL-M05).
  *
- * DependÃªncias injetÃ¡veis (testes): storage (RPC confirmar_token).
+ * Dependências injetáveis (testes): storage (RPC confirmar_token).
  */
 
 import { hashToken } from "../../../src/lib/academy/token.ts";
@@ -31,9 +31,9 @@ export interface ConfirmacaoDeps {
   agora?: () => number;
   log?: (evento: Record<string, unknown>) => void;
   novoRequestId?: () => string;
-  /** Path da pÃ¡gina neutra (configurÃ¡vel p/ teste). */
+  /** Path da página neutra (configurável p/ teste). */
   statusPath?: string;
-  /** Base da URL final (usado apenas para montar Location em testes; em produÃ§Ã£o vem do SPA). */
+  /** Base da URL final (usado apenas para montar Location em testes; em produção vem do SPA). */
   appBaseUrl?: () => string;
 }
 
@@ -75,7 +75,7 @@ export function createConfirmacaoHandler(deps: ConfirmacaoDeps) {
     const res = await deps.storage.confirmarToken({ tokenHash, ipHash });
     if (res.ok === false) {
       if (res.razao === "rate_limited") {
-        // Rate limit nÃ£o revela estado do token (M05): 429 genÃ©rico.
+        // Rate limit não revela estado do token (M05): 429 genérico.
         log({ event: "confirmacao_rate_limited", request_id: requestId });
         return json({ erro: "muitas_tentativas" }, 429);
       }
@@ -90,7 +90,7 @@ export function createConfirmacaoHandler(deps: ConfirmacaoDeps) {
       resultado: res.resultado, // "ok" | "invalido" â€” sem token, sem e-mail
     });
 
-    // TODOS os desfechos â†’ mesmo 302 para pÃ¡gina neutra (sem query string).
+    // TODOS os desfechos â†’ mesmo 302 para página neutra (sem query string).
     return redirecionar(statusPath);
   };
 }
@@ -109,7 +109,7 @@ function redirecionar(location: string): Response {
 }
 
 // ---------------------------------------------------------------------------
-// Wiring de produÃ§Ã£o (Supabase Edge Runtime)
+// Wiring de produção (Supabase Edge Runtime)
 // ---------------------------------------------------------------------------
 
 export function criarStorageSupabase(): ConfirmacaoStorage {
