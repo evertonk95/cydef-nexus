@@ -29,7 +29,9 @@ export default defineConfig(({ mode }) => ({
           if (!id.includes("node_modules")) return undefined;
           if (id.includes("react-router")) return "router";
           if (id.includes("recharts") || id.includes("/d3-") || id.includes("/victory-vendor/")) return "charts";
-          if (id.includes("/react-dom/") || id.includes("/scheduler/")) return "react-vendor";
+          // react + react-dom + scheduler SEMPRE no mesmo chunk (instância única —
+          // separá-los quebra o runtime: __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED).
+          if (id.includes("/react/") || id.includes("/react-dom/") || id.includes("/scheduler/")) return "react-vendor";
           if (id.includes("/@radix-ui/")) return "radix";
           if (id.includes("/cmdk/") || id.includes("/vaul/") || id.includes("/embla-carousel")) return "ui-widgets";
           return "vendor";
