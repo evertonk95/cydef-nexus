@@ -9,7 +9,7 @@ import { z } from "zod";
 
 export const PERFIL_OPTIONS = [
   { value: "iniciante", label: "Iniciante em segurança" },
-  { value: "transicao", label: "Em transição para SOC" },
+  { value: "transicao", label: "Em transição para cibersegurança" },
   { value: "profissional", label: "Profissional ativo" },
   { value: "estudante", label: "Estudante" },
   { value: "outro", label: "Outro" },
