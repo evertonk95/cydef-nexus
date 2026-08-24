@@ -13,6 +13,11 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
+import AcademyLanding from "./pages/AcademyLanding";
+import AcademyPrivacy from "./pages/AcademyPrivacy";
+import AcademyStatusConfirmation from "./pages/AcademyStatusConfirmation";
+import AcademyThankYou from "./pages/AcademyThankYou";
+import { LANDING_PATH } from "./lib/config";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +47,11 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/contato" element={<Contact />} />
           <Route path="/privacidade" element={<Privacy />} />
+          {/* CyDef Academy — landing de captura (fase protótipo/validação, S-02..S-06) */}
+          <Route path={LANDING_PATH} element={<AcademyLanding />} />
+          <Route path="/academy/privacidade/:versao" element={<AcademyPrivacy />} />
+          <Route path="/academy/status-confirmacao" element={<AcademyStatusConfirmation />} />
+          <Route path="/academy/obrigado" element={<AcademyThankYou />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
