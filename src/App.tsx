@@ -17,6 +17,7 @@ import AcademyLanding from "./pages/AcademyLanding";
 import AcademyPrivacy from "./pages/AcademyPrivacy";
 import AcademyStatusConfirmation from "./pages/AcademyStatusConfirmation";
 import AcademyThankYou from "./pages/AcademyThankYou";
+import AcademyLogin from "./pages/AcademyLogin";
 import { LANDING_PATH } from "./lib/config";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/academy/privacidade/:versao" element={<AcademyPrivacy />} />
           <Route path="/academy/status-confirmacao" element={<AcademyStatusConfirmation />} />
           <Route path="/academy/obrigado" element={<AcademyThankYou />} />
+          <Route path="/academy/entrar" element={<AcademyLogin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
