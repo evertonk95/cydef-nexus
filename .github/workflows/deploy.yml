@@ -42,6 +42,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_CAPTURE_ENABLED: "true"
+          VITE_CAPTURE_API_URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/capture"
+          VITE_EMAIL_ENABLED: "false"
+          VITE_ANALYTICS_ENABLED: "false"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

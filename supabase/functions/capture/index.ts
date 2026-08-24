@@ -361,3 +361,9 @@ export default async function handler(req: Request): Promise<Response> {
     email: criarEmailServico(),
   })(req);
 }
+
+// Supabase Edge Runtime (Deno): vincula o servidor HTTP.
+// Guard `typeof Deno` mantém os testes em Node/vitest funcionando.
+if (typeof Deno !== "undefined") {
+  Deno.serve(handler);
+}
