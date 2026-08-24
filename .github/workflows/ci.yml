@@ -1,0 +1,73 @@
+# ============================================================================
+# CI — Gates de qualidade e segurança (S-07, HEL-M04/L07, SEC-011/015)
+# Rodada em pull_request (gate de merge) e push em main.
+# - Lint, typecheck, testes (vitest + axe-core), build de produção
+# - SCA: npm audit (zero Critical/High — SEC-015)
+# - SBOM versionado (cyclonedx — SEC-015)
+# - Gitleaks em todo PR (HEL-M04) — falha bloqueia merge
+# Actions pinadas por SHA completo (HEL-L07). Node 22 LTS.
+# ============================================================================
+
+name: CI — quality & security gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: Lint · Typecheck · Testes · Build · SCA · SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Testes (unit/integração/component + axe-core)
+        run: npm test
+      - name: Build de produção
+        run: npm run build
+      - name: SCA — dependências sem Critical/High (SEC-015)
+        run: npm audit --audit-level=high
+      - name: SBOM (SEC-015)
+        run: npm run sbom
+      - name: Upload SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom/cyclonedx.json
+          if-no-files-found: error
+
+  gitleaks:
+    name: Gitleaks — secret scan (HEL-M04)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks (PR/commits)
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_OUTPUT: gitleaks-report.json
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "true"
+          GITLEAKS_ENABLE_COMMENTS: "false"
