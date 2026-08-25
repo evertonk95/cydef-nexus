@@ -4,10 +4,12 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowRight, Play, Check, Shield, ScanLine, Lock, Sparkles, Quote } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { fetchAcademyStats, isAcademyStatsAvailable, STATS_POLL_INTERVAL_MS } from "@/lib/academy/stats";
 
 const Index = () => {
   useScrollReveal();
   const [activeStep, setActiveStep] = useState(1);
+  const [alunosMatriculados, setAlunosMatriculados] = useState<number | null>(null);
 
   // Auto-rotate steps
   useEffect(() => {
@@ -15,6 +17,27 @@ const Index = () => {
       setActiveStep((prev) => (prev % 3) + 1);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Contagem real de alunos matriculados na Academy (atualiza automático — polling).
+  // Só roda quando a feature está habilitada no build (fail secure).
+  useEffect(() => {
+    if (!isAcademyStatsAvailable()) return;
+    let ativo = true;
+    const carregar = async () => {
+      try {
+        const stats = await fetchAcademyStats();
+        if (ativo) setAlunosMatriculados(stats.matriculados);
+      } catch {
+        // Mantém o último valor exibido; sem quebrar a home se a API falhar.
+      }
+    };
+    carregar();
+    const interval = setInterval(carregar, STATS_POLL_INTERVAL_MS);
+    return () => {
+      ativo = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -205,8 +228,12 @@ const Index = () => {
             <div className="text-xl font-medium pl-1 text-neutral-400">Mitigação Automática</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">500+</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">Alunos Formados</div>
+            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">
+              {isAcademyStatsAvailable()
+                ? (alunosMatriculados !== null ? alunosMatriculados : "—")
+                : "—"}
+            </div>
+            <div className="text-xl font-medium pl-1 text-neutral-400">Alunos Matriculados</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">0</div>
