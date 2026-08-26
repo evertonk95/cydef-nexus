@@ -10,6 +10,7 @@ import Services from "./pages/Services";
 import Academy from "./pages/Academy";
 import CoursePage from "./pages/CoursePage";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
@@ -17,6 +18,7 @@ import AcademyLanding from "./pages/AcademyLanding";
 import AcademyPrivacy from "./pages/AcademyPrivacy";
 import AcademyStatusConfirmation from "./pages/AcademyStatusConfirmation";
 import AcademyThankYou from "./pages/AcademyThankYou";
+import AcademyLogin from "./pages/AcademyLogin";
 import { LANDING_PATH } from "./lib/config";
 
 const queryClient = new QueryClient();
@@ -45,6 +47,7 @@ const App = () => (
           <Route path="/academy" element={<Academy />} />
           <Route path="/cursos/:courseId" element={<CoursePage />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contato" element={<Contact />} />
           <Route path="/privacidade" element={<Privacy />} />
           {/* CyDef Academy — landing de captura (fase protótipo/validação, S-02..S-06) */}
@@ -52,6 +55,7 @@ const App = () => (
           <Route path="/academy/privacidade/:versao" element={<AcademyPrivacy />} />
           <Route path="/academy/status-confirmacao" element={<AcademyStatusConfirmation />} />
           <Route path="/academy/obrigado" element={<AcademyThankYou />} />
+          <Route path="/academy/entrar" element={<AcademyLogin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
