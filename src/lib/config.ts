@@ -29,3 +29,17 @@ export const captureApiUrl = (): string =>
 export const isCaptureEnabled = (): boolean => import.meta.env.VITE_CAPTURE_ENABLED === "true";
 export const isEmailEnabled = (): boolean => import.meta.env.VITE_EMAIL_ENABLED === "true";
 export const isAnalyticsEnabled = (): boolean => import.meta.env.VITE_ANALYTICS_ENABLED === "true";
+
+/**
+ * Supabase (portal) — URL e anon key.
+ * A anon key é pública por design (vai no bundle do SPA); os dados continuam
+ * protegidos por RLS deny-by-default + grants explícitos de RPC (HEL-M03).
+ */
+export const supabaseUrl = (): string =>
+  ((import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? "").replace(/\/+$/, "");
+export const supabaseAnonKey = (): string =>
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ?? "";
+
+/** Stats públicos da Academy (contagem de alunos na home) — default desligado (fail secure). */
+export const isAcademyStatsEnabled = (): boolean =>
+  import.meta.env.VITE_ACADEMY_STATS_ENABLED === "true";

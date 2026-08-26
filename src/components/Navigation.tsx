@@ -35,7 +35,7 @@ export const Navigation = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/contato" className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
+            <Link to="/academy/entrar" className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
               Entrar
             </Link>
             <Link to="/contato">
@@ -77,6 +77,9 @@ export const Navigation = () => {
               </Link>
               <Link to="/blog" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 Blog
+              </Link>
+              <Link to="/academy/entrar" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
+                Entrar
               </Link>
               <Link to="/contato" onClick={() => setIsOpen(false)}>
                 <button className="button-custom w-full mt-4" type="button">
