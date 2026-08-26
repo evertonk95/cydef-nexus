@@ -45,7 +45,7 @@ jobs:
       - name: Varredura SAST (regras auto — falha em achado)
         run: |
           .venv-sast/bin/semgrep scan \
-            --config=auto \
+            --config=p/security-audit \
             --metrics=off \
             --error \
             --exclude node_modules --exclude dist --exclude sbom \
