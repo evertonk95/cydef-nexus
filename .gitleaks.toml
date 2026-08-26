@@ -1,0 +1,16 @@
+# ============================================================================
+# gitleaks — configuração (HEL-M04)
+# Usa o conjunto de regras padrão + allowlist local (fixtures de teste).
+# ============================================================================
+
+title = "gitleaks config — CyDef Academy"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Permitidos: valores sintéticos de testes/documentação (sem segredo real)."
+regexes = [
+  # Chave de teste explícita (email.test.ts) — valor fictício
+  '''chave-teste''',
+]

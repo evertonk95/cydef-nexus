@@ -1,0 +1,60 @@
+# ============================================================================
+# SAST dedicado — semgrep OSS (achado F-01 · SSDF PW.5.1 · SEC-015)
+#
+# Escolha de ferramenta: semgrep OSS (LGPL-2.1) — gratuito em repositórios
+# públicos E privados, sem exigir GitHub Advanced Security (CodeQL exigiria
+# GHAS em repo privado). Versão pinada (semgrep==1.174.0, PyPI 2026-08-24);
+# actions usadas pinadas por SHA completo (HEL-L07).
+#
+# Política (fail secure — alinhada ao gate SCA e à camada transversal):
+# qualquer achado SAST falha o job e bloqueia o merge. A primeira execução
+# pode trazer achados de dívida pré-existente — triagem com Helena antes de
+# qualquer supressão; regras/limits ficam em .semgrepignore quando necessário.
+#
+# Ativação: este workflow roda no push/PR futuro (com aprovação de Everton —
+# gate A-02). Nenhuma ação externa foi executada no ciclo de remediação.
+# ============================================================================
+
+name: SAST — semgrep
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sast-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: Semgrep OSS (typescript/javascript)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Instalar semgrep (versão pinada)
+        run: |
+          python3 -m venv .venv-sast
+          .venv-sast/bin/pip install --quiet semgrep==1.174.0
+      - name: Varredura SAST (regras auto — falha em achado)
+        run: |
+          .venv-sast/bin/semgrep scan \
+            --config=p/security-audit \
+            --metrics=off \
+            --error \
+            --exclude node_modules --exclude dist --exclude sbom \
+            --output semgrep-report.txt \
+            src supabase/functions scripts
+      - name: Upload relatório SAST
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: semgrep-report
+          path: semgrep-report.txt
+          if-no-files-found: warn

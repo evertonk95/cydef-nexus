@@ -19,29 +19,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # Actions pinadas por SHA completo (HEL-L07) — v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
-      - name: Log in to GitHub Container Registry
-        run: echo "Setting up environment"
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node (22 LTS — inventário de ferramentas S-07)
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Testes (unit/integração + axe-core)
+        run: npm test
+
       - name: Build
         run: npm run build
+        env:
+          VITE_CAPTURE_ENABLED: "true"
+          VITE_CAPTURE_API_URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/capture"
+          VITE_EMAIL_ENABLED: "false"
+          VITE_ANALYTICS_ENABLED: "false"
+          # Portal — contagem real de alunos na home (anon key é pública por design;
+          # os dados ficam protegidos por RLS deny-by-default + RPC sem PII).
+          VITE_SUPABASE_URL: "https://fawtpustzzzplzivsdwq.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhd3RwdXN0enp6cGx6aXZzZHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1ODU4OTYsImV4cCI6MjEwMzE2MTg5Nn0.fI2aNNVCD4NX_cXojAHp6u6uiryUYnueDQ6-IEAF_qs"
+          VITE_ACADEMY_STATS_ENABLED: "true"
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: ./dist
 
   deploy:
+    # Ambiente já declarado (F-02): os REVIEWERS e as branches de deploy são
+    # configurados em Settings → Environments (ação admin — ver .github/REPO-PROTECTION.md).
+    # Até essa configuração, nenhum merge em main é autorizado (gate S-10).
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -50,4 +70,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

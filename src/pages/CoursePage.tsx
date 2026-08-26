@@ -13,7 +13,26 @@ import {
   Target,
 } from "lucide-react";
 
-const courseData: { [key: string]: any } = {
+interface CourseModule {
+  title: string;
+  topics?: string[];
+}
+
+interface Course {
+  id?: string;
+  title: string;
+  level: string;
+  duration: string;
+  price: string;
+  description: string;
+  modules?: CourseModule[];
+  objectives?: string[];
+  prerequisites?: string;
+  target?: string;
+  topics?: string[];
+}
+
+const courseData: Record<string, Course> = {
   "cybersecurity-fundamentals": {
     title: "Cybersecurity Fundamentals",
     level: "Iniciante",
@@ -305,7 +324,7 @@ const CoursePage = () => {
                   Conteúdo Programático
                 </h2>
                 <div className="space-y-4">
-                  {course.modules.map((module: any, i: number) => (
+                  {course.modules?.map((module, i: number) => (
                     <div key={i} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors">
                       <div className="flex items-start gap-6">
                         <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">

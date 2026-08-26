@@ -2,89 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowRight, Tag } from "lucide-react";
-
-const blogPosts = [
-  {
-    id: "1",
-    title: "Como estruturar um SOC do zero: Guia completo",
-    excerpt:
-      "Aprenda os passos essenciais para criar um Centro de Operações de Segurança eficiente, desde o planejamento até a operação.",
-    category: "SOC",
-    author: "Equipe CyDef",
-    date: "15 de Janeiro, 2025",
-    readTime: "8 min",
-  },
-  {
-    id: "2",
-    title: "MITRE ATT&CK na prática: Detectando técnicas de adversários",
-    excerpt:
-      "Entenda como usar o framework MITRE ATT&CK para mapear ameaças e criar regras de detecção eficazes no seu ambiente.",
-    category: "Blue Team",
-    author: "Equipe CyDef",
-    date: "10 de Janeiro, 2025",
-    readTime: "10 min",
-  },
-  {
-    id: "3",
-    title: "Threat Hunting: Por onde começar?",
-    excerpt:
-      "Introdução ao threat hunting com metodologias, ferramentas e dicas práticas para caçar ameaças proativamente.",
-    category: "Detecção e Resposta",
-    author: "Equipe CyDef",
-    date: "5 de Janeiro, 2025",
-    readTime: "7 min",
-  },
-  {
-    id: "4",
-    title: "Hardening de servidores Linux com CIS Benchmarks",
-    excerpt:
-      "Passo a passo para implementar hardening em servidores Linux seguindo as recomendações do CIS Benchmark.",
-    category: "Hardening",
-    author: "Equipe CyDef",
-    date: "28 de Dezembro, 2024",
-    readTime: "12 min",
-  },
-  {
-    id: "5",
-    title: "Carreira em Cibersegurança: Certificações que fazem diferença",
-    excerpt:
-      "Análise das principais certificações de segurança e como escolher as mais adequadas para seu momento profissional.",
-    category: "Carreira e Certificações",
-    author: "Equipe CyDef",
-    date: "20 de Dezembro, 2024",
-    readTime: "6 min",
-  },
-  {
-    id: "6",
-    title: "Segurança em Cloud AWS: Melhores práticas essenciais",
-    excerpt:
-      "Guia prático de segurança para ambientes AWS com foco em IAM, VPC, CloudTrail e outros serviços críticos.",
-    category: "Cloud Security",
-    author: "Equipe CyDef",
-    date: "15 de Dezembro, 2024",
-    readTime: "9 min",
-  },
-  {
-    id: "7",
-    title: "Análise de logs: Identificando comportamentos maliciosos",
-    excerpt:
-      "Aprenda a correlacionar eventos de log e identificar padrões que indicam atividades suspeitas ou maliciosas.",
-    category: "SOC",
-    author: "Equipe CyDef",
-    date: "10 de Dezembro, 2024",
-    readTime: "11 min",
-  },
-  {
-    id: "8",
-    title: "Inteligência de Ameaças: Como usar IOCs efetivamente",
-    excerpt:
-      "Entenda como coletar, validar e aplicar Indicadores de Comprometimento no contexto de defesa proativa.",
-    category: "Inteligência de Ameaças",
-    author: "Equipe CyDef",
-    date: "5 de Dezembro, 2024",
-    readTime: "8 min",
-  },
-];
+import { Link } from "react-router-dom";
+import { blogPosts } from "@/lib/blog/posts";
 
 const categories = [
   "Todos",
@@ -147,10 +66,19 @@ const Blog = () => {
         <div className="container mx-auto max-w-7xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
             {blogPosts.map((post) => (
-              <div
-                key={post.id}
+              <Link
+                key={post.slug}
+                to={`/blog/${post.slug}`}
                 className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)] transition-all duration-300 group flex flex-col h-full cursor-pointer"
               >
+                <div className="rounded-xl overflow-hidden border border-white/10 mb-4">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">
                     {post.category}
@@ -173,8 +101,9 @@ const Blog = () => {
                     </div>
                     <span>{post.readTime}</span>
                   </div>
+                  <ArrowRight className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
