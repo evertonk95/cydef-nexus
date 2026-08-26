@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:c56f10a0-ccf0-4630-a892-9853d55189ac",
+  "serialNumber": "urn:uuid:e21c90be-6edb-407a-8ac1-73175f67f455",
   "metadata": {
-    "timestamp": "2026-08-24T16:58:38.537Z",
+    "timestamp": "2026-08-25T21:19:09.894Z",
     "tools": {
       "components": [
         {
@@ -3461,8 +3461,8 @@
     {
       "type": "library",
       "name": "react-router-dom",
-      "version": "6.30.6",
-      "bom-ref": "vite_react_shadcn_ts@0.0.0|react-router-dom@6.30.6",
+      "version": "7.18.2",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|react-router-dom@7.18.2",
       "author": "Remix Software",
       "description": "Declarative routing for React web applications",
       "licenses": [
@@ -3473,7 +3473,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/react-router-dom@6.30.6",
+      "purl": "pkg:npm/react-router-dom@7.18.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/remix-run/react-router.git#packages/react-router-dom",
@@ -3491,12 +3491,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.30.6.tgz",
+          "url": "https://registry.npmjs.org/react-router-dom/-/react-router-dom-7.18.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d111ca673ef0c1f7ef914fb6305553d8d9e32b8e2cb0b115fa6d02009692d8ab26a2baf08fb5b11f4d233b448e096dbafed20d5272474e85db943b37dc8dfc61"
+              "content": "008289fe38069456f711b7c25e4e46cec862c2dfa5de6a9b0ab36398458c323a90c4d277b2f05ae9b833172082d92c37440d15585d64837b907f63858716fc87"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -3505,7 +3505,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">=14.0.0"
+          "value": ">=20.0.0"
         },
         {
           "name": "cdx:npm:package:path",
@@ -4093,8 +4093,8 @@
     {
       "type": "library",
       "name": "vite",
-      "version": "5.4.21",
-      "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21",
+      "version": "7.3.6",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6",
       "author": "Evan You",
       "description": "Native-ESM powered web dev build tool",
       "licenses": [
@@ -4105,7 +4105,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/vite@5.4.21",
+      "purl": "pkg:npm/vite@7.3.6",
       "externalReferences": [
         {
           "url": "git+https://github.com/vitejs/vite.git#packages/vite",
@@ -4123,12 +4123,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/vite/-/vite-5.4.21.tgz",
+          "url": "https://registry.npmjs.org/vite/-/vite-7.3.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a396bdc4a8dbb6e858e818b94b7f87bdb444466a2e69b59bc947295d7500d6ef863542a844e8bd6f2389f0cd271db1d81e46080a2325ab1920d4a9189a6db94b"
+              "content": "e173fad2ca511a349915fd6a607f9d24890adb39cbdf341f97d2a4395f4c924451ff70e5b34771681b103d396811ce412d758f2fdbec3b1a29c722a83260ee7a"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4137,7 +4137,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:constraint:engine:node",
-          "value": "^18.0.0 || >=20.0.0"
+          "value": "^20.19.0 || >=22.12.0"
         },
         {
           "name": "cdx:npm:package:development",
@@ -4152,8 +4152,8 @@
         {
           "type": "library",
           "name": "esbuild",
-          "version": "0.21.5",
-          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21|esbuild@0.21.5",
+          "version": "0.28.2",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|esbuild@0.28.2",
           "description": "An extremely fast JavaScript and CSS bundler and minifier.",
           "licenses": [
             {
@@ -4163,7 +4163,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/esbuild@0.21.5",
+          "purl": "pkg:npm/esbuild@0.28.2",
           "externalReferences": [
             {
               "url": "git+https://github.com/evanw/esbuild.git",
@@ -4181,12 +4181,130 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/esbuild/-/esbuild-0.21.5.tgz",
+              "url": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "9a0dce3cc578857cb0c29a03c6edd075ae7108a422faf09366af12f49fc4a64841d87cca5eae12345644dfe34af77258c5cf153127a9fa5394482fd154a681ab"
+                  "content": "1ca54b4bc76f208fb1a0a5bd926ab16d12ab9d61177c926bfc56618499a2a880747b4e7740d605a8e068b9330efe4e6c203e0cbc28940afbfc6fd338877db020"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">=18"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/vite/node_modules/esbuild"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "fdir",
+          "version": "6.5.0",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|fdir@6.5.0",
+          "author": "thecodrr",
+          "description": "The fastest directory crawler & globbing alternative to glob, fast-glob, & tiny-glob. Crawls 1m files in < 1s",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/fdir@6.5.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/thecodrr/fdir.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/thecodrr/fdir#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/thecodrr/fdir/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "b486d8b596ee70eb340511aa3c992c84951874bf920c7edd54cf208f2f84469dd60148cb105244fb4da46a7c87b708d63a7c2b298062c0098cd29e242c90275e"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">=12.0.0"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/vite/node_modules/fdir"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "picomatch",
+          "version": "4.0.7",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|picomatch@4.0.7",
+          "author": "Jon Schlinkert",
+          "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/picomatch@4.0.7",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/micromatch/picomatch.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/micromatch/picomatch",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/micromatch/picomatch/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "a9c26ef3c436216a89b030f9dbd24a31dc069bf76f2275b81ef427470887f49b62849bf318eb1c0ed1c4df1d6904a794393cac43c91598b9c9da426eef285c18"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4203,7 +4321,7 @@
             },
             {
               "name": "cdx:npm:package:path",
-              "value": "node_modules/vite/node_modules/esbuild"
+              "value": "node_modules/vite/node_modules/picomatch"
             }
           ]
         },
@@ -4211,8 +4329,8 @@
           "type": "library",
           "name": "win32-x64",
           "group": "@esbuild",
-          "version": "0.21.5",
-          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21|@esbuild/win32-x64@0.21.5",
+          "version": "0.28.2",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|@esbuild/win32-x64@0.28.2",
           "description": "The Windows 64-bit binary for esbuild, a JavaScript bundler.",
           "scope": "optional",
           "licenses": [
@@ -4223,7 +4341,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/%40esbuild/win32-x64@0.21.5",
+          "purl": "pkg:npm/%40esbuild/win32-x64@0.28.2",
           "externalReferences": [
             {
               "url": "git+https://github.com/evanw/esbuild.git",
@@ -4241,12 +4359,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.21.5.tgz",
+              "url": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "b5077fd5e7c9bb33c2eab085c04bcbb5c8bfc4d15c4d9927997b3df056037c6138c0ff4294557df27c8aaf324a54f3217439e3ccb85d532317e0fb1000f8f023"
+                  "content": "e5e6e9c6bde758cceb2ffae7508ef9e4992e79ed1b1cbfc6ab459317d96f729bfbdf0029e5ebbc31f0548162bd6e15af6638fbc97f1eb5fffcb48f0d7b2ebde6"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4255,7 +4373,7 @@
           "properties": [
             {
               "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">=12"
+              "value": ">=18"
             },
             {
               "name": "cdx:npm:package:development",
@@ -11188,65 +11306,9 @@
     },
     {
       "type": "library",
-      "name": "router",
-      "group": "@remix-run",
-      "version": "1.23.4",
-      "bom-ref": "vite_react_shadcn_ts@0.0.0|@remix-run/router@1.23.4",
-      "author": "Remix Software",
-      "description": "Nested/Data-driven/Framework-agnostic Routing",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/%40remix-run/router@1.23.4",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/remix-run/react-router.git#packages/router",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
-        },
-        {
-          "url": "https://github.com/remix-run/react-router#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/remix-run/react-router/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/@remix-run/router/-/router-1.23.4.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "abb8f981e2bbc6cdd4252766f7f8b2b5435c9419cb998c7512749e0855c73debad76a80831e15e1ed519812dc48652b1741100bbc3b0b490b098bac4ce94aced"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">=14.0.0"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/@remix-run/router"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "react-router",
-      "version": "6.30.6",
-      "bom-ref": "vite_react_shadcn_ts@0.0.0|react-router@6.30.6",
+      "version": "7.18.2",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|react-router@7.18.2",
       "author": "Remix Software",
       "description": "Declarative routing for React",
       "licenses": [
@@ -11257,7 +11319,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/react-router@6.30.6",
+      "purl": "pkg:npm/react-router@7.18.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/remix-run/react-router.git#packages/react-router",
@@ -11275,12 +11337,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/react-router/-/react-router-6.30.6.tgz",
+          "url": "https://registry.npmjs.org/react-router/-/react-router-7.18.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e477caee4e629bb2d3381d04a824267efcb80b5dc6f764ac8f55539a8b932b7009bf28ca4e716e095d2f70c003fc94be242e03bc320146b9407892058e1e555a"
+              "content": "69454c8c59b71803d34d92fba18af913b1138aa7d008744b1fe07ee5a7e7202bdfd2bee490ae1e47a48cbb06d24c9c3feedfb5da4853fca6a18a3e3d7ea38222"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -11289,7 +11351,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">=14.0.0"
+          "value": ">=20.0.0"
         },
         {
           "name": "cdx:npm:package:path",
@@ -13236,6 +13298,173 @@
     },
     {
       "type": "library",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17",
+      "author": "Superchupu",
+      "description": "A fast and minimal alternative to globby and fast-glob",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tinyglobby@0.2.17",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/SuperchupuDev/tinyglobby.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://superchupu.dev/tinyglobby",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/SuperchupuDev/tinyglobby/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "c1747f758a5ca8a99f5a911d66388a24ec023459dd0f40cc9eb5bf7188d51adb449017d581c2c51e836b963e3b9a339589cf72c8dbbae5a96c805e0d4324dada"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:constraint:engine:node",
+          "value": ">=12.0.0"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tinyglobby"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "fdir",
+          "version": "6.5.0",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
+          "author": "thecodrr",
+          "description": "The fastest directory crawler & globbing alternative to glob, fast-glob, & tiny-glob. Crawls 1m files in < 1s",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/fdir@6.5.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/thecodrr/fdir.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/thecodrr/fdir#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/thecodrr/fdir/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "b486d8b596ee70eb340511aa3c992c84951874bf920c7edd54cf208f2f84469dd60148cb105244fb4da46a7c87b708d63a7c2b298062c0098cd29e242c90275e"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">=12.0.0"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/tinyglobby/node_modules/fdir"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "picomatch",
+          "version": "4.0.7",
+          "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7",
+          "author": "Jon Schlinkert",
+          "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/picomatch@4.0.7",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/micromatch/picomatch.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/micromatch/picomatch",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/micromatch/picomatch/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "a9c26ef3c436216a89b030f9dbd24a31dc069bf76f2275b81ef427470887f49b62849bf318eb1c0ed1c4df1d6904a794393cac43c91598b9c9da426eef285c18"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">=12"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/tinyglobby/node_modules/picomatch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "dom-accessibility-api",
       "version": "0.5.16",
       "bom-ref": "vite_react_shadcn_ts@0.0.0|dom-accessibility-api@0.5.16",
@@ -14167,173 +14396,6 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/tinyexec"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "tinyglobby",
-      "version": "0.2.17",
-      "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17",
-      "author": "Superchupu",
-      "description": "A fast and minimal alternative to globby and fast-glob",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/tinyglobby@0.2.17",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/SuperchupuDev/tinyglobby.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://superchupu.dev/tinyglobby",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/SuperchupuDev/tinyglobby/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "c1747f758a5ca8a99f5a911d66388a24ec023459dd0f40cc9eb5bf7188d51adb449017d581c2c51e836b963e3b9a339589cf72c8dbbae5a96c805e0d4324dada"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">=12.0.0"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/tinyglobby"
-        }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "fdir",
-          "version": "6.5.0",
-          "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
-          "author": "thecodrr",
-          "description": "The fastest directory crawler & globbing alternative to glob, fast-glob, & tiny-glob. Crawls 1m files in < 1s",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/fdir@6.5.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/thecodrr/fdir.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/thecodrr/fdir#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/thecodrr/fdir/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "b486d8b596ee70eb340511aa3c992c84951874bf920c7edd54cf208f2f84469dd60148cb105244fb4da46a7c87b708d63a7c2b298062c0098cd29e242c90275e"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">=12.0.0"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/tinyglobby/node_modules/fdir"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "picomatch",
-          "version": "4.0.7",
-          "bom-ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7",
-          "author": "Jon Schlinkert",
-          "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/picomatch@4.0.7",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/micromatch/picomatch.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/micromatch/picomatch",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/micromatch/picomatch/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "a9c26ef3c436216a89b030f9dbd24a31dc069bf76f2275b81ef427470887f49b62849bf318eb1c0ed1c4df1d6904a794393cac43c91598b9c9da426eef285c18"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">=12"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/tinyglobby/node_modules/picomatch"
-            }
-          ]
         }
       ]
     },
@@ -19694,6 +19756,112 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/js-tokens"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "cookie",
+      "version": "1.1.1",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|cookie@1.1.1",
+      "author": "Roman Shtylman",
+      "description": "HTTP server cookie parsing and serialization",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/cookie@1.1.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jshttp/cookie.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jshttp/cookie#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jshttp/cookie/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/cookie/-/cookie-1.1.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "7a2f00a2cee36b4c1e469173267100f541c9ffb5d09aa8256d1c277f60138dc07d5aaf3be15287f647e38e2acce94854dbf1397c561a77297284595d72a4a275"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:constraint:engine:node",
+          "value": ">=18"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/cookie"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "set-cookie-parser",
+      "version": "2.7.2",
+      "bom-ref": "vite_react_shadcn_ts@0.0.0|set-cookie-parser@2.7.2",
+      "author": "Nathan Friedly",
+      "description": "Parses set-cookie headers into objects",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/set-cookie-parser@2.7.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/nfriedly/set-cookie-parser.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nfriedly/set-cookie-parser",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nfriedly/set-cookie-parser/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/set-cookie-parser/-/set-cookie-parser-2.7.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "a1e33596953f52f853c70fa0ddc21fc571f225173fba275ddf22b53f6e368331ddb34b9d401633b37cbc8f8802096f9927b69dd3272d95df1160ef9b76eae5bf"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/set-cookie-parser"
         }
       ]
     },
@@ -33273,7 +33441,7 @@
         "vite_react_shadcn_ts@0.0.0|react-dom@18.3.1",
         "vite_react_shadcn_ts@0.0.0|react-hook-form@7.86.0",
         "vite_react_shadcn_ts@0.0.0|react-resizable-panels@2.1.9",
-        "vite_react_shadcn_ts@0.0.0|react-router-dom@6.30.6",
+        "vite_react_shadcn_ts@0.0.0|react-router-dom@7.18.2",
         "vite_react_shadcn_ts@0.0.0|react@18.3.1",
         "vite_react_shadcn_ts@0.0.0|recharts@2.15.4",
         "vite_react_shadcn_ts@0.0.0|sonner@1.7.4",
@@ -33283,7 +33451,7 @@
         "vite_react_shadcn_ts@0.0.0|typescript-eslint@8.67.0",
         "vite_react_shadcn_ts@0.0.0|typescript@5.9.3",
         "vite_react_shadcn_ts@0.0.0|vaul@0.9.9",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21",
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6",
         "vite_react_shadcn_ts@0.0.0|vitest-axe@0.1.0",
         "vite_react_shadcn_ts@0.0.0|vitest@3.2.7",
         "vite_react_shadcn_ts@0.0.0|zod@3.25.76"
@@ -33841,7 +34009,7 @@
       "dependsOn": [
         "vite_react_shadcn_ts@0.0.0|@rolldown/pluginutils@1.0.0-beta.27",
         "vite_react_shadcn_ts@0.0.0|@swc/core@1.16.1",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21"
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6"
       ]
     },
     {
@@ -33994,7 +34162,7 @@
       "dependsOn": [
         "vite_react_shadcn_ts@0.0.0|esbuild@0.25.12",
         "vite_react_shadcn_ts@0.0.0|tailwindcss@3.4.19",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21"
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6"
       ]
     },
     {
@@ -34047,11 +34215,10 @@
       ]
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|react-router-dom@6.30.6",
+      "ref": "vite_react_shadcn_ts@0.0.0|react-router-dom@7.18.2",
       "dependsOn": [
-        "vite_react_shadcn_ts@0.0.0|@remix-run/router@1.23.4",
         "vite_react_shadcn_ts@0.0.0|react-dom@18.3.1",
-        "vite_react_shadcn_ts@0.0.0|react-router@6.30.6",
+        "vite_react_shadcn_ts@0.0.0|react-router@7.18.2",
         "vite_react_shadcn_ts@0.0.0|react@18.3.1"
       ]
     },
@@ -34152,22 +34319,35 @@
       ]
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21",
+      "ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6",
       "dependsOn": [
         "vite_react_shadcn_ts@0.0.0|@types/node@22.20.1",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21|esbuild@0.21.5",
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6|esbuild@0.28.2",
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6|fdir@6.5.0",
+        "vite_react_shadcn_ts@0.0.0|jiti@1.21.7",
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6|picomatch@4.0.7",
         "vite_react_shadcn_ts@0.0.0|postcss@8.5.26",
-        "vite_react_shadcn_ts@0.0.0|rollup@4.62.5"
+        "vite_react_shadcn_ts@0.0.0|rollup@4.62.5",
+        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17"
       ]
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21|esbuild@0.21.5",
+      "ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|esbuild@0.28.2",
       "dependsOn": [
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21|@esbuild/win32-x64@0.21.5"
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6|@esbuild/win32-x64@0.28.2"
       ]
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|vite@5.4.21|@esbuild/win32-x64@0.21.5"
+      "ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|fdir@6.5.0",
+      "dependsOn": [
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6|picomatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|picomatch@4.0.7"
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|vite@7.3.6|@esbuild/win32-x64@0.28.2"
     },
     {
       "ref": "vite_react_shadcn_ts@0.0.0|vitest-axe@0.1.0",
@@ -34210,7 +34390,7 @@
         "vite_react_shadcn_ts@0.0.0|tinypool@1.1.1",
         "vite_react_shadcn_ts@0.0.0|tinyrainbow@2.0.0",
         "vite_react_shadcn_ts@0.0.0|vite-node@3.2.4",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21",
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6",
         "vite_react_shadcn_ts@0.0.0|why-is-node-running@2.3.0"
       ]
     },
@@ -34987,13 +35167,12 @@
       ]
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|@remix-run/router@1.23.4"
-    },
-    {
-      "ref": "vite_react_shadcn_ts@0.0.0|react-router@6.30.6",
+      "ref": "vite_react_shadcn_ts@0.0.0|react-router@7.18.2",
       "dependsOn": [
-        "vite_react_shadcn_ts@0.0.0|@remix-run/router@1.23.4",
-        "vite_react_shadcn_ts@0.0.0|react@18.3.1"
+        "vite_react_shadcn_ts@0.0.0|cookie@1.1.1",
+        "vite_react_shadcn_ts@0.0.0|react-dom@18.3.1",
+        "vite_react_shadcn_ts@0.0.0|react@18.3.1",
+        "vite_react_shadcn_ts@0.0.0|set-cookie-parser@2.7.2"
       ]
     },
     {
@@ -35245,6 +35424,22 @@
       ]
     },
     {
+      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17",
+      "dependsOn": [
+        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
+        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
+      "dependsOn": [
+        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
+    },
+    {
       "ref": "vite_react_shadcn_ts@0.0.0|dom-accessibility-api@0.5.16"
     },
     {
@@ -35273,7 +35468,7 @@
         "vite_react_shadcn_ts@0.0.0|@vitest/spy@3.2.7",
         "vite_react_shadcn_ts@0.0.0|estree-walker@3.0.3",
         "vite_react_shadcn_ts@0.0.0|magic-string@0.30.21",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21"
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6"
       ]
     },
     {
@@ -35344,22 +35539,6 @@
       "ref": "vite_react_shadcn_ts@0.0.0|tinyexec@0.3.2"
     },
     {
-      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17",
-      "dependsOn": [
-        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
-        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
-      ]
-    },
-    {
-      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|fdir@6.5.0",
-      "dependsOn": [
-        "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
-      ]
-    },
-    {
-      "ref": "vite_react_shadcn_ts@0.0.0|tinyglobby@0.2.17|picomatch@4.0.7"
-    },
-    {
       "ref": "vite_react_shadcn_ts@0.0.0|tinypool@1.1.1"
     },
     {
@@ -35372,7 +35551,7 @@
         "vite_react_shadcn_ts@0.0.0|debug@4.4.3",
         "vite_react_shadcn_ts@0.0.0|es-module-lexer@1.7.0",
         "vite_react_shadcn_ts@0.0.0|pathe@2.0.3",
-        "vite_react_shadcn_ts@0.0.0|vite@5.4.21"
+        "vite_react_shadcn_ts@0.0.0|vite@7.3.6"
       ]
     },
     {
@@ -35845,6 +36024,12 @@
     },
     {
       "ref": "vite_react_shadcn_ts@0.0.0|js-tokens@4.0.0"
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|cookie@1.1.1"
+    },
+    {
+      "ref": "vite_react_shadcn_ts@0.0.0|set-cookie-parser@2.7.2"
     },
     {
       "ref": "vite_react_shadcn_ts@0.0.0|fast-equals@5.4.1"

@@ -42,6 +42,16 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_CAPTURE_ENABLED: "true"
+          VITE_CAPTURE_API_URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/capture"
+          VITE_EMAIL_ENABLED: "false"
+          VITE_ANALYTICS_ENABLED: "false"
+          # Portal — contagem real de alunos na home (anon key é pública por design;
+          # os dados ficam protegidos por RLS deny-by-default + RPC sem PII).
+          VITE_SUPABASE_URL: "https://fawtpustzzzplzivsdwq.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhd3RwdXN0enp6cGx6aXZzZHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1ODU4OTYsImV4cCI6MjEwMzE2MTg5Nn0.fI2aNNVCD4NX_cXojAHp6u6uiryUYnueDQ6-IEAF_qs"
+          VITE_ACADEMY_STATS_ENABLED: "true"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
