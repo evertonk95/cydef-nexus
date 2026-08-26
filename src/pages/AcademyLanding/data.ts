@@ -53,7 +53,7 @@ export const FAQ_ITEMS = [
   {
     question: "Preciso de experiência?",
     answer:
-      "Não. Os dois cursos são de nível iniciante, desenhados para quem está começando ou migrando para a área de segurança operacional (SOC/Blue Team).",
+      "Não. Os dois cursos são de nível iniciante, desenhados para quem está começando ou migrando para a área de cibersegurança (SOC, Blue Team, governança e outras frentes).",
   },
   {
     question: "O que vem depois?",
