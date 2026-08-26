@@ -27,7 +27,7 @@ describe("AcademyLanding (S-02)", () => {
   it("renderiza hero com H1 e CTA âncora", () => {
     renderLanding();
     expect(
-      screen.getByRole("heading", { level: 1, name: /Comece sua carreira em SOC/i }),
+      screen.getByRole("heading", { level: 1, name: /Comece sua carreira de Cybersecurity/i }),
     ).toBeInTheDocument();
     const cta = screen.getByRole("link", { name: /Quero meu acesso gratuito/i });
     expect(cta).toHaveAttribute("href", "#pre-inscricao");

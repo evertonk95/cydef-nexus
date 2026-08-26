@@ -5,16 +5,16 @@
  *   request:  { nome, email, perfil, aceito, declaracao_idade, honeypot,
  *               request_id, action?: "capture"|"resend" }
  *             (SEM `consentimento.versao_aviso` â€” servidor carimba a vigente â€” M01)
- *   response: 202 { status:"pending_confirmation", mensagem }  (tambÃ©m p/ duplicado â€” M05)
- *             400 { erro:"payload_invalido" }  (genÃ©rico, sem reflexÃ£o de entrada)
- *             413 corpo > 4KB (HEL-L04) Â· 415 Content-Type invÃ¡lido (HEL-L04)
- *             429 rate limit (HEL-M05) Â· 503 fail closed (storage/email indisponÃ­vel)
+ *   response: 202 { status:"pending_confirmation", mensagem }  (também p/ duplicado â€” M05)
+ *             400 { erro:"payload_invalido" }  (genérico, sem reflexão de entrada)
+ *             413 corpo > 4KB (HEL-L04) · 415 Content-Type inválido (HEL-L04)
+ *             429 rate limit (HEL-M05) · 503 fail closed (storage/email indisponível)
  *
- * SeguranÃ§a: validaÃ§Ã£o server-side; honeypot; rate limit; dedupe silencioso;
+ * Segurança: validação server-side; honeypot; rate limit; dedupe silencioso;
  * token 256 bits (hash SHA-256 persistido); e-mail com nome sanitizado (L01);
  * logs SEM nome/e-mail/token/URL (M02).
  *
- * DependÃªncias injetÃ¡veis (testes): storage (RPCs), email, hashIp, agora, log.
+ * Dependências injetáveis (testes): storage (RPCs), email, hashIp, agora, log.
  */
 
 import {
@@ -39,7 +39,7 @@ import {
   novoRequestId,
 } from "../_shared/edge.ts";
 
-const MSG_GENERICA = "PrÃ©-inscriÃ§Ã£o recebida. Confirme seu e-mail.";
+const MSG_GENERICA = "Pré-inscrição recebida. Confirme seu e-mail.";
 
 export type RpcResultado =
   | { ok: true; status: "accepted" | "accepted_duplicate"; leadId?: string; email?: string; nome?: string }
@@ -95,7 +95,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
       return json({ erro: "metodo_nao_permitido" }, 405);
     }
 
-    // HEL-L04: Content-Type obrigatÃ³rio application/json.
+    // HEL-L04: Content-Type obrigatório application/json.
     const ct = (req.headers.get("content-type") ?? "").toLowerCase();
     if (!ct.startsWith("application/json")) {
       return json({ erro: "content_type_invalido" }, 415);
@@ -117,7 +117,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
     }
     const r = (body ?? {}) as Record<string, unknown>;
 
-    // Honeypot preenchido â†’ rejeiÃ§Ã£o silenciosa com resposta genÃ©rica (SEC-006).
+    // Honeypot preenchido â†’ rejeição silenciosa com resposta genérica (SEC-006).
     if (honeypotPreenchido(r.honeypot)) {
       log({ event: "capture_honeypot", request_id: requestId });
       return json({ status: "pending_confirmation", mensagem: MSG_GENERICA }, 202);
@@ -127,7 +127,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
       ? await deps.hashIp(ipDoRequest(req))
       : await hashIp(ipDoRequest(req));
 
-    // AÃ§Ã£o reenvio (UX "Reenviar e-mail" â€” estado email-failure).
+    // Ação reenvio (UX "Reenviar e-mail" â€” estado email-failure).
     if (r.action === "resend") {
       if (!validarRequestId(r.request_id)) {
         return json({ erro: "payload_invalido" }, 400);
@@ -162,7 +162,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
       return json({ status: "pending_confirmation", mensagem: MSG_GENERICA }, 202);
     }
 
-    // Captura: validaÃ§Ã£o server-side (SEC-002/SEC-006).
+    // Captura: validação server-side (SEC-002/SEC-006).
     const v = validarCaptura(body);
     if (v.ok === false) {
       log({ event: "capture_rejeitada", request_id: requestId, razao: v.razao });
@@ -173,7 +173,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
       return json({ erro: "payload_invalido" }, 400);
     }
 
-    // Token de confirmaÃ§Ã£o: gerado aqui (256 bits), persistido como hash (M02/M05).
+    // Token de confirmação: gerado aqui (256 bits), persistido como hash (M02/M05).
     const token = await gerarToken();
     const tokenHash = await hashToken(token);
     const expira = new Date(agora() + TOKEN_TTL_MS).toISOString();
@@ -215,7 +215,7 @@ export function createCaptureHandler(deps: CaptureDeps) {
     });
 
     log({ event: "capture_aceita", request_id: requestId, status: res.status });
-    // Duplicado (M05) â†’ mesma resposta 202 genÃ©rica (dedupe silencioso).
+    // Duplicado (M05) â†’ mesma resposta 202 genérica (dedupe silencioso).
     return json({ status: "pending_confirmation", mensagem: MSG_GENERICA }, 202);
   };
 }
@@ -246,13 +246,13 @@ async function enviarConfirmacao(
     link,
   });
   if (!result.enviado) {
-    // NÃ£o quebra o fluxo: lead permanece pending + fallback manual (ADRV-08).
+    // Não quebra o fluxo: lead permanece pending + fallback manual (ADRV-08).
     input.log({ event: "email_falha", request_id: input.requestId });
   }
 }
 
 // ---------------------------------------------------------------------------
-// Wiring de produÃ§Ã£o (Supabase Edge Runtime)
+// Wiring de produção (Supabase Edge Runtime)
 // ---------------------------------------------------------------------------
 
 function criarStorageSupabase(): CaptureStorage {
@@ -354,10 +354,16 @@ function criarEmailServico(): EmailServico {
   };
 }
 
-// Handler de produÃ§Ã£o (Supabase Edge Runtime): injeta deps reais.
+// Handler de produção (Supabase Edge Runtime): injeta deps reais.
 export default async function handler(req: Request): Promise<Response> {
   return createCaptureHandler({
     storage: criarStorageSupabase(),
     email: criarEmailServico(),
   })(req);
+}
+
+// Supabase Edge Runtime (Deno): vincula o servidor HTTP.
+// Guard `typeof Deno` mantém os testes em Node/vitest funcionando.
+if (typeof Deno !== "undefined") {
+  Deno.serve(handler);
 }

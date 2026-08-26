@@ -26,13 +26,13 @@ export const Hero = () => (
         Cursos gratuitos de entrada
       </span>
       <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-        Comece sua carreira em SOC —{" "}
+        Comece sua carreira de Cybersecurity —{" "}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F46B27] to-[#F69021]">
           de graça
         </span>
       </h1>
       <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-        2 cursos práticos para entrar no mundo da segurança operacional.
+        2 cursos práticos para entrar no mundo da cibersegurança.
         Pré-inscreva-se e receba o acesso.
       </p>
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">

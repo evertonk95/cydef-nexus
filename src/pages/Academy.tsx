@@ -2,6 +2,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
+import { LANDING_PATH } from "@/lib/config";
 import {
   GraduationCap,
   Award,
@@ -95,13 +96,18 @@ const Academy = () => {
             Do básico ao avançado, formamos profissionais com as habilidades
             necessárias para os desafios reais da cibersegurança.
           </p>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link to="#cursos" className="inline-block">
               <button className="button-custom" type="button">
                 <div className="points_wrapper">
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
                 <span className="inner flex items-center gap-2">Ver Cursos <ArrowRight className="w-4 h-4"/></span>
+              </button>
+            </Link>
+            <Link to={LANDING_PATH} className="inline-block">
+              <button className="px-6 py-4 rounded-lg border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors font-medium text-sm" type="button">
+                Cursos gratuitos de entrada <ArrowRight className="w-4 h-4 inline ml-1" />
               </button>
             </Link>
           </div>
@@ -142,7 +148,7 @@ const Academy = () => {
       {/* Courses Section */}
       <section id="cursos" className="py-24 px-4 bg-white/[0.02] border-y border-white/5 relative">
         <div className="container mx-auto max-w-7xl">
-          <div className="max-w-4xl mx-auto text-center mb-16 animate-on-scroll">
+          <div className="max-w-4xl mx-auto text-center mb-10 animate-on-scroll">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
               Nossos Cursos
             </h2>
@@ -150,6 +156,22 @@ const Academy = () => {
               Formações completas para todas as etapas da sua carreira em cibersegurança.
             </p>
           </div>
+
+          {/* Acesso gratuito — entrada para a Academy (landing de captura) */}
+          <Link to={LANDING_PATH} className="block mb-10 group animate-on-scroll">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent p-6 md:p-8 hover:border-orange-500/60 transition-colors">
+              <div className="text-center md:text-left">
+                <div className="inline-flex items-center gap-2 text-orange-400 text-xs font-semibold tracking-widest uppercase mb-2">
+                  <GraduationCap className="h-4 w-4" /> Comece de graça
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-white">2 cursos gratuitos de entrada para SOC</h3>
+                <p className="text-white/60 text-sm mt-1">Fundamentos para SOC e Cybersecurity Fundamentals — pré-inscreva-se e receba o acesso no seu e-mail.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-orange-500 hover:bg-orange-400 text-black font-semibold text-sm transition-colors shrink-0">
+                Quero meu acesso gratuito <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </Link>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
             {courses.map((course) => (
