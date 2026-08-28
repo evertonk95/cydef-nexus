@@ -9,8 +9,14 @@ title = "gitleaks config — CyDef Academy"
 useDefault = true
 
 [allowlist]
-description = "Permitidos: valores sintéticos de testes/documentação (sem segredo real)."
+description = "Permitidos: valores sintéticos de testes/documentação e chaves públicas por design."
 regexes = [
   # Chave de teste explícita (email.test.ts) — valor fictício
   '''chave-teste''',
+]
+# Chave ANON (pública) do Supabase — por design vai no bundle do SPA (VITE_SUPABASE_ANON_KEY),
+# documentado no .env.example. Não é segredo; a proteção real é RLS deny-by-default + RPC (HEL-M03).
+# O Gitleaks a flagra como JWT — allowlist para o CI (HEL-M04) não acusar falso positivo.
+stopwords = [
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhd3RwdXN0enp6cGx6aXZzZHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1ODU4OTYsImV4cCI6MjEwMzE2MTg5Nn0.fI2aNNVCD4NX_cXojAHp6u6uiryUYnueDQ6-IEAF_qs''',
 ]
