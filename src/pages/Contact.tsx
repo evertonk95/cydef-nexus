@@ -16,7 +16,7 @@ const Contact = () => {
         <div className="container mx-auto text-center relative z-10 animate-on-scroll">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <MessageSquare className="h-4 w-4" />
-            Fale Conosco
+            Fale com a CyDef
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
             Entre em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">Contato</span>
@@ -24,7 +24,8 @@ const Contact = () => {
           <p className="text-lg text-white/60 max-w-2xl mx-auto font-medium">
             Ainda não vendemos serviços gerenciados — e somos transparentes
             quanto a isso. Fale com a CyDef sobre conteúdo, formação gratuita
-            e o ecossistema que estamos construindo.
+            e o ecossistema que estamos construindo, guiados pelo Código
+            CyDef: justiça, respeito e responsabilidade pelo resultado.
           </p>
         </div>
       </section>

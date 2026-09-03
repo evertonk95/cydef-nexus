@@ -288,7 +288,7 @@ const Academy = () => {
                 <div className="points_wrapper">
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
-                <span className="inner flex items-center gap-2">Falar com Especialista <ArrowRight className="w-4 h-4"/></span>
+                <span className="inner flex items-center gap-2">Falar com a CyDef <ArrowRight className="w-4 h-4"/></span>
               </button>
             </Link>
           </div>

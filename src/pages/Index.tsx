@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Shield, Newspaper, GraduationCap, FlaskConical, Microscope, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { fetchAcademyStats, isAcademyStatsAvailable, STATS_POLL_INTERVAL_MS } from "@/lib/academy/stats";
@@ -96,17 +96,46 @@ const Index = () => {
           </div>
         </div>
 
-        {/* headline */}
-        <div className="md:px-10 mt-24 pt-4 pb-10 border-t border-white/5 relative z-20">
-          <div className="text-center animate-on-scroll">
-            <div className="flex items-center gap-2 justify-center mb-3 text-orange-400 text-xs font-medium uppercase tracking-wider">
-              <Sparkles className="w-3 h-3" />
-              <span>Blue Team & SOC — no futuro</span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-normal tracking-tighter text-white">
-              Proteção inteligente de
-              <span className="text-white/60 block">próxima geração.</span>
+        {/* ecossistema — os 5 pilares com estado honesto (fundação, tom consistente) */}
+        <div className="md:px-10 mt-24 pt-16 pb-10 border-t border-white/5 relative z-20">
+          <div className="text-center mb-12 animate-on-scroll">
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-4">
+              O ecossistema <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">CyDef</span>
             </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+              Media, Academy, Labs, Research e Consulting — cinco pilares, um
+              mesmo propósito. Cada um entra no ar quando existir de verdade.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 animate-on-scroll">
+            {[
+              { nome: "Media", papel: "Compartilhar conhecimento", estado: "Ativo — blog", ativo: true, para: "/blog", icon: Newspaper },
+              { nome: "Academy", papel: "Formar profissionais", estado: "Ativa — gratuita", ativo: true, para: "/academy", icon: GraduationCap },
+              { nome: "Labs", papel: "Construir ferramentas", estado: "Em construção", ativo: false, para: "/servicos", icon: FlaskConical },
+              { nome: "Research", papel: "Produzir pesquisa", estado: "Em construção", ativo: false, para: "/servicos", icon: Microscope },
+              { nome: "Consulting", papel: "Proteger organizações", estado: "Em construção", ativo: false, para: "/servicos", icon: Briefcase },
+            ].map((p) => (
+              <Link
+                key={p.nome}
+                to={p.para}
+                className="bg-neutral-900 border border-white/10 rounded-2xl p-6 text-center hover:border-orange-500/50 transition-colors group"
+              >
+                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-orange-500/20 to-amber-500/20 flex items-center justify-center mx-auto mb-4 border border-orange-500/20">
+                  <p.icon className="w-6 h-6 text-orange-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">{p.nome}</h3>
+                <p className="text-xs text-neutral-500 mb-3">{p.papel}</p>
+                <span
+                  className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${
+                    p.ativo
+                      ? "bg-orange-500/10 border-orange-500/30 text-orange-400"
+                      : "bg-white/5 border-white/10 text-neutral-500"
+                  }`}
+                >
+                  {p.estado}
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
 
