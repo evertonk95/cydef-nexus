@@ -22,8 +22,9 @@ const Contact = () => {
             Entre em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">Contato</span>
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto font-medium">
-            Fale com nossos especialistas e descubra como podemos proteger sua
-            organização ou ajudá-lo a avançar na carreira em cibersegurança.
+            Ainda não vendemos serviços gerenciados — e somos transparentes
+            quanto a isso. Fale com a CyDef sobre conteúdo, formação gratuita
+            e o ecossistema que estamos construindo.
           </p>
         </div>
       </section>
@@ -134,7 +135,7 @@ const Contact = () => {
                     <div>
                       <h3 className="text-lg font-bold text-white mb-2">Endereço</h3>
                       <p className="text-neutral-400 leading-relaxed">
-                        São Paulo, SP<br />Brasil
+                        Boston Post Road East<br />Boston, Massachusetts, EUA
                       </p>
                     </div>
                   </div>
@@ -155,20 +156,20 @@ const Contact = () => {
           <div className="space-y-6 animate-on-scroll">
             {[
               {
-                q: "Como funciona o processo de contratação dos serviços?",
-                a: "Após o contato inicial, agendamos uma reunião para entender suas necessidades. Em seguida, elaboramos uma proposta customizada com escopo, prazos e valores. Após aprovação, iniciamos o onboarding."
+                q: "A CyDef já oferece serviços gerenciados (SOC, consultoria)?",
+                a: "Não. Estamos construindo o ecossistema CyDef — Media, Academy, Labs, Research e, no futuro, Consulting. Serviços gerenciados só serão anunciados quando existirem de verdade, com processos, equipe e SLA reais."
               },
               {
-                q: "Os cursos possuem certificado?",
-                a: "Sim! Todos os cursos da CyDef Academy incluem certificado de conclusão digital. Os preparatórios também fornecem material completo para certificações de mercado."
+                q: "O que a CyDef oferece hoje?",
+                a: "Conteúdo técnico verificável (blog com fontes), formação gratuita de entrada na Academy (pré-inscrição com confirmação por e-mail) e contato humano direto por e-mail. Tudo isso está no ar e pode ser conferido agora."
               },
               {
-                q: "Qual o prazo para início dos serviços de SOC?",
-                a: "Dependendo da complexidade do ambiente, o onboarding completo leva de 2 a 4 semanas. Isso inclui integração de ferramentas, configuração de alertas e treinamento do time."
+                q: "Os cursos pagos da Academy estão disponíveis?",
+                a: "Ainda não. Os cursos pagos estão em preparação e não têm preço publicado. Interessados podem pedir uma cotação por e-mail e serão avisados quando a turma abrir."
               },
               {
-                q: "Oferecem consultoria pontual ou apenas contratos recorrentes?",
-                a: "Trabalhamos com ambos os modelos. Oferecemos consultorias pontuais para projetos específicos e também contratos recorrentes para serviços contínuos como SOC e Blue Team."
+                q: "Por que o site não mostra preços nem promessas de serviço?",
+                a: "Por transparência. Preferimos publicar apenas o que é real — nada de vitrine, depoimentos inventados ou métricas sem método. É uma decisão de marca: confiança se constrói com honestidade."
               }
             ].map((faq, i) => (
               <div key={i} className="bg-neutral-900 border border-white/10 rounded-2xl p-8 hover:border-orange-500/30 transition-colors">

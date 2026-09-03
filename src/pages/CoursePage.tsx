@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import {
   Clock,
   BarChart,
-  Award,
   CheckCircle,
   ArrowRight,
   BookOpen,
@@ -23,7 +22,6 @@ interface Course {
   title: string;
   level: string;
   duration: string;
-  price: string;
   description: string;
   modules?: CourseModule[];
   objectives?: string[];
@@ -37,7 +35,6 @@ const courseData: Record<string, Course> = {
     title: "Cybersecurity Fundamentals",
     level: "Iniciante",
     duration: "40 horas",
-    price: "R$ 997",
     description: "Construa uma base sólida em segurança da informação com este curso completo que aborda desde conceitos fundamentais até práticas essenciais de proteção.",
     objectives: [
       "Compreender os princípios fundamentais de segurança da informação",
@@ -100,7 +97,6 @@ const courseData: Record<string, Course> = {
     title: "SOC Analyst – Formação Completa",
     level: "Intermediário",
     duration: "80 horas",
-    price: "R$ 2.497",
     description: "Formação completa para atuar como Analista SOC Nível 1 e 2, com foco em detecção, análise e resposta a incidentes de segurança em ambientes corporativos.",
     objectives: [
       "Dominar análise de logs e correlação de eventos",
@@ -172,7 +168,6 @@ const courseData: Record<string, Course> = {
     title: "Blue Team Advanced",
     level: "Avançado",
     duration: "60 horas",
-    price: "R$ 2.997",
     description: "Curso avançado para profissionais experientes que buscam aprofundar conhecimentos em defesa cibernética, threat hunting, análise forense e estratégias de Blue Team.",
     objectives: [
       "Realizar threat hunting proativo",
@@ -332,12 +327,17 @@ const CoursePage = () => {
                     <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                   </div>
                   <span className="inner flex items-center gap-2">
-                    Matricular-se • {course.price}
+                    Pedir cotação
                     <ArrowRight className="w-4 h-4" />
                   </span>
                 </button>
               </Link>
             </div>
+            <p className="text-sm text-neutral-500 mt-5 max-w-md">
+              Curso em preparação — valor informado sob consulta, sem
+              compromisso. Preços publicados anteriormente eram simulados e
+              foram removidos.
+            </p>
           </div>
         </div>
       </section>
@@ -433,12 +433,15 @@ const CoursePage = () => {
                 <div className="p-8">
                   <div className="mb-8">
                     <p className="text-sm text-neutral-400 font-medium mb-2 uppercase tracking-widest">Investimento</p>
-                    <h3 className="text-4xl font-bold text-white mb-6 tracking-tight">
-                      {course.price}
+                    <h3 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                      Sob consulta
                     </h3>
+                    <p className="text-sm text-neutral-500 mb-6">
+                      Sem preço publicado até o lançamento oficial.
+                    </p>
                     <Link to="/contato" className="block w-full">
                       <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]">
-                        Matricular-se Agora
+                        Pedir cotação
                         <ArrowRight className="w-5 h-5" />
                       </button>
                     </Link>
@@ -464,48 +467,15 @@ const CoursePage = () => {
                         <p className="text-white font-medium">{course.level}</p>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                        <Award className="w-5 h-5 text-orange-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">Certificado</p>
-                        <p className="text-white font-medium">Incluído</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                        <Target className="w-5 h-5 text-orange-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">Suporte</p>
-                        <p className="text-white font-medium">Direto com instrutores</p>
-                      </div>
-                    </div>
                   </div>
 
-                  <div className="pt-8 mt-8 border-t border-white/10 space-y-4">
-                    <h4 className="font-bold text-white mb-4">Inclui também:</h4>
-                    <ul className="space-y-3">
-                      <li className="flex items-center gap-3 text-sm text-neutral-400">
-                        <CheckCircle className="w-5 h-5 text-orange-500/80" />
-                        Acesso vitalício ao conteúdo
-                      </li>
-                      <li className="flex items-center gap-3 text-sm text-neutral-400">
-                        <CheckCircle className="w-5 h-5 text-orange-500/80" />
-                        Material complementar
-                      </li>
-                      <li className="flex items-center gap-3 text-sm text-neutral-400">
-                        <CheckCircle className="w-5 h-5 text-orange-500/80" />
-                        Comunidade exclusiva
-                      </li>
-                      <li className="flex items-center gap-3 text-sm text-neutral-400">
-                        <CheckCircle className="w-5 h-5 text-orange-500/80" />
-                        Certificado de conclusão
-                      </li>
-                    </ul>
+                  <div className="pt-8 mt-8 border-t border-white/10">
+                    <h4 className="font-bold text-white mb-3">Estado atual</h4>
+                    <p className="text-sm text-neutral-400 leading-relaxed">
+                      Curso em preparação. Características finais (certificado,
+                      suporte, acesso ao conteúdo) serão publicadas quando a
+                      turma for lançada oficialmente.
+                    </p>
                   </div>
                 </div>
               </div>

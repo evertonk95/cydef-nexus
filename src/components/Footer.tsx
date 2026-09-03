@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Linkedin } from "lucide-react";
+import { LANDING_PATH } from "@/lib/config";
 
 export const Footer = () => {
   return (
@@ -19,41 +20,30 @@ export const Footer = () => {
               <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-8 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-neutral-400 mt-2">
-              Segurança que evolui com você. Protegendo organizações através de
-              tecnologia avançada e expertise em cibersegurança.
+              Segurança que evolui com você. Estamos construindo um ecossistema
+              global de cibersegurança com base em conhecimento, educação e
+              confiança.
             </p>
           </div>
 
           {/* Links Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-            {/* Serviços */}
-            <div className="flex flex-col gap-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-white">Serviços</span>
-              <div className="flex flex-col gap-2">
-                <Link to="/servicos#soc" className="text-sm text-neutral-400 hover:text-white transition-colors">SOC as a Service</Link>
-                <Link to="/servicos#blue-team" className="text-sm text-neutral-400 hover:text-white transition-colors">Blue Team</Link>
-                <Link to="/servicos#consultoria" className="text-sm text-neutral-400 hover:text-white transition-colors">Consultoria</Link>
-                <Link to="/servicos#hardening" className="text-sm text-neutral-400 hover:text-white transition-colors">Hardening & Compliance</Link>
-              </div>
-            </div>
-
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
             {/* Academy */}
             <div className="flex flex-col gap-4">
               <span className="text-xs font-bold uppercase tracking-widest text-white">Academy</span>
               <div className="flex flex-col gap-2">
                 <Link to="/academy" className="text-sm text-neutral-400 hover:text-white transition-colors">Todos os Cursos</Link>
-                <Link to="/cursos/cybersecurity-fundamentals" className="text-sm text-neutral-400 hover:text-white transition-colors">Fundamentos</Link>
-                <Link to="/cursos/soc-analyst" className="text-sm text-neutral-400 hover:text-white transition-colors">SOC Analyst</Link>
-                <Link to="/cursos/blue-team-advanced" className="text-sm text-neutral-400 hover:text-white transition-colors">Blue Team Adv</Link>
+                <Link to={LANDING_PATH} className="text-sm text-neutral-400 hover:text-white transition-colors">Pré-inscrição gratuita</Link>
               </div>
             </div>
 
             {/* Empresa */}
-            <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
+            <div className="flex flex-col gap-4">
               <span className="text-xs font-bold uppercase tracking-widest text-white">Empresa</span>
               <div className="flex flex-col gap-2">
                 <Link to="/sobre" className="text-sm text-neutral-400 hover:text-white transition-colors">Sobre</Link>
                 <Link to="/blog" className="text-sm text-neutral-400 hover:text-white transition-colors">Blog</Link>
+                <Link to="/servicos" className="text-sm text-neutral-400 hover:text-white transition-colors">O que estamos construindo</Link>
                 <Link to="/contato" className="text-sm text-neutral-400 hover:text-white transition-colors">Contato</Link>
               </div>
             </div>
