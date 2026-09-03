@@ -100,7 +100,7 @@ export const extraPosts: BlogPost[] = [
         "heading": "Próximos passos",
         "paragraphs": [
           "1. Confira a versão vigente na página de versionamento oficial (F02). 2. Audite regras, exceções, dashboards e playbooks com referências a \"Defense Evasion\", \"TA0005\", \"T1562\" e sub-técnicas. 3. Separe por intenção: Stealth (esconder) versus Defense Impairment (desativar controles) — e revise a prioridade de monitoramento de integridade dos seus controles. 4. Revise a cobertura com o Navigator ou planilha própria, e consulte CAR e D3FEND para fechar lacunas. 5. Teste qualquer regra nova em ambiente controlado, com eventos conhecidos, antes de produção.",
-          "Se a sua equipe está começando a estruturar esse trabalho, as práticas de Blue Team da Cydef (https://www.cydef.com.br/servicos#blue-team) e os serviços de SOC (https://www.cydef.com.br/servicos#soc) são pontos de partida para desenhar o serviço; a formação em detecção segue na Cydef Academy (https://www.cydef.com.br/academy)."
+          "Se a sua equipe está começando a estruturar esse trabalho, as práticas de Blue Team da CyDef (https://www.cydef.com.br/servicos#blue-team) e os serviços de SOC (https://www.cydef.com.br/servicos#soc) são pontos de partida para desenhar o serviço; a formação em detecção segue na CyDef Academy (https://www.cydef.com.br/academy)."
         ],
         "lists": []
       }
