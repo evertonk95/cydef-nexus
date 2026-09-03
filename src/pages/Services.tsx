@@ -2,6 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { L, waLink } from "@/lib/lang";
 import {
   Eye,
   Shield,
@@ -17,42 +19,24 @@ import {
   Radar,
 } from "lucide-react";
 
-// Página honesta de oferta (NEX-P0-02/P0-03 + diretriz do Everton 03/09):
-// a CyDef ainda NÃO vende serviços gerenciados. Nada aqui promete o que não existe.
+// Página honesta de oferta: a CyDef ainda NÃO vende serviços gerenciados.
 const Services = () => {
   useScrollReveal();
+  const { t } = useTranslation();
 
   const territorios = [
-    {
-      icon: Eye,
-      title: "Security Operations (SOC)",
-      desc: "Operação e maturidade de Centros de Operações de Segurança — processos, métricas e melhoria contínua.",
-    },
-    {
-      icon: Radar,
-      title: "Incident Response",
-      desc: "Investigação, contenção, erradicação, recuperação e lições aprendidas de incidentes de segurança.",
-    },
-    {
-      icon: ScanLine,
-      title: "Threat Hunting",
-      desc: "Caça proativa e baseada em hipóteses, usando comportamento, inteligência, TTPs e frameworks de ataque.",
-    },
-    {
-      icon: Wrench,
-      title: "Auditing & Hardening",
-      desc: "Avaliação de postura, identificação de lacunas e fortalecimento sistemático de ambientes.",
-    },
-    {
-      icon: Code,
-      title: "SIEM & SOAR Engineering",
-      desc: "Arquitetura, integrações, regras de correlação, tuning, orquestração e automação de segurança.",
-    },
-    {
-      icon: BarChart,
-      title: "AI for Cybersecurity",
-      desc: "Aplicação prática de IA para triagem, enriquecimento, investigação, detecção e apoio à decisão.",
-    },
+    { key: "soc", icon: Eye },
+    { key: "ir", icon: Radar },
+    { key: "hunting", icon: ScanLine },
+    { key: "hardening", icon: Wrench },
+    { key: "siem", icon: Code },
+    { key: "ai", icon: BarChart },
+  ];
+
+  const realItems = [
+    { to: "/blog", icon: Newspaper, title: t("services.realMediaTitle"), body: t("services.realMediaBody"), cta: t("services.realMediaCta") },
+    { to: "/academy", icon: GraduationCap, title: t("services.realAcademyTitle"), body: t("services.realAcademyBody"), cta: t("services.realAcademyCta") },
+    { to: "/contato", icon: Mail, title: t("services.realContactTitle"), body: t("services.realContactBody"), cta: t("services.realContactCta") },
   ];
 
   return (
@@ -65,17 +49,13 @@ const Services = () => {
         <div className="container mx-auto text-center relative z-10 animate-on-scroll">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <Shield className="h-4 w-4" />
-            O que estamos construindo
+            {t("services.badge")}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-            Sem vitrine. Só o que <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">existe de verdade.</span>
+            {t("services.h1a")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">{t("services.h1b")}</span>
           </h1>
           <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium leading-relaxed">
-            A CyDef está construindo um ecossistema global de cibersegurança —
-            Media, Academy, Labs, Research e, no futuro, Consulting. Enquanto
-            isso, não vendemos serviços gerenciados e não vamos fingir que
-            vendemos. Esta página mostra o que é real hoje e para onde estamos
-            indo, sem promessas que não possamos cumprir.
+            {t("services.lead")}
           </p>
         </div>
       </section>
@@ -85,62 +65,26 @@ const Services = () => {
         <div className="container mx-auto max-w-7xl">
           <div className="max-w-4xl mx-auto text-center mb-16 animate-on-scroll">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
-              O que já é real hoje
+              {t("services.realTitle")}
             </h2>
-            <p className="text-white/60 text-lg">
-              Nada aqui é maquete. Cada item abaixo existe, está no ar e pode
-              ser verificado agora.
-            </p>
+            <p className="text-white/60 text-lg">{t("services.realLead")}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 animate-on-scroll">
-            <Link to="/blog" className="block group">
-              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 h-full hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300">
-                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:border-orange-500/30">
-                  <Newspaper className="w-6 h-6 text-orange-500" />
+            {realItems.map((item) => (
+              <Link key={item.to} to={L(item.to)} className="block group">
+                <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 h-full hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:border-orange-500/30">
+                    <item.icon className="w-6 h-6 text-orange-500" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                  <p className="text-neutral-400 text-sm leading-relaxed mb-6">{item.body}</p>
+                  <span className="inline-flex items-center gap-2 text-orange-400 text-sm font-medium">
+                    {item.cta} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">CyDef Media — Blog</h3>
-                <p className="text-neutral-400 text-sm leading-relaxed mb-6">
-                  Artigos técnicos com fontes e data de verificação publicados
-                  por autores identificados.
-                </p>
-                <span className="inline-flex items-center gap-2 text-orange-400 text-sm font-medium">
-                  Ler o blog <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </div>
-            </Link>
-
-            <Link to="/academy" className="block group">
-              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 h-full hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300">
-                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:border-orange-500/30">
-                  <GraduationCap className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-3">CyDef Academy — gratuita</h3>
-                <p className="text-neutral-400 text-sm leading-relaxed mb-6">
-                  Dois cursos gratuitos de entrada para SOC, com pré-inscrição
-                  real, confirmação por e-mail e consentimento explícito.
-                </p>
-                <span className="inline-flex items-center gap-2 text-orange-400 text-sm font-medium">
-                  Pré-inscrever-se <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </div>
-            </Link>
-
-            <Link to="/contato" className="block group">
-              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 h-full hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300">
-                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:border-orange-500/30">
-                  <Mail className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Contato direto</h3>
-                <p className="text-neutral-400 text-sm leading-relaxed mb-6">
-                  E-mail real, respondido por pessoas. Sem robôs de atendimento
-                  e sem formulários que fingem enviar.
-                </p>
-                <span className="inline-flex items-center gap-2 text-orange-400 text-sm font-medium">
-                  Falar com a CyDef <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -150,43 +94,37 @@ const Services = () => {
         <div className="container mx-auto max-w-7xl">
           <div className="max-w-4xl mx-auto text-center mb-6 animate-on-scroll">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
-              Para onde estamos indo
+              {t("services.futureTitle")}
             </h2>
-            <p className="text-white/60 text-lg">
-              Nossos territórios técnicos de atuação, definidos na fundação
-              estratégica da CyDef.
-            </p>
+            <p className="text-white/60 text-lg">{t("services.futureLead")}</p>
           </div>
 
           <div className="max-w-3xl mx-auto text-center mb-14 animate-on-scroll">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-medium">
-              <Lock className="w-4 h-4" />
-              Nenhum destes está à venda hoje — e não será anunciado antes de
-              existir com processos, equipe e responsáveis reais.
+              <Lock className="w-4 h-4 shrink-0" />
+              {t("services.futureNote")}
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-on-scroll">
-            {territorios.map((item, i) => (
-              <div key={i} className="bg-neutral-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:border-orange-500/30 transition-all duration-300">
+            {territorios.map((item) => (
+              <div key={item.key} className="bg-neutral-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:border-orange-500/30 transition-all duration-300">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500/20 to-amber-500/20 flex items-center justify-center mb-6">
                   <item.icon className="w-5 h-5 text-orange-400" />
                 </div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-white">{t(`services.territories.${item.key}.title`)}</h3>
                   <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-semibold uppercase tracking-wider text-neutral-400 whitespace-nowrap">
-                    em construção
+                    {t("services.badgePrep")}
                   </span>
                 </div>
-                <p className="text-neutral-400 text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-neutral-400 text-sm leading-relaxed">{t(`services.territories.${item.key}.desc`)}</p>
               </div>
             ))}
           </div>
 
           <p className="text-center text-neutral-500 mt-12 max-w-2xl mx-auto">
-            Se a sua organização precisa de um destes serviços hoje, fale
-            conosco: registramos sua necessidade e você será avisado quando
-            houver oferta real — sem compromisso e sem promessas.
+            {t("services.futureHelp")}
           </p>
         </div>
       </section>
@@ -198,21 +136,19 @@ const Services = () => {
           <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 md:p-20 text-center relative backdrop-blur-md animate-on-scroll">
             <Shield className="h-16 w-16 text-orange-500 mx-auto mb-6 opacity-80" />
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
-              Acompanhe a construção
+              {t("services.ctaTitle")}
             </h2>
             <p className="text-white/70 text-lg mb-10 max-w-2xl mx-auto">
-              Conteúdo técnico, formação gratuita e atualizações reais do
-              ecossistema. Quando os serviços abrirem, você saberá pelos
-              canais oficiais da CyDef.
+              {t("services.ctaBody")}
             </p>
-            <Link to="/contato" className="inline-block">
+            <a href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer" className="inline-block">
               <button className="button-custom" type="button">
                 <div className="points_wrapper">
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
-                <span className="inner flex items-center gap-2">Falar com a CyDef <ArrowRight className="w-4 h-4"/></span>
+                <span className="inner flex items-center gap-2">{t("services.ctaButton")} <ArrowRight className="w-4 h-4" /></span>
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

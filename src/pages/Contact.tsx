@@ -1,10 +1,15 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Mail, MapPin, MessageSquare, Phone } from "lucide-react";
+import { Mail, MapPin, MessageSquare, Phone, MessageCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { waLink } from "@/lib/lang";
 
 const Contact = () => {
   useScrollReveal();
+  const { t } = useTranslation();
+
+  const faq = t("contact.faq", { returnObjects: true }) as { q: string; a: string }[];
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -16,16 +21,13 @@ const Contact = () => {
         <div className="container mx-auto text-center relative z-10 animate-on-scroll">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <MessageSquare className="h-4 w-4" />
-            Fale com a CyDef
+            {t("contact.badge")}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-            Entre em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">Contato</span>
+            {t("contact.h1a")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">{t("contact.h1b")}</span>
           </h1>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto font-medium">
-            Ainda não vendemos serviços gerenciados — e somos transparentes
-            quanto a isso. Fale com a CyDef sobre conteúdo, formação gratuita
-            e o ecossistema que estamos construindo, guiados pelo Código
-            CyDef: justiça, respeito e responsabilidade pelo resultado.
+          <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium leading-relaxed">
+            {t("contact.lead")}
           </p>
         </div>
       </section>
@@ -34,18 +36,33 @@ const Contact = () => {
       <section className="py-24 px-4 relative">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
-            {/* Contact — canais diretos. Formulário web em implantação (NEX-P0-02):
-                nenhuma ação reporta sucesso sem backend real. */}
+            {/* Canais diretos */}
             <div className="animate-on-scroll">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
-                Fale com a CyDef
+                {t("contact.panelTitle")}
               </h2>
               <p className="text-neutral-400 text-lg mb-8">
-                Nosso formulário web está em implantação. Enquanto isso, escreva
-                direto para a equipe — responderemos por e-mail.
+                {t("contact.panelBody")}
               </p>
 
               <div className="space-y-4">
+                <a
+                  href={waLink(t("contact.waMsg"))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-5 bg-neutral-900 border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-colors group"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 border border-green-500/25">
+                    <MessageCircle className="h-6 w-6 text-green-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
+                      {t("contact.waLabel")} · +1 (508) 630-5886
+                    </h3>
+                    <p className="text-neutral-400 text-sm leading-relaxed">{t("contact.waHint")}</p>
+                  </div>
+                </a>
+
                 <a
                   href="mailto:contato@cydef.com.br"
                   className="flex items-start gap-5 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors group"
@@ -55,7 +72,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
-                      Soluções para empresas
+                      {t("contact.businessTitle")}
                     </h3>
                     <p className="text-neutral-400 break-all">contato@cydef.com.br</p>
                   </div>
@@ -70,7 +87,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
-                      CyDef Academy
+                      {t("contact.academyTitle")}
                     </h3>
                     <p className="text-neutral-400 break-all">academy@cydef.com.br</p>
                   </div>
@@ -78,12 +95,9 @@ const Contact = () => {
 
                 <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
                   <h3 className="text-sm font-bold text-white/70 uppercase tracking-widest mb-2">
-                    Horário de resposta
+                    {t("contact.hoursTitle")}
                   </h3>
-                  <p className="text-neutral-400">
-                    Atendemos em horário comercial — fora dele, retornamos no
-                    próximo dia útil.
-                  </p>
+                  <p className="text-neutral-400">{t("contact.hoursBody")}</p>
                 </div>
               </div>
             </div>
@@ -92,11 +106,10 @@ const Contact = () => {
             <div className="space-y-8 animate-on-scroll" style={{ animationDelay: '150ms' }}>
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tighter">
-                  Informações de Contato
+                  {t("contact.infoTitle")}
                 </h2>
                 <p className="text-neutral-400 text-lg mb-10">
-                  Entre em contato conosco por qualquer um dos canais abaixo.
-                  Estamos prontos para atender você.
+                  {t("contact.infoBody")}
                 </p>
 
                 <div className="space-y-6">
@@ -105,7 +118,7 @@ const Contact = () => {
                       <Mail className="h-6 w-6 text-orange-500" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-2">E-mail</h3>
+                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.emailLabel")}</h3>
                       <div className="space-y-1">
                         <a href="mailto:contato@cydef.com.br" className="block text-neutral-400 hover:text-orange-400 transition-colors">
                           contato@cydef.com.br
@@ -122,7 +135,7 @@ const Contact = () => {
                       <Phone className="h-6 w-6 text-orange-500" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-2">Telefone</h3>
+                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.phoneLabel")}</h3>
                       <a href="tel:+15086305886" className="block text-neutral-400 hover:text-orange-400 transition-colors">
                         +1 (508) 630-5886
                       </a>
@@ -134,9 +147,9 @@ const Contact = () => {
                       <MapPin className="h-6 w-6 text-orange-500" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-2">Endereço</h3>
+                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.addressLabel")}</h3>
                       <p className="text-neutral-400 leading-relaxed">
-                        Boston Post Road East<br />Boston, Massachusetts, EUA
+                        {t("contact.addressLine1")}<br />{t("contact.addressLine2")}
                       </p>
                     </div>
                   </div>
@@ -151,31 +164,14 @@ const Contact = () => {
       <section className="py-24 px-4 bg-white/[0.02] border-y border-white/5 relative">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-16 text-center tracking-tighter animate-on-scroll">
-            Perguntas Frequentes
+            {t("contact.faqTitle")}
           </h2>
 
           <div className="space-y-6 animate-on-scroll">
-            {[
-              {
-                q: "A CyDef já oferece serviços gerenciados (SOC, consultoria)?",
-                a: "Não. Estamos construindo o ecossistema CyDef — Media, Academy, Labs, Research e, no futuro, Consulting. Serviços gerenciados só serão anunciados quando existirem de verdade, com processos, equipe e SLA reais."
-              },
-              {
-                q: "O que a CyDef oferece hoje?",
-                a: "Conteúdo técnico verificável (blog com fontes), formação gratuita de entrada na Academy (pré-inscrição com confirmação por e-mail) e contato humano direto por e-mail. Tudo isso está no ar e pode ser conferido agora."
-              },
-              {
-                q: "Os cursos pagos da Academy estão disponíveis?",
-                a: "Ainda não. Os cursos pagos estão em preparação e não têm preço publicado. Interessados podem pedir uma cotação por e-mail e serão avisados quando a turma abrir."
-              },
-              {
-                q: "Por que o site não mostra preços nem promessas de serviço?",
-                a: "Por transparência. Preferimos publicar apenas o que é real — nada de vitrine, depoimentos inventados ou métricas sem método. É uma decisão de marca: confiança se constrói com honestidade."
-              }
-            ].map((faq, i) => (
+            {faq.map((item, i) => (
               <div key={i} className="bg-neutral-900 border border-white/10 rounded-2xl p-8 hover:border-orange-500/30 transition-colors">
-                <h3 className="text-xl font-bold text-white mb-4">{faq.q}</h3>
-                <p className="text-neutral-400 leading-relaxed">{faq.a}</p>
+                <h3 className="text-xl font-bold text-white mb-4">{item.q}</h3>
+                <p className="text-neutral-400 leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>

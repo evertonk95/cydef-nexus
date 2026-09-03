@@ -1,22 +1,32 @@
-import { useLocation } from "react-router-dom";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { L } from "@/lib/lang";
 
 const NotFound = () => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    console.error("404 Error: non-existent route:", location.pathname);
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
-        </a>
+    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
+      <Navigation />
+      <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
+        <p className="text-8xl font-bold text-white/10 tracking-tighter mb-6">404</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{t("notfound.title")}</h1>
+        <p className="text-neutral-400 max-w-md mb-10">{t("notfound.body")}</p>
+        <Link to={L("/")}>
+          <button className="button-custom" type="button">
+            <span className="inner">{t("notfound.home")}</span>
+          </button>
+        </Link>
       </div>
+      <Footer />
     </div>
   );
 };

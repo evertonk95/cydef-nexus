@@ -2,6 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { L } from "@/lib/lang";
 import {
   Clock,
   BarChart,
@@ -240,11 +242,35 @@ const plannedCourses: Record<string, { title: string; description: string }> = {
   },
 };
 
+const courseKeyById: Record<string, string> = {
+  "cybersecurity-fundamentals": "fundamentals",
+  "soc-analyst": "soc",
+  "blue-team-advanced": "blue",
+  "sc-900-prep": "sc900",
+  "security-plus-prep": "secplus",
+  "malware-analysis": "malware",
+  "incident-investigation": "incident",
+};
+
+const plannedCourseKeys: Record<string, string> = {
+  "sc-900-prep": "sc900",
+  "security-plus-prep": "secplus",
+  "malware-analysis": "malware",
+  "incident-investigation": "incident",
+};
+
+const levelKeyOf = (level: string): string =>
+  ({ Iniciante: "beginner", Intermediário: "intermediate", Avançado: "advanced" })[level] ?? "beginner";
+
 const CoursePage = () => {
   useScrollReveal();
+  const { t, i18n } = useTranslation();
   const { courseId } = useParams();
   const course = courseId ? courseData[courseId] : null;
   const planned = courseId ? plannedCourses[courseId] : undefined;
+  const plannedKey = courseId ? plannedCourseKeys[courseId] : undefined;
+  const plannedTitle = plannedKey ? t(`academy.courses.${plannedKey}`) : undefined;
+  const plannedDesc = plannedKey ? t(`academy.planned.${plannedKey}Desc`) : undefined;
 
   if (!course) {
     return (
@@ -252,35 +278,34 @@ const CoursePage = () => {
         <Navigation />
         <div className="container mx-auto px-4 py-40 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            {planned ? planned.title : "Curso não encontrado"}
+            {planned ? plannedTitle : t("course.notFound")}
           </h1>
           {planned ? (
             <>
               <p className="text-lg text-white/60 max-w-2xl mx-auto mb-3">
-                {planned.description}
+                {plannedDesc}
               </p>
               <p className="text-neutral-400 max-w-xl mx-auto mb-10">
-                Esta turma está em preparação e ainda não aceita matrículas.
-                Cadastre seu e-mail para ser avisado quando abrir.
+                {t("course.prepBody")}
               </p>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a
-                  href={`mailto:academy@cydef.com.br?subject=${encodeURIComponent(`Interesse no curso: ${planned.title}`)}`}
+                  href={`mailto:academy@cydef.com.br?subject=${encodeURIComponent(`Interesse no curso: ${plannedTitle}`)}`}
                   className="inline-block px-6 py-4 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
                 >
-                  Avisar-me por e-mail
+                  {t("course.notifyMe")}
                 </a>
-                <Link to="/academy" className="inline-block">
+                <Link to={L("/academy")} className="inline-block">
                   <button className="px-6 py-4 rounded-lg border border-white/15 text-neutral-300 hover:bg-white/5 hover:text-white transition-colors font-medium text-sm" type="button">
-                    Voltar para a Academy
+                    {t("course.backAcademy")}
                   </button>
                 </Link>
               </div>
             </>
           ) : (
-            <Link to="/academy" className="inline-block mt-4">
+            <Link to={L("/academy")} className="inline-block mt-4">
               <button className="button-custom" type="button">
-                <span className="inner">Voltar para Academy</span>
+                <span className="inner">{t("course.notFoundCta")}</span>
               </button>
             </Link>
           )}
@@ -301,7 +326,7 @@ const CoursePage = () => {
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <span className="px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">
-                {course.level}
+                {t(`academy.level.${levelKeyOf(course.level)}`)}
               </span>
               <div className="flex items-center gap-2 text-white/60 font-medium">
                 <Clock className="w-4 h-4" />
@@ -309,35 +334,38 @@ const CoursePage = () => {
               </div>
               <div className="flex items-center gap-2 text-white/60 font-medium">
                 <BarChart className="w-4 h-4" />
-                <span className="text-sm">{course.modules.length} Módulos</span>
+                <span className="text-sm">{course.modules.length} {t("course.modulesCount")}</span>
               </div>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-              {course.title}
+              {t(`academy.courses.${courseKeyById[courseId ?? ""] ?? courseId}`)}
             </h1>
             <p className="text-xl text-white/70 mb-10 leading-relaxed font-medium">
               {course.description}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/contato">
+              <Link to={L("/contato")}>
                 <button className="button-custom" type="button">
                   <div className="points_wrapper">
                     <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                   </div>
                   <span className="inner flex items-center gap-2">
-                    Pedir cotação
+                    {t("course.quote")}
                     <ArrowRight className="w-4 h-4" />
                   </span>
                 </button>
               </Link>
             </div>
             <p className="text-sm text-neutral-500 mt-5 max-w-md">
-              Curso em preparação — valor informado sob consulta, sem
-              compromisso. Preços publicados anteriormente eram simulados e
-              foram removidos.
+              {t("course.underPrepNote")}
             </p>
+            {i18n.language !== "pt" && (
+              <p className="text-xs text-neutral-600 mt-3 max-w-md">
+                {t("common.contentPtNote")}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -352,7 +380,7 @@ const CoursePage = () => {
               <div>
                 <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
                   <Target className="w-8 h-8 text-orange-500" />
-                  O que você vai aprender
+                  {t("course.learnTitle")}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {course.objectives.map((obj: string, i: number) => (
@@ -368,7 +396,7 @@ const CoursePage = () => {
               <div>
                 <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
                   <BookOpen className="w-8 h-8 text-orange-500" />
-                  Conteúdo Programático
+                  {t("course.programTitle")}
                 </h2>
                 <div className="space-y-4">
                   {course.modules?.map((module, i: number) => (
@@ -402,7 +430,7 @@ const CoursePage = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-6">
-                    Para quem é este curso
+                    {t("course.audienceTitle")}
                   </h2>
                   <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 h-full hover:border-orange-500/30 transition-colors">
                     <div className="flex items-start gap-4">
@@ -414,7 +442,7 @@ const CoursePage = () => {
 
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-6">
-                    Pré-requisitos
+                    {t("course.prereqTitle")}
                   </h2>
                   <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 h-full hover:border-orange-500/30 transition-colors">
                     <div className="flex items-start gap-4">
@@ -432,16 +460,16 @@ const CoursePage = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent pointer-events-none"></div>
                 <div className="p-8">
                   <div className="mb-8">
-                    <p className="text-sm text-neutral-400 font-medium mb-2 uppercase tracking-widest">Investimento</p>
+                    <p className="text-sm text-neutral-400 font-medium mb-2 uppercase tracking-widest">{t("course.invest")}</p>
                     <h3 className="text-4xl font-bold text-white mb-2 tracking-tight">
-                      Sob consulta
+                      {t("course.onRequest")}
                     </h3>
                     <p className="text-sm text-neutral-500 mb-6">
-                      Sem preço publicado até o lançamento oficial.
+                      {t("course.noPriceYet")}
                     </p>
-                    <Link to="/contato" className="block w-full">
+                    <Link to={L("/contato")} className="block w-full">
                       <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]">
-                        Pedir cotação
+                        {t("course.quote")}
                         <ArrowRight className="w-5 h-5" />
                       </button>
                     </Link>
@@ -453,7 +481,7 @@ const CoursePage = () => {
                         <Clock className="w-5 h-5 text-orange-400" />
                       </div>
                       <div>
-                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">Duração</p>
+                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">{t("course.duration")}</p>
                         <p className="text-white font-medium">{course.duration}</p>
                       </div>
                     </div>
@@ -463,18 +491,16 @@ const CoursePage = () => {
                         <BarChart className="w-5 h-5 text-orange-400" />
                       </div>
                       <div>
-                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">Nível</p>
-                        <p className="text-white font-medium">{course.level}</p>
+                        <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">{t("course.level")}</p>
+                        <p className="text-white font-medium">{t(`academy.level.${levelKeyOf(course.level)}`)}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="pt-8 mt-8 border-t border-white/10">
-                    <h4 className="font-bold text-white mb-3">Estado atual</h4>
+                    <h4 className="font-bold text-white mb-3">{t("course.statusTitle")}</h4>
                     <p className="text-sm text-neutral-400 leading-relaxed">
-                      Curso em preparação. Características finais (certificado,
-                      suporte, acesso ao conteúdo) serão publicadas quando a
-                      turma for lançada oficialmente.
+                      {t("course.statusBody")}
                     </p>
                   </div>
                 </div>
