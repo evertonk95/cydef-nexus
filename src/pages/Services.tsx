@@ -100,25 +100,22 @@ const Services = () => {
               </Link>
             </div>
             
+            {/* Painel simulado de status removido (NEX-P0-03: "Operacional"/"99.9%"
+                eram telemetria falsa). Card honesto com conversão real. */}
             <div className="relative animate-on-scroll">
               <div className="absolute -inset-4 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-2xl blur-xl opacity-50"></div>
-              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 relative shadow-2xl">
-                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
-                  <span className="text-sm font-medium text-neutral-400">Status do SOC</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <span className="text-xs font-mono text-green-500">Operacional</span>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-orange-500 w-[85%]"></div>
-                  </div>
-                  <div className="flex justify-between text-xs text-neutral-500">
-                    <span>Taxa de Detecção</span>
-                    <span className="text-white">99.9%</span>
-                  </div>
-                </div>
+              <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 relative shadow-2xl text-center">
+                <Shield className="w-12 h-12 text-orange-500 mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-white mb-3">Pronto para começar?</h3>
+                <p className="text-neutral-400 leading-relaxed mb-8">
+                  Fale com a CyDef para desenhar o SOC certo para o momento da
+                  sua organização.
+                </p>
+                <Link to="/contato" className="inline-block">
+                  <button className="button-custom" type="button">
+                    <span className="inner flex items-center gap-2">Solicitar Proposta <ArrowRight className="w-4 h-4" /></span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

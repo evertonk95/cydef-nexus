@@ -1,7 +1,7 @@
 ﻿import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, Play, Check, Shield, ScanLine, Lock, Sparkles, Quote } from "lucide-react";
+import { ArrowRight, Check, Shield, ScanLine, Lock, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { fetchAcademyStats, isAcademyStatsAvailable, STATS_POLL_INTERVAL_MS } from "@/lib/academy/stats";
@@ -179,53 +179,27 @@ const Index = () => {
           </div>
         </div>
 
-        {/* testimonial-and-headline */}
+        {/* headline — depoimento removido (NEX-P0-03: sem prova associada) */}
         <div className="md:px-10 mt-32 pt-4 pb-10 border-t border-white/5 relative z-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-            <div className="col-span-1 lg:col-span-4 relative group animate-on-scroll">
-              <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-amber-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-              <div className="flex flex-col min-h-[180px] transition-transform hover:-translate-y-1 duration-300 text-black bg-gradient-to-b from-orange-400 to-orange-600 rounded-xl p-8 relative shadow-2xl justify-between">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full border-2 border-orange-400 bg-neutral-800"></div>
-                    <div className="w-8 h-8 rounded-full border-2 border-orange-400 bg-neutral-900"></div>
-                    <div className="w-8 h-8 rounded-full border-2 border-orange-400 bg-black text-white flex items-center justify-center text-[10px] font-bold">+50</div>
-                  </div>
-                  <Quote className="w-5 h-5 text-black/40 fill-black/20" />
-                </div>
-                <div>
-                  <p className="text-lg font-semibold leading-snug tracking-tight max-w-[80%]">"A CyDef mudou todo o nosso fluxo de segurança e compliance."</p>
-                  <div className="mt-4 pt-4 border-t border-black/10 flex items-center gap-2 text-xs font-medium uppercase tracking-wide opacity-70">
-                    <span>CISO Verificado</span>
-                    <span className="w-1 h-1 bg-black rounded-full"></span>
-                    <span>Avaliação 5.0</span>
-                  </div>
-                </div>
-              </div>
+          <div className="text-center animate-on-scroll">
+            <div className="flex items-center gap-2 justify-center mb-3 text-orange-400 text-xs font-medium uppercase tracking-wider">
+              <Sparkles className="w-3 h-3" />
+              <span>Blue Team & SOC</span>
             </div>
-            <div className="hidden lg:block col-span-2"></div>
-            <div className="col-span-1 lg:col-span-6 flex flex-col justify-end text-right lg:text-left">
-              <div className="flex items-center gap-2 lg:justify-start justify-end mb-3 text-orange-400 text-xs font-medium uppercase tracking-wider animate-on-scroll">
-                <Sparkles className="w-3 h-3" />
-                <span>Blue Team & SOC</span>
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-normal tracking-tighter text-white animate-on-scroll">
-                Proteção inteligente de
-                <span className="text-white/60 block">próxima geração.</span>
-              </h2>
-            </div>
+            <h2 className="text-4xl lg:text-5xl font-normal tracking-tighter text-white">
+              Proteção inteligente de
+              <span className="text-white/60 block">próxima geração.</span>
+            </h2>
           </div>
         </div>
 
-        {/* stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-24 pt-12 border-t border-white/5 pb-24 relative z-20">
+        {/* stats — apenas o que tem evidência/definição: 24x7 (oferta, p/ confirmar) e
+            Alunos Matriculados (contagem real via Supabase). Removidos: 99% Mitigação
+            Automática e 0 Falhas Críticas (NEX-P0-03 — sem metodologia/fonte). */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8 mt-24 pt-12 border-t border-white/5 pb-24 relative z-20">
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">24/7</div>
             <div className="text-xl font-medium pl-1 text-neutral-400">Monitoramento SOC</div>
-          </div>
-          <div className="flex flex-col gap-2 animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">99%</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">Mitigação Automática</div>
           </div>
           <div className="flex flex-col gap-2 animate-on-scroll">
             <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">
@@ -234,10 +208,6 @@ const Index = () => {
                 : "—"}
             </div>
             <div className="text-xl font-medium pl-1 text-neutral-400">Alunos Matriculados</div>
-          </div>
-          <div className="flex flex-col gap-2 animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">0</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">Falhas Críticas</div>
           </div>
         </div>
 
