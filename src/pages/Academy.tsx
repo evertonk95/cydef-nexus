@@ -21,6 +21,7 @@ const Academy = () => {
   const courses = [
     {
       id: "cybersecurity-fundamentals",
+      available: true,
       title: "Cybersecurity Fundamentals",
       level: "Iniciante",
       duration: "40h",
@@ -29,6 +30,7 @@ const Academy = () => {
     },
     {
       id: "soc-analyst",
+      available: true,
       title: "SOC Analyst – Formação Completa",
       level: "Intermediário",
       duration: "80h",
@@ -37,6 +39,7 @@ const Academy = () => {
     },
     {
       id: "blue-team-advanced",
+      available: true,
       title: "Blue Team Advanced",
       level: "Avançado",
       duration: "60h",
@@ -45,6 +48,7 @@ const Academy = () => {
     },
     {
       id: "sc-900-prep",
+      available: false,
       title: "Preparatório SC-900",
       level: "Iniciante",
       duration: "30h",
@@ -53,6 +57,7 @@ const Academy = () => {
     },
     {
       id: "security-plus-prep",
+      available: false,
       title: "Preparatório Security+",
       level: "Intermediário",
       duration: "50h",
@@ -61,6 +66,7 @@ const Academy = () => {
     },
     {
       id: "malware-analysis",
+      available: false,
       title: "Análise de Malware para SOC",
       level: "Intermediário",
       duration: "40h",
@@ -69,6 +75,7 @@ const Academy = () => {
     },
     {
       id: "incident-investigation",
+      available: false,
       title: "Investigação de Incidentes (MITRE ATT&CK)",
       level: "Avançado",
       duration: "45h",
@@ -183,6 +190,11 @@ const Academy = () => {
                   <span className="px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">
                     {course.level}
                   </span>
+                  {!course.available && (
+                    <span className="px-3 py-1 bg-white/10 text-neutral-300 border border-white/15 rounded-full text-xs font-semibold uppercase tracking-wider">
+                      Em breve
+                    </span>
+                  )}
                   <div className="flex items-center gap-1 text-neutral-400 text-sm font-medium">
                     <Clock className="w-4 h-4" />
                     <span>{course.duration}</span>
@@ -208,12 +220,21 @@ const Academy = () => {
                   </div>
                 </div>
 
-                <Link to={`/cursos/${course.id}`} className="mt-auto block">
-                  <button className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 border border-white/10">
-                    Ver Detalhes
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </Link>
+                {course.available ? (
+                  <Link to={`/cursos/${course.id}`} className="mt-auto block">
+                    <button className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 border border-white/10">
+                      Ver Detalhes
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </Link>
+                ) : (
+                  <div
+                    className="mt-auto block w-full py-3 bg-white/[0.03] text-neutral-500 font-medium rounded-lg flex items-center justify-center gap-2 border border-white/5"
+                    aria-disabled="true"
+                  >
+                    Conteúdo em produção
+                  </div>
+                )}
               </div>
             ))}
           </div>
