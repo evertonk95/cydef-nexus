@@ -6,21 +6,14 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams, Outlet 
 import { useEffect } from "react";
 import i18n, { DEFAULT_LANG, htmlTitles, isLang } from "./i18n";
 import Index from "./pages/Index";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Academy from "./pages/Academy";
-import CoursePage from "./pages/CoursePage";
-import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import Contact from "./pages/Contact";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import AcademyLanding from "./pages/AcademyLanding";
 import AcademyPrivacy from "./pages/AcademyPrivacy";
 import AcademyStatusConfirmation from "./pages/AcademyStatusConfirmation";
 import AcademyThankYou from "./pages/AcademyThankYou";
 import AcademyLogin from "./pages/AcademyLogin";
+import { PageRouter, CourseArea, HeadSeo } from "./lib/SeoRouter";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +50,12 @@ const LangShell = () => {
     document.title = htmlTitles[effective];
   }, [effective]);
 
-  return <Outlet />;
+  return (
+    <>
+      <HeadSeo />
+      <Outlet />
+    </>
+  );
 };
 
 const App = () => (
@@ -71,15 +69,11 @@ const App = () => (
         <Routes>
           <Route path="/:lang" element={<LangShell />}>
             <Route index element={<Index />} />
-            <Route path="sobre" element={<About />} />
-            <Route path="servicos" element={<Services />} />
-            <Route path="academy" element={<Academy />} />
-            <Route path="cursos/:courseId" element={<CoursePage />} />
-            <Route path="blog" element={<Blog />} />
+            {/* Páginas com slug localizado por idioma (P2-03) + aliases legados */}
+            <Route path=":page" element={<PageRouter />} />
+            {/* Conteúdo com slug universal */}
             <Route path="blog/:slug" element={<BlogPost />} />
-            <Route path="contato" element={<Contact />} />
-            <Route path="privacidade" element={<Privacy />} />
-            <Route path="termos" element={<Terms />} />
+            <Route path=":area/:courseId" element={<CourseArea />} />
             {/* CyDef Academy — landing de captura (fase protótipo/validação, S-02..S-06) */}
             <Route path="academy/gratuito" element={<AcademyLanding />} />
             <Route path="academy/privacidade/:versao" element={<AcademyPrivacy />} />
