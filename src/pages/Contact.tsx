@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Mail, MapPin, MessageSquare } from "lucide-react";
+import { Mail, MapPin, MessageSquare, Phone } from "lucide-react";
 
 const Contact = () => {
   useScrollReveal();
@@ -79,8 +79,8 @@ const Contact = () => {
                     Horário de resposta
                   </h3>
                   <p className="text-neutral-400">
-                    Segunda a sexta, das 9h às 18h (horário de Brasília). Fora
-                    desse horário, retornamos no próximo dia útil.
+                    Atendemos em horário comercial — fora dele, retornamos no
+                    próximo dia útil.
                   </p>
                 </div>
               </div>
@@ -112,6 +112,18 @@ const Contact = () => {
                           academy@cydef.com.br
                         </a>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors flex items-start gap-6">
+                    <div className="h-14 w-14 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
+                      <Phone className="h-6 w-6 text-orange-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-2">Telefone</h3>
+                      <a href="tel:+15086305886" className="block text-neutral-400 hover:text-orange-400 transition-colors">
+                        +1 (508) 630-5886
+                      </a>
                     </div>
                   </div>
 
