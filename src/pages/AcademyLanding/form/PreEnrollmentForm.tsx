@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 import { AlertCircle, CheckCircle2, Loader2, Mail } from "lucide-react";
 import {
-  preEnrollmentSchema,
-  PERFIL_OPTIONS,
+  buildPerfilOptions,
+  buildPreEnrollmentSchema,
+  FORM_DEFAULT_VALUES,
   type PreEnrollmentValues,
 } from "./schema";
 import { captureApiUrl, isCaptureEnabled, isEmailEnabled, privacyPath } from "@/lib/config";
+import { L } from "@/lib/lang";
 import { track } from "@/lib/analytics";
 
 /**
@@ -21,6 +24,8 @@ import { track } from "@/lib/analytics";
  * - Honeypot oculto (anti-bot) — humanos não veem/preenchem.
  * - Sem `versao_aviso` no payload (HEL-M01).
  * - Beacon `preinscricao_submitida` (sem PII) apenas em 202.
+ * - Idioma: o componente é remontado por idioma (key={lang} no index) para que
+ *   o schema zod (mensagens localizadas) seja reconstruído.
  */
 
 type FormState =
@@ -35,6 +40,9 @@ export const PreEnrollmentForm = () => {
   const captureEnabled = useMemo(() => isCaptureEnabled(), []);
   const emailEnabled = useMemo(() => isEmailEnabled(), []);
   const apiUrl = useMemo(() => captureApiUrl(), []);
+  const { t } = useTranslation();
+  const schema = useMemo(() => buildPreEnrollmentSchema(t), [t]);
+  const perfilOptions = useMemo(() => buildPerfilOptions(t), [t]);
   const requestIdRef = useRef<string>(crypto.randomUUID());
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<FormState>({ kind: "initial" });
@@ -45,14 +53,8 @@ export const PreEnrollmentForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<PreEnrollmentValues>({
-    resolver: zodResolver(preEnrollmentSchema),
-    defaultValues: {
-      nome: "",
-      email: "",
-      perfil: "iniciante",
-      aceito: false,
-      declaracao_idade: false,
-    },
+    resolver: zodResolver(schema),
+    defaultValues: FORM_DEFAULT_VALUES,
     mode: "onSubmit",
   });
 
@@ -142,26 +144,24 @@ export const PreEnrollmentForm = () => {
         <div className="container mx-auto max-w-2xl">
           <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12 text-center">
             <h2 id="pre-inscricao-titulo" className="text-3xl font-bold text-white mb-4 tracking-tighter">
-              Pré-inscrições em breve
+              {t("form.soonTitle")}
             </h2>
             <p className="text-neutral-400 leading-relaxed mb-6">
-              Estamos preparando o acesso aos cursos gratuitos. Quando as
-              inscrições abrirem, esta página será ativada — sem pegadinha e
-              com total transparência sobre privacidade (
+              {t("form.soonBodyA")}
               <a
-                href={privacyPath()}
+                href={L(privacyPath())}
                 className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
               >
-                veja o Aviso de Privacidade
+                {t("form.soonLink")}
               </a>
-              ).
+              {t("form.soonBodyB")}
             </p>
             <div
               role="status"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium"
             >
               <Mail className="h-4 w-4" aria-hidden="true" />
-              Inscrições em breve
+              {t("form.soonBadge")}
             </div>
           </div>
         </div>
@@ -192,18 +192,16 @@ export const PreEnrollmentForm = () => {
               tabIndex={-1}
               className="text-3xl font-bold text-white mb-4 tracking-tighter focus:outline-none"
             >
-              {isEmailFailure ? "Não foi possível reenviar o e-mail" : "Inscrição recebida!"}
+              {isEmailFailure ? t("form.emailFailTitle") : t("form.successTitle")}
             </h2>
             <p className="text-neutral-400 leading-relaxed mb-6">
               {isEmailFailure ? (
-                <>
-                  Sua pré-inscrição está registrada, mas o e-mail de confirmação
-                  não pôde ser enviado neste momento. Tente reenviar em instantes.
-                </>
+                t("form.emailFailBody")
               ) : (
                 <>
-                  Enviamos um e-mail para <strong className="text-white">{state.email}</strong>{" "}
-                  com o link de confirmação (válido por 48 horas).
+                  {t("form.successBodyA")}{" "}
+                  <strong className="text-white">{state.email}</strong>{" "}
+                  {t("form.successBodyB")}
                 </>
               )}
             </p>
@@ -215,17 +213,13 @@ export const PreEnrollmentForm = () => {
                 className="inline-flex items-center gap-2 px-6 py-3 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-[#F46B27] to-[#F69021] hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Mail className="h-4 w-4" aria-hidden="true" />}
-                Reenviar e-mail
+                {t("form.resend")}
               </button>
               {!emailEnabled && (
-                <span className="text-xs text-neutral-500">
-                  O reenvio estará disponível quando o envio de e-mails for ativado.
-                </span>
+                <span className="text-xs text-neutral-500">{t("form.resendDisabledNote")}</span>
               )}
             </div>
-            <p className="text-xs text-neutral-500 mt-6">
-              Não encontrou? Verifique a caixa de spam ou lixo eletrônico.
-            </p>
+            <p className="text-xs text-neutral-500 mt-6">{t("form.spamHint")}</p>
           </div>
         </div>
       </section>
@@ -244,29 +238,22 @@ export const PreEnrollmentForm = () => {
       <div className="container mx-auto max-w-2xl">
         <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12">
           <h2 id="pre-inscricao-titulo" className="text-3xl font-bold text-white mb-2 tracking-tighter">
-            Pré-inscreva-se grátis
+            {t("form.formTitle")}
           </h2>
-          <p className="text-neutral-400 mb-8">
-            Leva menos de 30 segundos. Sem cartão e sem spam.
-          </p>
+          <p className="text-neutral-400 mb-8">{t("form.formSub")}</p>
 
           {/* Anúncios de status (WCAG 4.1.3) */}
           <div aria-live="polite" className="mb-4">
             {isRateLimited && (
               <div role="status" className="flex items-start gap-2 p-4 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-300 text-sm">
                 <AlertCircle className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                <span>
-                  Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.
-                </span>
+                <span>{t("form.rateLimited")}</span>
               </div>
             )}
             {isServerError && (
               <div role="alert" className="flex items-start gap-2 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
                 <AlertCircle className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                <span>
-                  Não foi possível concluir agora. Tente novamente em instantes — seus dados
-                  não foram perdidos.
-                </span>
+                <span>{t("form.serverError")}</span>
               </div>
             )}
           </div>
@@ -274,7 +261,7 @@ export const PreEnrollmentForm = () => {
           <form onSubmit={onSubmit} noValidate className="space-y-6">
             {/* Honeypot (oculto para humanos; bots preenchem) */}
             <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
-              <label htmlFor={`${idBase}-website`}>Não preencha este campo</label>
+              <label htmlFor={`${idBase}-website`}>{t("form.honeyLabel")}</label>
               <input
                 id={`${idBase}-website`}
                 type="text"
@@ -288,7 +275,7 @@ export const PreEnrollmentForm = () => {
 
             <div>
               <label htmlFor={`${idBase}-nome`} className="block text-sm font-medium text-white mb-2">
-                Nome completo
+                {t("form.labelNome")}
               </label>
               <input
                 id={`${idBase}-nome`}
@@ -298,7 +285,7 @@ export const PreEnrollmentForm = () => {
                 aria-invalid={err("nome") ? true : undefined}
                 aria-describedby={err("nome") ? `${idBase}-nome-erro` : undefined}
                 className={inputClass(err("nome"))}
-                placeholder="Seu nome"
+                placeholder={t("form.phNome")}
                 disabled={isSubmittingUi}
                 {...register("nome")}
               />
@@ -312,7 +299,7 @@ export const PreEnrollmentForm = () => {
 
             <div>
               <label htmlFor={`${idBase}-email`} className="block text-sm font-medium text-white mb-2">
-                E-mail
+                {t("form.labelEmail")}
               </label>
               <input
                 id={`${idBase}-email`}
@@ -322,7 +309,7 @@ export const PreEnrollmentForm = () => {
                 aria-invalid={err("email") ? true : undefined}
                 aria-describedby={err("email") ? `${idBase}-email-erro` : undefined}
                 className={inputClass(err("email"))}
-                placeholder="nome@dominio.com"
+                placeholder={t("form.phEmail")}
                 disabled={isSubmittingUi}
                 {...register("email")}
               />
@@ -336,7 +323,7 @@ export const PreEnrollmentForm = () => {
 
             <div>
               <label htmlFor={`${idBase}-perfil`} className="block text-sm font-medium text-white mb-2">
-                Seu perfil
+                {t("form.labelPerfil")}
               </label>
               <select
                 id={`${idBase}-perfil`}
@@ -347,7 +334,7 @@ export const PreEnrollmentForm = () => {
                 disabled={isSubmittingUi}
                 {...register("perfil")}
               >
-                {PERFIL_OPTIONS.map((opt) => (
+                {perfilOptions.map((opt) => (
                   <option key={opt.value} value={opt.value} className="bg-[#0F0F10]">
                     {opt.label}
                   </option>
@@ -363,7 +350,7 @@ export const PreEnrollmentForm = () => {
 
             {/* Opt-in LGPD — NUNCA pré-marcado (SEC-001) */}
             <fieldset className="space-y-3">
-              <legend className="sr-only">Consentimentos obrigatórios</legend>
+              <legend className="sr-only">{t("form.legendConsents")}</legend>
               <div className="flex items-start gap-3">
                 <input
                   id={`${idBase}-aceito`}
@@ -375,16 +362,16 @@ export const PreEnrollmentForm = () => {
                   {...register("aceito")}
                 />
                 <label htmlFor={`${idBase}-aceito`} className="text-sm text-neutral-300 leading-relaxed">
-                  Li e concordo com o{" "}
+                  {t("form.consentPre")}{" "}
                   <a
-                    href={privacyPath()}
+                    href={L(privacyPath())}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
                   >
-                    Aviso de Privacidade
+                    {t("form.consentLink")}
                   </a>{" "}
-                  (LGPD) e autorizo o envio do e-mail de confirmação da pré-inscrição.
+                  {t("form.consentPost")}
                 </label>
               </div>
               {err("aceito") && (
@@ -406,7 +393,7 @@ export const PreEnrollmentForm = () => {
                   {...register("declaracao_idade")}
                 />
                 <label htmlFor={`${idBase}-idade`} className="text-sm text-neutral-300 leading-relaxed">
-                  Declaro que tenho 16 anos ou mais.
+                  {t("form.ageDeclare")}
                 </label>
               </div>
               {err("declaracao_idade") && (
@@ -425,23 +412,23 @@ export const PreEnrollmentForm = () => {
               {isSubmittingUi ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                  Enviando…
+                  {t("form.submitSending")}
                 </>
               ) : (
-                "Confirmar pré-inscrição"
+                t("form.submit")
               )}
             </button>
             <p className="text-xs text-neutral-500 text-center">
-              Seus dados são usados apenas para esta pré-inscrição. Saiba mais no{" "}
+              {t("form.footnotePre")}{" "}
               <a
-                href={privacyPath()}
+                href={L(privacyPath())}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-400 underline underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
               >
-                Aviso de Privacidade
+                {t("form.footnoteLink")}
               </a>
-              .
+              {t("form.footnotePost")}
             </p>
           </form>
         </div>

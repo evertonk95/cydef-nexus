@@ -1,7 +1,9 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { currentLang } from "@/lib/lang";
 import { trackPageview } from "@/lib/analytics";
 import { PreEnrollmentForm } from "./form/PreEnrollmentForm";
 import {
@@ -19,9 +21,12 @@ import {
  * Rota: /academy/gratuito (proposta; constante única em src/lib/config.ts).
  * Fluxo J1 100% navegável por teclado; WCAG 2.2 AA (labels, foco visível,
  * erro inline, aria-live, reflow 320px, prefers-reduced-motion global).
+ * key={lang} no formulário: schema zod localizado é reconstruído por idioma.
  */
 const AcademyLanding = () => {
   useScrollReveal();
+  useTranslation(); // assina troca de idioma (re-render)
+  const lang = currentLang();
 
   useEffect(() => {
     trackPageview(); // sem PII (SEC-008)
@@ -37,7 +42,7 @@ const AcademyLanding = () => {
         <HowItWorks />
         <Proof />
         <Faq />
-        <PreEnrollmentForm />
+        <PreEnrollmentForm key={lang} />
       </main>
       <LandingFooter />
       <Footer />

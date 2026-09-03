@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import i18n from "@/i18n";
 import AcademyPrivacy from "../AcademyPrivacy";
 
 /**
@@ -20,6 +21,10 @@ function renderPrivacy(versao: string) {
 }
 
 describe("AcademyPrivacy (S-04)", () => {
+  beforeAll(async () => {
+    await i18n.changeLanguage("pt"); // chrome da página em PT
+  });
+
   it("renderiza a versão vigente com cabeçalho correto", async () => {
     renderPrivacy("v2026.1");
     expect(

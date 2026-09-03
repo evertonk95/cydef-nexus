@@ -1,7 +1,8 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
+import i18n from "@/i18n";
 import AcademyLanding from "../index";
 import { expectNoViolations } from "@/test/axe";
 
@@ -19,6 +20,10 @@ function renderLanding() {
 }
 
 describe("AcademyLanding (S-02)", () => {
+  beforeAll(async () => {
+    await i18n.changeLanguage("pt"); // landing em PT (canônico)
+  });
+
   beforeEach(() => {
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
@@ -39,11 +44,11 @@ describe("AcademyLanding (S-02)", () => {
     expect(screen.getByText("Cybersecurity Fundamentals")).toBeInTheDocument();
   });
 
-  it("apresenta os 3 passos e a prova de valor", () => {
+  it("apresenta os 3 passos e a prova de valor (copy honesta)", () => {
     renderLanding();
     expect(screen.getByText("Como funciona")).toBeInTheDocument();
     expect(screen.getByText("Pré-inscreva-se")).toBeInTheDocument();
-    expect(screen.getByText("Quem cria é quem opera")).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo de quem vive a segurança no dia a dia")).toBeInTheDocument();
   });
 
   it("FAQ acessível por teclado (botões com aria-expanded)", async () => {
@@ -70,7 +75,7 @@ describe("AcademyLanding (S-02)", () => {
   it("link do Aviso de Privacidade aponta para versão imutável (M01)", () => {
     renderLanding();
     const aviso = screen.getByRole("link", { name: "Aviso de Privacidade" });
-    expect(aviso).toHaveAttribute("href", "/academy/privacidade/v2026.1");
+    expect(aviso).toHaveAttribute("href", "/pt/academy/privacidade/v2026.1");
   });
 
   it("formulário em estado 'inscrições em breve' (capture off) — NENHUM input de PII na rede", async () => {
