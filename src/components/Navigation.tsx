@@ -43,7 +43,7 @@ export const Navigation = () => {
                 <div className="points_wrapper">
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
-                <span className="inner">Obter Acesso</span>
+                <span className="inner">Falar com a CyDef</span>
               </button>
             </Link>
           </div>
@@ -86,7 +86,7 @@ export const Navigation = () => {
                   <div className="points_wrapper">
                     <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                   </div>
-                  <span className="inner">Obter Acesso</span>
+                  <span className="inner">Falar com a CyDef</span>
                 </button>
               </Link>
             </div>
