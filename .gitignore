@@ -37,3 +37,6 @@ supabase/.env.local
 
 # local preview logs
 preview-*.txt
+
+# temp do gen-sitemap
+.gen-sitemap-*.cjs

@@ -1,5 +1,6 @@
 import i18n from "@/i18n";
 import { DEFAULT_LANG, isLang } from "@/i18n";
+import { localizePath } from "@/lib/routes";
 
 /** Current effective language (always a supported one). */
 export const currentLang = (): Lang =>
@@ -7,11 +8,15 @@ export const currentLang = (): Lang =>
 
 type Lang = (typeof import("@/i18n").LANGS)[number];
 
-/** Prefixes an internal path with the active language: L("/sobre") -> "/pt/sobre". */
+/**
+ * Prefixes an internal path with the active language, translating the first
+ * segment when it is a known page slug (P2-03):
+ * L("/sobre") no EN -> "/en/about"; no ES -> "/es/nosotros"; no PT -> "/pt/sobre".
+ * Caminhos de conteúdo (blog/:slug, cursos/:id, academy/*) mantêm o slug.
+ */
 export const L = (path: string): string => {
   const lang = currentLang();
-  if (path === "/") return `/${lang}`;
-  return `/${lang}${path.startsWith("/") ? path : `/${path}`}`;
+  return localizePath(path, lang, "pt");
 };
 
 /** Official WhatsApp number (Everton, 03/09/2026). */
