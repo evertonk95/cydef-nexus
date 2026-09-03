@@ -72,7 +72,7 @@ const sections = [
     body: (
       <>
         <ul className="list-disc pl-5 space-y-1">
-          <li>Mensagens de contato: até <strong>[12] meses</strong> após o último contato;</li>
+          <li>Mensagens de contato: até <strong>12 meses</strong> após o último contato;</li>
           <li>Dados de conta da Academy: enquanto a conta estiver ativa;</li>
           <li>Dados de navegação/análise: conforme período definido pela ferramenta utilizada (ex.: até 14 meses no GA4).</li>
         </ul>

@@ -224,10 +224,32 @@ const courseData: Record<string, Course> = {
   },
 };
 
+// Cursos planejados (sem página de detalhe ainda) — NEX-P1-04: estado honesto
+// em vez de "Curso não encontrado" para rotas conhecidas do catálogo.
+const plannedCourses: Record<string, { title: string; description: string }> = {
+  "sc-900-prep": {
+    title: "Preparatório SC-900",
+    description: "Preparação completa para o exame Microsoft Security, Compliance, and Identity Fundamentals.",
+  },
+  "security-plus-prep": {
+    title: "Preparatório Security+",
+    description: "Preparação completa para a certificação CompTIA Security+ com exercícios práticos e simulados.",
+  },
+  "malware-analysis": {
+    title: "Análise de Malware para SOC",
+    description: "Introdução à análise de malware com foco em contexto SOC, identificação de comportamentos e IOCs.",
+  },
+  "incident-investigation": {
+    title: "Investigação de Incidentes (MITRE ATT&CK)",
+    description: "Investigação profunda de incidentes utilizando o framework MITRE ATT&CK para detecção e resposta.",
+  },
+};
+
 const CoursePage = () => {
   useScrollReveal();
   const { courseId } = useParams();
   const course = courseId ? courseData[courseId] : null;
+  const planned = courseId ? plannedCourses[courseId] : undefined;
 
   if (!course) {
     return (
@@ -235,13 +257,38 @@ const CoursePage = () => {
         <Navigation />
         <div className="container mx-auto px-4 py-40 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Curso não encontrado
+            {planned ? planned.title : "Curso não encontrado"}
           </h1>
-          <Link to="/academy" className="inline-block mt-4">
-            <button className="button-custom" type="button">
-              <span className="inner">Voltar para Academy</span>
-            </button>
-          </Link>
+          {planned ? (
+            <>
+              <p className="text-lg text-white/60 max-w-2xl mx-auto mb-3">
+                {planned.description}
+              </p>
+              <p className="text-neutral-400 max-w-xl mx-auto mb-10">
+                Esta turma está em preparação e ainda não aceita matrículas.
+                Cadastre seu e-mail para ser avisado quando abrir.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a
+                  href={`mailto:academy@cydef.com.br?subject=${encodeURIComponent(`Interesse no curso: ${planned.title}`)}`}
+                  className="inline-block px-6 py-4 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+                >
+                  Avisar-me por e-mail
+                </a>
+                <Link to="/academy" className="inline-block">
+                  <button className="px-6 py-4 rounded-lg border border-white/15 text-neutral-300 hover:bg-white/5 hover:text-white transition-colors font-medium text-sm" type="button">
+                    Voltar para a Academy
+                  </button>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <Link to="/academy" className="inline-block mt-4">
+              <button className="button-custom" type="button">
+                <span className="inner">Voltar para Academy</span>
+              </button>
+            </Link>
+          )}
         </div>
         <Footer />
       </div>

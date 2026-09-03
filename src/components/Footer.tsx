@@ -63,7 +63,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-neutral-500 font-medium">
-            © 2025 CyDef. Todos os direitos reservados.
+            © 2026 CyDef. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
             <a href="https://www.linkedin.com/company/cydef-group/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
@@ -71,9 +71,9 @@ export const Footer = () => {
             </a>
           </div>
           <div className="flex gap-4 text-xs font-medium text-neutral-500">
-            <a href="/privacidade" className="hover:text-white transition-colors">Privacidade</a>
+            <Link to="/privacidade" className="hover:text-white transition-colors">Privacidade</Link>
             <span className="text-neutral-700">|</span>
-            <a href="#" className="hover:text-white transition-colors">Termos</a>
+            <Link to="/termos" className="hover:text-white transition-colors">Termos</Link>
           </div>
         </div>
       </div>

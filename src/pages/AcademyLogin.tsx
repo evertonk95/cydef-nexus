@@ -23,6 +23,10 @@ const AcademyLogin = () => {
           <div className="al-login-card">
             <h1>Área do Aluno</h1>
             <p className="al-sub">Entre para acessar seus cursos, trilhas e certificados da formação.</p>
+            <p className="al-sub" style={{ fontSize: 12.5, color: "#F59E0B", marginBottom: 20 }}>
+              Portal em desenvolvimento — o acesso será liberado por e-mail após a
+              pré-inscrição confirmada na landing gratuita.
+            </p>
             <form onSubmit={enviar}>
               <div className="al-field">
                 <label>E-mail</label>

@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { blogPosts } from "@/lib/blog/posts";
 
 const categories = [
@@ -18,6 +19,11 @@ const categories = [
 
 const Blog = () => {
   useScrollReveal();
+  const [activeCategory, setActiveCategory] = useState("Todos");
+  const filteredPosts =
+    activeCategory === "Todos"
+      ? blogPosts
+      : blogPosts.filter((post) => post.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -48,8 +54,10 @@ const Blog = () => {
             {categories.map((category) => (
               <button
                 key={category}
+                type="button"
+                onClick={() => setActiveCategory(category)}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
-                  category === "Todos"
+                  category === activeCategory
                     ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
                     : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
                 }`}
@@ -65,7 +73,7 @@ const Blog = () => {
       <section className="py-24 px-4 relative">
         <div className="container mx-auto max-w-7xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
-            {blogPosts.map((post) => (
+            {filteredPosts.map((post) => (
               <Link
                 key={post.slug}
                 to={`/blog/${post.slug}`}
@@ -107,21 +115,6 @@ const Blog = () => {
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="mt-16 flex justify-center gap-2 animate-on-scroll">
-            <button className="w-10 h-10 rounded-lg bg-orange-500 text-white font-bold flex items-center justify-center shadow-[0_0_15px_-3px_rgba(249,115,22,0.4)]">
-              1
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              2
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              3
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </section>
 
@@ -131,26 +124,21 @@ const Blog = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 text-center relative backdrop-blur-md animate-on-scroll">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
-              Receba conteúdo exclusivo
+              Em breve: CyDef Brief
             </h2>
             <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-              Cadastre-se para receber artigos, guias e novidades sobre
-              cibersegurança diretamente no seu e-mail.
+              Nossa newsletter ainda está em preparação (NEX-P2-02). Enquanto
+              isso, os artigos do blog e o LinkedIn da CyDef seguem no ar —
+              sem cadastro, sem ruído.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-4" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 px-5 py-4 rounded-xl border border-white/10 bg-black/50 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                required
-              />
-              <button type="submit" className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] whitespace-nowrap">
-                Inscrever-se
-              </button>
-            </form>
-            <p className="text-sm text-neutral-500 font-medium">
-              Sem spam. Apenas conteúdo de qualidade.
-            </p>
+            <a
+              href="https://www.linkedin.com/company/cydef-group/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+            >
+              Seguir a CyDef no LinkedIn
+            </a>
           </div>
         </div>
       </section>

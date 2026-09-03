@@ -1,35 +1,10 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { Mail, MapPin, MessageSquare, Phone } from "lucide-react";
 
 const Contact = () => {
   useScrollReveal();
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Mensagem enviada com sucesso!",
-      description: "Nossa equipe entrará em contato em breve.",
-    });
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-      message: "",
-    });
-  };
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -57,95 +32,58 @@ const Contact = () => {
       <section className="py-24 px-4 relative">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
-            {/* Contact Form */}
+            {/* Contact — canais diretos. Formulário web em implantação (NEX-P0-02):
+                nenhuma ação reporta sucesso sem backend real. */}
             <div className="animate-on-scroll">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 tracking-tighter">
-                Envie sua mensagem
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
+                Fale com a CyDef
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2 group">
-                  <label htmlFor="name" className="text-sm font-medium text-neutral-400 group-focus-within:text-orange-500 transition-colors">Nome Completo *</label>
-                  <input
-                    id="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="Seu nome"
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                  />
-                </div>
+              <p className="text-neutral-400 text-lg mb-8">
+                Nosso formulário web está em implantação. Enquanto isso, escreva
+                direto para a equipe — responderemos por e-mail.
+              </p>
 
-                <div className="space-y-2 group">
-                  <label htmlFor="email" className="text-sm font-medium text-neutral-400 group-focus-within:text-orange-500 transition-colors">E-mail *</label>
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="seu@email.com"
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                  />
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="space-y-2 group">
-                    <label htmlFor="phone" className="text-sm font-medium text-neutral-400 group-focus-within:text-orange-500 transition-colors">Telefone</label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                      placeholder="(00) 00000-0000"
-                      className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                    />
+              <div className="space-y-4">
+                <a
+                  href="mailto:contato@cydef.com.br"
+                  className="flex items-start gap-5 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors group"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
+                    <Mail className="h-6 w-6 text-orange-500" />
                   </div>
-
-                  <div className="space-y-2 group">
-                    <label htmlFor="company" className="text-sm font-medium text-neutral-400 group-focus-within:text-orange-500 transition-colors">Empresa</label>
-                    <input
-                      id="company"
-                      value={formData.company}
-                      onChange={(e) =>
-                        setFormData({ ...formData, company: e.target.value })
-                      }
-                      placeholder="Nome da empresa"
-                      className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                    />
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                      Soluções para empresas
+                    </h3>
+                    <p className="text-neutral-400 break-all">contato@cydef.com.br</p>
                   </div>
-                </div>
+                </a>
 
-                <div className="space-y-2 group">
-                  <label htmlFor="message" className="text-sm font-medium text-neutral-400 group-focus-within:text-orange-500 transition-colors">Mensagem *</label>
-                  <textarea
-                    id="message"
-                    required
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    placeholder="Como podemos ajudar?"
-                    rows={5}
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all resize-none"
-                  />
-                </div>
-
-                <button type="submit" className="button-custom w-full group !py-4">
-                  <div className="points_wrapper">
-                    <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
+                <a
+                  href="mailto:academy@cydef.com.br"
+                  className="flex items-start gap-5 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors group"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
+                    <Mail className="h-6 w-6 text-orange-500" />
                   </div>
-                  <span className="inner flex items-center justify-center gap-2">
-                    Enviar Mensagem
-                    <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </span>
-                </button>
-              </form>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                      CyDef Academy
+                    </h3>
+                    <p className="text-neutral-400 break-all">academy@cydef.com.br</p>
+                  </div>
+                </a>
+
+                <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-sm font-bold text-white/70 uppercase tracking-widest mb-2">
+                    Horário de resposta
+                  </h3>
+                  <p className="text-neutral-400">
+                    Atendemos em horário comercial — fora dele, retornamos no
+                    próximo dia útil.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Contact Info */}
@@ -183,10 +121,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-white mb-2">Telefone</h3>
-                      <a href="tel:+5511999999999" className="block text-neutral-400 hover:text-orange-400 transition-colors mb-1">
-                        +55 (11) 99999-9999
+                      <a href="tel:+15086305886" className="block text-neutral-400 hover:text-orange-400 transition-colors">
+                        +1 (508) 630-5886
                       </a>
-                      <p className="text-sm text-neutral-500 font-medium">Seg - Sex: 9h às 18h</p>
                     </div>
                   </div>
 
@@ -202,32 +139,6 @@ const Contact = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Office Hours */}
-              <div className="bg-gradient-to-br from-orange-500/10 to-amber-500/5 border border-orange-500/20 rounded-2xl p-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 blur-3xl rounded-full"></div>
-                <h3 className="text-2xl font-bold text-white mb-6 tracking-tight relative z-10">
-                  Horário de Atendimento
-                </h3>
-                <div className="space-y-4 text-neutral-300 relative z-10">
-                  <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                    <span>Segunda - Sexta</span>
-                    <span className="font-semibold text-white">9:00 - 18:00</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                    <span>Sábado</span>
-                    <span className="font-semibold text-white">9:00 - 13:00</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Domingo</span>
-                    <span className="font-semibold text-orange-400">Fechado</span>
-                  </div>
-                </div>
-                <p className="text-sm text-orange-500/80 font-medium mt-6 relative z-10 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                  SOC 24x7 disponível para clientes
-                </p>
               </div>
             </div>
           </div>
