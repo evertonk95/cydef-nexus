@@ -3,7 +3,8 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { L } from "@/lib/lang";
+import { L, currentLang } from "@/lib/lang";
+import { coursesByLang } from "@/lib/courses";
 import {
   Clock,
   BarChart,
@@ -13,214 +14,6 @@ import {
   Users,
   Target,
 } from "lucide-react";
-
-interface CourseModule {
-  title: string;
-  topics?: string[];
-}
-
-interface Course {
-  id?: string;
-  title: string;
-  level: string;
-  duration: string;
-  description: string;
-  modules?: CourseModule[];
-  objectives?: string[];
-  prerequisites?: string;
-  target?: string;
-  topics?: string[];
-}
-
-const courseData: Record<string, Course> = {
-  "cybersecurity-fundamentals": {
-    title: "Cybersecurity Fundamentals",
-    level: "Iniciante",
-    duration: "40 horas",
-    description: "Construa uma base sólida em segurança da informação com este curso completo que aborda desde conceitos fundamentais até práticas essenciais de proteção.",
-    objectives: [
-      "Compreender os princípios fundamentais de segurança da informação",
-      "Dominar conceitos de redes e protocolos essenciais",
-      "Entender criptografia e sua aplicação prática",
-      "Identificar e mitigar ameaças comuns",
-      "Aplicar boas práticas de segurança no dia a dia",
-    ],
-    target: "Iniciantes em cibersegurança, profissionais de TI buscando especialização, estudantes de tecnologia, e qualquer pessoa interessada em construir carreira em segurança.",
-    prerequisites: "Conhecimentos básicos de informática. Não é necessária experiência prévia em segurança.",
-    modules: [
-      {
-        title: "Fundamentos de Segurança",
-        topics: [
-          "Confidencialidade, Integridade e Disponibilidade (CIA)",
-          "Princípios de Defesa em Profundidade",
-          "Gestão de Riscos",
-          "Controles de Segurança",
-        ],
-      },
-      {
-        title: "Redes e Protocolos",
-        topics: [
-          "Modelo OSI e TCP/IP",
-          "Protocolos de Rede Essenciais",
-          "Firewalls e Segmentação",
-          "VPNs e Túneis Seguros",
-        ],
-      },
-      {
-        title: "Criptografia",
-        topics: [
-          "Criptografia Simétrica e Assimétrica",
-          "Funções Hash",
-          "Certificados Digitais",
-          "PKI e Infraestrutura de Chave Pública",
-        ],
-      },
-      {
-        title: "Ameaças e Vulnerabilidades",
-        topics: [
-          "Tipos de Malware",
-          "Ataques Comuns (Phishing, Ransomware, etc)",
-          "Engenharia Social",
-          "Ciclo de Vida de um Ataque",
-        ],
-      },
-      {
-        title: "Práticas de Segurança",
-        topics: [
-          "Gestão de Identidade e Acesso",
-          "Segurança de Endpoints",
-          "Backup e Recuperação",
-          "Políticas e Procedimentos",
-        ],
-      },
-    ],
-  },
-  "soc-analyst": {
-    title: "SOC Analyst – Formação Completa",
-    level: "Intermediário",
-    duration: "80 horas",
-    description: "Formação completa para atuar como Analista SOC Nível 1 e 2, com foco em detecção, análise e resposta a incidentes de segurança em ambientes corporativos.",
-    objectives: [
-      "Dominar análise de logs e correlação de eventos",
-      "Operar SIEM e ferramentas de detecção",
-      "Investigar e responder a incidentes de segurança",
-      "Aplicar o framework MITRE ATT&CK na prática",
-      "Criar e executar playbooks de resposta",
-    ],
-    target: "Profissionais que desejam atuar em SOC, analistas de suporte buscando especialização, profissionais de TI migrando para segurança.",
-    prerequisites: "Conhecimentos em redes, sistemas operacionais e fundamentos de segurança. Recomendado ter concluído Cybersecurity Fundamentals ou experiência equivalente.",
-    modules: [
-      {
-        title: "Introdução ao SOC",
-        topics: [
-          "Estrutura e Processos de um SOC",
-          "Papéis e Responsabilidades",
-          "Métricas e KPIs",
-          "Integração com outras áreas",
-        ],
-      },
-      {
-        title: "Análise de Logs",
-        topics: [
-          "Logs de Sistemas Operacionais",
-          "Logs de Rede e Firewall",
-          "Logs de Aplicações",
-          "Correlação de Eventos",
-        ],
-      },
-      {
-        title: "SIEM e Ferramentas de Detecção",
-        topics: [
-          "Operação de SIEM",
-          "Criação de Regras de Detecção",
-          "Dashboards e Alertas",
-          "Integração de Fontes de Dados",
-        ],
-      },
-      {
-        title: "Detecção e Análise de Ameaças",
-        topics: [
-          "Identificação de Indicadores de Compromisso (IOCs)",
-          "Análise de Malware em Contexto SOC",
-          "Threat Intelligence",
-          "Técnicas de Evasão",
-        ],
-      },
-      {
-        title: "Resposta a Incidentes",
-        topics: [
-          "Fases da Resposta a Incidentes",
-          "Triagem e Priorização",
-          "Containment e Erradicação",
-          "Recovery e Lições Aprendidas",
-        ],
-      },
-      {
-        title: "MITRE ATT&CK",
-        topics: [
-          "Framework MITRE ATT&CK",
-          "Mapeamento de Táticas e Técnicas",
-          "Detecção Baseada em ATT&CK",
-          "Casos Práticos",
-        ],
-      },
-    ],
-  },
-  "blue-team-advanced": {
-    title: "Blue Team Advanced",
-    level: "Avançado",
-    duration: "60 horas",
-    description: "Curso avançado para profissionais experientes que buscam aprofundar conhecimentos em defesa cibernética, threat hunting, análise forense e estratégias de Blue Team.",
-    objectives: [
-      "Realizar threat hunting proativo",
-      "Conduzir análises forenses avançadas",
-      "Implementar defesa em profundidade",
-      "Operar EDR em nível avançado",
-      "Desenvolver estratégias de detecção customizadas",
-    ],
-    target: "Analistas SOC experientes, profissionais de Blue Team, especialistas em segurança que desejam evoluir para posições sênior.",
-    prerequisites: "Experiência sólida em SOC ou segurança defensiva. Recomendado ter concluído SOC Analyst ou experiência equivalente de 1+ ano.",
-    modules: [
-      {
-        title: "Threat Hunting Avançado",
-        topics: [
-          "Metodologias de Hunting",
-          "Hipóteses e Investigações",
-          "Hunting em Rede",
-          "Hunting em Endpoints",
-        ],
-      },
-      {
-        title: "Análise Forense Digital",
-        topics: [
-          "Aquisição e Preservação de Evidências",
-          "Análise de Memória",
-          "Análise de Disco",
-          "Timeline Analysis",
-        ],
-      },
-      {
-        title: "EDR Avançado",
-        topics: [
-          "Detecção Comportamental",
-          "Response Automatizado",
-          "Análise de Telemetria",
-          "Tuning e Otimização",
-        ],
-      },
-      {
-        title: "Defesa em Profundidade",
-        topics: [
-          "Arquitetura de Defesa em Camadas",
-          "Segmentação Avançada",
-          "Microsegmentação",
-          "Zero Trust",
-        ],
-      },
-    ],
-  },
-};
-
 // Cursos planejados (sem página de detalhe ainda) — NEX-P1-04: estado honesto
 // em vez de "Curso não encontrado" para rotas conhecidas do catálogo.
 const plannedCourses: Record<string, { title: string; description: string }> = {
@@ -259,14 +52,11 @@ const plannedCourseKeys: Record<string, string> = {
   "incident-investigation": "incident",
 };
 
-const levelKeyOf = (level: string): string =>
-  ({ Iniciante: "beginner", Intermediário: "intermediate", Avançado: "advanced" })[level] ?? "beginner";
-
 const CoursePage = () => {
   useScrollReveal();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { courseId } = useParams();
-  const course = courseId ? courseData[courseId] : null;
+  const course = courseId ? coursesByLang[currentLang()][courseId] : null;
   const planned = courseId ? plannedCourses[courseId] : undefined;
   const plannedKey = courseId ? plannedCourseKeys[courseId] : undefined;
   const plannedTitle = plannedKey ? t(`academy.courses.${plannedKey}`) : undefined;
@@ -326,7 +116,7 @@ const CoursePage = () => {
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <span className="px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">
-                {t(`academy.level.${levelKeyOf(course.level)}`)}
+                {t(`academy.level.${course.levelKey}`)}
               </span>
               <div className="flex items-center gap-2 text-white/60 font-medium">
                 <Clock className="w-4 h-4" />
@@ -361,11 +151,6 @@ const CoursePage = () => {
             <p className="text-sm text-neutral-500 mt-5 max-w-md">
               {t("course.underPrepNote")}
             </p>
-            {i18n.language !== "pt" && (
-              <p className="text-xs text-neutral-600 mt-3 max-w-md">
-                {t("common.contentPtNote")}
-              </p>
-            )}
           </div>
         </div>
       </section>
@@ -492,7 +277,7 @@ const CoursePage = () => {
                       </div>
                       <div>
                         <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">{t("course.level")}</p>
-                        <p className="text-white font-medium">{t(`academy.level.${levelKeyOf(course.level)}`)}</p>
+                        <p className="text-white font-medium">{t(`academy.level.${course.levelKey}`)}</p>
                       </div>
                     </div>
                   </div>
