@@ -1,12 +1,15 @@
 import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { L } from "@/lib/lang";
 import { LANDING_PATH } from "@/lib/config";
 
-// Tela de login simulada (protótipo). Sem contas de demonstração — o acesso real
+// Tela de login (protótipo). Sem contas de demonstração: o acesso real
 // chega por e-mail após a pré-inscrição confirmada na landing de captura.
 const AcademyLogin = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [erro, setErro] = useState(false);
 
@@ -21,44 +24,41 @@ const AcademyLogin = () => {
       <main style={{ paddingTop: 96, minHeight: "100vh" }}>
         <div className="al-wrap">
           <div className="al-login-card">
-            <h1>Área do Aluno</h1>
-            <p className="al-sub">Entre para acessar seus cursos, trilhas e certificados da formação.</p>
-            <p className="al-sub" style={{ fontSize: 12.5, color: "#F59E0B", marginBottom: 20 }}>
-              Portal em desenvolvimento — o acesso será liberado por e-mail após a
-              pré-inscrição confirmada na landing gratuita.
-            </p>
+            <h1>{t("login.title")}</h1>
+            <p className="al-sub">{t("login.sub")}</p>
+            <p className="al-note">{t("login.note")}</p>
             <form onSubmit={enviar}>
               <div className="al-field">
-                <label>E-mail</label>
+                <label>{t("login.email")}</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="voce@email.com"
+                  placeholder={t("login.emailPh")}
                   autoComplete="off"
                 />
               </div>
               <div className="al-field">
-                <label>Senha</label>
-                <input type="password" placeholder="•••••••• (simulada)" />
+                <label>{t("login.password")}</label>
+                <input type="password" placeholder={t("login.passwordPh")} />
               </div>
               <button type="submit" className="al-btn">
-                Entrar
+                {t("login.submit")}
               </button>
             </form>
             {erro && (
               <div className="al-erro">
-                Login ainda não está disponível — o acesso aos cursos chega por e-mail após a pré-inscrição confirmada.
+                {t("login.error")}
               </div>
             )}
             <div className="al-foot-links">
-              <span>Não tem conta? </span>
-              <Link to={LANDING_PATH} className="al-link">
-                Pré-inscreva-se no curso gratuito
+              <span>{t("login.noAccount")} </span>
+              <Link to={L(LANDING_PATH)} className="al-link">
+                {t("login.preRegister")}
               </Link>
             </div>
-            <Link to="/academy" className="al-back">
-              ← Voltar para a Academy
+            <Link to={L("/academy")} className="al-back">
+              ← {t("login.back")}
             </Link>
           </div>
         </div>
@@ -70,7 +70,8 @@ const AcademyLogin = () => {
         .al-wrap{max-width:1080px;margin:0 auto;padding:24px 24px 60px}
         .al-login-card{max-width:440px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
         .al-login-card h1{font-size:22px;margin-bottom:6px}
-        .al-sub{color:var(--muted);font-size:13.5px;margin-bottom:24px}
+        .al-sub{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+        .al-note{font-size:12.5px;color:var(--amber);margin-bottom:20px;line-height:1.5}
         .al-field{margin-bottom:16px}
         .al-field label{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
         .al-field input{width:100%;background:#0E0E12;border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;padding:11px 13px;outline:none;box-sizing:border-box}

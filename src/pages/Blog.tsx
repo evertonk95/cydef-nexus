@@ -4,26 +4,30 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { L } from "@/lib/lang";
 import { blogPosts } from "@/lib/blog/posts";
 
-const categories = [
-  "Todos",
-  "SOC",
-  "Blue Team",
-  "Detecção e Resposta",
-  "Hardening",
-  "Cloud Security",
-  "Carreira e Certificações",
-  "Inteligência de Ameaças",
-];
+// Categorias do conteúdo (dados em PT) mapeadas para chaves i18n.
+const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel"] as const;
+type CatKey = (typeof CAT_KEYS)[number];
+const ptCategory: Record<CatKey, string> = {
+  soc: "SOC",
+  blueTeam: "Blue Team",
+  detection: "Detecção e Resposta",
+  hardening: "Hardening",
+  cloud: "Cloud Security",
+  career: "Carreira e Certificações",
+  threatIntel: "Inteligência de Ameaças",
+};
 
 const Blog = () => {
   useScrollReveal();
-  const [activeCategory, setActiveCategory] = useState("Todos");
+  const { t, i18n } = useTranslation();
+  const [activeKey, setActiveKey] = useState<CatKey | "all">("all");
+
   const filteredPosts =
-    activeCategory === "Todos"
-      ? blogPosts
-      : blogPosts.filter((post) => post.category === activeCategory);
+    activeKey === "all" ? blogPosts : blogPosts.filter((post) => post.category === ptCategory[activeKey]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -35,34 +39,55 @@ const Blog = () => {
         <div className="container mx-auto text-center relative z-10 animate-on-scroll">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <Tag className="h-4 w-4" />
-            Insights & Artigos
+            {t("blog.badge")}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-            Blog <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">CyDef</span>
+            {t("blog.title")}
           </h1>
           <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium">
-            Artigos técnicos, guias práticos e insights sobre cibersegurança,
-            Blue Team e SOC escritos por especialistas.
+            {t("blog.lead")}
           </p>
         </div>
       </section>
+
+      {i18n.language !== "pt" && (
+        <div className="px-4 pt-8">
+          <div className="container mx-auto max-w-4xl">
+            <p className="text-sm text-neutral-500 text-center bg-white/[0.03] border border-white/10 rounded-xl px-6 py-4">
+              {t("common.contentPtNote")}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Categories */}
       <section className="py-8 px-4 border-b border-white/5 relative z-20">
         <div className="container mx-auto animate-on-scroll">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => (
+            <button
+              key="all"
+              type="button"
+              onClick={() => setActiveKey("all")}
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
+                activeKey === "all"
+                  ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
+                  : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              {t("blog.all")}
+            </button>
+            {CAT_KEYS.map((key) => (
               <button
-                key={category}
+                key={key}
                 type="button"
-                onClick={() => setActiveCategory(category)}
+                onClick={() => setActiveKey(key)}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
-                  category === activeCategory
+                  key === activeKey
                     ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
                     : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                {category}
+                {t(`blog.categories.${key}`)}
               </button>
             ))}
           </div>
@@ -76,7 +101,7 @@ const Blog = () => {
             {filteredPosts.map((post) => (
               <Link
                 key={post.slug}
-                to={`/blog/${post.slug}`}
+                to={L(`/blog/${post.slug}`)}
                 className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)] transition-all duration-300 group flex flex-col h-full cursor-pointer"
               >
                 <div className="rounded-xl overflow-hidden border border-white/10 mb-4">
@@ -114,7 +139,6 @@ const Blog = () => {
               </Link>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -124,12 +148,10 @@ const Blog = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 text-center relative backdrop-blur-md animate-on-scroll">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
-              Em breve: CyDef Brief
+              {t("blog.briefTitle")}
             </h2>
             <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-              Nossa newsletter ainda está em preparação (NEX-P2-02). Enquanto
-              isso, os artigos do blog e o LinkedIn da CyDef seguem no ar —
-              sem cadastro, sem ruído.
+              {t("blog.briefBody")}
             </p>
             <a
               href="https://www.linkedin.com/company/cydef-group/"
@@ -137,7 +159,7 @@ const Blog = () => {
               rel="noopener noreferrer"
               className="inline-block px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
             >
-              Seguir a CyDef no LinkedIn
+              {t("blog.followLinkedin")}
             </a>
           </div>
         </div>
