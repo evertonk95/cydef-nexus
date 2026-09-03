@@ -28,6 +28,9 @@ export interface BlogSection {
  * Documents/Squads100/squads/cydef-security-editorial/output/
  */
 import { extraPosts } from "./posts-extra.generated";
+import { blogPostsEn } from "./posts.en";
+import { blogPostsEs } from "./posts.es";
+import type { Lang } from "@/i18n";
 
 export const blogPosts: BlogPost[] = [
   {
@@ -198,5 +201,15 @@ export const blogPosts: BlogPost[] = [
   ...extraPosts,
 ];
 
-export const getPostBySlug = (slug: string): BlogPost | undefined =>
-  blogPosts.find((p) => p.slug === slug);
+export const blogPostsByLang: Record<Lang, BlogPost[]> = {
+  en: blogPostsEn,
+  pt: blogPosts,
+  es: blogPostsEs,
+};
+
+/** Posts for a given language (content localized; PT is the fallback). */
+export const postsForLang = (lang: Lang): BlogPost[] =>
+  blogPostsByLang[lang] ?? blogPosts;
+
+export const getPostBySlug = (slug: string, lang?: Lang): BlogPost | undefined =>
+  (lang ? postsForLang(lang) : blogPosts).find((p) => p.slug === slug);

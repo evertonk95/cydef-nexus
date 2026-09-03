@@ -276,6 +276,17 @@ export const es: Dict = {
     preRegister: "Preinscríbete en el curso gratuito",
     back: "Volver a la Academy",
   },
+  blogPost: {
+    back: "Volver al Blog",
+    notFoundTitle: "Artículo no encontrado",
+    notFoundBody: "El artículo que buscas no existe o fue movido.",
+    sourcesTitle: "Fuentes",
+    changelogTitle: "Historial factual",
+    ctaTitle: "¿Quieres profundizar en SOC y Blue Team?",
+    ctaBody: "Explora el ecosistema CyDef y la Academy para seguir evolucionando en la práctica.",
+    ctaSoc: "Explorar el ecosistema",
+    ctaAcademy: "CyDef Academy",
+  },
   notfound: {
     title: "Página no encontrada",
     body: "Esta dirección no existe o cambió de lugar. Te llevamos de vuelta a una página que existe de verdad.",

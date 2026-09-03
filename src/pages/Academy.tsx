@@ -16,7 +16,7 @@ import {
 
 const Academy = () => {
   useScrollReveal();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const slugById: Record<string, string> = {
     fundamentals: "cybersecurity-fundamentals",
@@ -40,7 +40,6 @@ const Academy = () => {
 
   const benefits = t("academy.benefits", { returnObjects: true }) as { title: string; desc: string }[];
   const features = t("academy.features", { returnObjects: true }) as { title: string; desc: string }[];
-  const showContentNote = i18n.language !== "pt";
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -77,16 +76,6 @@ const Academy = () => {
           </div>
         </div>
       </section>
-
-      {showContentNote && (
-        <div className="px-4 pt-8">
-          <div className="container mx-auto max-w-4xl">
-            <p className="text-sm text-neutral-500 text-center bg-white/[0.03] border border-white/10 rounded-xl px-6 py-4">
-              {t("common.contentPtNote")}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Benefits Section */}
       <section className="py-24 px-4 relative">

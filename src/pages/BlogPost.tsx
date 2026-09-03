@@ -1,24 +1,28 @@
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowLeft, Tag, ExternalLink } from "lucide-react";
 import { getPostBySlug } from "@/lib/blog/posts";
+import { L, currentLang } from "@/lib/lang";
+import { htmlTitles } from "@/i18n";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   useScrollReveal();
-  const post = slug ? getPostBySlug(slug) : undefined;
+  const { t } = useTranslation();
+  const post = slug ? getPostBySlug(slug, currentLang()) : undefined;
 
   useEffect(() => {
     if (post) {
-      document.title = `${post.title} | Blog CyDef`;
+      document.title = `${post.title} | ${t("blog.title")}`;
     }
     return () => {
-      document.title = "CyDef — Segurança que evolui com você";
+      document.title = htmlTitles[currentLang()];
     };
-  }, [post]);
+  }, [post, t]);
 
   // Renderiza **negrito** e [texto](url) inline
   const renderInline = (text: string) => {
@@ -55,16 +59,16 @@ const BlogPost = () => {
         <Navigation />
         <section className="relative pt-48 pb-32 px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tighter">
-            Artigo <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">não encontrado</span>
+            {t("blogPost.notFoundTitle")}
           </h1>
           <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-            O artigo que você procura não existe ou foi movido.
+            {t("blogPost.notFoundBody")}
           </p>
           <Link
-            to="/blog"
+            to={L("/blog")}
             className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Voltar para o Blog
+            <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
           </Link>
         </section>
         <Footer />
@@ -81,10 +85,10 @@ const BlogPost = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
         <div className="container mx-auto max-w-4xl relative z-10 animate-on-scroll">
           <Link
-            to="/blog"
+            to={L("/blog")}
             className="inline-flex items-center gap-2 text-neutral-400 hover:text-orange-400 transition-colors text-sm font-medium mb-6"
           >
-            <ArrowLeft className="w-4 h-4" /> Voltar para o Blog
+            <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
           </Link>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <Tag className="h-4 w-4" />
@@ -98,7 +102,7 @@ const BlogPost = () => {
               <Calendar className="h-4 w-4" />
               <span>{post.date}</span>
             </div>
-            <span>{post.readTime} de leitura</span>
+            <span>{post.readTime}</span>
             <span>· {post.author}</span>
           </div>
         </div>
@@ -177,7 +181,7 @@ const BlogPost = () => {
 
           {/* Fontes */}
           <div className="mt-14 bg-neutral-900/70 border border-white/10 rounded-2xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Fontes</h2>
+            <h2 className="text-xl font-bold text-white mb-4">{t("blogPost.sourcesTitle")}</h2>
             <ul className="space-y-2">
               {post.sources.map((s, i) => (
                 <li key={i}>
@@ -198,7 +202,7 @@ const BlogPost = () => {
           {post.changelog && post.changelog.length > 0 && (
             <div className="mt-8">
               <h2 className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-3">
-                Changelog factual
+                {t("blogPost.changelogTitle")}
               </h2>
               <ul className="space-y-1 text-sm text-neutral-500">
                 {post.changelog.map((c, i) => (
@@ -214,23 +218,23 @@ const BlogPost = () => {
       <section className="py-20 px-4 border-t border-white/5">
         <div className="container mx-auto max-w-3xl text-center animate-on-scroll">
           <h2 className="text-3xl font-bold text-white mb-4 tracking-tighter">
-            Quer aprofundar em SOC e Blue Team?
+            {t("blogPost.ctaTitle")}
           </h2>
           <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-            Explore nossos serviços e a CyDef Academy para evoluir na prática.
+            {t("blogPost.ctaBody")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              to="/servicos#soc"
+              to={L("/servicos")}
               className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
             >
-              Conhecer serviços de SOC
+              {t("blogPost.ctaSoc")}
             </Link>
             <Link
-              to="/academy"
+              to={L("/academy")}
               className="px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl transition-colors"
             >
-              CyDef Academy
+              {t("blogPost.ctaAcademy")}
             </Link>
           </div>
         </div>

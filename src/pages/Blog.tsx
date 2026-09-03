@@ -5,29 +5,53 @@ import { Calendar, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { L } from "@/lib/lang";
-import { blogPosts } from "@/lib/blog/posts";
+import { L, currentLang } from "@/lib/lang";
+import { postsForLang } from "@/lib/blog/posts";
 
-// Categorias do conteúdo (dados em PT) mapeadas para chaves i18n.
 const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel"] as const;
 type CatKey = (typeof CAT_KEYS)[number];
-const ptCategory: Record<CatKey, string> = {
-  soc: "SOC",
-  blueTeam: "Blue Team",
-  detection: "Detecção e Resposta",
-  hardening: "Hardening",
-  cloud: "Cloud Security",
-  career: "Carreira e Certificações",
-  threatIntel: "Inteligência de Ameaças",
+
+// Category labels used by the content itself, per language (must match the data files).
+const catLabels: Record<string, Record<CatKey, string>> = {
+  pt: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detecção e Resposta",
+    hardening: "Hardening",
+    cloud: "Cloud Security",
+    career: "Carreira e Certificações",
+    threatIntel: "Inteligência de Ameaças",
+  },
+  en: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detection & Response",
+    hardening: "Hardening",
+    cloud: "Cloud Security",
+    career: "Career & Certifications",
+    threatIntel: "Threat Intelligence",
+  },
+  es: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detección y Respuesta",
+    hardening: "Hardening",
+    cloud: "Seguridad en la Nube",
+    career: "Carrera y Certificaciones",
+    threatIntel: "Inteligencia de Amenazas",
+  },
 };
 
 const Blog = () => {
   useScrollReveal();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState<CatKey | "all">("all");
+  const lang = currentLang();
+  const posts = postsForLang(lang);
+  const labels = catLabels[lang] ?? catLabels.pt;
 
   const filteredPosts =
-    activeKey === "all" ? blogPosts : blogPosts.filter((post) => post.category === ptCategory[activeKey]);
+    activeKey === "all" ? posts : posts.filter((post) => post.category === labels[activeKey]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -49,16 +73,6 @@ const Blog = () => {
           </p>
         </div>
       </section>
-
-      {i18n.language !== "pt" && (
-        <div className="px-4 pt-8">
-          <div className="container mx-auto max-w-4xl">
-            <p className="text-sm text-neutral-500 text-center bg-white/[0.03] border border-white/10 rounded-xl px-6 py-4">
-              {t("common.contentPtNote")}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Categories */}
       <section className="py-8 px-4 border-b border-white/5 relative z-20">

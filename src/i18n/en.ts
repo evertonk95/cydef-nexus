@@ -275,6 +275,17 @@ export const en = {
     preRegister: "Pre-enroll in the free course",
     back: "Back to the Academy",
   },
+  blogPost: {
+    back: "Back to the Blog",
+    notFoundTitle: "Article not found",
+    notFoundBody: "The article you are looking for does not exist or was moved.",
+    sourcesTitle: "Sources",
+    changelogTitle: "Factual changelog",
+    ctaTitle: "Want to go deeper into SOC and Blue Team?",
+    ctaBody: "Explore the CyDef ecosystem and the Academy to keep evolving in practice.",
+    ctaSoc: "Explore the ecosystem",
+    ctaAcademy: "CyDef Academy",
+  },
   notfound: {
     title: "Page not found",
     body: "This address does not exist or has moved. Let us take you back to a page that is real.",
