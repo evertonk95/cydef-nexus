@@ -97,6 +97,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "wazuh-em-movimento",
+    "title": "Wazuh em Movimento: como avaliar, estabilizar e amadurecer um SIEM que já está em produção",
+    "category": "SOC Engineering",
+    "excerpt": "Um framework prático para quem herda um Wazuh já em produção: medir o caminho do evento entre a fonte e o analista, provar drops e lacunas de cobertura e evoluir o SIEM sem transformar produção em laboratório.",
+    "date": "04 de Setembro, 2026",
+    "dateISO": "2026-09-04",
+    "readTime": "31 min",
+    "image": "/assets/blog/wazuh-em-movimento-thumb.webp",
+    "author": "Everton Nascimento"
+  },
+  {
     "slug": "como-estruturar-um-soc-do-zero",
     "title": "Como estruturar um SOC do zero: Guia completo",
     "category": "SOC",

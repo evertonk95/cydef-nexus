@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { L, currentLang } from "@/lib/lang";
 import { postsForLangMeta } from "@/lib/blog/posts";
 
-const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel"] as const;
+const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel", "socEngineering"] as const;
 type CatKey = (typeof CAT_KEYS)[number];
 
 // Category labels used by the content itself, per language (must match the data files).
@@ -21,6 +21,7 @@ const catLabels: Record<string, Record<CatKey, string>> = {
     cloud: "Cloud Security",
     career: "Carreira e Certificações",
     threatIntel: "Inteligência de Ameaças",
+    socEngineering: "SOC Engineering",
   },
   en: {
     soc: "SOC",
@@ -30,6 +31,7 @@ const catLabels: Record<string, Record<CatKey, string>> = {
     cloud: "Cloud Security",
     career: "Career & Certifications",
     threatIntel: "Threat Intelligence",
+    socEngineering: "SOC Engineering",
   },
   es: {
     soc: "SOC",
@@ -39,6 +41,7 @@ const catLabels: Record<string, Record<CatKey, string>> = {
     cloud: "Seguridad en la Nube",
     career: "Carrera y Certificaciones",
     threatIntel: "Inteligencia de Amenazas",
+    socEngineering: "SOC Engineering",
   },
 };
 

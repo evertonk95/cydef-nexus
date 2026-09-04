@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="Visão geral das fases do framework de assessment: observabilidade e arquitetura, pipeline de ingestão, detecção e operação, governança e evolução.">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c0c0f"/>
+      <stop offset="1" stop-color="#141216"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="420" fill="url(#bg2)"/>
+  <text x="60" y="60" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#f5f5f5">As 14 fases do framework</text>
+  <text x="60" y="90" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#9ca3af">Da infraestrutura à governança — cada fase termina em evidência e decisão.</text>
+
+  <!-- Trilho 1: Observar -->
+  <g>
+    <rect x="60" y="130" width="255" height="120" rx="14" fill="#1c1917" stroke="#f97316" stroke-width="1.4"/>
+    <text x="80" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#fb923c">Observar</text>
+    <text x="80" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F0 Preparação e escopo</text>
+    <text x="80" y="208" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F1 Inventário técnico</text>
+    <text x="80" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F2 Cluster e carga</text>
+  </g>
+
+  <!-- Trilho 2: Pipeline -->
+  <g>
+    <rect x="345" y="130" width="270" height="120" rx="14" fill="#1c1917" stroke="#f97316" stroke-width="1.4"/>
+    <text x="365" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#fb923c">Pipeline de ingestão</text>
+    <text x="365" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F3 Filas e drops</text>
+    <text x="365" y="208" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F4 Agents e client_buffer</text>
+    <text x="365" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F5 Log Source Coverage</text>
+  </g>
+
+  <!-- Trilho 3: Deteccao -->
+  <g>
+    <rect x="645" y="130" width="255" height="120" rx="14" fill="#1c1917" stroke="#f97316" stroke-width="1.4"/>
+    <text x="665" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#fb923c">Detecção</text>
+    <text x="665" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F6 Filebeat e Indexer</text>
+    <text x="665" y="208" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F7 Controles funcionais</text>
+    <text x="665" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F8 Rules e use cases</text>
+  </g>
+
+  <!-- Trilho 4: Governanca -->
+  <g>
+    <rect x="930" y="130" width="210" height="120" rx="14" fill="#1c1917" stroke="#f97316" stroke-width="1.4"/>
+    <text x="950" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#fb923c">Operação e futuro</text>
+    <text x="950" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">F9–F13 alertas,</text>
+    <text x="950" y="208" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">segurança, DR,</text>
+    <text x="950" y="230" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">capacidade e plano</text>
+  </g>
+
+  <!-- Bottom bar -->
+  <rect x="60" y="290" width="1080" height="90" rx="14" fill="#2b1610" stroke="#f97316" stroke-width="1.2" opacity="0.9"/>
+  <text x="80" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#fed7aa">Cada fase entrega:</text>
+  <text x="80" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#e4e4e7">objetivo · perguntas · evidências · comandos · critérios de decisão · entregáveis</text>
+  <text x="80" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" fill="#9ca3af">Saída: AS IS técnico · análise de gaps · maturity score · TO BE · roadmap com rollback e validação</text>
+</svg>

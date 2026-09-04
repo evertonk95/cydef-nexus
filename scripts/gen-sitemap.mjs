@@ -44,8 +44,10 @@ for (const lang of LANGS) {
   for (const key of ["about", "ecosystem", "academy", "labs", "research", "blog", "contact", "privacy", "terms", "courses"]) {
     urls.add(`/${lang}/${pageSlugs[key][lang]}`);
   }
-  // Slugs universais (mesmos nos 3 idiomas): iterar o PT (canônico) basta.
-  for (const post of postsMetaByLang.pt) {
+  // Slugs universais de artigos: iterar o meta DE CADA idioma (P3-01/F3: um
+  // artigo pode existir só em PT até a tradução EN/ES chegar — não gerar URL
+  // morta nos idiomas ainda não traduzidos).
+  for (const post of postsMetaByLang[lang]) {
     urls.add(`/${lang}/${pageSlugs.blog[lang]}/${post.slug}`);
   }
   for (const courseId of Object.keys(courseDataPt)) {
