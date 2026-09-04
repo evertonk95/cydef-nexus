@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { L, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
+import { JsonLd } from "@/lib/seo";
+import { courseLd } from "@/lib/seo-data";
 import {
   Clock,
   BarChart,
@@ -107,6 +109,15 @@ const CoursePage = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
+      {/* Structured data: Course (somente cursos com ementa publicada — NEX-P2-04) */}
+      <JsonLd
+        data={courseLd({
+          name: t(`academy.courses.${courseKeyById[courseId ?? ""] ?? courseId}`),
+          description: course.description,
+          lang: currentLang(),
+          courseId: courseId ?? "",
+        })}
+      />
       <Navigation />
 
       {/* Hero Section */}

@@ -8,6 +8,8 @@ import { Calendar, ArrowLeft, Tag, ExternalLink } from "lucide-react";
 import { getPostBySlug } from "@/lib/blog/posts";
 import { L, currentLang } from "@/lib/lang";
 import { htmlTitles } from "@/i18n";
+import { JsonLd } from "@/lib/seo";
+import { blogPostingLd } from "@/lib/seo-data";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,6 +80,8 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
+      {/* Structured data: BlogPosting (NEX-P2-04) */}
+      <JsonLd data={blogPostingLd(post, currentLang())} />
       <Navigation />
 
       {/* Hero */}

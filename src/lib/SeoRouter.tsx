@@ -13,7 +13,8 @@ import Terms from "../pages/Terms";
 import NotFound from "../pages/NotFound";
 import CoursePage from "../pages/CoursePage";
 
-export const SITE_ORIGIN = "https://www.cydef.com.br";/** Resolves a first-segment page (localized slugs + alias redirects). */
+export { SITE_ORIGIN } from "@/lib/site";
+/** Resolves a first-segment page (localized slugs + alias redirects). */
 export const PageRouter = () => {
   const { lang, page } = useParams();
   const l: Lang = isLang(lang) ? lang : DEFAULT_LANG;

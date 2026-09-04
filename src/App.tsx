@@ -14,6 +14,8 @@ import AcademyStatusConfirmation from "./pages/AcademyStatusConfirmation";
 import AcademyThankYou from "./pages/AcademyThankYou";
 import AcademyLogin from "./pages/AcademyLogin";
 import { PageRouter, CourseArea, HeadSeo } from "./lib/SeoRouter";
+import { JsonLd } from "./lib/seo";
+import { orgLd, webSiteLd } from "./lib/seo-data";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +54,9 @@ const LangShell = () => {
 
   return (
     <>
+      {/* Structured data global (NEX-P2-04) */}
+      <JsonLd data={orgLd()} />
+      <JsonLd data={webSiteLd(effective)} />
       <HeadSeo />
       <Outlet />
     </>
