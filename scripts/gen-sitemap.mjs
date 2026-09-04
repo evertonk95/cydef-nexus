@@ -52,7 +52,8 @@ for (const lang of LANGS) {
     urls.add(`/${lang}/${pageSlugs.courses[lang]}/${courseId}`);
   }
   urls.add(`/${lang}/academy/gratuito`);
-  urls.add(`/${lang}/academy/privacidade/v2026.1`);
+  // URL do Aviso de Privacidade VIGENTE (manter em sincronia com PRIVACY_VERSION em src/lib/config.ts).
+  urls.add(`/${lang}/academy/privacidade/v2026.2`);
 }
 
 const sorted = [...urls].sort();
