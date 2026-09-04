@@ -160,9 +160,13 @@ async function main() {
     .replace(/<div id="root"><\/div>/, `<div id="root">${rootHtml}</div>`);
   if (extra) out = out.replace("</head>", `${extra}</head>`);
 
-  process.stdout.write(JSON.stringify({ html: out }));
-  dom.window.close();
-  process.exit(0);
+  // Flush antes do exit: com HTML grande (> pipe buffer do SO), o write é
+  // assíncrono — sair na hora truncava o stdout no Linux/CI e o JSON do
+  // orquestrador quebrava (rota caía para o template shell).
+  process.stdout.write(JSON.stringify({ html: out }), () => {
+    dom.window.close();
+    process.exit(0);
+  });
 }
 
 main().catch((err) => {
