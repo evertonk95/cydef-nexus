@@ -13,6 +13,7 @@ import { describe, expect, it } from "vitest";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Services from "@/pages/Services";
+import Labs from "@/pages/Labs";
 import Contact from "@/pages/Contact";
 import Academy from "@/pages/Academy";
 import Blog from "@/pages/Blog";
@@ -40,6 +41,7 @@ const pages: [string, React.ReactNode][] = [
   ["Home (Index)", withRouter(<Index />)],
   ["About", withRouter(<About />)],
   ["Services (Ecossistema)", withRouter(<Services />)],
+  ["Labs", withRouter(<Labs />)],
   ["Contact", withRouter(<Contact />)],
   ["Academy", withRouter(<Academy />)],
   ["Blog", withRouter(<Blog />)],

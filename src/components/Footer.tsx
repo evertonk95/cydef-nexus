@@ -53,6 +53,7 @@ export const Footer = () => {
               <span className="text-xs font-bold uppercase tracking-widest text-white">{t("footer.companyTitle")}</span>
               <div className="flex flex-col gap-2">
                 <Link to={L("/sobre")} className={linkClass}>{t("nav.about")}</Link>
+                <Link to={L("/labs")} className={linkClass}>{t("nav.labs")}</Link>
                 <Link to={L("/blog")} className={linkClass}>{t("nav.blog")}</Link>
                 <Link to={L("/servicos")} className={linkClass}>{t("footer.whatWeBuild")}</Link>
                 <Link to={L("/contato")} className={linkClass}>{t("contact.badge")}</Link>

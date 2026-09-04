@@ -17,6 +17,7 @@ import {
   Wrench,
   ScanLine,
   Radar,
+  FlaskConical,
 } from "lucide-react";
 
 // Página honesta de oferta: a CyDef ainda NÃO vende serviços gerenciados.
@@ -86,6 +87,43 @@ const Services = () => {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Em validação interna (existe, mas não é público) */}
+      <section className="py-24 px-4 relative">
+        <div className="container mx-auto max-w-7xl">
+          <div className="max-w-4xl mx-auto text-center mb-16 animate-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
+              {t("services.becomingTitle")}
+            </h2>
+            <p className="text-white/60 text-lg">{t("services.becomingLead")}</p>
+          </div>
+          <div className="max-w-4xl mx-auto animate-on-scroll">
+            <Link to={L("/labs")} className="block group">
+              <div className="bg-neutral-900 border border-amber-500/20 rounded-2xl p-8 md:p-10 hover:border-amber-500/50 transition-all duration-300">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
+                      <FlaskConical className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        {t("services.becomingItemTitle")}
+                      </h3>
+                      <p className="text-neutral-400 text-sm leading-relaxed mb-4 max-w-2xl">
+                        {t("services.becomingItemBody")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-2 text-amber-400 text-sm font-medium">
+                  {t("services.becomingItemCta")}{" "}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

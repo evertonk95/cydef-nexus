@@ -8,6 +8,7 @@ export const pageSlugs = {
   about: { pt: "sobre", en: "about", es: "nosotros" },
   ecosystem: { pt: "servicos", en: "ecosystem", es: "ecosistema" },
   academy: { pt: "academy", en: "academy", es: "academy" },
+  labs: { pt: "labs", en: "labs", es: "labs" },
   blog: { pt: "blog", en: "blog", es: "blog" },
   contact: { pt: "contato", en: "contact", es: "contacto" },
   privacy: { pt: "privacidade", en: "privacy", es: "privacidad" },
