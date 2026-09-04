@@ -1,7 +1,3 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams, Outlet } from "react-router-dom";
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from "react";
 import i18n, { DEFAULT_LANG, ensureLang, htmlTitles, isLang, type Lang } from "./i18n";
@@ -30,8 +26,6 @@ const CourseArea = lazy(() =>
 const RouteFallback = () => (
   <div className="min-h-screen bg-[#050505]" aria-busy="true" />
 );
-
-const queryClient = new QueryClient();
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -95,11 +89,7 @@ const LangShell = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
         <LangGate />
         <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
@@ -122,9 +112,7 @@ const App = () => (
             </Route>
           </Routes>
         </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  </BrowserRouter>
 );
 
 export default App;
