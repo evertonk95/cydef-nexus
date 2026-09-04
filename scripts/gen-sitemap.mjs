@@ -41,7 +41,7 @@ const urls = new Set();
 
 for (const lang of LANGS) {
   urls.add(`/${lang}/`);
-  for (const key of ["about", "ecosystem", "academy", "labs", "blog", "contact", "privacy", "terms", "courses"]) {
+  for (const key of ["about", "ecosystem", "academy", "labs", "research", "blog", "contact", "privacy", "terms", "courses"]) {
     urls.add(`/${lang}/${pageSlugs[key][lang]}`);
   }
   // Slugs universais (mesmos nos 3 idiomas): iterar o PT (canônico) basta.

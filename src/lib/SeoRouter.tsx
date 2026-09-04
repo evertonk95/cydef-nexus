@@ -4,6 +4,7 @@ import { pageKeyForSlug, slugFor, type PageKey } from "@/lib/routes";
 import About from "../pages/About";
 import Services from "../pages/Services";
 import Labs from "../pages/Labs";
+import Research from "../pages/Research";
 import Academy from "../pages/Academy";
 import Blog from "../pages/Blog";
 import Contact from "../pages/Contact";
@@ -45,6 +46,8 @@ export const PageRouter = () => {
       return <Academy />;
     case "labs":
       return <Labs />;
+    case "research":
+      return <Research />;
     case "blog":
       return <Blog />;
     case "contact":
