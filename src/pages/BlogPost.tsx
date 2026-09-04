@@ -5,7 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowLeft, Tag, ExternalLink } from "lucide-react";
-import { getPostBySlug } from "@/lib/blog/posts";
+import { getPostBySlug } from "@/lib/blog/posts.content";
 import { L, currentLang } from "@/lib/lang";
 import { htmlTitles } from "@/i18n";
 import { JsonLd } from "@/lib/seo";

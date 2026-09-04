@@ -31,7 +31,7 @@ async function load(entry) {
   return mod;
 }
 
-const [{ pageSlugs }, { blogPosts }, { courseDataPt }] = await Promise.all([
+const [{ pageSlugs }, { postsMetaByLang }, { courseDataPt }] = await Promise.all([
   load("src/lib/routes.ts"),
   load("src/lib/blog/posts.ts"),
   load("src/lib/courses.ts"),
@@ -44,7 +44,8 @@ for (const lang of LANGS) {
   for (const key of ["about", "ecosystem", "academy", "blog", "contact", "privacy", "terms", "courses"]) {
     urls.add(`/${lang}/${pageSlugs[key][lang]}`);
   }
-  for (const post of blogPosts) {
+  // Slugs universais (mesmos nos 3 idiomas): iterar o PT (canônico) basta.
+  for (const post of postsMetaByLang.pt) {
     urls.add(`/${lang}/${pageSlugs.blog[lang]}/${post.slug}`);
   }
   for (const courseId of Object.keys(courseDataPt)) {

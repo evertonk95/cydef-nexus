@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { L, waLink, currentLang } from "@/lib/lang";
 import { fetchAcademyStats, isAcademyStatsAvailable, STATS_POLL_INTERVAL_MS } from "@/lib/academy/stats";
-import { postsForLang } from "@/lib/blog/posts";
+import { countPostsForLang } from "@/lib/blog/posts";
 
 const Index = () => {
   useScrollReveal();
@@ -143,7 +143,7 @@ const Index = () => {
         {/* stats — apenas números reais */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8 mt-20 pt-12 border-t border-white/5 pb-24 relative z-20">
           <div className="flex flex-col gap-2 items-center md:items-start animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">{postsForLang(currentLang()).length}</div>
+            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">{countPostsForLang(currentLang())}</div>
             <div className="text-xl font-medium pl-1 text-neutral-400">{t("home.statArticles")}</div>
           </div>
           <div className="flex flex-col gap-2 items-center md:items-start animate-on-scroll">
