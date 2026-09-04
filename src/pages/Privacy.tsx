@@ -37,7 +37,7 @@ const Privacy = () => {
     <div className="bg-[#050505] text-white font-sans antialiased overflow-x-hidden flex flex-col min-h-screen">
       <Navigation />
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-6 md:px-10 pt-32 pb-24">
+      <main id="conteudo" tabIndex={-1} className="flex-1 w-full max-w-4xl mx-auto px-6 md:px-10 pt-32 pb-24 outline-none">
         <div className="inline-flex items-center gap-2 text-orange-500 mb-4">
           <Shield className="w-4 h-4" />
           <span className="text-xs font-bold tracking-widest uppercase">LGPD</span>

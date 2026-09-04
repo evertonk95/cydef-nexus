@@ -6,15 +6,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { currentLang } from "@/lib/lang";
 import { trackPageview } from "@/lib/analytics";
 import { PreEnrollmentForm } from "./form/PreEnrollmentForm";
-import {
-  SkipLink,
-  Hero,
-  Courses,
-  HowItWorks,
-  Proof,
-  Faq,
-  LandingFooter,
-} from "./sections";
+import { Hero, Courses, HowItWorks, Proof, Faq, LandingFooter } from "./sections";
 
 /**
  * Landing de captura — CyDef Academy (S-02, UX package v8).
@@ -34,7 +26,6 @@ const AcademyLanding = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
-      <SkipLink />
       <Navigation />
       <main id="conteudo">
         <Hero />

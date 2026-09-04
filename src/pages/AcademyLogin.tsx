@@ -21,7 +21,7 @@ const AcademyLogin = () => {
   return (
     <div className="academy-login">
       <Navigation />
-      <main style={{ paddingTop: 96, minHeight: "100vh" }}>
+      <main id="conteudo" tabIndex={-1} style={{ paddingTop: 96, minHeight: "100vh" }}>
         <div className="al-wrap">
           <div className="al-login-card">
             <h1>{t("login.title")}</h1>

@@ -59,6 +59,7 @@ const BlogPost = () => {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
         <Navigation />
+        <main id="conteudo" tabIndex={-1} className="outline-none">
         <section className="relative pt-48 pb-32 px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tighter">
             {t("blogPost.notFoundTitle")}
@@ -73,6 +74,7 @@ const BlogPost = () => {
             <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
           </Link>
         </section>
+        </main>
         <Footer />
       </div>
     );
@@ -83,6 +85,7 @@ const BlogPost = () => {
       {/* Structured data: BlogPosting (NEX-P2-04) */}
       <JsonLd data={blogPostingLd(post, currentLang())} />
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero */}
       <section className="relative pt-40 pb-12 px-4 overflow-hidden border-b border-white/5">
@@ -244,6 +247,7 @@ const BlogPost = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

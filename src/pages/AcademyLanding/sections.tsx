@@ -8,19 +8,6 @@ import { COURSES_ES, FAQ_ITEMS_ES, STEPS_ES } from "./data.es";
 import { currentLang, L } from "@/lib/lang";
 import { LANDING_PATH, privacyPath } from "@/lib/config";
 
-/** Skip link: primeiro elemento focável (WCAG 2.4.1). */
-export const SkipLink = () => {
-  const { t } = useTranslation();
-  return (
-    <a
-      href="#conteudo"
-      className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-md focus:bg-[#F69021] focus:text-black focus:font-semibold"
-    >
-      {t("landing.skip")}
-    </a>
-  );
-};
-
 const useContent = () => {
   useTranslation(); // assina troca de idioma
   const lang = currentLang();

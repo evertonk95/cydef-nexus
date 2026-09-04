@@ -16,7 +16,7 @@ const AcademyThankYou = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
-      <main className="pt-40 pb-24 px-4">
+      <main id="conteudo" tabIndex={-1} className="pt-40 pb-24 px-4">
         <div className="container mx-auto max-w-xl text-center">
           <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12">
             <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />

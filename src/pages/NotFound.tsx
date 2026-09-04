@@ -16,6 +16,7 @@ const NotFound = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
         <p className="text-8xl font-bold text-white/10 tracking-tighter mb-6">404</p>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{t("notfound.title")}</h1>
@@ -26,6 +27,7 @@ const NotFound = () => {
           </button>
         </Link>
       </div>
+      </main>
       <Footer />
     </div>
   );

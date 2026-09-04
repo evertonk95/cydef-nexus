@@ -68,6 +68,7 @@ const CoursePage = () => {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-sans antialiased">
         <Navigation />
+        <main id="conteudo" tabIndex={-1} className="outline-none">
         <div className="container mx-auto px-4 py-40 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {planned ? plannedTitle : t("course.notFound")}
@@ -102,6 +103,7 @@ const CoursePage = () => {
             </Link>
           )}
         </div>
+        </main>
         <Footer />
       </div>
     );
@@ -119,6 +121,7 @@ const CoursePage = () => {
         })}
       />
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
@@ -263,11 +266,12 @@ const CoursePage = () => {
                     <p className="text-sm text-neutral-500 mb-6">
                       {t("course.noPriceYet")}
                     </p>
-                    <Link to={L("/contato")} className="block w-full">
-                      <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]">
-                        {t("course.quote")}
-                        <ArrowRight className="w-5 h-5" />
-                      </button>
+                    <Link
+                      to={L("/contato")}
+                      className="block w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+                    >
+                      {t("course.quote")}
+                      <ArrowRight className="w-5 h-5" />
                     </Link>
                   </div>
 
@@ -306,6 +310,7 @@ const CoursePage = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

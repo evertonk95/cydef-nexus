@@ -56,6 +56,7 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
@@ -111,6 +112,7 @@ const Blog = () => {
       {/* Blog Posts */}
       <section className="py-24 px-4 relative">
         <div className="container mx-auto max-w-7xl">
+          <h2 className="sr-only">{t("blog.postsTitle")}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
             {filteredPosts.map((post) => (
               <Link
@@ -179,6 +181,7 @@ const Blog = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

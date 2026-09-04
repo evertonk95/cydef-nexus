@@ -44,6 +44,7 @@ const Academy = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
@@ -155,11 +156,12 @@ const Academy = () => {
                 </p>
 
                 {course.available ? (
-                  <Link to={L(`/cursos/${slugById[course.id]}`)} className="mt-auto block">
-                    <button className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 border border-white/10">
-                      {t("academy.details")}
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
+                  <Link
+                    to={L(`/cursos/${slugById[course.id]}`)}
+                    className="mt-auto block w-full py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 border border-white/10"
+                  >
+                    {t("academy.details")}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 ) : (
                   <div
@@ -222,6 +224,7 @@ const Academy = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );
