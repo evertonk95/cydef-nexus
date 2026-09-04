@@ -69,7 +69,7 @@ const BlogPost = () => {
           </p>
           <Link
             to={L("/blog")}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
           </Link>
@@ -233,7 +233,7 @@ const BlogPost = () => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to={L("/servicos")}
-              className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+              className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
             >
               {t("blogPost.ctaSoc")}
             </Link>

@@ -10,7 +10,7 @@ export const SkipLink = () => {
   return (
     <a
       href="#conteudo"
-      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-orange-600 focus:text-white focus:text-sm focus:font-semibold"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-orange-600 focus:text-black focus:text-sm focus:font-semibold"
     >
       {t("common.skipToContent")}
     </a>

@@ -173,7 +173,7 @@ const Blog = () => {
               href="https://www.linkedin.com/company/cydef-group/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+              className="inline-block px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
             >
               {t("blog.followLinkedin")}
             </a>

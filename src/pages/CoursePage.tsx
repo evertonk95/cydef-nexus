@@ -84,7 +84,7 @@ const CoursePage = () => {
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a
                   href={`mailto:academy@cydef.com.br?subject=${encodeURIComponent(`Interesse no curso: ${plannedTitle}`)}`}
-                  className="inline-block px-6 py-4 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+                  className="inline-block px-6 py-4 rounded-lg bg-orange-600 hover:bg-orange-500 text-black font-bold transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
                 >
                   {t("course.notifyMe")}
                 </a>
@@ -268,7 +268,7 @@ const CoursePage = () => {
                     </p>
                     <Link
                       to={L("/contato")}
-                      className="block w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+                      className="block w-full py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
                     >
                       {t("course.quote")}
                       <ArrowRight className="w-5 h-5" />
