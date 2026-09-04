@@ -13,7 +13,8 @@ import Terms from "../pages/Terms";
 import NotFound from "../pages/NotFound";
 import CoursePage from "../pages/CoursePage";
 
-export { SITE_ORIGIN } from "@/lib/site";
+import { SITE_ORIGIN } from "@/lib/site";
+export { SITE_ORIGIN };
 /** Resolves a first-segment page (localized slugs + alias redirects). */
 export const PageRouter = () => {
   const { lang, page } = useParams();
