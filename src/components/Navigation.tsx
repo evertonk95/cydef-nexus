@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,18 +24,19 @@ export const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden xl:flex items-center gap-7">
             <Link to={L("/")} className={itemClass}>{t("nav.home")}</Link>
             <Link to={L("/sobre")} className={itemClass}>{t("nav.about")}</Link>
             <Link to={L("/servicos")} className={itemClass}>{t("nav.ecosystem")}</Link>
             <Link to={L("/academy")} className={itemClass}>{t("nav.academy")}</Link>
+            <Link to={L("/labs")} className={itemClass}>{t("nav.labs")}</Link>
             <Link to={L("/blog")} className={itemClass}>{t("nav.blog")}</Link>
             <div className="border-l border-white/10 pl-4">
               <LanguageSwitcher compact />
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden xl:flex items-center gap-6">
             <Link to={L("/academy/entrar")} className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
               {t("nav.signIn")}
             </Link>
@@ -48,7 +49,7 @@ export const Navigation = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-3 md:hidden">
+          <div className="flex items-center gap-3 xl:hidden">
             <LanguageSwitcher compact />
             <button
               type="button"
@@ -64,7 +65,7 @@ export const Navigation = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-white/5 bg-[#050505]">
+          <div className="xl:hidden py-4 border-t border-white/5 bg-[#050505]">
             <div className="flex flex-col gap-4 px-6">
               <Link to={L("/")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.home")}
@@ -77,6 +78,9 @@ export const Navigation = () => {
               </Link>
               <Link to={L("/academy")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.academy")}
+              </Link>
+              <Link to={L("/labs")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
+                {t("nav.labs")}
               </Link>
               <Link to={L("/blog")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.blog")}
