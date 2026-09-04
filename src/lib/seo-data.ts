@@ -45,7 +45,10 @@ export const webSiteLd = (lang: Lang) => ({
   publisher: { "@id": `${SITE_ORIGIN}/#org` },
 });
 
-/** Artigo do blog (URL canônica por idioma). */
+/** Artigo do blog (URL canônica por idioma).
+ *  Autor: posts com `authorRole` são de autor pessoa (ex.: Everton Nascimento,
+ *  decisão 09/2026) — schema Person + afiliação CyDef. Posts sem `authorRole`
+ *  seguem como Organization (padrão histórico "Equipe CyDef"). */
 export const blogPostingLd = (post: BlogPost, lang: Lang) => ({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -60,12 +63,18 @@ export const blogPostingLd = (post: BlogPost, lang: Lang) => ({
   dateModified: post.dateISO,
   inLanguage: htmlLang(lang),
   url: `${SITE_ORIGIN}/${lang}/blog/${post.slug}`,
-  author: {
-    "@type": "Organization",
-    "@id": `${SITE_ORIGIN}/#org`,
-    name: "CyDef",
-    url: SITE_ORIGIN,
-  },
+  author: post.authorRole
+    ? {
+        "@type": "Person",
+        name: post.author,
+        affiliation: { "@id": `${SITE_ORIGIN}/#org`, name: "CyDef" },
+      }
+    : {
+        "@type": "Organization",
+        "@id": `${SITE_ORIGIN}/#org`,
+        name: "CyDef",
+        url: SITE_ORIGIN,
+      },
   publisher: {
     "@type": "Organization",
     "@id": `${SITE_ORIGIN}/#org`,

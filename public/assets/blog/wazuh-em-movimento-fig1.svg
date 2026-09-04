@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-label="O caminho que precisa ser provado durante o assessment: da fonte de log ao analista, passando por agente, remoted, analysisd, alerta, Filebeat, Indexer e Dashboard.">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c0c0f"/>
+      <stop offset="1" stop-color="#141216"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="480" fill="url(#bg1)"/>
+  <!-- Titulo -->
+  <text x="60" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#f5f5f5">O caminho do evento</text>
+  <text x="60" y="94" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#9ca3af">Cada camada entre a fonte e o analista precisa ser provada — drops podem acontecer em qualquer ponto.</text>
+
+  <!-- Etapa 1: Fonte -->
+  <g transform="translate(60,140)">
+    <rect width="180" height="64" rx="12" fill="#1c1917" stroke="#f97316" stroke-width="1.5"/>
+    <text x="90" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Fonte de log</text>
+    <text x="90" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">Firewall, AD, Linux…</text>
+  </g>
+  <g transform="translate(280,168)">
+    <path d="M0,4 L22,4" stroke="#52525b" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#52525b" stroke-width="2"/>
+  </g>
+
+  <!-- Etapa 2: Agente / Syslog -->
+  <g transform="translate(340,140)">
+    <rect width="180" height="64" rx="12" fill="#1c1917" stroke="#f97316" stroke-width="1.5"/>
+    <text x="90" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Agente / Syslog</text>
+    <text x="90" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">client_buffer · rede</text>
+  </g>
+  <g transform="translate(560,168)">
+    <path d="M0,4 L22,4" stroke="#52525b" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#52525b" stroke-width="2"/>
+  </g>
+
+  <!-- Etapa 3: Manager -->
+  <g transform="translate(620,140)">
+    <rect width="200" height="64" rx="12" fill="#1c1917" stroke="#f97316" stroke-width="1.5"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Wazuh Manager</text>
+    <text x="100" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">remoted → analysisd</text>
+  </g>
+  <g transform="translate(860,168)">
+    <path d="M0,4 L22,4" stroke="#52525b" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#52525b" stroke-width="2"/>
+  </g>
+
+  <!-- Etapa 4: Alerta -->
+  <g transform="translate(920,140)">
+    <rect width="180" height="64" rx="12" fill="#7c2d12" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="90" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Alertas</text>
+    <text x="90" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fed7aa">alerts.json</text>
+  </g>
+
+  <!-- Camada 2: transporte e analista -->
+  <g transform="translate(60,260)">
+    <rect width="200" height="64" rx="12" fill="#1c1917" stroke="#a1a1aa" stroke-width="1.2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Filebeat</text>
+    <text x="100" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">transporte de alertas</text>
+  </g>
+  <g transform="translate(300,288)">
+    <path d="M0,4 L22,4" stroke="#52525b" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#52525b" stroke-width="2"/>
+  </g>
+  <g transform="translate(360,260)">
+    <rect width="200" height="64" rx="12" fill="#1c1917" stroke="#a1a1aa" stroke-width="1.2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Wazuh Indexer</text>
+    <text x="100" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">health · heap · shards</text>
+  </g>
+  <g transform="translate(600,288)">
+    <path d="M0,4 L22,4" stroke="#52525b" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#52525b" stroke-width="2"/>
+  </g>
+  <g transform="translate(660,260)">
+    <rect width="200" height="64" rx="12" fill="#1c1917" stroke="#a1a1aa" stroke-width="1.2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Dashboard</text>
+    <text x="100" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af">visualização</text>
+  </g>
+  <g transform="translate(900,288)">
+    <path d="M0,4 L22,4" stroke="#f97316" stroke-width="2"/>
+    <path d="M18,0 L22,4 L18,8" fill="none" stroke="#f97316" stroke-width="2"/>
+  </g>
+  <g transform="translate(960,260)">
+    <rect width="180" height="64" rx="12" fill="#7c2d12" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="90" y="30" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Analista</text>
+    <text x="90" y="50" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fed7aa">triagem e resposta</text>
+  </g>
+
+  <!-- Zonas de perda -->
+  <g transform="translate(60,380)">
+    <text x="0" y="0" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#f87171">Pontos de perda a investigar:</text>
+    <text x="0" y="24" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#d4d4d8">1. agente (buffer/antiflooding) · 2. rede (Syslog UDP) · 3. remoted/analysisd (drops) · 4. Filebeat (retries) · 5. Indexer (write rejected)</text>
+  </g>
+</svg>

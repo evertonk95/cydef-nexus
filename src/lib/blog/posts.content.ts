@@ -1,4 +1,5 @@
 import { extraPosts } from "./posts-extra.generated";
+import { wazuhEmMovimentoPost } from "./posts.wazuh";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -12,6 +13,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  wazuhEmMovimentoPost,
   {
     slug: "como-estruturar-um-soc-do-zero",
     title: "Como estruturar um SOC do zero: Guia completo",
