@@ -13,7 +13,7 @@ import { ArrowLeft } from "lucide-react";
  * /academy/privacidade/v<versão>.
  * O conteúdo de uma versão publicada nunca é sobrescrito; nova versão = nova URL.
  * A página exibe o hash SHA-256 do conteúdo (prova de integridade da versão).
- * O texto do aviso é documento legal (rascunho v2026.1 aguardando jurídico/DPO —
+ * O texto do aviso é documento legal (rascunho v2026.2 aguardando jurídico/DPO —
  * SEC-003): permanece em português; o chrome da página é localizado e, para
  * idiomas ≠ PT, exibe aviso de que o documento vigente é publicado em PT.
  */

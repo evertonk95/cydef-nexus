@@ -23,9 +23,9 @@ export interface PrivacyDoc {
 export const privacyDocPt: PrivacyDoc = {
   docTitle: "Política de Privacidade",
   updatedLabel: "Última atualização:",
-  updatedAt: "3 de setembro de 2026",
+  updatedAt: "4 de setembro de 2026",
   contactIntro: "Dúvidas sobre esta Política? Fale com nosso encarregado:",
-  dpoEmail: "dpo@cydef.com.br",
+  dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quem somos",
@@ -35,7 +35,7 @@ export const privacyDocPt: PrivacyDoc = {
       list: {
         items: [
           "**Site:** https://www.cydef.com.br",
-          "**Contato para privacidade (DPO):** dpo@cydef.com.br",
+          "**Contato para privacidade (DPO):** contato@cydef.com.br",
         ],
       },
       closing: [
@@ -121,7 +121,7 @@ export const privacyDocPt: PrivacyDoc = {
         ],
       },
       closing: [
-        "Para exercer seus direitos, envie e-mail para **dpo@cydef.com.br** com o assunto \"LGPD — Solicitação de titular\". Responderemos em até **15 dias**.",
+        "Para exercer seus direitos, envie e-mail para **contato@cydef.com.br** com o assunto \"LGPD — Solicitação de titular\". Responderemos em até **15 dias**.",
       ],
     },
     {
@@ -164,7 +164,7 @@ export const privacyDocPt: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "**E-mail:** dpo@cydef.com.br",
+          "**E-mail:** contato@cydef.com.br",
           "**Prazo de resposta:** até 15 dias",
         ],
       },
@@ -181,9 +181,9 @@ export const privacyDocPt: PrivacyDoc = {
 export const privacyDocEn: PrivacyDoc = {
   docTitle: "Privacy Policy",
   updatedLabel: "Last updated:",
-  updatedAt: "September 3, 2026",
+  updatedAt: "September 4, 2026",
   contactIntro: "Questions about this Policy? Contact our data protection officer:",
-  dpoEmail: "dpo@cydef.com.br",
+  dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Who we are",
@@ -193,7 +193,7 @@ export const privacyDocEn: PrivacyDoc = {
       list: {
         items: [
           "**Site:** https://www.cydef.com.br",
-          "**Privacy contact (DPO):** dpo@cydef.com.br",
+          "**Privacy contact (DPO):** contato@cydef.com.br",
         ],
       },
       closing: [
@@ -279,7 +279,7 @@ export const privacyDocEn: PrivacyDoc = {
         ],
       },
       closing: [
-        "To exercise your rights, email **dpo@cydef.com.br** with the subject \"LGPD — Data subject request\". We will respond within **15 days**.",
+        "To exercise your rights, email **contato@cydef.com.br** with the subject \"LGPD — Data subject request\". We will respond within **15 days**.",
       ],
     },
     {
@@ -322,7 +322,7 @@ export const privacyDocEn: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "**Email:** dpo@cydef.com.br",
+          "**Email:** contato@cydef.com.br",
           "**Response time:** within 15 days",
         ],
       },
@@ -339,9 +339,9 @@ export const privacyDocEn: PrivacyDoc = {
 export const privacyDocEs: PrivacyDoc = {
   docTitle: "Política de Privacidad",
   updatedLabel: "Última actualización:",
-  updatedAt: "3 de septiembre de 2026",
+  updatedAt: "4 de septiembre de 2026",
   contactIntro: "¿Dudas sobre esta Política? Habla con nuestro encargado de datos:",
-  dpoEmail: "dpo@cydef.com.br",
+  dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quiénes somos",
@@ -351,7 +351,7 @@ export const privacyDocEs: PrivacyDoc = {
       list: {
         items: [
           "**Sitio:** https://www.cydef.com.br",
-          "**Contacto de privacidad (DPO):** dpo@cydef.com.br",
+          "**Contacto de privacidad (DPO):** contato@cydef.com.br",
         ],
       },
       closing: [
@@ -437,7 +437,7 @@ export const privacyDocEs: PrivacyDoc = {
         ],
       },
       closing: [
-        "Para ejercer tus derechos, escribe a **dpo@cydef.com.br** con el asunto \"LGPD — Solicitud de titular\". Responderemos en un plazo de **15 días**.",
+        "Para ejercer tus derechos, escribe a **contato@cydef.com.br** con el asunto \"LGPD — Solicitud de titular\". Responderemos en un plazo de **15 días**.",
       ],
     },
     {
@@ -480,7 +480,7 @@ export const privacyDocEs: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "**Correo electrónico:** dpo@cydef.com.br",
+          "**Correo electrónico:** contato@cydef.com.br",
           "**Plazo de respuesta:** dentro de 15 días",
         ],
       },
