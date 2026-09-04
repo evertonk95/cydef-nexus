@@ -39,7 +39,7 @@ const Index = () => {
     { key: "media", icon: Newspaper, para: "/blog", ativo: true },
     { key: "academy", icon: GraduationCap, para: "/academy", ativo: true },
     { key: "labs", icon: FlaskConical, para: "/labs", ativo: true },
-    { key: "research", icon: Microscope, para: "/servicos", ativo: false },
+    { key: "research", icon: Microscope, para: "/research", ativo: false },
     { key: "consulting", icon: Briefcase, para: "/servicos", ativo: false },
   ];
 
