@@ -8,6 +8,7 @@ export const en = {
     readMore: "Read more",
     comingSoon: "Coming soon",
     underConstruction: "Under construction",
+    skipToContent: "Skip to content",
     contentPtNote: "Detailed content (courses, articles and legal pages) is currently available in Portuguese. English and Spanish versions are in editorial production.",
   },
   nav: {
@@ -226,6 +227,7 @@ export const en = {
     title: "CyDef Blog",
     lead: "Technical articles, practical guides and insights about cybersecurity, Blue Team and SOC, written by identified authors with sources.",
     all: "All",
+    postsTitle: "Latest articles",
     categories: {
       soc: "SOC",
       blueTeam: "Blue Team",

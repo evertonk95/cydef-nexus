@@ -14,6 +14,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
@@ -178,6 +179,7 @@ const Contact = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

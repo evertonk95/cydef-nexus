@@ -20,7 +20,7 @@ async function load(entry) {
     format: "cjs",
     write: false,
   });
-  const tmp = join(ROOT, `.gen-sitemap-${Date.now()}.cjs`);
+  const tmp = join(ROOT, `.gen-sitemap-${Date.now()}-${Math.random().toString(36).slice(2)}.cjs`);
   writeFileSync(tmp, res.outputFiles[0].text);
   const mod = await import(`file://${tmp.replace(/\\/g, "/")}`);
   try {

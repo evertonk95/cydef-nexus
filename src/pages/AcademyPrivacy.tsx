@@ -43,7 +43,7 @@ const AcademyPrivacy = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
-      <main className="pt-32 pb-20 px-4">
+      <main id="conteudo" tabIndex={-1} className="pt-32 pb-20 px-4">
         <div className="container mx-auto max-w-3xl">
           {!aviso ? (
             <div className="text-center py-16">

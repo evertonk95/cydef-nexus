@@ -9,6 +9,7 @@ export const pt: Dict = {
     readMore: "Leia mais",
     comingSoon: "Em breve",
     underConstruction: "Em construção",
+    skipToContent: "Pular para o conteúdo",
     contentPtNote: "O conteúdo detalhado (cursos, artigos e páginas legais) está disponível em português. As versões em inglês e espanhol estão em produção editorial.",
   },
   nav: {
@@ -227,6 +228,7 @@ export const pt: Dict = {
     title: "Blog CyDef",
     lead: "Artigos técnicos, guias práticos e insights sobre cibersegurança, Blue Team e SOC, escritos por autores identificados e com fontes.",
     all: "Todos",
+    postsTitle: "Artigos recentes",
     categories: {
       soc: "SOC",
       blueTeam: "Blue Team",

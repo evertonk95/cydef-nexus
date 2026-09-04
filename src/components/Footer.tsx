@@ -22,7 +22,7 @@ export const Footer = () => {
           {/* Brand */}
           <div className="flex flex-col gap-4 max-w-sm">
             <Link to={L("/")} className="flex items-center gap-2.5 group cursor-pointer">
-              <img src="/assets/cydef-icon.webp" alt="CyDef" className="h-10 w-10 rounded-full" />
+              <img src="/assets/cydef-icon.webp" alt="" className="h-10 w-10 rounded-full" />
               <img src="/assets/cydef-wordmark.png" alt="CyDef" className="h-8 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-neutral-400 mt-2">
@@ -67,12 +67,12 @@ export const Footer = () => {
             {t("footer.rights", { year })}
           </p>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-neutral-600 font-medium">{t("footer.language")}</span>
+            <span className="text-xs text-neutral-500 font-medium">{t("footer.language")}</span>
             <LanguageSwitcher />
           </div>
           <div className="flex gap-4 text-xs font-medium text-neutral-500">
             <Link to={L("/privacidade")} className="hover:text-white transition-colors">{t("footer.privacy")}</Link>
-            <span className="text-neutral-700">|</span>
+            <span className="text-neutral-700" aria-hidden="true">|</span>
             <Link to={L("/termos")} className="hover:text-white transition-colors">{t("footer.terms")}</Link>
           </div>
         </div>
