@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import i18n from "@/i18n";
+import i18n, { ensureLang } from "@/i18n";
 import AcademyLanding from "../index";
 import { expectNoViolations } from "@/test/axe";
 
@@ -21,6 +21,7 @@ function renderLanding() {
 
 describe("AcademyLanding (S-02)", () => {
   beforeAll(async () => {
+    await ensureLang("pt"); // dicionário PT sob demanda (P3-01)
     await i18n.changeLanguage("pt"); // landing em PT (canônico)
   });
 

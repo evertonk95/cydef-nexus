@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { L, currentLang } from "@/lib/lang";
-import { postsForLang } from "@/lib/blog/posts";
+import { postsForLangMeta } from "@/lib/blog/posts";
 
 const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel"] as const;
 type CatKey = (typeof CAT_KEYS)[number];
@@ -47,7 +47,7 @@ const Blog = () => {
   const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState<CatKey | "all">("all");
   const lang = currentLang();
-  const posts = postsForLang(lang);
+  const posts = postsForLangMeta(lang);
   const labels = catLabels[lang] ?? catLabels.pt;
 
   const filteredPosts =

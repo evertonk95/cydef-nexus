@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import i18n from "@/i18n";
+import i18n, { ensureLang } from "@/i18n";
 import { PreEnrollmentForm } from "../form/PreEnrollmentForm";
 import { expectNoViolations } from "@/test/axe";
 
@@ -23,6 +23,7 @@ function renderForm() {
 
 describe("PreEnrollmentForm", () => {
   beforeAll(async () => {
+    await ensureLang("pt"); // dicionário PT sob demanda (P3-01)
     await i18n.changeLanguage("pt"); // textos do formulário em PT (canônico)
   });
 

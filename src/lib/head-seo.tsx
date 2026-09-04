@@ -1,0 +1,60 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { DEFAULT_LANG, isLang, type Lang } from "@/i18n";
+import { localizePath } from "@/lib/routes";
+import { SITE_ORIGIN } from "@/lib/site";
+
+/**
+ * Head SEO: canonical + hreflang alternates (P2-03).
+ * Computa a base (pathname sem idioma) e gera o URL canônico do idioma atual
+ * + alternates EN/PT/ES + x-default (EN).
+ *
+ * Vive em módulo próprio (não no SeoRouter) para não arrastar as páginas
+ * estáticas para o chunk inicial (P3-01 code-splitting).
+ */
+export const HeadSeo = () => {
+  const { pathname } = useLocation();
+  useTranslation(); // re-render na troca de idioma
+  const l = ((): Lang => {
+    const first = pathname.split("/")[1];
+    return isLang(first) ? first : DEFAULT_LANG;
+  })();
+
+  useEffect(() => {
+    const base =
+      pathname === `/${l}` || pathname === `/${l}/`
+        ? "/"
+        : pathname.replace(`/${l}`, "");
+    const links: { rel: string; href: string; hreflang?: string }[] = [
+      { rel: "canonical", href: `${SITE_ORIGIN}${localizePath(base, l, l)}` },
+    ];
+    for (const t of ["pt", "en", "es"] as Lang[]) {
+      links.push({
+        rel: "alternate",
+        hreflang: t,
+        href: `${SITE_ORIGIN}${localizePath(base, t, l)}`,
+      });
+    }
+    links.push({
+      rel: "alternate",
+      hreflang: "x-default",
+      href: `${SITE_ORIGIN}${localizePath(base, "en", l)}`,
+    });
+
+    const head = document.head;
+    const els = links.map((link) => {
+      const el = document.createElement("link");
+      el.rel = link.rel;
+      el.href = link.href;
+      if (link.hreflang) el.setAttribute("hreflang", link.hreflang);
+      head.appendChild(el);
+      return el;
+    });
+    return () => {
+      els.forEach((el) => el.remove());
+    };
+  }, [pathname, l]);
+
+  return null;
+};
