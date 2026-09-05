@@ -14,6 +14,7 @@ import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Services from "@/pages/Services";
 import Labs from "@/pages/Labs";
+import LabsArtifact from "@/pages/LabsArtifact";
 import Research from "@/pages/Research";
 import Contact from "@/pages/Contact";
 import Academy from "@/pages/Academy";
@@ -69,6 +70,27 @@ describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
       </MemoryRouter>,
     );
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("LabsArtifact (framework, PT) sem violações críticas/sérias", async () => {
+    // Conteúdo PT-first: carrega o dicionário PT e troca o idioma ativo
+    // (lição 04/09: ensureLang ANTES de changeLanguage). Restaura EN ao final
+    // para não vazar estado para os demais testes do arquivo.
+    const i18nMod = await import("@/i18n");
+    await i18nMod.ensureLang("pt");
+    await i18nMod.default.changeLanguage("pt");
+    try {
+      const { container } = render(
+        <MemoryRouter initialEntries={["/pt/labs/siem-health-maturity-framework"]}>
+          <Routes>
+            <Route path="/:lang/labs/:slug" element={<LabsArtifact />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      expect(await axe(container)).toHaveNoViolations();
+    } finally {
+      await i18nMod.default.changeLanguage("en");
+    }
   });
 
   it("CoursePage (curso com ementa) sem violações críticas/sérias", async () => {

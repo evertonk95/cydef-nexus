@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { L, waLink } from "@/lib/lang";
+import { L, waLink, currentLang } from "@/lib/lang";
 import {
   Eye,
   Shield,
@@ -88,6 +88,45 @@ const Services = () => {
               </Link>
             ))}
           </div>
+
+          {/* Labs: framework público (F5) — card real do pilar Labs. PT-first:
+              só no idioma em que a página do artefato existe (hoje PT; EN/ES
+              quando a tradução chegar — Fase 10). Sem link morto. */}
+          {currentLang() === "pt" && (
+            <div className="mt-6 animate-on-scroll">
+              <Link
+                to={L("/labs/siem-health-maturity-framework")}
+                className="block group"
+              >
+                <div className="bg-neutral-900 border border-emerald-500/25 rounded-2xl p-8 md:p-10 hover:border-emerald-500/60 transition-all duration-300">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/25">
+                        <FlaskConical className="w-6 h-6 text-emerald-400" />
+                      </div>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <h3 className="text-xl font-semibold text-white">
+                            {t("services.realLabsTitle")}
+                          </h3>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider border bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
+                            {t("labs.fwState")}
+                          </span>
+                        </div>
+                        <p className="text-neutral-400 text-sm leading-relaxed max-w-3xl">
+                          {t("services.realLabsBody")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-2 text-emerald-400 text-sm font-medium mt-4">
+                    {t("services.realLabsCta")}{" "}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
