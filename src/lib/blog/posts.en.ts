@@ -1,7 +1,9 @@
 ﻿// CyDef Blog — English editorial translation (source: PT canonical, 2026-09-03). Human review via PR.
 import type { BlogPost } from "./posts";
+import { wazuhEmMovimentoPostEn } from "./posts.wazuh.en";
 
 export const blogPostsEn: BlogPost[] = [
+  wazuhEmMovimentoPostEn,
   {
     slug: "como-estruturar-um-soc-do-zero",
     title: "Building a SOC from scratch: Complete guide",

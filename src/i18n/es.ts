@@ -46,7 +46,7 @@ export const es: Dict = {
     pillars: {
       media: { name: "Media", role: "Compartir conocimiento", state: "Activo: blog" },
       academy: { name: "Academy", role: "Formar profesionales", state: "Activa: gratuita" },
-      labs: { name: "Labs", role: "Construir herramientas", state: "Activo: Inora" },
+      labs: { name: "Labs", role: "Construir herramientas y frameworks", state: "Activo: Inora y framework" },
       research: { name: "Research", role: "Producir investigación", state: "En construcción" },
       consulting: { name: "Consulting", role: "Proteger organizaciones", state: "En construcción" },
     },
@@ -60,7 +60,7 @@ export const es: Dict = {
     lead: "CyDef es una empresa de ciberseguridad en construcción, diseñada desde el inicio para ser global. Nuestro propósito es proteger personas, compartir conocimiento y contribuir a una sociedad digital más segura. Lo construimos por fases, con transparencia.",
     whereTitle: "Dónde estamos ahora",
     whereList: [
-      "Hoy existe de verdad: CyDef Media (blog técnico con fuentes), la CyDef Academy gratuita (preinscripción con confirmación por correo) y CyDef Labs, cuyo primer artefacto, la plataforma de gestión de incidentes CyDef Inora, está en validación interna.",
+      "Hoy existe de verdad: CyDef Media (blog técnico con fuentes), la CyDef Academy gratuita (preinscripción con confirmación por correo) y CyDef Labs, con dos artefactos reales: la plataforma de gestión de incidentes CyDef Inora, en validación interna, y el CyDef SIEM Health and Maturity Assessment Framework, abierto y público.",
       "Research y Consulting entrarán cuando existan de hecho. Sin vitrina y sin promesas anticipadas.",
     ],
     whereLink: "Ver lo que ya es real",
@@ -320,7 +320,7 @@ export const es: Dict = {
       { state: "Público", desc: "Publicado con repositorio, licencia y documentación" },
     ],
     catTitle: "Catálogo",
-    catLead: "Un artefacto hoy. Se añadirán más cuando se vuelvan reales.",
+    catLead: "Dos artefactos reales hoy. Se añadirán más cuando se vuelvan reales.",
     inoraName: "CyDef Inora",
     inoraRole: "Plataforma de gestión de incidentes para equipos de SOC",
     inoraState: "Validación interna",
@@ -350,6 +350,9 @@ export const es: Dict = {
     fwRepo: "Repositorio: público",
     fwUpdated: "Estado actualizado: septiembre de 2026",
     fwCta: "Conocer el framework",
+    artifactBack: "Volver a Labs",
+    artifactNotFoundTitle: "Artefacto no encontrado",
+    artifactNotFoundBody: "Este artefacto no existe o aún no está disponible en este idioma.",
     otherNote: "Research y Consulting siguen en construcción. Se publicarán cuando existan de verdad.",
   },
   research: {

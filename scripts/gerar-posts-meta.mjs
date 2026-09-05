@@ -30,7 +30,9 @@ const { blogPostsByLang } = mod.exports;
 
 const langs = ["en", "pt", "es"];
 const metaOf = (posts) =>
-  posts.map(({ sections, sources, changelog, tags, toc, authorRole, ...meta }) => meta);
+  posts.map(
+    ({ sections, sources, changelog, tags, toc, cta, authorRole, ...meta }) => meta,
+  );
 
 const out = [];
 out.push("// GERADO AUTOMATICAMENTE por scripts/gerar-posts-meta.mjs — não editar manualmente.");

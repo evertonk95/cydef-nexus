@@ -45,7 +45,7 @@ export const en = {
     pillars: {
       media: { name: "Media", role: "Share knowledge", state: "Active: blog" },
       academy: { name: "Academy", role: "Educate professionals", state: "Active: free" },
-      labs: { name: "Labs", role: "Build tools", state: "Active: Inora" },
+      labs: { name: "Labs", role: "Build tools and frameworks", state: "Active: Inora and framework" },
       research: { name: "Research", role: "Produce research", state: "Under construction" },
       consulting: { name: "Consulting", role: "Protect organizations", state: "Under construction" },
     },
@@ -59,7 +59,7 @@ export const en = {
     lead: "CyDef is a cybersecurity company in the making, designed from day one to be global. Our purpose is to protect people, share knowledge and contribute to a safer digital society. We are building it in phases, with transparency.",
     whereTitle: "Where we stand now",
     whereList: [
-      "Today, what truly exists is CyDef Media (a technical blog with sources), the free CyDef Academy (enrollment with email confirmation) and CyDef Labs, whose first artifact, the CyDef Inora incident management platform, is in internal validation.",
+      "Today, what truly exists is CyDef Media (a technical blog with sources), the free CyDef Academy (enrollment with email confirmation) and CyDef Labs, with two real artifacts: the CyDef Inora incident management platform, in internal validation, and the CyDef SIEM Health and Maturity Assessment Framework, open and public.",
       "Research and Consulting will launch when they actually exist. No showroom, no promises ahead of reality.",
     ],
     whereLink: "See what is already real",
@@ -319,7 +319,7 @@ export const en = {
       { state: "Public", desc: "Published with repository, license and documentation" },
     ],
     catTitle: "Catalog",
-    catLead: "One real artifact today. More will be added as they become real.",
+    catLead: "Two real artifacts today. More will be added as they become real.",
     inoraName: "CyDef Inora",
     inoraRole: "Incident management platform for SOC teams",
     inoraState: "Internal validation",
@@ -349,6 +349,9 @@ export const en = {
     fwRepo: "Repository: public",
     fwUpdated: "Status updated: September 2026",
     fwCta: "Explore the framework",
+    artifactBack: "Back to Labs",
+    artifactNotFoundTitle: "Artifact not found",
+    artifactNotFoundBody: "This artifact does not exist or is not available in this language yet.",
     otherNote: "Research and Consulting are still under construction. They will go live when they truly exist.",
   },
   research: {
