@@ -290,7 +290,6 @@ export const en = {
     notFoundTitle: "Article not found",
     notFoundBody: "The article you are looking for does not exist or was moved.",
     sourcesTitle: "Sources",
-    changelogTitle: "Factual changelog",
     tocTitle: "In this article",
     tocLabel: "Table of contents",
     callout: {

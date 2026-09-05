@@ -291,7 +291,6 @@ export const pt: Dict = {
     notFoundTitle: "Artigo não encontrado",
     notFoundBody: "O artigo que você procura não existe ou foi movido.",
     sourcesTitle: "Fontes",
-    changelogTitle: "Changelog factual",
     tocTitle: "Neste artigo",
     tocLabel: "Índice do artigo",
     callout: {
