@@ -1656,8 +1656,5 @@ export const wazuhEmMovimentoPost: BlogPost = {
       "label": "Local configuration reference",
       "url": "https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/index.html"
     }
-  ],
-  "changelog": [
-    "v1 (04/09/2026): estruturação do documento original em formato de artigo web; anonimização verificada por scan automatizado (0 IPs, 0 e-mails, 0 telefones, 0 segredos); referências verificadas (15/15 HTTP 200 em 04/09/2026); marcações de figuras FIG-1/2/3 posicionadas; tabelas e blocos de código convertidos para o modelo de conteúdo rico do blog (Fase 3 implementa)."
   ]
 };

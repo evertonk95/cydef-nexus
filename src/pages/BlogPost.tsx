@@ -463,19 +463,6 @@ const BlogPost = () => {
               </ul>
             </div>
           )}
-
-          {post.changelog && post.changelog.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-3">
-                {t("blogPost.changelogTitle")}
-              </h2>
-              <ul className="space-y-1 text-sm text-neutral-500">
-                {post.changelog.map((c, i) => (
-                  <li key={i}>{c}</li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </article>
 
