@@ -350,6 +350,9 @@ export const pt: Dict = {
     fwRepo: "Repositório: público",
     fwUpdated: "Status atualizado: setembro de 2026",
     fwCta: "Conhecer o framework",
+    artifactBack: "Voltar para o Labs",
+    artifactNotFoundTitle: "Artefato não encontrado",
+    artifactNotFoundBody: "Este artefato não existe ou ainda não está disponível neste idioma.",
     otherNote: "Research e Consulting seguem em construção. Eles entrarão no ar quando existirem de verdade.",
   },
   research: {

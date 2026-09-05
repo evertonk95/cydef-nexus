@@ -4,6 +4,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { L, waLink, currentLang } from "@/lib/lang";
+import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 import {
   Eye,
   Shield,
@@ -89,10 +90,9 @@ const Services = () => {
             ))}
           </div>
 
-          {/* Labs: framework público (F5) — card real do pilar Labs. PT-first:
-              só no idioma em que a página do artefato existe (hoje PT; EN/ES
-              quando a tradução chegar — Fase 10). Sem link morto. */}
-          {currentLang() === "pt" && (
+          {/* Labs: framework público (F5) — card real do pilar Labs.
+              Fase 10: visível nos 3 idiomas (página do artefato localizada). */}
+          {hasLabsArtifactFor("siem-health-maturity-framework", currentLang()) && (
             <div className="mt-6 animate-on-scroll">
               <Link
                 to={L("/labs/siem-health-maturity-framework")}

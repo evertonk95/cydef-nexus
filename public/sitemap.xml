@@ -14,6 +14,7 @@
   <url><loc>https://www.cydef.com.br/en/blog/mitre-attack-deteccao-tecnicas-adversarios</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/seguranca-cloud-aws-melhores-praticas</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/threat-hunting-por-onde-comecar</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/wazuh-em-movimento</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/contact</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/courses</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/courses/blue-team-advanced</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
@@ -21,6 +22,7 @@
   <url><loc>https://www.cydef.com.br/en/courses/soc-analyst</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/ecosystem</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/labs</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/labs/siem-health-maturity-framework</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/privacy</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/research</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/terms</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
@@ -37,6 +39,7 @@
   <url><loc>https://www.cydef.com.br/es/blog/mitre-attack-deteccao-tecnicas-adversarios</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/seguranca-cloud-aws-melhores-praticas</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/threat-hunting-por-onde-comecar</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/wazuh-em-movimento</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/contacto</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/cursos</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/cursos/blue-team-advanced</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
@@ -44,6 +47,7 @@
   <url><loc>https://www.cydef.com.br/es/cursos/soc-analyst</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/ecosistema</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/labs</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/labs/siem-health-maturity-framework</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/nosotros</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/privacidad</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/research</loc><changefreq>monthly</changefreq><lastmod>2026-09-03</lastmod></url>

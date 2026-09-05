@@ -19,9 +19,10 @@ export interface LabsArtifactMeta {
 export const labsArtifactsMeta: LabsArtifactMeta[] = [
   {
     // CyDef SIEM Health and Maturity Assessment Framework (Fase 4–5, 04/09/2026).
-    // Multi-plataforma: implementação nº 1 = Wazuh (whitepaper em PT). EN/ES na Fase 10.
+    // Multi-plataforma: implementação nº 1 = Wazuh (whitepaper em PT).
+    // Fase 10 (05/09/2026): página localizada EN/PT/ES.
     slug: "siem-health-maturity-framework",
-    langs: ["pt"],
+    langs: ["en", "pt", "es"],
   },
 ];
 

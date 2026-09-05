@@ -21,16 +21,18 @@ import { htmlTitles } from "@/i18n";
 import { JsonLd } from "@/lib/seo";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 import { getFrameworkContent } from "@/lib/labs/framework.content";
+import { useTranslation } from "react-i18next";
 
 /**
  * Página de artefato do CyDef Labs — rota /labs/:slug (Fase 4–5).
- * Conteúdo por idioma (PT-first): se o artefato não existe no idioma atual,
- * responde NotFound — mesmo padrão do artigo de blog PT-only.
+ * Conteúdo por idioma (Fase 10: EN/PT/ES): se o artefato não existe no idioma
+ * atual, responde NotFound — mesmo padrão do artigo de blog PT-only.
  * Hoje o único artefato com página é o SIEM Health and Maturity Assessment
  * Framework; o catálogo cresce quando novos artefatos forem reais.
  */
 const LabsArtifact = () => {
   useScrollReveal();
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const lang = currentLang();
 
@@ -46,6 +48,8 @@ const LabsArtifact = () => {
     };
   }, [content]);
 
+  const htmlLang = lang === "pt" ? "pt-BR" : lang;
+
   if (!slug || !content || !hasLabsArtifactFor(slug, lang)) {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -53,16 +57,16 @@ const LabsArtifact = () => {
         <main id="conteudo" tabIndex={-1} className="outline-none">
           <section className="relative pt-48 pb-32 px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tighter">
-              Artefato não encontrado
+              {t("labs.artifactNotFoundTitle")}
             </h1>
             <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-              Este artefato não existe ou ainda não está disponível neste idioma.
+              {t("labs.artifactNotFoundBody")}
             </p>
             <Link
               to={L("/labs")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Voltar para o Labs
+              <ArrowLeft className="w-4 h-4" /> {t("labs.artifactBack")}
             </Link>
           </section>
         </main>
@@ -73,7 +77,7 @@ const LabsArtifact = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
-      <JsonLd data={{ "@context": "https://schema.org", "@type": "CreativeWork", name: content.h1, description: content.lead, inLanguage: "pt-BR", url: `https://www.cydef.com.br/pt/labs/${slug}`, publisher: { "@id": "https://www.cydef.com.br/#org", name: "CyDef" } }} />
+      <JsonLd data={{ "@context": "https://schema.org", "@type": "CreativeWork", name: content.h1, description: content.lead, inLanguage: htmlLang, url: `https://www.cydef.com.br/${lang}/labs/${slug}`, publisher: { "@id": "https://www.cydef.com.br/#org", name: "CyDef" } }} />
       <Navigation />
       <main id="conteudo" tabIndex={-1} className="outline-none">
         {/* Hero */}
@@ -84,7 +88,7 @@ const LabsArtifact = () => {
               to={L("/labs")}
               className="inline-flex items-center gap-2 text-neutral-400 hover:text-orange-400 transition-colors text-sm font-medium mb-6"
             >
-              <ArrowLeft className="w-4 h-4" /> Voltar para o Labs
+              <ArrowLeft className="w-4 h-4" /> {t("labs.artifactBack")}
             </Link>
             <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium">
@@ -280,11 +284,11 @@ const LabsArtifact = () => {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-neutral-400 animate-on-scroll">
               <span className="inline-flex items-center gap-2">
                 <Lock className="w-4 h-4 text-neutral-500" />
-                Licença: Apache-2.0
+                {t("labs.fwLicense")}
               </span>
               <span className="inline-flex items-center gap-2">
                 <GitFork className="w-4 h-4 text-neutral-500" />
-                Repositório: público
+                {t("labs.fwRepo")}
               </span>
               <span className="inline-flex items-center gap-2">
                 <ScrollText className="w-4 h-4 text-neutral-500" />

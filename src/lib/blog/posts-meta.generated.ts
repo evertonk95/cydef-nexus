@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "wazuh-em-movimento",
+    "title": "Wazuh in Motion: how to assess, stabilize, and mature a SIEM that is already in production",
+    "category": "SOC Engineering",
+    "excerpt": "A practical framework for anyone who inherits a Wazuh already in production: measure the event path between the source and the analyst, prove drops and coverage gaps, and evolve the SIEM without turning production into a laboratory.",
+    "date": "September 4, 2026",
+    "dateISO": "2026-09-04",
+    "readTime": "31 min read",
+    "image": "/assets/blog/wazuh-em-movimento-thumb.webp",
+    "author": "Everton Nascimento"
+  },
+  {
     "slug": "como-estruturar-um-soc-do-zero",
     "title": "Building a SOC from scratch: Complete guide",
     "category": "SOC",
@@ -198,6 +209,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "wazuh-em-movimento",
+    "title": "Wazuh en Movimiento: cómo evaluar, estabilizar y madurar un SIEM que ya está en producción",
+    "category": "SOC Engineering",
+    "excerpt": "Un framework práctico para quienes heredan un Wazuh ya en producción: medir el recorrido del evento entre la fuente y el analista, probar drops y brechas de cobertura y evolucionar el SIEM sin convertir la producción en un laboratorio.",
+    "date": "4 de septiembre de 2026",
+    "dateISO": "2026-09-04",
+    "readTime": "31 min de lectura",
+    "image": "/assets/blog/wazuh-em-movimento-thumb.webp",
+    "author": "Everton Nascimento"
+  },
   {
     "slug": "como-estruturar-um-soc-do-zero",
     "title": "Cómo estructurar un SOC desde cero: Guía completa",
