@@ -41,7 +41,6 @@ export interface FrameworkContent {
   resources: { label: string; desc: string; href: string; external?: boolean }[];
   notTitle: string;
   notBody: string;
-  articleCta: { label: string; to: string };
   updated: string;
 }
 
@@ -89,7 +88,6 @@ export const frameworkContent: FrameworkContent = {
   ],
   notTitle: "O que ele não é",
   notBody: "Não é um serviço que a CyDef vende hoje, não é uma ferramenta SaaS e não promete datas para outras plataformas. É uma metodologia aberta, publicada com repositório, licença e documentação.",
-  articleCta: { label: "Ler o artigo Wazuh em Movimento", to: "/blog/wazuh-em-movimento" },
   updated: "Status atualizado: setembro de 2026",
 };
 
