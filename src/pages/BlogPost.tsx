@@ -466,29 +466,48 @@ const BlogPost = () => {
         </div>
       </article>
 
-      {/* CTA */}
+      {/* CTA — contextual (post.cta, F5) ou genérico fixo como fallback */}
       <section className="py-20 px-4 border-t border-white/5">
         <div className="container mx-auto max-w-3xl text-center animate-on-scroll">
-          <h2 className="text-3xl font-bold text-white mb-4 tracking-tighter">
-            {t("blogPost.ctaTitle")}
-          </h2>
-          <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-            {t("blogPost.ctaBody")}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              to={L("/servicos")}
-              className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
-            >
-              {t("blogPost.ctaSoc")}
-            </Link>
-            <Link
-              to={L("/academy")}
-              className="px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl transition-colors"
-            >
-              {t("blogPost.ctaAcademy")}
-            </Link>
-          </div>
+          {post.cta ? (
+            <>
+              <h2 className="text-3xl font-bold text-white mb-4 tracking-tighter">
+                {post.cta.title}
+              </h2>
+              <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
+                {post.cta.body}
+              </p>
+              <Link
+                to={L(post.cta.to)}
+                className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+              >
+                {post.cta.label}
+              </Link>
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold text-white mb-4 tracking-tighter">
+                {t("blogPost.ctaTitle")}
+              </h2>
+              <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
+                {t("blogPost.ctaBody")}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  to={L("/servicos")}
+                  className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+                >
+                  {t("blogPost.ctaSoc")}
+                </Link>
+                <Link
+                  to={L("/academy")}
+                  className="px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl transition-colors"
+                >
+                  {t("blogPost.ctaAcademy")}
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

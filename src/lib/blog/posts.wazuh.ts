@@ -24,6 +24,12 @@ export const wazuhEmMovimentoPost: BlogPost = {
     "Security Operations"
   ],
   "toc": true,
+  "cta": {
+    "title": "Este artigo faz parte de um framework maior",
+    "body": "O CyDef SIEM Health and Maturity Assessment Framework reúne as 14 fases, tabelas, comandos, estudo de caso anonimizado, playbook de coleta rápida e checklist final em um documento versionado e aberto.",
+    "label": "Conhecer o framework",
+    "to": "/labs/siem-health-maturity-framework"
+  },
   "sections": [
     {
       "heading": "Nota de publicação e anonimização",

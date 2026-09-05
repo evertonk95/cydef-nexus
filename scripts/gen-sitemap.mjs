@@ -31,10 +31,11 @@ async function load(entry) {
   return mod;
 }
 
-const [{ pageSlugs }, { postsMetaByLang }, { courseDataPt }] = await Promise.all([
+const [{ pageSlugs }, { postsMetaByLang }, { courseDataPt }, { labsSlugsForLang }] = await Promise.all([
   load("src/lib/routes.ts"),
   load("src/lib/blog/posts.ts"),
   load("src/lib/courses.ts"),
+  load("src/lib/labs/artifacts.ts"),
 ]);
 
 const urls = new Set();
@@ -49,6 +50,11 @@ for (const lang of LANGS) {
   // morta nos idiomas ainda não traduzidos).
   for (const post of postsMetaByLang[lang]) {
     urls.add(`/${lang}/${pageSlugs.blog[lang]}/${post.slug}`);
+  }
+  // Artefatos do Labs com conteúdo no idioma (F5: framework PT-first — só PT
+  // até a tradução EN/ES chegar; não gerar URL morta nos demais idiomas).
+  for (const slug of labsSlugsForLang(lang)) {
+    urls.add(`/${lang}/${pageSlugs.labs[lang]}/${slug}`);
   }
   for (const courseId of Object.keys(courseDataPt)) {
     urls.add(`/${lang}/${pageSlugs.courses[lang]}/${courseId}`);

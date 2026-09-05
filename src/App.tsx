@@ -9,6 +9,7 @@ import { orgLd, webSiteLd } from "./lib/seo-data";
 /** Rotas fora do primeiro paint: carregadas sob demanda (P3-01 code-splitting).
  *  A home (Index) fica no chunk inicial — é o LCP de todas as entradas. */
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const LabsArtifact = lazy(() => import("./pages/LabsArtifact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const AcademyLanding = lazy(() => import("./pages/AcademyLanding"));
 const AcademyPrivacy = lazy(() => import("./pages/AcademyPrivacy"));
@@ -100,6 +101,8 @@ const App = () => (
               <Route path=":page" element={<PageRouter />} />
               {/* Conteúdo com slug universal */}
               <Route path="blog/:slug" element={<BlogPost />} />
+              {/* Artefatos do Labs com slug universal (F4: siem-health-maturity-framework) */}
+              <Route path="labs/:slug" element={<LabsArtifact />} />
               <Route path=":area/:courseId" element={<CourseArea />} />
               {/* CyDef Academy — landing de captura (fase protótipo/validação, S-02..S-06) */}
               <Route path="academy/gratuito" element={<AcademyLanding />} />

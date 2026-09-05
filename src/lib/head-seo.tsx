@@ -5,6 +5,7 @@ import { DEFAULT_LANG, isLang, type Lang } from "@/i18n";
 import { localizePath } from "@/lib/routes";
 import { SITE_ORIGIN } from "@/lib/site";
 import { postMetaBySlug } from "@/lib/blog/posts";
+import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 
 /** Slug universal de conteúdo, se a base for rota de artigo (/blog/<slug>). */
 const blogSlugFromBase = (base: string): string | undefined => {
@@ -12,14 +13,23 @@ const blogSlugFromBase = (base: string): string | undefined => {
   return m ? m[1] : undefined;
 };
 
-/** Idioma tem versão do artigo? Rotas de página sempre existem nos 3 idiomas;
+/** Slug universal de conteúdo, se a base for rota de artefato do Labs
+ *  (/labs/<slug> — Fase 4–5: siem-health-maturity-framework). */
+const labsSlugFromBase = (base: string): string | undefined => {
+  const m = base.match(/^\/labs\/([^/]+)$/);
+  return m ? m[1] : undefined;
+};
+
+/** Idioma tem versão do conteúdo? Rotas de página sempre existem nos 3 idiomas;
  *  conteúdo editorial pode estar só em PT até a tradução chegar (F3: artigo
- *  Wazuh em Movimento PT-only até a Fase 10) — sem alternate para idioma que
- *  ainda não tem o artigo (evita hreflang apontando para 404). */
+ *  Wazuh em Movimento PT-only até a Fase 10; Labs: framework PT-first) — sem
+ *  alternate para idioma que ainda não tem a página (evita hreflang 404). */
 const hasContentFor = (base: string, lang: Lang): boolean => {
-  const slug = blogSlugFromBase(base);
-  if (!slug) return true;
-  return !!postMetaBySlug(slug, lang);
+  const blogSlug = blogSlugFromBase(base);
+  if (blogSlug) return !!postMetaBySlug(blogSlug, lang);
+  const labsSlug = labsSlugFromBase(base);
+  if (labsSlug) return hasLabsArtifactFor(labsSlug, lang);
+  return true;
 };
 
 /**

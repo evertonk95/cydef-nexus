@@ -14,6 +14,11 @@ export interface BlogPost {
   authorRole?: string;
   tags?: string[];
   toc?: boolean;
+  /** CTA contextual (F5): substitui o CTA genérico fixo no rodapé do artigo.
+   *  Aditivo — posts sem `cta` seguem com o CTA genérico atual. `to` é rota
+   *  interna universal (ex.: /labs/siem-health-maturity-framework) — o render
+   *  localiza com L(). */
+  cta?: { title: string; body: string; label: string; to: string } | null;
   sections: BlogSection[];
   sources: { label: string; url: string }[];
   changelog?: string[];
@@ -65,7 +70,7 @@ export interface BlogSection {
  *  vive em posts.content.ts e só é carregado na página do artigo. */
 export type BlogPostMeta = Omit<
   BlogPost,
-  "sections" | "sources" | "changelog" | "tags" | "toc" | "authorRole"
+  "sections" | "sources" | "changelog" | "tags" | "toc" | "cta" | "authorRole"
 >;
 
 /** Artigos publicados (meta) por idioma — fonte: posts-meta.generated.ts
