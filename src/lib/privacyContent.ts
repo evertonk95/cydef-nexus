@@ -39,16 +39,16 @@ export const privacyDocPt: PrivacyDoc = {
         ],
       },
       closing: [
-        "Esta Política explica como tratamos seus dados pessoais, em conformidade com a **Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)**.",
+        "Esta Política explica como tratamos seus dados pessoais, em conformidade com a **Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018)**.",
       ],
     },
     {
       title: "2. Dados que coletamos",
       paragraphs: [
-        "**2.1. Contato e mensagens (WhatsApp, e-mail e formulários)** — Nome, e-mail, país e mensagem (incluindo objetivos informados). Fornecido voluntariamente por você.",
-        "**2.2. Pré-inscrição na CyDef Academy** — Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. Quando a área do aluno for liberada, poderá incluir dados de progresso e histórico de acesso.",
-        "**2.3. Dados de navegação e análise** — Endereço IP, tipo de navegador, páginas visitadas e tempo de permanência, coletados por ferramentas de análise (ex.: Google Analytics 4), quando aplicável e com seu consentimento.",
-        "**2.4. Dados de pagamento (quando disponível)** — Processados exclusivamente por provedores de pagamento. Não armazenamos números de cartão ou dados completos de pagamento.",
+        "**2.1. Contato e mensagens (WhatsApp, e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Fornecido voluntariamente por você.",
+        "**2.2. Pré-inscrição na CyDef Academy**: Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. Quando a área do aluno for liberada, poderá incluir dados de progresso e histórico de acesso.",
+        "**2.3. Dados de navegação e análise**: Endereço IP, tipo de navegador, páginas visitadas e tempo de permanência, coletados por ferramentas de análise (ex.: Google Analytics 4), quando aplicável e com seu consentimento.",
+        "**2.4. Dados de pagamento (quando disponível)**: Processados exclusivamente por provedores de pagamento. Não armazenamos números de cartão ou dados completos de pagamento.",
       ],
     },
     {
@@ -56,10 +56,10 @@ export const privacyDocPt: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Responder a solicitações de contato e mensagens — *Consentimento (art. 7º, I)*",
-          "Processar pré-inscrição e entrega dos cursos gratuitos da Academy — *Execução de contrato ou de procedimentos preliminares (art. 7º, V)*",
-          "Segurança do site (proteção contra fraudes e ataques) — *Legítimo interesse (art. 7º, IX)*",
-          "Análise de audiência e melhoria do site — *Consentimento (quando exigido)*",
+          "Responder a solicitações de contato e mensagens: *Consentimento (art. 7º, I)*",
+          "Processar pré-inscrição e entrega dos cursos gratuitos da Academy: *Execução de contrato ou de procedimentos preliminares (art. 7º, V)*",
+          "Segurança do site (proteção contra fraudes e ataques): *Legítimo interesse (art. 7º, IX)*",
+          "Análise de audiência e melhoria do site: *Consentimento (quando exigido)*",
         ],
       },
       closing: [
@@ -73,10 +73,10 @@ export const privacyDocPt: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Provedores de infraestrutura e hospedagem** (ex.: GitHub Pages, Cloudflare) — necessários ao funcionamento do site;",
-          "**Ferramentas de análise** (ex.: Google Analytics) — para medir audiência, quando você consente;",
-          "**Provedores de autenticação, e-mail e pagamento** — para viabilizar a Academy e transações, quando disponíveis;",
-          "**Autoridades públicas** — quando exigido por lei ou ordem judicial.",
+          "**Provedores de infraestrutura e hospedagem** (ex.: GitHub Pages, Cloudflare): necessários ao funcionamento do site;",
+          "**Ferramentas de análise** (ex.: Google Analytics): para medir audiência, quando você consente;",
+          "**Provedores de autenticação, e-mail e pagamento**: para viabilizar a Academy e transações, quando disponíveis;",
+          "**Autoridades públicas**: quando exigido por lei ou ordem judicial.",
         ],
       },
       closing: [
@@ -121,7 +121,7 @@ export const privacyDocPt: PrivacyDoc = {
         ],
       },
       closing: [
-        "Para exercer seus direitos, envie e-mail para **contato@cydef.com.br** com o assunto \"LGPD — Solicitação de titular\". Responderemos em até **15 dias**.",
+        "Para exercer seus direitos, envie e-mail para **contato@cydef.com.br** com o assunto \"LGPD: Solicitação de titular\". Responderemos em até **15 dias**.",
       ],
     },
     {
@@ -197,16 +197,16 @@ export const privacyDocEn: PrivacyDoc = {
         ],
       },
       closing: [
-        "This Policy explains how we process your personal data, in compliance with the Brazilian **General Data Protection Law (LGPD — Law No. 13.709/2018)**.",
+        "This Policy explains how we process your personal data, in compliance with the Brazilian **General Data Protection Law (LGPD, Law No. 13.709/2018)**.",
       ],
     },
     {
       title: "2. Data we collect",
       paragraphs: [
-        "**2.1. Contact and messages (WhatsApp, email and forms)** — Name, email, country and message (including goals you share). Provided voluntarily by you.",
-        "**2.2. CyDef Academy pre-enrollment** — Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. When the student area is released, it may also include course progress and access history.",
-        "**2.3. Browsing and analytics data** — IP address, browser type, pages visited and time on site, collected by analytics tools (e.g., Google Analytics 4) when applicable and with your consent.",
-        "**2.4. Payment data (when available)** — Processed exclusively by payment providers. We do not store card numbers or complete payment data.",
+        "**2.1. Contact and messages (WhatsApp, email and forms)**: Name, email, country and message (including goals you share). Provided voluntarily by you.",
+        "**2.2. CyDef Academy pre-enrollment**: Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. When the student area is released, it may also include course progress and access history.",
+        "**2.3. Browsing and analytics data**: IP address, browser type, pages visited and time on site, collected by analytics tools (e.g., Google Analytics 4) when applicable and with your consent.",
+        "**2.4. Payment data (when available)**: Processed exclusively by payment providers. We do not store card numbers or complete payment data.",
       ],
     },
     {
@@ -214,10 +214,10 @@ export const privacyDocEn: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Reply to contact requests and messages — *Consent (Art. 7, I)*",
-          "Process Academy pre-enrollment and delivery of free entry courses — *Performance of a contract or preliminary steps (Art. 7, V)*",
-          "Site security (protection against fraud and attacks) — *Legitimate interest (Art. 7, IX)*",
-          "Audience analytics and site improvement — *Consent (where required)*",
+          "Reply to contact requests and messages: *Consent (Art. 7, I)*",
+          "Process Academy pre-enrollment and delivery of free entry courses: *Performance of a contract or preliminary steps (Art. 7, V)*",
+          "Site security (protection against fraud and attacks): *Legitimate interest (Art. 7, IX)*",
+          "Audience analytics and site improvement: *Consent (where required)*",
         ],
       },
       closing: [
@@ -231,10 +231,10 @@ export const privacyDocEn: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Infrastructure and hosting providers** (e.g., GitHub Pages, Cloudflare) — required for the site to work;",
-          "**Analytics tools** (e.g., Google Analytics) — to measure audience, when you consent;",
-          "**Authentication, email and payment providers** — to run the Academy and transactions, when available;",
-          "**Public authorities** — when required by law or court order.",
+          "**Infrastructure and hosting providers** (e.g., GitHub Pages, Cloudflare): required for the site to work;",
+          "**Analytics tools** (e.g., Google Analytics): to measure audience, when you consent;",
+          "**Authentication, email and payment providers**: to run the Academy and transactions, when available;",
+          "**Public authorities**: when required by law or court order.",
         ],
       },
       closing: [
@@ -279,7 +279,7 @@ export const privacyDocEn: PrivacyDoc = {
         ],
       },
       closing: [
-        "To exercise your rights, email **contato@cydef.com.br** with the subject \"LGPD — Data subject request\". We will respond within **15 days**.",
+        "To exercise your rights, email **contato@cydef.com.br** with the subject \"LGPD: Data subject request\". We will respond within **15 days**.",
       ],
     },
     {
@@ -355,16 +355,16 @@ export const privacyDocEs: PrivacyDoc = {
         ],
       },
       closing: [
-        "Esta Política explica cómo tratamos tus datos personales, en cumplimiento de la **Ley General de Protección de Datos de Brasil (LGPD — Ley n.º 13.709/2018)**.",
+        "Esta Política explica cómo tratamos tus datos personales, en cumplimiento de la **Ley General de Protección de Datos de Brasil (LGPD, Ley n.º 13.709/2018)**.",
       ],
     },
     {
       title: "2. Datos que recopilamos",
       paragraphs: [
-        "**2.1. Contacto y mensajes (WhatsApp, correo electrónico y formularios)** — Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). Proporcionados voluntariamente por ti.",
-        "**2.2. Preinscripción en la CyDef Academy** — Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. Cuando se libere el área de estudiantes, podrá incluir datos de progreso e historial de acceso.",
-        "**2.3. Datos de navegación y análisis** — Dirección IP, tipo de navegador, páginas visitadas y tiempo de permanencia, recopilados por herramientas de análisis (p. ej., Google Analytics 4), cuando corresponda y con tu consentimiento.",
-        "**2.4. Datos de pago (cuando estén disponibles)** — Procesados exclusivamente por proveedores de pago. No almacenamos números de tarjeta ni datos completos de pago.",
+        "**2.1. Contacto y mensajes (WhatsApp, correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). Proporcionados voluntariamente por ti.",
+        "**2.2. Preinscripción en la CyDef Academy**: Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. Cuando se libere el área de estudiantes, podrá incluir datos de progreso e historial de acceso.",
+        "**2.3. Datos de navegación y análisis**: Dirección IP, tipo de navegador, páginas visitadas y tiempo de permanencia, recopilados por herramientas de análisis (p. ej., Google Analytics 4), cuando corresponda y con tu consentimiento.",
+        "**2.4. Datos de pago (cuando estén disponibles)**: Procesados exclusivamente por proveedores de pago. No almacenamos números de tarjeta ni datos completos de pago.",
       ],
     },
     {
@@ -372,10 +372,10 @@ export const privacyDocEs: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Responder a solicitudes de contacto y mensajes — *Consentimiento (art. 7.º, I)*",
-          "Procesar la preinscripción y la entrega de los cursos gratuitos de la Academy — *Ejecución de un contrato o de trámites preliminares (art. 7.º, V)*",
-          "Seguridad del sitio (protección contra fraudes y ataques) — *Interés legítimo (art. 7.º, IX)*",
-          "Análisis de audiencia y mejora del sitio — *Consentimiento (cuando se exija)*",
+          "Responder a solicitudes de contacto y mensajes: *Consentimiento (art. 7.º, I)*",
+          "Procesar la preinscripción y la entrega de los cursos gratuitos de la Academy: *Ejecución de un contrato o de trámites preliminares (art. 7.º, V)*",
+          "Seguridad del sitio (protección contra fraudes y ataques): *Interés legítimo (art. 7.º, IX)*",
+          "Análisis de audiencia y mejora del sitio: *Consentimiento (cuando se exija)*",
         ],
       },
       closing: [
@@ -389,10 +389,10 @@ export const privacyDocEs: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Proveedores de infraestructura y alojamiento** (p. ej., GitHub Pages, Cloudflare) — necesarios para el funcionamiento del sitio;",
-          "**Herramientas de análisis** (p. ej., Google Analytics) — para medir la audiencia, cuando das tu consentimiento;",
-          "**Proveedores de autenticación, correo y pago** — para operar la Academy y las transacciones, cuando estén disponibles;",
-          "**Autoridades públicas** — cuando lo exija la ley o una orden judicial.",
+          "**Proveedores de infraestructura y alojamiento** (p. ej., GitHub Pages, Cloudflare): necesarios para el funcionamiento del sitio;",
+          "**Herramientas de análisis** (p. ej., Google Analytics): para medir la audiencia, cuando das tu consentimiento;",
+          "**Proveedores de autenticación, correo y pago**: para operar la Academy y las transacciones, cuando estén disponibles;",
+          "**Autoridades públicas**: cuando lo exija la ley o una orden judicial.",
         ],
       },
       closing: [
@@ -437,7 +437,7 @@ export const privacyDocEs: PrivacyDoc = {
         ],
       },
       closing: [
-        "Para ejercer tus derechos, escribe a **contato@cydef.com.br** con el asunto \"LGPD — Solicitud de titular\". Responderemos en un plazo de **15 días**.",
+        "Para ejercer tus derechos, escribe a **contato@cydef.com.br** con el asunto \"LGPD: Solicitud de titular\". Responderemos en un plazo de **15 días**.",
       ],
     },
     {

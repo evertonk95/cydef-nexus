@@ -339,7 +339,7 @@ export const pt: Dict = {
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
     fwRole: "Framework aberto para avaliar e amadurecer SIEMs em produção",
     fwState: "Público",
-    fwBody: "O framework que nasceu do artigo Wazuh em Movimento: 14 fases que provam o que acontece entre a fonte de log e o analista antes de qualquer mudança. Multi-plataforma por desenho — a implementação Wazuh é a primeira e está publicada com whitepaper técnico anonimizado, checklists e repositório aberto.",
+    fwBody: "O framework que nasceu do artigo Wazuh em Movimento: 14 fases que provam o que acontece entre a fonte de log e o analista antes de qualquer mudança. Multi-plataforma por desenho: a implementação Wazuh é a primeira e está publicada com whitepaper técnico anonimizado, checklists e repositório aberto.",
     fwFactsTitle: "Fatos sobre o estado atual",
     fwFacts: [
       "Whitepaper técnico completo, anonimizado, derivado de assessments reais",
@@ -395,7 +395,7 @@ export const pt: Dict = {
   },
   form: {
     soonTitle: "Pré-inscrições em breve",
-    soonBodyA: "Estamos preparando o acesso aos cursos gratuitos. Quando as inscrições abrirem, esta página será ativada — com total transparência sobre privacidade (",
+    soonBodyA: "Estamos preparando o acesso aos cursos gratuitos. Quando as inscrições abrirem, esta página será ativada com total transparência sobre privacidade (",
     soonLink: "veja o Aviso de Privacidade",
     soonBodyB: ").",
     soonBadge: "Inscrições em breve",
@@ -410,7 +410,7 @@ export const pt: Dict = {
     formTitle: "Pré-inscreva-se grátis",
     formSub: "Leva menos de 30 segundos. Sem cartão e sem spam.",
     rateLimited: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
-    serverError: "Não foi possível concluir agora. Tente novamente em instantes — seus dados não foram perdidos.",
+    serverError: "Não foi possível concluir agora. Tente novamente em instantes. Seus dados não foram perdidos.",
     labelNome: "Nome completo",
     phNome: "Seu nome",
     labelEmail: "E-mail",

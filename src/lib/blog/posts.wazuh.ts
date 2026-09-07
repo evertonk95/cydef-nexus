@@ -75,8 +75,8 @@ export const wazuhEmMovimentoPost: BlogPost = {
           "type": "figure",
           "figure": {
             "src": "/assets/blog/wazuh-em-movimento-fig1.svg",
-            "alt": "O caminho que precisa ser provado durante o assessment — da fonte de log ao analista.",
-            "caption": "O caminho que precisa ser provado durante o assessment — da fonte de log ao analista."
+            "alt": "O caminho que precisa ser provado durante o assessment: da fonte de log ao analista.",
+            "caption": "O caminho que precisa ser provado durante o assessment: da fonte de log ao analista."
           }
         }
       ]
@@ -172,7 +172,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 0 — Preparação, escopo e preservação da evidência",
+      "heading": "Fase 0: Preparação, escopo e preservação da evidência",
       "blocks": [
         {
           "type": "p",
@@ -211,7 +211,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 1 — Inventário técnico e arquitetura real",
+      "heading": "Fase 1: Inventário técnico e arquitetura real",
       "blocks": [
         {
           "type": "p",
@@ -255,7 +255,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 2 — Cluster de Managers e distribuição de carga",
+      "heading": "Fase 2: Cluster de Managers e distribuição de carga",
       "blocks": [
         {
           "type": "p",
@@ -323,7 +323,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 3 — Pipeline de ingestão, filas e drops",
+      "heading": "Fase 3: Pipeline de ingestão, filas e drops",
       "blocks": [
         {
           "type": "p",
@@ -347,7 +347,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
         },
         {
           "type": "p",
-          "text": "O remoted recebe eventos de agentes em conexões seguras. Já o analysisd processa diferentes categorias de eventos. Um contador de `discarded_count` igual a zero no remoted não prova que o pipeline está íntegro — o drop pode ocorrer depois."
+          "text": "O remoted recebe eventos de agentes em conexões seguras. Já o analysisd processa diferentes categorias de eventos. Um contador de `discarded_count` igual a zero no remoted não prova que o pipeline está íntegro: o drop pode ocorrer depois."
         },
         {
           "type": "callout",
@@ -384,7 +384,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "3.1 — Quando o problema é Syslog",
+      "heading": "3.1: Quando o problema é Syslog",
       "blocks": [
         {
           "type": "p",
@@ -409,7 +409,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "3.2 — Descubra o conteúdo antes de reduzir o volume",
+      "heading": "3.2: Descubra o conteúdo antes de reduzir o volume",
       "blocks": [
         {
           "type": "p",
@@ -422,7 +422,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "3.3 — Use archives para descobrir top talkers",
+      "heading": "3.3: Use archives para descobrir top talkers",
       "blocks": [
         {
           "type": "p",
@@ -439,7 +439,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 4 — Agents, client_buffer, grupos e lifecycle",
+      "heading": "Fase 4: Agents, client_buffer, grupos e lifecycle",
       "blocks": [
         {
           "type": "p",
@@ -448,7 +448,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "4.1 — Inventarie grupos e configuração centralizada",
+      "heading": "4.1: Inventarie grupos e configuração centralizada",
       "blocks": [
         {
           "type": "code",
@@ -461,7 +461,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "4.2 — Entenda o client_buffer antes de mexer",
+      "heading": "4.2: Entenda o client_buffer antes de mexer",
       "blocks": [
         {
           "type": "p",
@@ -486,7 +486,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "4.3 — Procure evidência de antiflooding",
+      "heading": "4.3: Procure evidência de antiflooding",
       "blocks": [
         {
           "type": "p",
@@ -528,13 +528,13 @@ export const wazuhEmMovimentoPost: BlogPost = {
           "callout": {
             "kind": "exemplo",
             "title": "Exemplo anonimizado",
-            "body": "em 30 dias, um ambiente apresentou 908 alertas de antiflooding, correspondentes a 83 episódios distintos de saturação. Foram 681 registros de queue full, e em 47 episódios a fila chegou ao estado flooded. Quatro agentes concentraram todo o problema. O buffer já estava configurado em 100.000 eventos (o limite máximo) e o throughput permanecia em 500 EPS. Um dos top talkers era justamente o único agente conectado ao Worker, enquanto o Worker não apresentava drops. Esse cruzamento foi decisivo: o gargalo daquele caso estava no próprio agente ou na geração local, não na capacidade do Manager. A conclusão não foi \"aumentar a fila\" — a fila já estava no máximo. A investigação passou a ser \"qual workload local produz o burst e por quê?\"."
+            "body": "em 30 dias, um ambiente apresentou 908 alertas de antiflooding, correspondentes a 83 episódios distintos de saturação. Foram 681 registros de queue full, e em 47 episódios a fila chegou ao estado flooded. Quatro agentes concentraram todo o problema. O buffer já estava configurado em 100.000 eventos (o limite máximo) e o throughput permanecia em 500 EPS. Um dos top talkers era justamente o único agente conectado ao Worker, enquanto o Worker não apresentava drops. Esse cruzamento foi decisivo: o gargalo daquele caso estava no próprio agente ou na geração local, não na capacidade do Manager. A conclusão não foi \"aumentar a fila\": a fila já estava no máximo. A investigação passou a ser \"qual workload local produz o burst e por quê?\"."
           }
         }
       ]
     },
     {
-      "heading": "4.4 — Procure padrão temporal e causalidade local",
+      "heading": "4.4: Procure padrão temporal e causalidade local",
       "blocks": [
         {
           "type": "p",
@@ -543,16 +543,16 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "4.5 — Não confunda agentes desconectados com falha atual",
+      "heading": "4.5: Não confunda agentes desconectados com falha atual",
       "blocks": [
         {
           "type": "p",
-          "text": "Um inventário com muitos agentes disconnected pode indicar problema grave, ou apenas dívida histórica. Use `lastKeepAlive`, `disconnection_time` e reconciliação com CMDB. Em um caso real, havia 235 agentes registrados, 137 desconectados — mas 136 desses estavam sem comunicar havia pelo menos 30 dias e dezenas não reportavam havia mais de um ano. A leitura correta era \"inventário não higienizado\", não \"58% do parque caiu hoje\"."
+          "text": "Um inventário com muitos agentes disconnected pode indicar problema grave, ou apenas dívida histórica. Use `lastKeepAlive`, `disconnection_time` e reconciliação com CMDB. Em um caso real, havia 235 agentes registrados, 137 desconectados, mas 136 desses estavam sem comunicar havia pelo menos 30 dias e dezenas não reportavam havia mais de um ano. A leitura correta era \"inventário não higienizado\", não \"58% do parque caiu hoje\"."
         }
       ]
     },
     {
-      "heading": "4.6 — Verifique consistência de grupos e sincronização",
+      "heading": "4.6: Verifique consistência de grupos e sincronização",
       "blocks": [
         {
           "type": "p",
@@ -561,7 +561,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "4.7 — Versionamento também é maturidade",
+      "heading": "4.7: Versionamento também é maturidade",
       "blocks": [
         {
           "type": "p",
@@ -570,7 +570,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 5 — Cobertura de fontes de log e qualidade da telemetria",
+      "heading": "Fase 5: Cobertura de fontes de log e qualidade da telemetria",
       "blocks": [
         {
           "type": "p",
@@ -664,7 +664,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 6 — Transporte de alertas, Indexer e Dashboard",
+      "heading": "Fase 6: Transporte de alertas, Indexer e Dashboard",
       "blocks": [
         {
           "type": "p",
@@ -673,7 +673,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "6.1 — Filebeat e forwarding",
+      "heading": "6.1: Filebeat e forwarding",
       "blocks": [
         {
           "type": "code",
@@ -686,7 +686,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "6.2 — Saúde do Indexer",
+      "heading": "6.2: Saúde do Indexer",
       "blocks": [
         {
           "type": "code",
@@ -703,7 +703,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "6.3 — Memória, heap e swap",
+      "heading": "6.3: Memória, heap e swap",
       "blocks": [
         {
           "type": "p",
@@ -724,7 +724,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "6.4 — Alta disponibilidade e quorum",
+      "heading": "6.4: Alta disponibilidade e quorum",
       "blocks": [
         {
           "type": "p",
@@ -733,7 +733,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 7 — Controles funcionais do Wazuh",
+      "heading": "Fase 7: Controles funcionais do Wazuh",
       "blocks": [
         {
           "type": "p",
@@ -797,7 +797,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 8 — Rules, decoders e Detection Engineering",
+      "heading": "Fase 8: Rules, decoders e Detection Engineering",
       "blocks": [
         {
           "type": "p",
@@ -897,7 +897,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 9 — Qualidade de alertas e operação do SOC",
+      "heading": "Fase 9: Qualidade de alertas e operação do SOC",
       "blocks": [
         {
           "type": "p",
@@ -926,7 +926,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 10 — Segurança do próprio SIEM",
+      "heading": "Fase 10: Segurança do próprio SIEM",
       "blocks": [
         {
           "type": "p",
@@ -984,13 +984,13 @@ export const wazuhEmMovimentoPost: BlogPost = {
           "callout": {
             "kind": "exemplo",
             "title": "Exemplo anonimizado",
-            "body": "durante uma revisão de configuração foi encontrado um listener Syslog legado ainda ativo para uma tecnologia que já não existia no ambiente, aceitando origem ampla, além de um webhook antigo armazenado em texto claro dentro de configuração comentada. Outro listener crítico também usava allowlist excessivamente permissiva. O ambiente funcionava, mas a superfície de exposição havia crescido silenciosamente. A correção correta é inventariar fontes legítimas, validar ACLs de rede e só então restringir ou remover listeners — para não interromper telemetria válida."
+            "body": "durante uma revisão de configuração foi encontrado um listener Syslog legado ainda ativo para uma tecnologia que já não existia no ambiente, aceitando origem ampla, além de um webhook antigo armazenado em texto claro dentro de configuração comentada. Outro listener crítico também usava allowlist excessivamente permissiva. O ambiente funcionava, mas a superfície de exposição havia crescido silenciosamente. A correção correta é inventariar fontes legítimas, validar ACLs de rede e só então restringir ou remover listeners, para não interromper telemetria válida."
           }
         }
       ]
     },
     {
-      "heading": "Fase 11 — Backup, Disaster Recovery e resiliência",
+      "heading": "Fase 11: Backup, Disaster Recovery e resiliência",
       "blocks": [
         {
           "type": "p",
@@ -1016,7 +1016,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 12 — Capacity Planning e monitoramento do próprio SIEM",
+      "heading": "Fase 12: Capacity Planning e monitoramento do próprio SIEM",
       "blocks": [
         {
           "type": "p",
@@ -1092,7 +1092,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "Fase 13 — Converter evidência em maturidade e plano de ação",
+      "heading": "Fase 13: Converter evidência em maturidade e plano de ação",
       "blocks": [
         {
           "type": "p",
@@ -1109,7 +1109,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "13.1 — Modelo de registro de gap",
+      "heading": "13.1: Modelo de registro de gap",
       "blocks": [
         {
           "type": "table",
@@ -1173,7 +1173,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "13.2 — Priorização",
+      "heading": "13.2: Priorização",
       "blocks": [
         {
           "type": "table",
@@ -1205,7 +1205,7 @@ export const wazuhEmMovimentoPost: BlogPost = {
       ]
     },
     {
-      "heading": "13.3 — Score de maturidade",
+      "heading": "13.3: Score de maturidade",
       "blocks": [
         {
           "type": "table",
