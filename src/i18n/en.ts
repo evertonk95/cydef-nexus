@@ -338,7 +338,7 @@ export const en = {
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
     fwRole: "Open framework to assess and mature SIEMs in production",
     fwState: "Public",
-    fwBody: "The framework born from the Wazuh em Movimento article: 14 phases that prove what happens between the log source and the analyst before any change. Multi-platform by design — the Wazuh implementation is the first and is published with an anonymized technical whitepaper, checklists and an open repository.",
+    fwBody: "The framework born from the Wazuh em Movimento article: 14 phases that prove what happens between the log source and the analyst before any change. Multi-platform by design: the Wazuh implementation is the first and is published with an anonymized technical whitepaper, checklists and an open repository.",
     fwFactsTitle: "Facts about the current state",
     fwFacts: [
       "Complete technical whitepaper, anonymized, derived from real assessments",
