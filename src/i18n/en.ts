@@ -59,7 +59,7 @@ export const en = {
     lead: "CyDef is a cybersecurity company in the making, designed from day one to be global. Our purpose is to protect people, share knowledge and contribute to a safer digital society. We are building it in phases, with transparency.",
     whereTitle: "Where we stand now",
     whereList: [
-      "Today, what truly exists is CyDef Media (a technical blog with sources), the free CyDef Academy (enrollment with email confirmation) and CyDef Labs, with two real artifacts: the CyDef Inora incident management platform, in internal validation, and the CyDef SIEM Health and Maturity Assessment Framework, open and public.",
+      "Today, what truly exists is CyDef Media (a technical blog with sources), CyDef Academy and CyDef Labs.",
       "Research and Consulting will launch when they actually exist. No showroom, no promises ahead of reality.",
     ],
     whereLink: "See what is already real",
