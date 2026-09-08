@@ -60,7 +60,7 @@ export const pt: Dict = {
     lead: "A CyDef é uma empresa de cibersegurança em construção, desenhada desde o início para ser global. Nosso propósito é proteger pessoas, compartilhar conhecimento e contribuir para uma sociedade digital mais segura. Vamos construindo isso em fases, com transparência.",
     whereTitle: "Onde estamos agora",
     whereList: [
-      "Hoje existe de verdade: a CyDef Media (blog técnico com fontes), a CyDef Academy gratuita (pré-inscrição com confirmação por e-mail) e o CyDef Labs, com dois artefatos reais: a plataforma de gestão de incidentes CyDef Inora, em validação interna, e o CyDef SIEM Health and Maturity Assessment Framework, aberto e público.",
+      "Hoje existe de verdade: a CyDef Media (blog técnico com fontes), a CyDef Academy e o CyDef Labs, com a plataforma de gestão de incidentes CyDef Inora, em validação interna, e o CyDef SIEM Health and Maturity Assessment Framework, aberto e público.",
       "Research e Consulting entram quando existirem de fato. Sem vitrine e sem promessas adiantadas.",
     ],
     whereLink: "Ver o que já é real",
