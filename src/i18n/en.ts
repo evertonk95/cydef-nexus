@@ -43,9 +43,9 @@ export const en = {
     ecoTitle: "The CyDef ecosystem",
     ecoLead: "Media, Academy, Labs, Research and Consulting: five pillars, one purpose. Each goes live only when it truly exists.",
     pillars: {
-      media: { name: "Media", role: "Share knowledge", state: "Active: blog" },
-      academy: { name: "Academy", role: "Educate professionals", state: "Active: free" },
-      labs: { name: "Labs", role: "Build tools and frameworks", state: "Active: Inora and framework" },
+      media: { name: "Media", role: "Share knowledge", state: "Active" },
+      academy: { name: "Academy", role: "Educate professionals", state: "Active" },
+      labs: { name: "Labs", role: "Build tools and frameworks", state: "Active" },
       research: { name: "Research", role: "Produce research", state: "Under construction" },
       consulting: { name: "Consulting", role: "Protect organizations", state: "Under construction" },
     },

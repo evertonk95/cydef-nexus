@@ -44,9 +44,9 @@ export const es: Dict = {
     ecoTitle: "El ecosistema CyDef",
     ecoLead: "Media, Academy, Labs, Research y Consulting: cinco pilares, un mismo propósito. Cada uno se publica cuando existe de verdad.",
     pillars: {
-      media: { name: "Media", role: "Compartir conocimiento", state: "Activo: blog" },
-      academy: { name: "Academy", role: "Formar profesionales", state: "Activa: gratuita" },
-      labs: { name: "Labs", role: "Construir herramientas y frameworks", state: "Activo: Inora y framework" },
+      media: { name: "Media", role: "Compartir conocimiento", state: "Activo" },
+      academy: { name: "Academy", role: "Formar profesionales", state: "Activo" },
+      labs: { name: "Labs", role: "Construir herramientas y frameworks", state: "Activo" },
       research: { name: "Research", role: "Producir investigación", state: "En construcción" },
       consulting: { name: "Consulting", role: "Proteger organizaciones", state: "En construcción" },
     },
