@@ -108,6 +108,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "claude-skills-seguranca-da-informacao",
+    "title": "Claude Skills para Segurança da Informação: o que são, como funcionam e 50 skills que valem a pena",
+    "category": "IA Aplicada",
+    "excerpt": "Uma skill é uma pasta com um SKILL.md que ensina o agente a executar uma tarefa do seu jeito, carregada só quando a tarefa aparece. Este guia explica o mecanismo (descoberta, carregamento em três níveis, riscos de instalar instrução de terceiro) e organiza 50 skills úteis para quem trabalha com segurança da informação.",
+    "date": "10 de Setembro, 2026",
+    "dateISO": "2026-09-10",
+    "readTime": "16 min",
+    "image": "/assets/blog/claude-skills-seguranca-da-informacao-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "wazuh-em-movimento",
     "title": "Wazuh em Movimento: como avaliar, estabilizar e amadurecer um SIEM que já está em produção",
     "category": "SOC Engineering",
