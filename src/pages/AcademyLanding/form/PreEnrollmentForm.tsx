@@ -43,7 +43,11 @@ export const PreEnrollmentForm = () => {
   const { t } = useTranslation();
   const schema = useMemo(() => buildPreEnrollmentSchema(t), [t]);
   const perfilOptions = useMemo(() => buildPerfilOptions(t), [t]);
-  const requestIdRef = useRef<string>(crypto.randomUUID());
+  // request_id único por montagem: gerado uma vez no inicializador preguiçoso do
+  // useState. Antes era um useRef lido dentro do callback entregue ao
+  // handleSubmit do react-hook-form, o que a regra react-hooks/refs reprova
+  // (ref pode ser lido durante o render). A idempotência do retry é mantida.
+  const [requestId] = useState(() => crypto.randomUUID());
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<FormState>({ kind: "initial" });
   const successRef = useRef<HTMLHeadingElement>(null);
@@ -82,7 +86,7 @@ export const PreEnrollmentForm = () => {
           aceito: values.aceito,
           declaracao_idade: values.declaracao_idade,
           honeypot,
-          request_id: requestIdRef.current,
+          request_id: requestId,
         }),
       });
       if (res.status === 202) {
@@ -110,7 +114,7 @@ export const PreEnrollmentForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "resend",
-          request_id: requestIdRef.current,
+          request_id: requestId,
           honeypot: "",
         }),
       });

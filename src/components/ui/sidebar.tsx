@@ -525,16 +525,26 @@ const SidebarMenuBadge = React.forwardRef<HTMLDivElement, React.ComponentProps<"
 );
 SidebarMenuBadge.displayName = "SidebarMenuBadge";
 
+/**
+ * Largura do placeholder do skeleton (50% a 90%) derivada do `useId` da
+ * instancia: preserva a variacao visual sem `Math.random()` durante o render,
+ * que viola a pureza exigida pelo React Compiler (react-hooks/purity).
+ */
+function skeletonWidth(id: string) {
+  let hash = 0;
+  for (let i = 0; i < id.length; i += 1) {
+    hash = (hash * 31 + id.charCodeAt(i)) % 40;
+  }
+  return `${50 + hash}%`;
+}
+
 const SidebarMenuSkeleton = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     showIcon?: boolean;
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  const width = skeletonWidth(React.useId());
 
   return (
     <div
