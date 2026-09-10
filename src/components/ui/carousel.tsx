@@ -28,6 +28,9 @@ type CarouselContextProps = {
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
+/** Snapshot de servidor/SSG: sem Embla inicializado nada pode ser rolado. */
+const getFalse = () => false;
+
 function useCarousel() {
   const context = React.useContext(CarouselContext);
 
@@ -47,17 +50,31 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
       },
       plugins,
     );
-    const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-    const [canScrollNext, setCanScrollNext] = React.useState(false);
+    // O estado de scroll pertence a instancia do Embla (sistema externo), entao
+    // ele e lido por assinatura com useSyncExternalStore em vez de setState
+    // sincrono dentro de efeito (react-hooks/set-state-in-effect).
+    const subscribeApi = React.useCallback(
+      (onStoreChange: () => void) => {
+        if (!api) {
+          return () => undefined;
+        }
 
-    const onSelect = React.useCallback((api: CarouselApi) => {
-      if (!api) {
-        return;
-      }
+        api.on("reInit", onStoreChange);
+        api.on("select", onStoreChange);
 
-      setCanScrollPrev(api.canScrollPrev());
-      setCanScrollNext(api.canScrollNext());
-    }, []);
+        return () => {
+          api.off("reInit", onStoreChange);
+          api.off("select", onStoreChange);
+        };
+      },
+      [api],
+    );
+
+    const getCanScrollPrev = React.useCallback(() => api?.canScrollPrev() ?? false, [api]);
+    const getCanScrollNext = React.useCallback(() => api?.canScrollNext() ?? false, [api]);
+
+    const canScrollPrev = React.useSyncExternalStore(subscribeApi, getCanScrollPrev, getFalse);
+    const canScrollNext = React.useSyncExternalStore(subscribeApi, getCanScrollNext, getFalse);
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev();
@@ -87,20 +104,6 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
       setApi(api);
     }, [api, setApi]);
-
-    React.useEffect(() => {
-      if (!api) {
-        return;
-      }
-
-      onSelect(api);
-      api.on("reInit", onSelect);
-      api.on("select", onSelect);
-
-      return () => {
-        api?.off("select", onSelect);
-      };
-    }, [api, onSelect]);
 
     return (
       <CarouselContext.Provider
