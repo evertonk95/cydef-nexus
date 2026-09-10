@@ -248,6 +248,7 @@ export const pt: Dict = {
       career: "Carreira e Certificações",
       threatIntel: "Inteligência de Ameaças",
       socEngineering: "SOC Engineering",
+      iaAplicada: "IA Aplicada",
     },
     briefTitle: "Em breve: CyDef Brief",
     briefBody: "Nossa newsletter ainda está em preparação. Enquanto isso, os artigos do blog e o LinkedIn da CyDef seguem no ar, sem cadastro e sem ruído.",

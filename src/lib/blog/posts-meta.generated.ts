@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "claude-skills-seguranca-da-informacao",
+    "title": "Claude Skills for Information Security: what they are, how they work, and 50 skills worth using",
+    "category": "Applied AI",
+    "excerpt": "A skill is a folder with a SKILL.md that teaches the agent to perform a task your way, loaded only when the task shows up. This guide explains the mechanism (discovery, three-level loading, risks of installing third-party instruction) and organizes 50 useful skills for those who work with information security.",
+    "date": "September 10, 2026",
+    "dateISO": "2026-09-10",
+    "readTime": "16 min read",
+    "image": "/assets/blog/claude-skills-seguranca-da-informacao-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "wazuh-em-movimento",
     "title": "Wazuh in Motion: how to assess, stabilize, and mature a SIEM that is already in production",
     "category": "SOC Engineering",
@@ -220,6 +231,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "claude-skills-seguranca-da-informacao",
+    "title": "Claude Skills para la Seguridad de la Información: qué son, cómo funcionan y 50 skills que valen la pena",
+    "category": "IA Aplicada",
+    "excerpt": "Una skill es una carpeta con un SKILL.md que le enseña al agente a ejecutar una tarea a su manera, cargada solo cuando la tarea aparece. Esta guía explica el mecanismo (descubrimiento, carga en tres niveles, riesgos de instalar instrucción de terceros) y organiza 50 skills útiles para quien trabaja con seguridad de la información.",
+    "date": "10 de septiembre de 2026",
+    "dateISO": "2026-09-10",
+    "readTime": "16 min de lectura",
+    "image": "/assets/blog/claude-skills-seguranca-da-informacao-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "wazuh-em-movimento",
     "title": "Wazuh en Movimiento: cómo evaluar, estabilizar y madurar un SIEM que ya está en producción",
