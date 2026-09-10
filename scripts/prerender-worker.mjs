@@ -119,6 +119,75 @@ const sandbox = {
 };
 sandbox.globalThis = sandbox;
 
+// --- construtores do DOM do jsdom ---
+// O sandbox expunha só APIs "soltas" (Blob, File, FormData, streams,
+// DOMException). Os construtores do DOM ficavam de fora, e o bundle os usa via
+// `instanceof`: com o formulário de captura ativo, o ref de `register()` do
+// react-hook-form cai em `isHTMLElement` (`value instanceof HTMLElement`)
+// durante os layout effects. Sem o construtor o ReferenceError derruba a
+// árvore React, o #root fica com < 400 caracteres e o worker lança
+// "HTML nao estabilizou" (fallback de shell). Repassamos os construtores do
+// próprio jsdom (as mesmas funções que criaram os nós: `instanceof` funciona),
+// pulando com segurança o que não existir no jsdom.
+const DOM_GLOBALS = [
+  // núcleo do DOM
+  "Event",
+  "CustomEvent",
+  "UIEvent",
+  "MouseEvent",
+  "PointerEvent",
+  "KeyboardEvent",
+  "FocusEvent",
+  "InputEvent",
+  "CompositionEvent",
+  "WheelEvent",
+  "TouchEvent",
+  "DragEvent",
+  "ClipboardEvent",
+  "AnimationEvent",
+  "TransitionEvent",
+  "Node",
+  "Element",
+  "Text",
+  "CharacterData",
+  "Comment",
+  "DocumentFragment",
+  "ShadowRoot",
+  "HTMLCollection",
+  "NodeList",
+  "DOMParser",
+  "XMLSerializer",
+  "Range",
+  "Selection",
+  "CSSStyleDeclaration",
+  "DOMRect",
+  "Image",
+  // elementos HTML (react-hook-form toca os de formulário)
+  "HTMLElement",
+  "HTMLInputElement",
+  "HTMLSelectElement",
+  "HTMLTextAreaElement",
+  "HTMLButtonElement",
+  "HTMLFormElement",
+  "HTMLLabelElement",
+  "HTMLAnchorElement",
+  "HTMLDivElement",
+  "HTMLSpanElement",
+  "HTMLParagraphElement",
+  "HTMLHeadingElement",
+  "HTMLImageElement",
+  "HTMLUListElement",
+  "HTMLOListElement",
+  "HTMLLIElement",
+  "HTMLTableElement",
+  "HTMLIFrameElement",
+  "SVGElement",
+  "SVGSVGElement",
+];
+for (const name of DOM_GLOBALS) {
+  if (typeof win[name] === "function") sandbox[name] = win[name];
+}
+
 const bundleCode = readFileSync(bundleTmp, "utf8");
 
 async function main() {
