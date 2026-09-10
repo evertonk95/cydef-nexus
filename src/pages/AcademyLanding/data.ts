@@ -43,12 +43,12 @@ export const FAQ_ITEMS = [
   {
     question: "É realmente grátis?",
     answer:
-      "Sim. Estes dois cursos de entrada são 100% gratuitos, sem cartão de crédito e sem cobrança escondida. A CyDef Academy terá cursos pagos no futuro — você será sempre informado com clareza sobre o que é grátis e o que é pago.",
+      "Sim. Estes dois cursos de entrada são 100% gratuitos, sem cartão de crédito e sem cobrança escondida. A CyDef Academy terá cursos pagos no futuro. Você será sempre informado com clareza sobre o que é grátis e o que é pago.",
   },
   {
     question: "Quando começa?",
     answer:
-      "As turmas da fase de pré-inscrição começam quando o conteúdo estiver publicado e você receber o acesso por e-mail. A confirmação da pré-inscrição não garante vaga imediata — garante prioridade na comunicação.",
+      "As turmas da fase de pré-inscrição começam quando o conteúdo estiver publicado e você receber o acesso por e-mail. A confirmação da pré-inscrição não garante vaga imediata, mas garante prioridade na comunicação.",
   },
   {
     question: "Preciso de experiência?",
@@ -58,6 +58,6 @@ export const FAQ_ITEMS = [
   {
     question: "O que vem depois?",
     answer:
-      "Depois dos cursos gratuitos, você conhecerá a CyDef Academy completa, com formações avançadas e pagas — sempre com transparência sobre custos e conteúdo.",
+      "Depois dos cursos gratuitos, você conhecerá a CyDef Academy completa, com formações avançadas e pagas, sempre com transparência sobre custos e conteúdo.",
   },
 ] as const;

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { track } from "@/lib/analytics";
 import { LANDING_PATH } from "@/lib/config";
+import { L } from "@/lib/lang";
 
 /**
  * Página neutra de status de confirmação (HEL-M02/M05).
@@ -13,6 +15,8 @@ import { LANDING_PATH } from "@/lib/config";
  * Beacon `confirmacao_concluida` dispara daqui (sem token presente — M02).
  */
 const AcademyStatusConfirmation = () => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     track("confirmacao_concluida");
   }, []);
@@ -20,22 +24,20 @@ const AcademyStatusConfirmation = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
-      <main className="pt-40 pb-24 px-4">
+      <main id="conteudo" tabIndex={-1} className="pt-40 pb-24 px-4">
         <div className="container mx-auto max-w-xl text-center">
           <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12">
             <h1 className="text-3xl font-bold mb-4 tracking-tighter">
-              Obrigado!
+              {t("status.title")}
             </h1>
             <p className="text-neutral-400 leading-relaxed mb-8">
-              Sua confirmação foi processada. Se você confirmou sua
-              pré-inscrição recentemente, o próximo passo é aguardar o e-mail
-              com as instruções de acesso.
+              {t("status.body")}
             </p>
             <Link
-              to={LANDING_PATH}
+              to={L(LANDING_PATH)}
               className="inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-[#F46B27] to-[#F69021] hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
             >
-              Voltar à pré-inscrição
+              {t("status.back")}
             </Link>
           </div>
         </div>

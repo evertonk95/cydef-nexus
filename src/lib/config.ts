@@ -10,7 +10,7 @@
 export const LANDING_PATH = "/academy/gratuito";
 
 /** Versão vigente do Aviso de Privacidade da landing. */
-export const PRIVACY_VERSION = "v2026.1";
+export const PRIVACY_VERSION = "v2026.2";
 
 export const privacyPath = (version: string = PRIVACY_VERSION) =>
   `/academy/privacidade/${version}`;
