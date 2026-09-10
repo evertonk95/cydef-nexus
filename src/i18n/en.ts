@@ -247,6 +247,7 @@ export const en = {
       career: "Career & Certifications",
       threatIntel: "Threat Intelligence",
       socEngineering: "SOC Engineering",
+      iaAplicada: "Applied AI",
     },
     briefTitle: "Coming soon: CyDef Brief",
     briefBody: "Our newsletter is still in preparation. Meanwhile, the blog articles and the CyDef LinkedIn page remain live, no sign-up required.",
