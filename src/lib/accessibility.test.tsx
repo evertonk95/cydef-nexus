@@ -1,0 +1,106 @@
+/**
+ * Auditoria de acessibilidade (NEX-P2-05) — axe-core via vitest-axe (jsdom).
+ * Meta: zero violações críticas/sérias nas páginas principais (WCAG 2.2 AA).
+ * Regras que exigem layout/CSS real (ex.: color-contrast) ficam "incomplete"
+ * em jsdom e não contam como violação — a validação visual/contraste é feita
+ * em produção (axe no navegador, etapa pós-deploy).
+ */
+import { render } from "@testing-library/react";
+import { axe } from "vitest-axe";
+import "vitest-axe/extend-expect";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { describe, expect, it } from "vitest";
+import Index from "@/pages/Index";
+import About from "@/pages/About";
+import Services from "@/pages/Services";
+import Labs from "@/pages/Labs";
+import LabsArtifact from "@/pages/LabsArtifact";
+import Research from "@/pages/Research";
+import Contact from "@/pages/Contact";
+import Academy from "@/pages/Academy";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
+import CoursePage from "@/pages/CoursePage";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import NotFound from "@/pages/NotFound";
+
+// vitest-axe 0.1.0 augmenta `namespace Vi` (API antiga) — Vitest 3 usa o módulo.
+declare module "vitest" {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- default exige `any` p/ casar com a interface do Vitest
+  interface Assertion<T = any> {
+    toHaveNoViolations(): Promise<void>;
+  }
+}
+
+const withRouter = (ui: React.ReactNode) => (
+  <MemoryRouter initialEntries={["/en"]}>{ui}</MemoryRouter>
+);
+
+const POST_SLUG = "como-estruturar-um-soc-do-zero";
+
+const pages: [string, React.ReactNode][] = [
+  ["Home (Index)", withRouter(<Index />)],
+  ["About", withRouter(<About />)],
+  ["Services (Ecossistema)", withRouter(<Services />)],
+  ["Labs", withRouter(<Labs />)],
+  ["Research", withRouter(<Research />)],
+  ["Contact", withRouter(<Contact />)],
+  ["Academy", withRouter(<Academy />)],
+  ["Blog", withRouter(<Blog />)],
+  ["Privacy", withRouter(<Privacy />)],
+  ["Terms", withRouter(<Terms />)],
+  ["NotFound", withRouter(<NotFound />)],
+];
+
+describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
+  for (const [name, ui] of pages) {
+    it(`${name} sem violações críticas/sérias`, async () => {
+      const { container } = render(ui);
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  }
+
+  it("BlogPost sem violações críticas/sérias", async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={[`/en/blog/${POST_SLUG}`]}>
+        <Routes>
+          <Route path="/:lang/blog/:slug" element={<BlogPost />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("LabsArtifact (framework, PT) sem violações críticas/sérias", async () => {
+    // Conteúdo PT-first: carrega o dicionário PT e troca o idioma ativo
+    // (lição 04/09: ensureLang ANTES de changeLanguage). Restaura EN ao final
+    // para não vazar estado para os demais testes do arquivo.
+    const i18nMod = await import("@/i18n");
+    await i18nMod.ensureLang("pt");
+    await i18nMod.default.changeLanguage("pt");
+    try {
+      const { container } = render(
+        <MemoryRouter initialEntries={["/pt/labs/siem-health-maturity-framework"]}>
+          <Routes>
+            <Route path="/:lang/labs/:slug" element={<LabsArtifact />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      expect(await axe(container)).toHaveNoViolations();
+    } finally {
+      await i18nMod.default.changeLanguage("en");
+    }
+  });
+
+  it("CoursePage (curso com ementa) sem violações críticas/sérias", async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={["/en/courses/cybersecurity-fundamentals"]}>
+        <Routes>
+          <Route path="/:lang/:area/:courseId" element={<CoursePage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await axe(container)).toHaveNoViolations();
+  });
+});

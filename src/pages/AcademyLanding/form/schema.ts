@@ -5,46 +5,48 @@ import { z } from "zod";
  * A fronteira de segurança é o servidor (Edge Function + RPCs): este schema
  * nunca substitui a validação server-side (SEC-006).
  * Contrato HEL-M01: NÃO há campo `versao_aviso` — o servidor carimba a vigente.
+ * Mensagens localizadas: o schema é construído com o `t` do idioma ativo.
  */
 
-export const PERFIL_OPTIONS = [
-  { value: "iniciante", label: "Iniciante em segurança" },
-  { value: "transicao", label: "Em transição para cibersegurança" },
-  { value: "profissional", label: "Profissional ativo" },
-  { value: "estudante", label: "Estudante" },
-  { value: "outro", label: "Outro" },
-] as const;
+export const PERFIL_VALUES = ["iniciante", "transicao", "profissional", "estudante", "outro"] as const;
+export type PerfilValue = (typeof PERFIL_VALUES)[number];
 
-export const preEnrollmentSchema = z.object({
-  nome: z
-    .string()
-    .trim()
-    .min(2, "Informe seu nome completo.")
-    .max(80, "Nome muito longo."),
-  email: z
-    .string()
-    .trim()
-    .min(1, "Informe seu e-mail.")
-    .max(254, "E-mail muito longo.")
-    .refine((v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), {
-      message: "E-mail inválido. Ex.: nome@dominio.com",
-    }),
-  perfil: z.enum(["iniciante", "transicao", "profissional", "estudante", "outro"], {
-    errorMap: () => ({ message: "Selecione seu perfil." }),
-  }),
-  aceito: z
-    .boolean({ errorMap: () => ({ message: "É preciso concordar com o Aviso de Privacidade." }) })
-    .refine((v) => v === true, {
-      message: "É preciso concordar com o Aviso de Privacidade.",
-    }),
-  declaracao_idade: z
-    .boolean({ errorMap: () => ({ message: "É preciso confirmar que você tem 16 anos ou mais." }) })
-    .refine((v) => v === true, {
-      message: "É preciso confirmar que você tem 16 anos ou mais.",
-    }),
-});
+type TFunc = (key: string) => string;
 
-export type PreEnrollmentValues = z.infer<typeof preEnrollmentSchema>;
+export const buildPerfilOptions = (t: TFunc) =>
+  PERFIL_VALUES.map((value) => ({ value, label: t(`form.perfilOptions.${value}`) }));
+
+export const buildPreEnrollmentSchema = (t: TFunc) =>
+  z.object({
+    nome: z
+      .string()
+      .trim()
+      .min(2, t("form.errors.nomeMin"))
+      .max(80, t("form.errors.nomeMax")),
+    email: z
+      .string()
+      .trim()
+      .min(1, t("form.errors.emailReq"))
+      .max(254, t("form.errors.emailMax"))
+      .refine((v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), {
+        message: t("form.errors.emailInvalid"),
+      }),
+    perfil: z.enum(PERFIL_VALUES, {
+      errorMap: () => ({ message: t("form.errors.perfilReq") }),
+    }),
+    aceito: z
+      .boolean({ errorMap: () => ({ message: t("form.errors.aceitoReq") }) })
+      .refine((v) => v === true, {
+        message: t("form.errors.aceitoReq"),
+      }),
+    declaracao_idade: z
+      .boolean({ errorMap: () => ({ message: t("form.errors.idadeReq") }) })
+      .refine((v) => v === true, {
+        message: t("form.errors.idadeReq"),
+      }),
+  });
+
+export type PreEnrollmentValues = z.infer<ReturnType<typeof buildPreEnrollmentSchema>>;
 
 export const FORM_DEFAULT_VALUES: PreEnrollmentValues = {
   nome: "",

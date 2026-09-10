@@ -1,52 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { AVISOS, versaoVigente } from "./consent";
 
 /**
  * Consistência SPA ↔ migração (HEL-M01): o conteúdo servido pela landing
  * (src/lib/academy/consent.ts) deve ser IDÊNTICO ao conteúdo semeado em
- * `supabase/migrations/0001_init.sql` (aviso_privacidade). O hash é computado
- * pelo trigger do banco a partir desse conteúdo — qualquer divergência
- * quebraria a equivalência hash == conteúdo servido.
+ * `supabase/migrations/*.sql` (tabela aviso_privacidade) para cada versão —
+ * vigente e históricas. O hash é computado pelo trigger do banco a partir
+ * desse conteúdo — qualquer divergência quebraria a equivalência
+ * hash == conteúdo servido.
  */
 
-const SQL_PATH = join(process.cwd(), "supabase", "migrations", "0001_init.sql");
+const MIGRATIONS_DIR = join(process.cwd(), "supabase", "migrations");
 
-function lerSql(): string {
-  return readFileSync(SQL_PATH, "utf8");
+function lerMigrations(): string[] {
+  return readdirSync(MIGRATIONS_DIR)
+    .filter((f) => f.endsWith(".sql"))
+    .sort()
+    .map((f) => readFileSync(join(MIGRATIONS_DIR, f), "utf8"));
 }
-
-describe("consistência do Aviso de Privacidade (SPA ↔ SQL seed)", () => {
-  it("conteúdo da versão vigente no SPA == conteúdo no seed da migração", () => {
-    const sql = lerSql();
-
-    const valores = sql.match(/values\s*\(([\s\S]*?)\)\s*on conflict/i)?.[1];
-    expect(valores, "bloco de seed encontrado").toBeTruthy();
-
-    const literais = [...(valores?.matchAll(/E'((?:[^'\\]|\\.)*)'/g) ?? [])].map((m) =>
-      unescapeE(m[1]),
-    );
-    const conteudoSql = literais.join("");
-    expect(conteudoSql.length).toBeGreaterThan(100);
-
-    const textoSpa = AVISOS[versaoVigente()].texto;
-    expect(conteudoSql).toBe(textoSpa);
-  });
-
-  it("migração declara a versão vigente como vigente=true com URL estável", () => {
-    const sql = lerSql();
-    expect(sql).toContain(`'${versaoVigente()}'`);
-    expect(sql).toContain(AVISOS[versaoVigente()].urlEstavel);
-    expect(sql).toContain("true");
-  });
-
-  it("migração define trigger de hash a partir do conteúdo (sem hash manual)", () => {
-    const sql = lerSql();
-    expect(sql).toContain("aviso_calcula_hash");
-    expect(sql).toContain("encode(digest(new.conteudo, 'sha256'), 'hex')");
-  });
-});
 
 function unescapeE(s: string): string {
   return s.replace(/\\(.)/g, (_, c: string) => {
@@ -55,3 +28,53 @@ function unescapeE(s: string): string {
     return c; // \' → ', \\ → \
   });
 }
+
+/**
+ * Retorna o conteúdo semeado da versão: no arquivo de migração que contém a
+ * URL estável da versão, extrai o trecho do INSERT em aviso_privacidade e
+ * decodifica o literal E'...' do conteúdo.
+ */
+function conteudoSeedDaVersao(versao: string): { conteudo: string; arquivo: string } {
+  const aviso = AVISOS[versao];
+  for (const sql of lerMigrations()) {
+    if (!sql.includes(aviso.urlEstavel)) continue;
+    const arquivo = sql;
+    const inicio = arquivo.indexOf("insert into public.aviso_privacidade");
+    const fim = arquivo.indexOf("on conflict", inicio) + "on conflict".length;
+    expect(inicio, `insert de ${versao} encontrado`).toBeGreaterThan(-1);
+    expect(fim, `on conflict de ${versao} encontrado`).toBeGreaterThan(-1);
+    const trecho = arquivo.slice(inicio, fim);
+    const literais = [...trecho.matchAll(/E'((?:[^'\\]|\\.)*)'/g)].map((mm) => unescapeE(mm[1]));
+    const conteudo = literais.join("");
+    expect(conteudo.length).toBeGreaterThan(100);
+    return { conteudo, arquivo: trecho };
+  }
+  throw new Error(`nenhuma migração semeia a URL estável de ${versao} (${aviso.urlEstavel})`);
+}
+
+describe("consistência do Aviso de Privacidade (SPA ↔ SQL seed)", () => {
+  it("conteúdo de cada versão no SPA == conteúdo no seed da migração (vigente e histórico)", () => {
+    for (const versao of Object.keys(AVISOS)) {
+      const { conteudo } = conteudoSeedDaVersao(versao);
+      expect(conteudo, `seed de ${versao}`).toBe(AVISOS[versao].texto);
+    }
+  });
+
+  it("versão vigente é declarada vigente=true na migração que a semeia", () => {
+    const { arquivo } = conteudoSeedDaVersao(versaoVigente());
+    expect(arquivo).toMatch(/,\s*true\s*\)\s*on conflict/i);
+  });
+
+  it("toda versão tem URL estável imutável (versão embutida na URL)", () => {
+    for (const [versao, aviso] of Object.entries(AVISOS)) {
+      expect(aviso.urlEstavel).toBe(`/academy/privacidade/${versao}`);
+    }
+  });
+
+  it("migrações definem trigger de hash a partir do conteúdo (sem hash manual)", () => {
+    const todas = lerMigrations().join("\n");
+    expect(todas).toContain("aviso_calcula_hash");
+    expect(todas).toContain("encode(digest(new.conteudo, 'sha256'), 'hex')");
+    expect(todas).toContain("aviso_conteudo_imutavel");
+  });
+});

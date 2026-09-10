@@ -48,13 +48,13 @@ export function montarEmailConfirmacao(input: {
   const linkSeguro = escaparHtml(input.link);
   return {
     to: input.to,
-    subject: "Confirme sua pré-inscrição — CyDef Academy",
+    subject: "Confirme sua pré-inscrição na CyDef Academy",
     html: `<p>Olá, <strong>${nomeLimp}</strong>!</p>
 <p>Recebemos sua pré-inscrição nos cursos gratuitos da CyDef Academy.</p>
 <p>Para confirmar, clique no link abaixo (válido por 48 horas):</p>
 <p><a href="${linkSeguro}">Confirmar pré-inscrição</a></p>
 <p>Se não foi você, ignore este e-mail. Nenhuma outra ação é necessária.</p>
-<p>— CyDef Academy</p>`,
+<p>CyDef Academy</p>`,
   };
 }
 
@@ -110,7 +110,7 @@ export function resendTransport(
 export function devTransport(log: (msg: string) => void = console.log): EmailTransport {
   return {
     async send(mail) {
-      log(`[dev-transport] para=${mail.to} assunto="${mail.subject}" (sandbox — não enviado)`);
+      log(`[dev-transport] para=${mail.to} assunto="${mail.subject}" (sandbox: não enviado)`);
       return { ok: true };
     },
   };

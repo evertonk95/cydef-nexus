@@ -3,25 +3,66 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
-import { blogPosts } from "@/lib/blog/posts";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { L, currentLang } from "@/lib/lang";
+import { postsForLangMeta } from "@/lib/blog/posts";
 
-const categories = [
-  "Todos",
-  "SOC",
-  "Blue Team",
-  "Detecção e Resposta",
-  "Hardening",
-  "Cloud Security",
-  "Carreira e Certificações",
-  "Inteligência de Ameaças",
-];
+const CAT_KEYS = ["soc", "blueTeam", "detection", "hardening", "cloud", "career", "threatIntel", "socEngineering", "iaAplicada"] as const;
+type CatKey = (typeof CAT_KEYS)[number];
+
+// Category labels used by the content itself, per language (must match the data files).
+const catLabels: Record<string, Record<CatKey, string>> = {
+  pt: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detecção e Resposta",
+    hardening: "Hardening",
+    cloud: "Cloud Security",
+    career: "Carreira e Certificações",
+    threatIntel: "Inteligência de Ameaças",
+    socEngineering: "SOC Engineering",
+    iaAplicada: "IA Aplicada",
+  },
+  en: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detection & Response",
+    hardening: "Hardening",
+    cloud: "Cloud Security",
+    career: "Career & Certifications",
+    threatIntel: "Threat Intelligence",
+    socEngineering: "SOC Engineering",
+    iaAplicada: "Applied AI",
+  },
+  es: {
+    soc: "SOC",
+    blueTeam: "Blue Team",
+    detection: "Detección y Respuesta",
+    hardening: "Hardening",
+    cloud: "Seguridad en la Nube",
+    career: "Carrera y Certificaciones",
+    threatIntel: "Inteligencia de Amenazas",
+    socEngineering: "SOC Engineering",
+    iaAplicada: "IA Aplicada",
+  },
+};
 
 const Blog = () => {
   useScrollReveal();
+  const { t } = useTranslation();
+  const [activeKey, setActiveKey] = useState<CatKey | "all">("all");
+  const lang = currentLang();
+  const posts = postsForLangMeta(lang);
+  const labels = catLabels[lang] ?? catLabels.pt;
+
+  const filteredPosts =
+    activeKey === "all" ? posts : posts.filter((post) => post.category === labels[activeKey]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
+      <main id="conteudo" tabIndex={-1} className="outline-none">
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-4 overflow-hidden border-b border-white/5">
@@ -29,14 +70,13 @@ const Blog = () => {
         <div className="container mx-auto text-center relative z-10 animate-on-scroll">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-500 text-sm font-medium mb-6">
             <Tag className="h-4 w-4" />
-            Insights & Artigos
+            {t("blog.badge")}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-            Blog <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-600">CyDef</span>
+            {t("blog.title")}
           </h1>
           <p className="text-lg text-white/60 max-w-3xl mx-auto font-medium">
-            Artigos técnicos, guias práticos e insights sobre cibersegurança,
-            Blue Team e SOC escritos por especialistas.
+            {t("blog.lead")}
           </p>
         </div>
       </section>
@@ -45,16 +85,30 @@ const Blog = () => {
       <section className="py-8 px-4 border-b border-white/5 relative z-20">
         <div className="container mx-auto animate-on-scroll">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => (
+            <button
+              key="all"
+              type="button"
+              onClick={() => setActiveKey("all")}
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
+                activeKey === "all"
+                  ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
+                  : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              {t("blog.all")}
+            </button>
+            {CAT_KEYS.map((key) => (
               <button
-                key={category}
+                key={key}
+                type="button"
+                onClick={() => setActiveKey(key)}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
-                  category === "Todos"
+                  key === activeKey
                     ? "bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_15px_-3px_rgba(249,115,22,0.3)]"
                     : "bg-white/5 border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                {category}
+                {t(`blog.categories.${key}`)}
               </button>
             ))}
           </div>
@@ -64,11 +118,12 @@ const Blog = () => {
       {/* Blog Posts */}
       <section className="py-24 px-4 relative">
         <div className="container mx-auto max-w-7xl">
+          <h2 className="sr-only">{t("blog.postsTitle")}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
-            {blogPosts.map((post) => (
+            {filteredPosts.map((post) => (
               <Link
                 key={post.slug}
-                to={`/blog/${post.slug}`}
+                to={L(`/blog/${post.slug}`)}
                 className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)] transition-all duration-300 group flex flex-col h-full cursor-pointer"
               >
                 <div className="rounded-xl overflow-hidden border border-white/10 mb-4">
@@ -106,22 +161,6 @@ const Blog = () => {
               </Link>
             ))}
           </div>
-
-          {/* Pagination */}
-          <div className="mt-16 flex justify-center gap-2 animate-on-scroll">
-            <button className="w-10 h-10 rounded-lg bg-orange-500 text-white font-bold flex items-center justify-center shadow-[0_0_15px_-3px_rgba(249,115,22,0.4)]">
-              1
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              2
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              3
-            </button>
-            <button className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center font-medium">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </section>
 
@@ -131,30 +170,24 @@ const Blog = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-b from-white/10 to-transparent border border-white/10 rounded-3xl p-12 text-center relative backdrop-blur-md animate-on-scroll">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
-              Receba conteúdo exclusivo
+              {t("blog.briefTitle")}
             </h2>
             <p className="text-white/60 text-lg mb-8 max-w-2xl mx-auto">
-              Cadastre-se para receber artigos, guias e novidades sobre
-              cibersegurança diretamente no seu e-mail.
+              {t("blog.briefBody")}
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-4" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 px-5 py-4 rounded-xl border border-white/10 bg-black/50 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all"
-                required
-              />
-              <button type="submit" className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] whitespace-nowrap">
-                Inscrever-se
-              </button>
-            </form>
-            <p className="text-sm text-neutral-500 font-medium">
-              Sem spam. Apenas conteúdo de qualidade.
-            </p>
+            <a
+              href="https://www.linkedin.com/company/cydef-group/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
+            >
+              {t("blog.followLinkedin")}
+            </a>
           </div>
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

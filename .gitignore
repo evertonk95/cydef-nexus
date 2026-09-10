@@ -34,3 +34,12 @@ coverage/
 # Supabase CLI temp/link artifacts
 supabase/.temp/
 supabase/.env.local
+
+# local preview logs
+preview-*.txt
+
+# temp do gen-sitemap
+.gen-sitemap-*.cjs
+
+# Lighthouse local audit artifacts
+lh-*.json
