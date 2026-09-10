@@ -1,8 +1,8 @@
 /**
- * Auditoria de acessibilidade (NEX-P2-05) — axe-core via vitest-axe (jsdom).
+ * Auditoria de acessibilidade (NEX-P2-05): axe-core via vitest-axe (jsdom).
  * Meta: zero violações críticas/sérias nas páginas principais (WCAG 2.2 AA).
  * Regras que exigem layout/CSS real (ex.: color-contrast) ficam "incomplete"
- * em jsdom e não contam como violação — a validação visual/contraste é feita
+ * em jsdom e não contam como violação. A validação visual/contraste é feita
  * em produção (axe no navegador, etapa pós-deploy).
  */
 import { render } from "@testing-library/react";
@@ -25,13 +25,13 @@ import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import NotFound from "@/pages/NotFound";
 
-// vitest-axe 0.1.0 augmenta `namespace Vi` (API antiga) — Vitest 3 usa o módulo.
-declare module "vitest" {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- default exige `any` p/ casar com a interface do Vitest
-  interface Assertion<T = any> {
-    toHaveNoViolations(): Promise<void>;
-  }
-}
+// vitest-axe 0.1.0 augmenta `namespace Vi` (API antiga do Vitest) e o matcher é
+// registrado em src/test/setup.ts via expect.extend. No Vitest 5 a interface
+// Assertion passou a ter dois genericos (R e T) e a augmentation local conflita
+// com a do @testing-library/jest-dom, entao o matcher e chamado por um helper
+// tipado em vez de augmentar a interface.
+const expectNoViolations = (results: unknown): Promise<void> =>
+  (expect(results) as unknown as { toHaveNoViolations: () => Promise<void> }).toHaveNoViolations();
 
 const withRouter = (ui: React.ReactNode) => (
   <MemoryRouter initialEntries={["/en"]}>{ui}</MemoryRouter>
@@ -57,7 +57,7 @@ describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
   for (const [name, ui] of pages) {
     it(`${name} sem violações críticas/sérias`, async () => {
       const { container } = render(ui);
-      expect(await axe(container)).toHaveNoViolations();
+      await expectNoViolations(await axe(container));
     });
   }
 
@@ -69,7 +69,7 @@ describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(await axe(container)).toHaveNoViolations();
+    await expectNoViolations(await axe(container));
   });
 
   it("LabsArtifact (framework, PT) sem violações críticas/sérias", async () => {
@@ -87,7 +87,7 @@ describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
           </Routes>
         </MemoryRouter>,
       );
-      expect(await axe(container)).toHaveNoViolations();
+      await expectNoViolations(await axe(container));
     } finally {
       await i18nMod.default.changeLanguage("en");
     }
@@ -101,6 +101,6 @@ describe("acessibilidade WCAG 2.2 (axe, páginas principais)", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(await axe(container)).toHaveNoViolations();
+    await expectNoViolations(await axe(container));
   });
 });
