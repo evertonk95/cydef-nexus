@@ -6,6 +6,7 @@ import { localizePath } from "@/lib/routes";
 import { SITE_ORIGIN } from "@/lib/site";
 import { postMetaBySlug } from "@/lib/blog/posts";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
+import { isPrivateAcademyPath } from "@/lib/private-routes";
 
 /** Slug universal de conteúdo, se a base for rota de artigo (/blog/<slug>). */
 const blogSlugFromBase = (base: string): string | undefined => {
@@ -72,6 +73,22 @@ export const HeadSeo = () => {
     });
 
     const head = document.head;
+
+    // Rotas utilitárias/privadas da Academy (login, obrigado, status, aviso de
+    // privacidade): fora do sitemap e fora do índice do buscador. O meta entra
+    // no HTML estático porque o pré-render repassa meta[name="robots"]
+    // (scripts/prerender-worker.mjs) — sem JS o status 200 já vem do arquivo
+    // físico gerado no postbuild.
+    if (isPrivateAcademyPath(base)) {
+      const noindex = document.createElement("meta");
+      noindex.name = "robots";
+      noindex.content = "noindex, nofollow";
+      head.appendChild(noindex);
+      return () => {
+        noindex.remove();
+      };
+    }
+
     const els = links.map((link) => {
       const el = document.createElement("link");
       el.rel = link.rel;

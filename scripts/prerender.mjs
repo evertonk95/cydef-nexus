@@ -12,6 +12,7 @@ import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadPrivateRoutes } from "./lib/load-private-routes.mjs";
 
 const require = createRequire(import.meta.url);
 const esbuild = require("esbuild");
@@ -60,16 +61,25 @@ const bundleCode = res.outputFiles[0].text;
 // 2. Rotas (sitemap → index.html físico do postbuild)
 const sitemap = readFileSync(path.join(ROOT, "dist/sitemap.xml"), "utf8");
 const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
-const routes = locs
+const sitemapRoutes = locs
   .map((loc) => new URL(loc).pathname)
   .filter((p) => p.startsWith("/"));
-console.log(`prerender: ${routes.length} rotas do sitemap`);
-if (routes.length === 0) {
+if (sitemapRoutes.length === 0) {
   console.error(
     "prerender: nenhuma rota em dist/sitemap.xml. Nada foi pre-renderizado.",
   );
   process.exit(1);
 }
+// Rotas utilitárias/privadas da Academy (etapa 58) também têm index.html físico
+// (postbuild) e também são pré-renderizadas: elas não entram no sitemap, mas
+// servem o mesmo conteúdo de SPA no primeiro paint. Fonte: src/lib/private-routes.ts.
+const privateRoutes = (await loadPrivateRoutes()).filter(
+  (route) => !sitemapRoutes.includes(route),
+);
+const routes = [...sitemapRoutes, ...privateRoutes];
+console.log(
+  `prerender: ${routes.length} rotas (${sitemapRoutes.length} do sitemap + ${privateRoutes.length} utilitarias fora do sitemap)`,
+);
 
 // 3. Workers em lotes
 const bundleTmp = path.join(mkdtempSync(path.join(tmpdir(), "cydef-prerender-")), "app.cjs");
@@ -145,6 +155,9 @@ console.log(
 // /pt|/en|/es/academy/gratuito ficaram meses em producao com 78/81 no log).
 // O fallback fail-safe continua escrevendo o template original no dist, mas o
 // build precisa falhar: rota vazia indexada e pior que deploy bloqueado.
+// O gate vale para todas as rotas do portao, do sitemap e utilitarias: rota do
+// sitemap que falha continua reprovando o build (etapa 57), e rota utilitaria
+// que falha tambem (o shell dela iria para o ar sem conteudo e sem noindex).
 if (failed.length > 0) {
   console.error("");
   console.error(

@@ -217,8 +217,13 @@ async function main() {
 
   const title = doc.title || "CyDef";
   const lang = doc.documentElement.getAttribute("lang") || "en";
+  // canonical + hreflang + robots (o noindex das rotas utilitarias da Academy
+  // nasce no HeadSeo: sem repassar o meta, o HTML estatico publicado ficaria
+  // indexavel mesmo com a SPA emitindo noindex no cliente).
   const extra = [
-    ...doc.head.querySelectorAll('link[rel="canonical"], link[rel="alternate"]'),
+    ...doc.head.querySelectorAll(
+      'link[rel="canonical"], link[rel="alternate"], meta[name="robots"]',
+    ),
   ]
     .map((l) => l.outerHTML)
     .join("");
