@@ -25,8 +25,8 @@ export const privateAcademyPaths = (): string[] => [
   "/academy/status-confirmacao",
   // Aviso de privacidade: URL imutável por versão (HEL-M01/SEC-003). Toda
   // versão PUBLICADA continua acessível (a anterior permanece como histórico),
-  // não apenas a vigente — por isso a lista sai do AVISOS, não do
-  // PRIVACY_VERSION.
+  // não apenas a vigente: a lista sai do AVISOS, e não de um valor repetido no
+  // build (a versão vigente do link da landing vem de `versaoVigente()`).
   ...Object.keys(AVISOS)
     .sort()
     .map((versao) => `/academy/privacidade/${versao}`),
