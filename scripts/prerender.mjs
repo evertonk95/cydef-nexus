@@ -64,6 +64,12 @@ const routes = locs
   .map((loc) => new URL(loc).pathname)
   .filter((p) => p.startsWith("/"));
 console.log(`prerender: ${routes.length} rotas do sitemap`);
+if (routes.length === 0) {
+  console.error(
+    "prerender: nenhuma rota em dist/sitemap.xml. Nada foi pre-renderizado.",
+  );
+  process.exit(1);
+}
 
 // 3. Workers em lotes
 const bundleTmp = path.join(mkdtempSync(path.join(tmpdir(), "cydef-prerender-")), "app.cjs");
@@ -112,8 +118,18 @@ for (let i = 0; i < routes.length; i += CONCURRENCY) {
         continue;
       }
     }
-    const detail = (err || out || "").trim().split("\n").pop() || `exit ${code}`;
-    failed.push(`${route} (${detail.slice(0, 140)})`);
+    // A ultima linha do stderr e o ultimo frame do stack ("at main (file:///...)")
+    // com o caminho absoluto da maquina: inutil no log e ilegivel no PR. Prefere
+    // a linha com a mensagem do erro.
+    const lines = (err || out || "")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
+    const detail =
+      lines.find((l) => /Error|erro|estabilizou|inv[aá]lid/i.test(l)) ||
+      lines[lines.length - 1] ||
+      `exit ${code}`;
+    failed.push(`${route} (${detail.slice(0, 160)})`);
   }
   process.stdout.write(`\r  ${ok + failed.length}/${routes.length} rotas...`);
 }
@@ -122,4 +138,21 @@ console.log(
   `prerender: ${ok}/${routes.length} rotas com conteudo no HTML` +
     (failed.length ? ` · falhas: ${failed.join(" | ")}` : ""),
 );
-if (ok === 0) process.exit(1);
+
+// Falha parcial REPROVA o build.
+// Antes a checagem era `ok === 0`: uma rota quebrada mantinha o shell do
+// dist/404.html no index.html dela e o deploy seguia verde (as
+// /pt|/en|/es/academy/gratuito ficaram meses em producao com 78/81 no log).
+// O fallback fail-safe continua escrevendo o template original no dist, mas o
+// build precisa falhar: rota vazia indexada e pior que deploy bloqueado.
+if (failed.length > 0) {
+  console.error("");
+  console.error(
+    `prerender: BLOQUEADO. ${failed.length} de ${routes.length} rotas ficaram com o shell do 404.html:`,
+  );
+  for (const f of failed) console.error(`  - ${f}`);
+  console.error(
+    "  Corrija a rota ou rode o worker direto: node scripts/prerender-worker.mjs \"<rota>\" \"%TEMP%/cydef-prerender-*/app.cjs\" \"https://www.cydef.com.br\"",
+  );
+  process.exit(1);
+}
