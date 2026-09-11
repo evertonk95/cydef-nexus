@@ -60,8 +60,11 @@ for (const lang of LANGS) {
     urls.add(`/${lang}/${pageSlugs.courses[lang]}/${courseId}`);
   }
   urls.add(`/${lang}/academy/gratuito`);
-  // URL do Aviso de Privacidade VIGENTE (manter em sincronia com PRIVACY_VERSION em src/lib/config.ts).
-  urls.add(`/${lang}/academy/privacidade/v2026.2`);
+  // Fora do sitemap, de propósito (etapa 58): as rotas utilitárias/privadas da
+  // Academy (entrar, obrigado, status-confirmacao e o aviso de privacidade de
+  // TODA versão publicada) servem `noindex, nofollow` e não são conteúdo de
+  // descoberta. O index.html físico delas sai de src/lib/private-routes.ts
+  // (postbuild/prerender), não deste script.
 }
 
 const sorted = [...urls].sort();
