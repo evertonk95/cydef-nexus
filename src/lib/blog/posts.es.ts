@@ -1,9 +1,11 @@
 // CyDef Blog — Traducción editorial al español (fuente: canónico PT, 2026-09-03). Revisión humana vía PR.
 import type { BlogPost } from "./posts";
+import { phishingBlobPostEs } from "./posts.phishing-blob.es";
 import { claudeSkillsPostEs } from "./posts.claude-skills.es";
 import { wazuhEmMovimentoPostEs } from "./posts.wazuh.es";
 
 export const blogPostsEs: BlogPost[] = [
+  phishingBlobPostEs,
   claudeSkillsPostEs,
   wazuhEmMovimentoPostEs,
   {
