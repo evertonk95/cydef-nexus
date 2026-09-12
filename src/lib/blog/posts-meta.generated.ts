@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "phishing-blob-urls-microsoft-teams-navegador",
+    "title": "Phishing campaign builds fake login pages directly inside the victims' browser",
+    "category": "Threat Intelligence",
+    "excerpt": "A campaign analyzed by Barracuda abandons the hosted phishing page and assembles the malicious content inside the victim's browser, after a redirect chain that passes through Microsoft OAuth and Microsoft Teams.",
+    "date": "September 11, 2026",
+    "dateISO": "2026-09-11",
+    "readTime": "15 min read",
+    "image": "/assets/blog/phishing-blob-urls-microsoft-teams-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "claude-skills-seguranca-da-informacao",
     "title": "Claude Skills for Information Security: what they are, how they work, and 50 skills worth using",
     "category": "Applied AI",
@@ -242,6 +253,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "phishing-blob-urls-microsoft-teams-navegador",
+    "title": "Una campaña de phishing crea páginas falsas de login directamente en el navegador de las víctimas",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Una campaña analizada por Barracuda abandona la página de phishing hospedada y monta el contenido malicioso dentro del navegador de la víctima, después de una cadena de redireccionamientos que pasa por Microsoft OAuth y Microsoft Teams.",
+    "date": "11 de septiembre de 2026",
+    "dateISO": "2026-09-11",
+    "readTime": "15 min de lectura",
+    "image": "/assets/blog/phishing-blob-urls-microsoft-teams-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "claude-skills-seguranca-da-informacao",
     "title": "Claude Skills para la Seguridad de la Información: qué son, cómo funcionan y 50 skills que valen la pena",

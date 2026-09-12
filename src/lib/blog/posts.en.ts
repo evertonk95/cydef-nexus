@@ -1,9 +1,11 @@
 ﻿// CyDef Blog — English editorial translation (source: PT canonical, 2026-09-03). Human review via PR.
 import type { BlogPost } from "./posts";
+import { phishingBlobPostEn } from "./posts.phishing-blob.en";
 import { claudeSkillsPostEn } from "./posts.claude-skills.en";
 import { wazuhEmMovimentoPostEn } from "./posts.wazuh.en";
 
 export const blogPostsEn: BlogPost[] = [
+  phishingBlobPostEn,
   claudeSkillsPostEn,
   wazuhEmMovimentoPostEn,
   {
