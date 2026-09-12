@@ -119,6 +119,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "phishing-blob-urls-microsoft-teams-navegador",
+    "title": "Campanha de phishing cria páginas falsas de login diretamente no navegador das vítimas",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "Uma campanha analisada pela Barracuda abandona a página de phishing hospedada e monta o conteúdo malicioso dentro do navegador da vítima, depois de uma cadeia de redirecionamentos que passa por Microsoft OAuth e Microsoft Teams.",
+    "date": "11 de Setembro, 2026",
+    "dateISO": "2026-09-11",
+    "readTime": "15 min",
+    "image": "/assets/blog/phishing-blob-urls-microsoft-teams-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "claude-skills-seguranca-da-informacao",
     "title": "Claude Skills para Segurança da Informação: o que são, como funcionam e 50 skills que valem a pena",
     "category": "IA Aplicada",
