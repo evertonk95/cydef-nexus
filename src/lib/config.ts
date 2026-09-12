@@ -1,3 +1,5 @@
+import { versaoVigente } from "@/lib/academy/consent";
+
 /**
  * Configuração única da landing da CyDef Academy (fase protótipo/validação).
  *
@@ -5,14 +7,17 @@
  *   aqui + sitemap no go-live, S-10).
  * - Aviso de Privacidade imutável por versão (HEL-M01): a URL contém a versão;
  *   o conteúdo publicado de uma versão nunca é sobrescrito.
+ * - Versão vigente do aviso: fonte única é `versaoVigente()`
+ *   (src/lib/academy/consent.ts, última entrada de AVISOS, o conteúdo
+ *   publicado). O link da landing deriva dela: publicar uma versão nova passa
+ *   a valer sozinho, sem constante paralela para esquecer de atualizar.
  */
 
 export const LANDING_PATH = "/academy/gratuito";
 
-/** Versão vigente do Aviso de Privacidade da landing. */
-export const PRIVACY_VERSION = "v2026.2";
-
-export const privacyPath = (version: string = PRIVACY_VERSION) =>
+/** URL do Aviso de Privacidade. Sem argumento usa a versão VIGENTE publicada;
+ *  com argumento serve versões históricas (imutabilidade por versão, HEL-M01). */
+export const privacyPath = (version: string = versaoVigente()) =>
   `/academy/privacidade/${version}`;
 
 /** Página neutra para onde todos os desfechos do token de confirmação redirecionam (HEL-M02/M05). */

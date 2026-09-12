@@ -5,7 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import i18n, { ensureLang } from "@/i18n";
 import AcademyLanding from "../index";
 import { expectNoViolations } from "@/test/axe";
-import { PRIVACY_VERSION } from "@/lib/config";
+import { versaoVigente } from "@/lib/academy/consent";
 
 /**
  * S-02 — walking skeleton: landing estática na rota /academy/gratuito.
@@ -74,10 +74,13 @@ describe("AcademyLanding (S-02)", () => {
     await expectNoViolations(container);
   });
 
-  it("link do Aviso de Privacidade aponta para versão imutável (M01)", () => {
+  it("link do Aviso de Privacidade aponta para a versão vigente publicada (M01)", () => {
     renderLanding();
     const aviso = screen.getByRole("link", { name: "Aviso de Privacidade" });
-    expect(aviso).toHaveAttribute("href", `/pt/academy/privacidade/${PRIVACY_VERSION}`);
+    expect(aviso).toHaveAttribute(
+      "href",
+      `/pt/academy/privacidade/${versaoVigente()}`,
+    );
   });
 
   it("formulário em estado 'inscrições em breve' (capture off) — NENHUM input de PII na rede", async () => {

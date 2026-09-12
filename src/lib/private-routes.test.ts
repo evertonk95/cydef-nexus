@@ -4,8 +4,7 @@ import {
   privateRoutesForLang,
   isPrivateAcademyPath,
 } from "@/lib/private-routes";
-import { AVISOS } from "@/lib/academy/consent";
-import { PRIVACY_VERSION } from "@/lib/config";
+import { AVISOS, versaoVigente } from "@/lib/academy/consent";
 
 /**
  * Etapa 58: rotas utilitárias/privadas da Academy que ficam FORA do sitemap
@@ -22,8 +21,9 @@ describe("rotas utilitárias/privadas da Academy", () => {
     for (const versao of Object.keys(AVISOS)) {
       expect(paths).toContain(`/academy/privacidade/${versao}`);
     }
-    // versão vigente entra pelo AVISOS, não por um valor repetido no build
-    expect(paths).toContain(`/academy/privacidade/${PRIVACY_VERSION}`);
+    // A versão vigente entra pelo AVISOS, não por um valor repetido no build:
+    // é a mesma fonte que o link da landing usa (privacyPath)
+    expect(paths).toContain(`/academy/privacidade/${versaoVigente()}`);
     // v2026.1 continua acessível como histórico (imutabilidade HEL-M01)
     expect(paths).toContain("/academy/privacidade/v2026.1");
     expect(new Set(paths).size).toBe(paths.length);

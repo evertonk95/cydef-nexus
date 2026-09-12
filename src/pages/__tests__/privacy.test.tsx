@@ -3,14 +3,19 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import i18n, { ensureLang } from "@/i18n";
 import AcademyPrivacy from "../AcademyPrivacy";
-import { PRIVACY_VERSION } from "@/lib/config";
+import { versaoVigente } from "@/lib/academy/consent";
 
 /**
  * S-04 — aviso de privacidade por versão (HEL-M01/SEC-003):
  * URL imutável /academy/privacidade/v<versão>; conteúdo da versão publicado
  * nunca sobrescrito; versão inexistente → página neutra. Versões anteriores
  * permanecem acessíveis como histórico (imutabilidade preservada).
+ *
+ * A versão vigente vem de `versaoVigente()` (fonte única do conteúdo
+ * publicado): a página e o link da landing não podem divergir dela.
  */
+
+const VIGENTE = versaoVigente();
 
 function renderPrivacy(versao: string) {
   return render(
@@ -29,18 +34,18 @@ describe("AcademyPrivacy (S-04)", () => {
   });
 
   it("renderiza a versão vigente com cabeçalho correto", async () => {
-    renderPrivacy(PRIVACY_VERSION);
+    renderPrivacy(VIGENTE);
     expect(
       await screen.findByRole("heading", { level: 1, name: /Aviso de Privacidade/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(`versão ${PRIVACY_VERSION}`, "i"))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`versão ${VIGENTE}`, "i"))).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /Quem é o controlador/i }),
     ).toBeInTheDocument();
   });
 
   it("exibe o hash SHA-256 da versão (integridade — M01)", async () => {
-    renderPrivacy(PRIVACY_VERSION);
+    renderPrivacy(VIGENTE);
     const hash = await screen.findByText(/^[0-9a-f]{64}$/);
     expect(hash).toBeInTheDocument();
   });
@@ -59,7 +64,7 @@ describe("AcademyPrivacy (S-04)", () => {
   });
 
   it("link de volta aponta para a landing", () => {
-    renderPrivacy(PRIVACY_VERSION);
+    renderPrivacy(VIGENTE);
     expect(screen.getAllByRole("link", { name: /Voltar para a pré-inscrição/i }).length).toBeGreaterThan(0);
   });
 });
