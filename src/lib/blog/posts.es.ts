@@ -3,8 +3,10 @@ import type { BlogPost } from "./posts";
 import { phishingBlobPostEs } from "./posts.phishing-blob.es";
 import { claudeSkillsPostEs } from "./posts.claude-skills.es";
 import { wazuhEmMovimentoPostEs } from "./posts.wazuh.es";
+import { ciscoSegEmailGatewayPostEs } from "./posts.cisco-seg-email-gateway.es";
 
 export const blogPostsEs: BlogPost[] = [
+  ciscoSegEmailGatewayPostEs,
   phishingBlobPostEs,
   claudeSkillsPostEs,
   wazuhEmMovimentoPostEs,

@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
+    "title": "Zero-day in Cisco Secure Email Gateway allows command execution as root",
+    "category": "Threat Intelligence",
+    "excerpt": "Cisco confirmed active exploitation of an SQL injection flaw in AsyncOS email processing, tracked as CVE-2026-76461: a remote, unauthenticated attacker can reach command execution with root privileges on the appliance.",
+    "date": "September 15, 2026",
+    "dateISO": "2026-09-15",
+    "readTime": "10 min read",
+    "image": "/assets/blog/cisco-secure-email-gateway-zero-day-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "phishing-blob-urls-microsoft-teams-navegador",
     "title": "Phishing campaign builds fake login pages directly inside the victims' browser",
     "category": "Threat Intelligence",
@@ -264,6 +275,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
+    "title": "Zero-day en Cisco Secure Email Gateway permite ejecución de comandos como root",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Cisco confirmó la explotación activa de una falla de inyección SQL en el procesamiento de correos del AsyncOS, rastreada como CVE-2026-76461: un atacante remoto y no autenticado puede llegar a la ejecución de comandos con privilegios de root en el appliance.",
+    "date": "15 de septiembre de 2026",
+    "dateISO": "2026-09-15",
+    "readTime": "10 min de lectura",
+    "image": "/assets/blog/cisco-secure-email-gateway-zero-day-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "phishing-blob-urls-microsoft-teams-navegador",
     "title": "Una campaña de phishing crea páginas falsas de login directamente en el navegador de las víctimas",
