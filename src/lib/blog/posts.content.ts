@@ -2,6 +2,7 @@ import { extraPosts } from "./posts-extra.generated";
 import { claudeSkillsPost } from "./posts.claude-skills";
 import { wazuhEmMovimentoPost } from "./posts.wazuh";
 import { phishingBlobPost } from "./posts.phishing-blob";
+import { ciscoSegEmailGatewayPost } from "./posts.cisco-seg-email-gateway";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -15,6 +16,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  ciscoSegEmailGatewayPost,
   phishingBlobPost,
   claudeSkillsPost,
   wazuhEmMovimentoPost,
