@@ -49,4 +49,65 @@ describe("HeadSeo · robôs por tipo de rota", () => {
       document.head.querySelector('link[rel="canonical"]')?.getAttribute("href"),
     ).toBe("https://www.cydef.com.br/pt/academy/gratuito/");
   });
+
+  /**
+   * Correção de 18/09/2026 (avisos do GSC de 16/09): canonical e hreflang
+   * passam a usar a forma servida pelo GitHub Pages (COM barra final), a mesma
+   * que o sitemap emite (guarda: sitemap-forma-canonica.test.ts).
+   */
+  const href = (selector: string) =>
+    document.head.querySelector(selector)?.getAttribute("href");
+
+  it("emite canonical com barra final em página localizada", () => {
+    renderAt("/en/about/");
+    expect(href('link[rel="canonical"]')).toBe(
+      "https://www.cydef.com.br/en/about/",
+    );
+  });
+
+  it("aplica a forma com barra em hreflang e x-default", () => {
+    renderAt("/en/about/");
+    expect(href('link[rel="alternate"][hreflang="pt"]')).toBe(
+      "https://www.cydef.com.br/pt/sobre/",
+    );
+    expect(href('link[rel="alternate"][hreflang="en"]')).toBe(
+      "https://www.cydef.com.br/en/about/",
+    );
+    expect(href('link[rel="alternate"][hreflang="es"]')).toBe(
+      "https://www.cydef.com.br/es/nosotros/",
+    );
+    expect(href('link[rel="alternate"][hreflang="x-default"]')).toBe(
+      "https://www.cydef.com.br/en/about/",
+    );
+  });
+
+  it("dá a mesma forma à rota com e sem barra final", () => {
+    renderAt("/pt/sobre");
+    renderAt("/pt/sobre/");
+    const canonicals = [
+      ...document.head.querySelectorAll('link[rel="canonical"]'),
+    ].map((el) => el.getAttribute("href"));
+    expect(canonicals).toEqual([
+      "https://www.cydef.com.br/pt/sobre/",
+      "https://www.cydef.com.br/pt/sobre/",
+    ]);
+  });
+
+  it("mantém alternate de artigo com a forma canônica", () => {
+    renderAt("/pt/blog/wazuh-em-movimento/");
+    expect(href('link[rel="canonical"]')).toBe(
+      "https://www.cydef.com.br/pt/blog/wazuh-em-movimento/",
+    );
+    expect(href('link[rel="alternate"][hreflang="en"]')).toBe(
+      "https://www.cydef.com.br/en/blog/wazuh-em-movimento/",
+    );
+  });
+
+  it("não emite robots em rota pública com barra final", () => {
+    renderAt("/pt/academy/gratuito/");
+    expect(robots()).toBeNull();
+    expect(href('link[rel="canonical"]')).toBe(
+      "https://www.cydef.com.br/pt/academy/gratuito/",
+    );
+  });
 });
