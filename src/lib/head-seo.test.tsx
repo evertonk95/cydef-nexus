@@ -47,6 +47,6 @@ describe("HeadSeo · robôs por tipo de rota", () => {
     renderAt("/pt/academy/gratuito");
     expect(
       document.head.querySelector('link[rel="canonical"]')?.getAttribute("href"),
-    ).toBe("https://www.cydef.com.br/pt/academy/gratuito");
+    ).toBe("https://www.cydef.com.br/pt/academy/gratuito/");
   });
 });
