@@ -55,3 +55,34 @@ export const localizePath = (path: string, toLang: Lang, fromLang?: Lang): strin
   const tail = rest.length > 0 ? `/${rest.join("/")}` : "";
   return `/${toLang}/${firstOut}${tail}${hash}`;
 };
+
+/** Separa `caminho` de `?query#hash` (o sufixo volta intacto). */
+const splitSuffix = (path: string): [string, string] => {
+  const i = path.search(/[?#]/);
+  return i >= 0 ? [path.slice(0, i), path.slice(i)] : [path, ""];
+};
+
+/**
+ * Forma canonica real do site: COM barra final.
+ *
+ * O `scripts/postbuild.mjs` grava um arquivo fisico por rota
+ * (`dist/<rota>/index.html`) e o GitHub Pages responde 301 de `/<rota>` para
+ * `/<rota>/`. Sitemap (`scripts/gen-sitemap.mjs`), canonical e hreflang
+ * (`@/lib/head-seo`) usam ESTA funcao, e so ela, para nao divergirem de novo:
+ * a divergencia (sitemap sem barra + canonica sem barra) gerou os avisos de
+ * "Pagina com redirecionamento" e "Pagina alternativa com tag canonica
+ * adequada" no GSC em 16/09/2026.
+ */
+export const withTrailingSlash = (path: string): string => {
+  const [base, suffix] = splitSuffix(path);
+  if (base === "" || base === "/") return `/${suffix}`;
+  return base.endsWith("/") ? `${base}${suffix}` : `${base}/${suffix}`;
+};
+
+/** Forma sem barra final (navegacao interna e comparação de slug de
+ *  conteudo, ex.: `/blog/<slug>` no HeadSeo). A raiz continua `/`. */
+export const withoutTrailingSlash = (path: string): string => {
+  const [base, suffix] = splitSuffix(path);
+  const trimmed = base.replace(/\/+$/, "");
+  return `${trimmed === "" ? "/" : trimmed}${suffix}`;
+};

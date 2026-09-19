@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { DEFAULT_LANG, isLang, type Lang } from "@/i18n";
-import { localizePath } from "@/lib/routes";
+import { localizePath, withTrailingSlash, withoutTrailingSlash } from "@/lib/routes";
 import { SITE_ORIGIN } from "@/lib/site";
 import { postMetaBySlug } from "@/lib/blog/posts";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
@@ -50,17 +50,25 @@ export const HeadSeo = () => {
   })();
 
   useEffect(() => {
-    const base =
+    // A rota chega com barra final (forma servida pelo GitHub Pages) ou sem
+    // (navegacao SPA). O base interno e sempre SEM barra: os helpers de
+    // conteudo (blog/labs) casam o pathname sem barra.
+    const base = withoutTrailingSlash(
       pathname === `/${l}` || pathname === `/${l}/`
         ? "/"
-        : pathname.replace(`/${l}`, "");
+        : pathname.replace(`/${l}`, ""),
+    );
+    // Canonical e hreflang na forma COM barra final, a mesma que o sitemap
+    // emite: /en/about responde 301 para /en/about/, entao a canonica sem
+    // barra apontava para uma URL que redireciona.
+    const canonical = `${SITE_ORIGIN}${withTrailingSlash(localizePath(base, l, l))}`;
     const links: { rel: string; href: string; hreflang?: string }[] = [
-      { rel: "canonical", href: `${SITE_ORIGIN}${localizePath(base, l, l)}` },
+      { rel: "canonical", href: canonical },
     ];
     let enHref: string | undefined;
     for (const t of ["pt", "en", "es"] as Lang[]) {
       if (!hasContentFor(base, t)) continue;
-      const href = `${SITE_ORIGIN}${localizePath(base, t, l)}`;
+      const href = `${SITE_ORIGIN}${withTrailingSlash(localizePath(base, t, l))}`;
       links.push({ rel: "alternate", hreflang: t, href });
       if (t === "en") enHref = href;
     }
@@ -69,7 +77,7 @@ export const HeadSeo = () => {
     links.push({
       rel: "alternate",
       hreflang: "x-default",
-      href: enHref ?? `${SITE_ORIGIN}${localizePath(base, l, l)}`,
+      href: enHref ?? canonical,
     });
 
     const head = document.head;
