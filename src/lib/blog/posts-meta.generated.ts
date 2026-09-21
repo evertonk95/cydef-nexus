@@ -141,6 +141,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
+    "title": "Click2Shell: falha no WordPress instala tema pelo link e leva à execução remota de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "Uma cadeia de exploração no recurso de visualização de temas do WordPress instala silenciosamente um tema do diretório oficial depois que um administrador autenticado abre um link malicioso. Encadeada com código inseguro do tema instalado, a falha termina em execução remota de código no servidor. A correção chegou na versão 7.1.1.",
+    "date": "21 de Setembro, 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "9 min",
+    "image": "/assets/blog/click2shell-wordpress-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
     "title": "Zero-day no Cisco Secure Email Gateway permite execução de comandos como root",
     "category": "Inteligência de Ameaças",
