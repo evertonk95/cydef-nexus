@@ -5,9 +5,11 @@ import { claudeSkillsPostEs } from "./posts.claude-skills.es";
 import { wazuhEmMovimentoPostEs } from "./posts.wazuh.es";
 import { ciscoSegEmailGatewayPostEs } from "./posts.cisco-seg-email-gateway.es";
 import { cloudflareContainersTenantsPostEs } from "./posts.cloudflare-containers-tenants.es";
+import { click2shellWordpressPostEs } from "./posts.click2shell-wordpress.es";
 
 export const blogPostsEs: BlogPost[] = [
   cloudflareContainersTenantsPostEs,
+  click2shellWordpressPostEs,
   ciscoSegEmailGatewayPostEs,
   phishingBlobPostEs,
   claudeSkillsPostEs,

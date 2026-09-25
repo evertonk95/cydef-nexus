@@ -17,6 +17,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
     "author": "CyDef Team"
   },
   {
+    "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
+    "title": "Click2Shell: WordPress flaw installs a theme via link and leads to remote code execution",
+    "category": "Threat Intelligence",
+    "excerpt": "An exploitation chain in the WordPress theme preview feature silently installs a theme from the official directory after an authenticated administrator opens a malicious link. Chained with insecure code from the installed theme, the flaw ends in remote code execution on the server. The fix arrived in version 7.1.1.",
+    "date": "September 21, 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "9 min read",
+    "image": "/assets/blog/click2shell-wordpress-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
     "title": "Zero-day in Cisco Secure Email Gateway allows command execution as root",
     "category": "Threat Intelligence",
@@ -317,6 +328,17 @@ export const blogPostsEsMeta: BlogPostMeta[] = [
     "dateISO": "2026-09-25",
     "readTime": "11 min de lectura",
     "image": "/assets/blog/cloudflare-containers-cross-tenant-thumb.webp",
+    "author": "Equipo CyDef"
+  },
+  {
+    "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
+    "title": "Click2Shell: falla en WordPress instala un tema desde el enlace y lleva a la ejecución remota de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Una cadena de explotación en el recurso de visualización de temas de WordPress instala silenciosamente un tema del directorio oficial después de que un administrador autenticado abre un enlace malicioso. Encadenada con código inseguro del tema instalado, la falla termina en ejecución remota de código en el servidor. La corrección llegó en la versión 7.1.1.",
+    "date": "21 de septiembre de 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "9 min de lectura",
+    "image": "/assets/blog/click2shell-wordpress-thumb.webp",
     "author": "Equipo CyDef"
   },
   {
