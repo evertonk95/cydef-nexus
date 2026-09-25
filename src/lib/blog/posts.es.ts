@@ -4,8 +4,10 @@ import { phishingBlobPostEs } from "./posts.phishing-blob.es";
 import { claudeSkillsPostEs } from "./posts.claude-skills.es";
 import { wazuhEmMovimentoPostEs } from "./posts.wazuh.es";
 import { ciscoSegEmailGatewayPostEs } from "./posts.cisco-seg-email-gateway.es";
+import { cloudflareContainersTenantsPostEs } from "./posts.cloudflare-containers-tenants.es";
 
 export const blogPostsEs: BlogPost[] = [
+  cloudflareContainersTenantsPostEs,
   ciscoSegEmailGatewayPostEs,
   phishingBlobPostEs,
   claudeSkillsPostEs,
