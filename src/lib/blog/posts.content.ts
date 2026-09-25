@@ -5,6 +5,7 @@ import { phishingBlobPost } from "./posts.phishing-blob";
 import { ciscoSegEmailGatewayPost } from "./posts.cisco-seg-email-gateway";
 import { click2shellWordpressPost } from "./posts.click2shell-wordpress";
 import { cloudflareContainersTenantsPost } from "./posts.cloudflare-containers-tenants";
+import { rathatAndroidTrojanPost } from "./posts.rathat-android-trojan";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -19,6 +20,7 @@ import type { Lang } from "@/i18n";
  */
 export const blogPosts: BlogPost[] = [
   cloudflareContainersTenantsPost,
+  rathatAndroidTrojanPost,
   click2shellWordpressPost,
   ciscoSegEmailGatewayPost,
   phishingBlobPost,

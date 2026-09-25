@@ -174,6 +174,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
     "author": "Equipe CyDef"
   },
   {
+    "slug": "rathat-trojan-bancario-android-controle-ia",
+    "title": "RatHat: trojan bancário no Android usa IA para roubar credenciais, códigos e reconstruir PINs",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "Um trojan bancário para Android identificado como RatHat combina engenharia social, abuso do serviço de acessibilidade e uso indevido do Android Debug Bridge para sobrepor telas de aplicativos financeiros, interceptar códigos de autenticação e reconstruir PINs e padrões de desbloqueio a partir das coordenadas de toque.",
+    "date": "21 de Setembro, 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "10 min",
+    "image": "/assets/blog/rathat-android-banking-trojan-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
     "title": "Click2Shell: falha no WordPress instala tema pelo link e leva à execução remota de código",
     "category": "Inteligência de Ameaças",
