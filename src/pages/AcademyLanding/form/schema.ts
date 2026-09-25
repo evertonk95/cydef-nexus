@@ -32,15 +32,15 @@ export const buildPreEnrollmentSchema = (t: TFunc) =>
         message: t("form.errors.emailInvalid"),
       }),
     perfil: z.enum(PERFIL_VALUES, {
-      errorMap: () => ({ message: t("form.errors.perfilReq") }),
+      error: t("form.errors.perfilReq"),
     }),
     aceito: z
-      .boolean({ errorMap: () => ({ message: t("form.errors.aceitoReq") }) })
+      .boolean({ error: t("form.errors.aceitoReq") })
       .refine((v) => v === true, {
         message: t("form.errors.aceitoReq"),
       }),
     declaracao_idade: z
-      .boolean({ errorMap: () => ({ message: t("form.errors.idadeReq") }) })
+      .boolean({ error: t("form.errors.idadeReq") })
       .refine((v) => v === true, {
         message: t("form.errors.idadeReq"),
       }),
