@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "cloudflare-containers-isolamento-entre-tenants",
+    "title": "Cloudflare Containers: cross-tenant isolation flaw exposed residual data from previous workloads",
+    "category": "Cloud Security",
+    "excerpt": "A flaw in the storage layer of Cloudflare Containers shared pools allowed a workload to recover residual disk blocks left behind by containers belonging to other customers on the same physical host. The exposure reached file system metadata, database pages, and structurally complete SQLite databases. The fix has already been applied across the entire fleet, with no change to customer-side configuration.",
+    "date": "September 25, 2026",
+    "dateISO": "2026-09-25",
+    "readTime": "11 min read",
+    "image": "/assets/blog/cloudflare-containers-cross-tenant-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
     "title": "Zero-day in Cisco Secure Email Gateway allows command execution as root",
     "category": "Threat Intelligence",
@@ -140,6 +151,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "cloudflare-containers-isolamento-entre-tenants",
+    "title": "Cloudflare Containers: falha de isolamento entre tenants expunha dados residuais de cargas de trabalho anteriores",
+    "category": "Cloud Security",
+    "excerpt": "Uma falha na camada de armazenamento dos pools compartilhados do Cloudflare Containers permitia que uma carga de trabalho recuperasse blocos de disco residuais de contêineres de outros clientes no mesmo host físico. A exposição alcançava metadados de sistema de arquivos, páginas de banco de dados e bancos SQLite estruturalmente completos. A correção já foi aplicada em toda a frota, sem alteração de configuração do lado do cliente.",
+    "date": "25 de Setembro, 2026",
+    "dateISO": "2026-09-25",
+    "readTime": "11 min",
+    "image": "/assets/blog/cloudflare-containers-cross-tenant-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
     "title": "Click2Shell: falha no WordPress instala tema pelo link e leva à execução remota de código",
@@ -286,6 +308,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "cloudflare-containers-isolamento-entre-tenants",
+    "title": "Cloudflare Containers: falla de aislamiento entre tenants exponía datos residuales de cargas de trabajo anteriores",
+    "category": "Seguridad en la Nube",
+    "excerpt": "Una falla en la capa de almacenamiento de los pools compartidos de Cloudflare Containers permitía que una carga de trabajo recuperara bloques de disco residuales de contenedores de otros clientes en el mismo host físico. La exposición alcanzaba metadatos de sistema de archivos, páginas de base de datos y bases SQLite estructuralmente completas. La corrección ya se aplicó en toda la flota, sin alteración de configuración del lado del cliente.",
+    "date": "25 de septiembre de 2026",
+    "dateISO": "2026-09-25",
+    "readTime": "11 min de lectura",
+    "image": "/assets/blog/cloudflare-containers-cross-tenant-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "cisco-secure-email-gateway-cve-2026-76461-root",
     "title": "Zero-day en Cisco Secure Email Gateway permite ejecución de comandos como root",
