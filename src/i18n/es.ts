@@ -172,6 +172,10 @@ export const es: Dict = {
     nowBody2: "Dudas sobre el sitio, el contenido o los servicios: contato@cydef.com.br.",
     version: "v0.1: borrador · 03/09/2026",
   },
+  privacy: {
+    title: "Política de Privacidad",
+    lead: "Cómo trata CyDef los datos personales en este sitio y cómo puedes ejercer tus derechos.",
+  },
   academy: {
     badge: "Educación de entrada gratuita",
     h1: "CyDef Academy",
