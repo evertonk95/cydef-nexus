@@ -1,9 +1,11 @@
-// og:* e twitter:* por rota (etapa 81).
+// og:* e twitter:* por rota (etapa 81) e a descrição da rota (etapa 83).
 //
 // O que existia: nada no app emitia og/twitter, então TODA página interna servia
 // o mesmo card do template index.html (título e descrição da home, og:url da
 // raiz, imagem genérica). Compartilhar um artigo no LinkedIn/WhatsApp/X mostrava
-// o card da home apontando para a raiz.
+// o card da home apontando para a raiz. A mesma lacuna valia para a meta
+// description: o trecho que o buscador mostra vinha igual em todas as páginas, em
+// qualquer idioma (etapa 83).
 //
 // O que entra aqui: título e descrição do conteúdo da rota (metadados do artigo,
 // i18n da página/artefato) e a imagem do conteúdo, no idioma da rota. É módulo
@@ -85,8 +87,8 @@ const resolveKeys = (
   description: keys.description.map((key) => String(t(key))).join(" "),
 });
 
-/**
- * og da rota. `base` é o caminho SEM idioma e SEM barra final (a mesma forma que
+/** og da rota e descrição dela (a mesma string alimenta a meta description).
+ *  `base` é o caminho SEM idioma e SEM barra final (a mesma forma que
  * o HeadSeo usa para casar conteúdo); `t` traduz no idioma ativo (o mesmo que a
  * página renderiza) e `siteTitle` é o título do site no idioma ativo.
  *
