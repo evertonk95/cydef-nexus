@@ -35,10 +35,14 @@ export interface OgMeta {
 /** og das páginas com slug localizado (PageRouter): título e descrição do i18n
  *  da própria página (o mesmo texto que a página renderiza).
  *
- *  `courses` fica fora de propósito: `/cursos` não tem página hoje (o
- *  PageRouter cai no NotFound) e o sitemap lista a URL mesmo assim. Card de
- *  catálogo de cursos num 404 mentiria sobre o conteúdo da página. */
-const PAGE_OG: Partial<Record<PageKey, OgKeys>> = {
+ *  O tipo cheio (`Record<PageKey, …>`) cobra uma entrada por página de
+ *  `pageSlugs`: página nova sem og cairia no card da home em produção.
+ *
+ *  Área de cursos não entra: `courses` é prefixo de conteúdo
+ *  (`/<lang>/cursos/<courseId>`), não página (etapa 82, ver routes.ts). As
+ *  páginas de detalhe de curso seguem com o card do site (og por curso é
+ *  follow-up anotado). */
+const PAGE_OG: Record<PageKey, OgKeys> = {
   about: { title: ["about.h1a", "about.h1b"], description: ["about.lead"] },
   ecosystem: { title: ["services.h1a", "services.h1b"], description: ["services.lead"] },
   academy: { title: ["academy.h1"], description: ["academy.lead"] },
