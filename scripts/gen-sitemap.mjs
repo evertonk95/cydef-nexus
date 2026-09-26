@@ -45,7 +45,7 @@ async function load(entry) {
 }
 
 const [
-  { pageSlugs, withTrailingSlash },
+  { pageSlugs, contentAreaSlugs, withTrailingSlash },
   { postsMetaByLang },
   { courseDataPt },
   { labsSlugsForLang },
@@ -66,7 +66,12 @@ const add = (path, lastmod = BUILD_DATE) => {
 
 for (const lang of LANGS) {
   add(`/${lang}/`);
-  for (const key of ["about", "ecosystem", "academy", "labs", "research", "blog", "contact", "privacy", "terms", "courses"]) {
+  // Páginas do PageRouter. A lista sai do próprio `pageSlugs` (fonte única com o
+  // PAGE_COMPONENTS de src/lib/SeoRouter.tsx, que o typecheck mantém em par):
+  // lista hardcoded aqui e chave sem componente lá foi o que publicou
+  // `/pt|/en|/es/(cursos|courses)/` sem página nenhuma (soft-404 da etapa 81,
+  // corrigido na etapa 82 — a chave de área saiu de `pageSlugs`).
+  for (const key of Object.keys(pageSlugs)) {
     add(`/${lang}/${pageSlugs[key][lang]}`);
   }
   // Slugs universais de artigos: iterar o meta DE CADA idioma (P3-01/F3: um
@@ -81,7 +86,9 @@ for (const lang of LANGS) {
     add(`/${lang}/${pageSlugs.labs[lang]}/${slug}`);
   }
   for (const courseId of Object.keys(courseDataPt)) {
-    add(`/${lang}/${pageSlugs.courses[lang]}/${courseId}`);
+    // Área de cursos: o slug localizado é prefixo de conteúdo
+    // (`contentAreaSlugs`), não página — a URL publicada é a de detalhe.
+    add(`/${lang}/${contentAreaSlugs.courses[lang]}/${courseId}`);
   }
   add(`/${lang}/academy/gratuito`);
   // Fora do sitemap, de propósito (etapa 58): as rotas utilitárias/privadas da

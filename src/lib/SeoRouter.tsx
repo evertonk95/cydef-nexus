@@ -1,21 +1,16 @@
 import { Navigate, useParams } from "react-router-dom";
 import { DEFAULT_LANG, isLang, type Lang } from "@/i18n";
-import { pageKeyForSlug, slugFor, type PageKey } from "@/lib/routes";
-import About from "../pages/About";
-import Services from "../pages/Services";
-import Labs from "../pages/Labs";
-import Research from "../pages/Research";
-import Academy from "../pages/Academy";
-import Blog from "../pages/Blog";
-import Contact from "../pages/Contact";
-import Privacy from "../pages/Privacy";
-import Terms from "../pages/Terms";
+import { areaSlugFor, pageKeyForSlug, slugFor, type PageKey } from "@/lib/routes";
+import { PAGE_COMPONENTS } from "@/lib/page-components";
 import NotFound from "../pages/NotFound";
 import CoursePage from "../pages/CoursePage";
 
 import { SITE_ORIGIN } from "@/lib/site";
 export { SITE_ORIGIN };
-/** Resolves a first-segment page (localized slugs + alias redirects). */
+/** Resolves a first-segment page (localized slugs + alias redirects).
+ *  O componente de cada página vem de `PAGE_COMPONENTS`
+ *  (src/lib/page-components.ts): mapa tipado por `PageKey`, então página nova
+ *  sem componente não passa no typecheck e não chega aqui como NotFound. */
 export const PageRouter = () => {
   const { lang, page } = useParams();
   const l: Lang = isLang(lang) ? lang : DEFAULT_LANG;
@@ -37,40 +32,20 @@ export const PageRouter = () => {
   const canonical = slugFor(key, l);
   if (page !== canonical) return <Navigate to={`/${l}/${canonical}`} replace />;
 
-  switch (key) {
-    case "about":
-      return <About />;
-    case "ecosystem":
-      return <Services />;
-    case "academy":
-      return <Academy />;
-    case "labs":
-      return <Labs />;
-    case "research":
-      return <Research />;
-    case "blog":
-      return <Blog />;
-    case "contact":
-      return <Contact />;
-    case "privacy":
-      return <Privacy />;
-    case "terms":
-      return <Terms />;
-    default:
-      return <NotFound />;
-  }
+  const Page = PAGE_COMPONENTS[key];
+  return <Page />;
 };
 
 /** Área de cursos com slug localizado + redirect de área legada. */
 export const CourseArea = () => {
   const { lang, area, courseId } = useParams();
   const l: Lang = isLang(lang) ? lang : DEFAULT_LANG;
-  const allowed = slugFor("courses", l);
+  const allowed = areaSlugFor("courses", l);
   if (!area) return <NotFound />;
   if (area !== allowed) {
     // Slug de área de outro idioma (ex.: /en/cursos/x, /pt/courses/x) → canônico.
     const known = (["pt", "en", "es"] as Lang[]).some(
-      (lg) => slugFor("courses", lg) === area,
+      (lg) => areaSlugFor("courses", lg) === area,
     );
     if (!known) return <NotFound />;
     return <Navigate to={`/${l}/${allowed}/${courseId}`} replace />;

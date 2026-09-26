@@ -8,7 +8,7 @@
 import type { Lang } from "@/i18n";
 import type { BlogPost } from "@/lib/blog/posts";
 import { SITE_ORIGIN } from "@/lib/site";
-import { slugFor } from "@/lib/routes";
+import { areaSlugFor } from "@/lib/routes";
 
 /** schema.org inLanguage: pt -> pt-BR; en/es são códigos válidos diretos. */
 const htmlLang = (lang: Lang): string => (lang === "pt" ? "pt-BR" : lang);
@@ -100,7 +100,7 @@ export const courseLd = ({
   name,
   description,
   inLanguage: htmlLang(lang),
-  url: `${SITE_ORIGIN}/${lang}/${slugFor("courses", lang)}/${courseId}`,
+  url: `${SITE_ORIGIN}/${lang}/${areaSlugFor("courses", lang)}/${courseId}`,
   provider: {
     "@type": "Organization",
     "@id": `${SITE_ORIGIN}/#org`,
