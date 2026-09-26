@@ -219,16 +219,25 @@ async function main() {
   const lang = doc.documentElement.getAttribute("lang") || "en";
   // canonical + hreflang + robots (o noindex das rotas utilitarias da Academy
   // nasce no HeadSeo: sem repassar o meta, o HTML estatico publicado ficaria
-  // indexavel mesmo com a SPA emitindo noindex no cliente).
+  // indexavel mesmo com a SPA emitindo noindex no cliente) + og/twitter do
+  // conteudo da rota (etapa 81: sem eles o HTML servido de toda pagina interna
+  // ficava com o card da home do template index.html).
   const extra = [
     ...doc.head.querySelectorAll(
-      'link[rel="canonical"], link[rel="alternate"], meta[name="robots"]',
+      'link[rel="canonical"], link[rel="alternate"], meta[name="robots"], meta[property^="og:"], meta[name^="twitter:"]',
     ),
   ]
     .map((l) => l.outerHTML)
     .join("");
 
   let out = template
+    // As og/twitter do template (card da home) valem para a raiz/404: nas rotas
+    // pre-renderizadas quem manda sao as do conteudo da rota, entao as antigas
+    // saem antes do append (uma pagina, um og:title).
+    .replace(
+      /<meta\s[^>]*(?:property="og:[^"]*"|name="twitter:[^"]*")[^>]*>\s*/g,
+      "",
+    )
     .replace(/<html[^>]*>/, `<html lang="${lang}">`)
     .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
     .replace(/<div id="root"><\/div>/, `<div id="root">${rootHtml}</div>`);

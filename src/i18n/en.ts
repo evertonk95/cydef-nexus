@@ -171,6 +171,10 @@ export const en = {
     nowBody2: "Questions about the site, content or services: contato@cydef.com.br.",
     version: "v0.1: draft · Sep 3, 2026",
   },
+  privacy: {
+    title: "Privacy Policy",
+    lead: "How CyDef handles personal data on this site and how you can exercise your rights.",
+  },
   academy: {
     badge: "Free entry education",
     h1: "CyDef Academy",
