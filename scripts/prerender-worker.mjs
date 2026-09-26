@@ -219,23 +219,29 @@ async function main() {
   const lang = doc.documentElement.getAttribute("lang") || "en";
   // canonical + hreflang + robots (o noindex das rotas utilitarias da Academy
   // nasce no HeadSeo: sem repassar o meta, o HTML estatico publicado ficaria
-  // indexavel mesmo com a SPA emitindo noindex no cliente) + og/twitter do
-  // conteudo da rota (etapa 81: sem eles o HTML servido de toda pagina interna
-  // ficava com o card da home do template index.html).
+  // indexavel mesmo com a SPA emitindo noindex no cliente) + og/twitter e
+  // descricao do conteudo da rota (etapa 81: sem os og, o HTML servido de toda
+  // pagina interna ficava com o card da home do template index.html; etapa 83:
+  // sem a descricao, TODA pagina servia a mesma meta description da home, em
+  // qualquer idioma, e era esse texto que aparecia no resultado do buscador).
+  // O seletor pega o head do jsdom DEPOIS do app montar: nas rotas publicas o
+  // HeadSeo ja removeu por chave as tags do template e o que sobra e o da rota;
+  // nas privadas ele sai antes de emitir og/descricao, entao as do template
+  // continuam no head e sao elas que voltam (comportamento atual, mantido).
   const extra = [
     ...doc.head.querySelectorAll(
-      'link[rel="canonical"], link[rel="alternate"], meta[name="robots"], meta[property^="og:"], meta[name^="twitter:"]',
+      'link[rel="canonical"], link[rel="alternate"], meta[name="robots"], meta[property^="og:"], meta[name^="twitter:"], meta[name="description"]',
     ),
   ]
     .map((l) => l.outerHTML)
     .join("");
 
   let out = template
-    // As og/twitter do template (card da home) valem para a raiz/404: nas rotas
-    // pre-renderizadas quem manda sao as do conteudo da rota, entao as antigas
-    // saem antes do append (uma pagina, um og:title).
+    // As og/twitter/descricao do template (card da home) valem para a raiz/404:
+    // nas rotas pre-renderizadas quem manda sao as do conteudo da rota, entao as
+    // antigas saem antes do append (uma pagina, um og:title e uma descricao).
     .replace(
-      /<meta\s[^>]*(?:property="og:[^"]*"|name="twitter:[^"]*")[^>]*>\s*/g,
+      /<meta\s[^>]*(?:property="og:[^"]*"|name="(?:twitter:[^"]*|description)")[^>]*>\s*/g,
       "",
     )
     .replace(/<html[^>]*>/, `<html lang="${lang}">`)

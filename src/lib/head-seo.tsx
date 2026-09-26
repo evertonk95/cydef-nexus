@@ -36,10 +36,11 @@ const hasContentFor = (base: string, lang: Lang): boolean => {
 
 /**
  * Head SEO: canonical + hreflang alternates (P2-03) + og/twitter por rota
- * (etapa 81).
+ * (etapa 81) + descrição da rota (etapa 83).
  * Computa a base (pathname sem idioma) e gera o URL canônico do idioma atual
- * + alternates EN/PT/ES (apenas idiomas com conteúdo) + x-default, e as tags
- * de compartilhamento do conteúdo da rota (src/lib/og.ts).
+ * + alternates EN/PT/ES (apenas idiomas com conteúdo) + x-default, a meta
+ * description do conteúdo da rota e as tags de compartilhamento dele
+ * (src/lib/og.ts).
  *
  * Vive em módulo próprio (não no SeoRouter) para não arrastar as páginas
  * estáticas para o chunk inicial (P3-01 code-splitting).
@@ -128,14 +129,20 @@ export const HeadSeo = () => {
       };
     }
 
-    // og:* e twitter:* por rota (etapa 81). Sem isto, o HTML servido de toda
-    // página interna herdava as tags do template index.html: card da home, com
-    // og:url na raiz, em qualquer artigo compartilhado. O pré-render repassa
-    // estas tags (scripts/prerender-worker.mjs) e o build troca as do template
-    // pelas do prerender, então o que o rastreador lê é o card da própria rota.
+    // og:* e twitter:* por rota (etapa 81) e a descrição da rota (etapa 83).
+    // Sem isto, o HTML servido de toda página interna herdava as tags do
+    // template index.html: card da home, com og:url na raiz, em qualquer artigo
+    // compartilhado, e a MESMA meta description da home em todas as páginas (o
+    // trecho que o buscador mostra vinha sempre igual, em qualquer idioma).
+    // O pré-render repassa estas tags (scripts/prerender-worker.mjs) e o build
+    // troca as do template pelas do prerender, então o que o rastreador lê é o
+    // card e a descrição da própria rota.
     const og = ogForBase(base, l, (key) => t(key), htmlTitles[l]);
     const image = absoluteUrl(og.image);
     const metas: { attr: "property" | "name"; key: string; content: string }[] = [
+      // A descrição da rota usa o mesmo texto do og:description: é o que o
+      // buscador mostra no resultado e o que a rede social mostra no card.
+      { attr: "name", key: "description", content: og.description },
       { attr: "property", key: "og:title", content: og.title },
       { attr: "property", key: "og:description", content: og.description },
       // og:url na mesma forma da canônica (COM barra final, a do sitemap): a URL

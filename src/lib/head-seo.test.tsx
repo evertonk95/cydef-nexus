@@ -424,3 +424,84 @@ describe("HeadSeo · og/twitter por rota", () => {
     });
   });
 });
+
+/**
+ * Etapa 83: a meta description do template (texto da home, em inglês) era
+ * servida em TODAS as páginas e nos 3 idiomas, então o trecho que o buscador
+ * mostrava vinha sempre igual. A descrição passa a ser a da rota, o mesmo texto
+ * do og:description, e o pré-render a repassa para o HTML estático
+ * (scripts/prerender-worker.mjs).
+ */
+describe("HeadSeo · descrição por rota", () => {
+  const content = (selector: string) =>
+    document.head.querySelector(selector)?.getAttribute("content");
+
+  /** Em teste o idioma do i18n não vem da URL: alinha antes de montar. */
+  const translateInto = async (lang: Lang) => {
+    await ensureLang(lang);
+    await i18n.changeLanguage(lang);
+  };
+
+  it("usa o resumo do artigo no idioma da rota", async () => {
+    await translateInto("pt");
+    const post = postMetaBySlug(
+      "cloudflare-containers-isolamento-entre-tenants",
+      "pt",
+    );
+
+    renderAt("/pt/blog/cloudflare-containers-isolamento-entre-tenants/");
+
+    expect(content('meta[name="description"]')).toBe(post?.excerpt);
+    // Mesmo texto do card: descrição de busca e de compartilhamento não divergem.
+    expect(content('meta[property="og:description"]')).toBe(post?.excerpt);
+  });
+
+  it("usa a descrição do i18n da página, no idioma da rota", async () => {
+    for (const [lang, path] of [
+      ["pt", "/pt/sobre/"],
+      ["en", "/en/about/"],
+      ["es", "/es/nosotros/"],
+    ] as const) {
+      await translateInto(lang);
+      const view = renderAt(path);
+      expect(content('meta[name="description"]')).toBe(
+        i18n.getFixedT(lang)("about.lead"),
+      );
+      view.unmount();
+    }
+  });
+
+  it("emite a descrição da home no idioma da rota", async () => {
+    await translateInto("es");
+
+    renderAt("/es/");
+
+    expect(content('meta[name="description"]')).toBe(
+      i18n.getFixedT("es")("home.lead"),
+    );
+  });
+
+  /**
+   * O HTML servido traz a descrição do template (home) e o HeadSeo anexa a da
+   * rota: a chave é única na página, então a antiga sai. Sem isso o buscador
+   * leria a descrição da home antes da descrição do conteúdo.
+   */
+  it("substitui a descrição da home que veio no HTML servido", async () => {
+    await translateInto("pt");
+    served(
+      '<meta name="description" content="CyDef is a cybersecurity ecosystem under construction.">',
+    );
+    const post = postMetaBySlug(
+      "cloudflare-containers-isolamento-entre-tenants",
+      "pt",
+    );
+
+    renderAt("/pt/blog/cloudflare-containers-isolamento-entre-tenants/");
+
+    const descriptions = [
+      ...document.head.querySelectorAll('meta[name="description"]'),
+    ];
+    expect(descriptions).toHaveLength(1);
+    expect(descriptions[0].getAttribute("content")).toBe(post?.excerpt);
+  });
+});
