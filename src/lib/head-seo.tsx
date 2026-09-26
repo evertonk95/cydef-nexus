@@ -40,6 +40,11 @@ const hasContentFor = (base: string, lang: Lang): boolean => {
  *
  * Vive em módulo próprio (não no SeoRouter) para não arrastar as páginas
  * estáticas para o chunk inicial (P3-01 code-splitting).
+ *
+ * Estas tags são emitidas no cliente E serializadas no HTML servido (o
+ * scripts/prerender-worker.mjs repassa o head do pré-render). Sem remover a
+ * equivalente antes de anexar, o DOM renderizado ficava com a canônica
+ * duplicada (aba HTML da Inspeção de URL: linhas 24 e 25 com a mesma URL).
  */
 export const HeadSeo = () => {
   const { pathname } = useLocation();
@@ -82,6 +87,21 @@ export const HeadSeo = () => {
 
     const head = document.head;
 
+    // O pre-render grava no HTML servido as tags que este efeito emite (ver
+    // scripts/prerender-worker.mjs), então no cliente elas JÁ estão no head:
+    // anexar a cópia deixava duas canônicas idênticas no DOM renderizado.
+    // Antes de cada anexo sai a tag equivalente já presente, comparada pelos
+    // atributos que a definem (rel+href+hreflang no link, name+content no
+    // meta). A equivalência por atributo, e não "todo link[rel=alternate]",
+    // evita remover um alternate que só compartilha o href com outro hreflang
+    // (en e x-default apontam para a mesma URL) e nunca alcança os elementos
+    // criados aqui, que a limpeza do unmount remove sozinha.
+    const dropEquivalent = (isEquivalent: (el: Element) => boolean): void => {
+      for (const el of Array.from(head.querySelectorAll("link, meta"))) {
+        if (isEquivalent(el)) el.remove();
+      }
+    };
+
     // Rotas utilitárias/privadas da Academy (login, obrigado, status, aviso de
     // privacidade): fora do sitemap e fora do índice do buscador. O meta entra
     // no HTML estático porque o pré-render repassa meta[name="robots"]
@@ -91,6 +111,14 @@ export const HeadSeo = () => {
       const noindex = document.createElement("meta");
       noindex.name = "robots";
       noindex.content = "noindex, nofollow";
+      // O pré-render já publicou este meta no HTML estático: sem a remoção,
+      // a rota privada ficava com dois meta[name=robots] idênticos.
+      dropEquivalent(
+        (el) =>
+          el.localName === "meta" &&
+          el.getAttribute("name") === noindex.name &&
+          el.getAttribute("content") === noindex.content,
+      );
       head.appendChild(noindex);
       return () => {
         noindex.remove();
@@ -98,6 +126,13 @@ export const HeadSeo = () => {
     }
 
     const els = links.map((link) => {
+      dropEquivalent(
+        (el) =>
+          el.localName === "link" &&
+          el.getAttribute("rel") === link.rel &&
+          el.getAttribute("href") === link.href &&
+          el.getAttribute("hreflang") === (link.hreflang ?? null),
+      );
       const el = document.createElement("link");
       el.rel = link.rel;
       el.href = link.href;
