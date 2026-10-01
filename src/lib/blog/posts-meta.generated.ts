@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "atualizacao-chrome-correcoes-seguranca",
+    "title": "Google Chrome Update Fixes Critical and High Severity Vulnerabilities",
+    "category": "Threat Intelligence",
+    "excerpt": "Google has released a stable update for Chrome on Windows, macOS, and Linux that addresses 32 security vulnerabilities, including a critical buffer overflow in the ANGLE component and severe type confusion flaws in the V8 engine.",
+    "date": "October 1, 2026",
+    "dateISO": "2026-10-01",
+    "readTime": "6 min read",
+    "image": "/assets/blog/atualizacao-chrome-correcoes-seguranca-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "cloudflare-containers-isolamento-entre-tenants",
     "title": "Cloudflare Containers: cross-tenant isolation flaw exposed residual data from previous workloads",
     "category": "Cloud Security",
@@ -162,6 +173,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "atualizacao-chrome-correcoes-seguranca",
+    "title": "Atualização do Google Chrome corrige falhas críticas e de alta severidade",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O Google lançou uma atualização estável do Chrome para Windows, macOS e Linux que corrige 32 vulnerabilidades, incluindo um estouro de buffer crítico no componente ANGLE e falhas graves de confusão de tipos no motor V8.",
+    "date": "1 de Outubro, 2026",
+    "dateISO": "2026-10-01",
+    "readTime": "6 min",
+    "image": "/assets/blog/atualizacao-chrome-correcoes-seguranca-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "cloudflare-containers-isolamento-entre-tenants",
     "title": "Cloudflare Containers: falha de isolamento entre tenants expunha dados residuais de cargas de trabalho anteriores",
@@ -330,6 +352,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "atualizacao-chrome-correcoes-seguranca",
+    "title": "Actualización de Google Chrome corrige fallas críticas y de alta severidad",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Google ha lanzado una actualización estable de Chrome para Windows, macOS y Linux que corrige 32 vulnerabilidades de seguridad, incluyendo un desbordamiento de búfer crítico en el componente ANGLE y fallas graves de confusión de tipos en el motor V8.",
+    "date": "1 de octubre de 2026",
+    "dateISO": "2026-10-01",
+    "readTime": "6 min de lectura",
+    "image": "/assets/blog/atualizacao-chrome-correcoes-seguranca-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "cloudflare-containers-isolamento-entre-tenants",
     "title": "Cloudflare Containers: falla de aislamiento entre tenants exponía datos residuales de cargas de trabajo anteriores",
