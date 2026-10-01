@@ -1,5 +1,6 @@
 ﻿// CyDef Blog — English editorial translation (source: PT canonical, 2026-09-03). Human review via PR.
 import type { BlogPost } from "./posts";
+import { googleChromeUpdateFixesPostEn } from "./posts.google-chrome-update-fixes.en";
 import { phishingBlobPostEn } from "./posts.phishing-blob.en";
 import { claudeSkillsPostEn } from "./posts.claude-skills.en";
 import { wazuhEmMovimentoPostEn } from "./posts.wazuh.en";
@@ -8,6 +9,7 @@ import { cloudflareContainersTenantsPostEn } from "./posts.cloudflare-containers
 import { click2shellWordpressPostEn } from "./posts.click2shell-wordpress.en";
 
 export const blogPostsEn: BlogPost[] = [
+  googleChromeUpdateFixesPostEn,
   cloudflareContainersTenantsPostEn,
   click2shellWordpressPostEn,
   ciscoSegEmailGatewayPostEn,
