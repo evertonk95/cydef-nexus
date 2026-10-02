@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 Fixes 20 Vulnerabilities, Including Flaws That Can Lead to Code Execution",
+    "category": "Threat Intelligence",
+    "excerpt": "The Apache Software Foundation released Apache HTTP Server 2.4.69 with fixes for 20 vulnerabilities, including flaws that can cause code execution, crashes, data leaks, and authentication bypass under specific conditions.",
+    "date": "October 2, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min read",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Google Chrome Update Fixes Critical and High Severity Vulnerabilities",
     "category": "Threat Intelligence",
@@ -173,6 +184,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluindo falhas que podem levar à execução de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Apache Software Foundation lançou o Apache HTTP Server 2.4.69 com correções para 20 vulnerabilidades, entre elas falhas que podem causar execução de código, travamentos, vazamento de dados e bypass de autenticação sob condições específicas.",
+    "date": "2 de Outubro, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Atualização do Google Chrome corrige falhas críticas e de alta severidade",
@@ -352,6 +374,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluidas fallas que pueden llevar a la ejecución de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "La Apache Software Foundation publicó Apache HTTP Server 2.4.69 con correcciones para 20 vulnerabilidades, entre ellas fallas que pueden causar ejecución de código, caídas, filtración de datos y omisión de autenticación en condiciones específicas.",
+    "date": "2 de Octubre, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min de lectura",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Actualización de Google Chrome corrige fallas críticas y de alta severidad",

@@ -1,4 +1,5 @@
 import { extraPosts } from "./posts-extra.generated";
+import { apacheHttpServer2469Post } from "./posts.apache-http-server-2-4-69";
 import { googleChromeUpdateFixesPost } from "./posts.google-chrome-update-fixes";
 import { claudeSkillsPost } from "./posts.claude-skills";
 import { wazuhEmMovimentoPost } from "./posts.wazuh";
@@ -20,6 +21,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  apacheHttpServer2469Post,
   googleChromeUpdateFixesPost,
   cloudflareContainersTenantsPost,
   rathatAndroidTrojanPost,
