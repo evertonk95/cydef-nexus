@@ -1,5 +1,6 @@
 // CyDef Blog — Traducción editorial al español (fuente: canónico PT, 2026-09-03). Revisión humana vía PR.
 import type { BlogPost } from "./posts";
+import { debianKernelDsa65281PostEs } from "./posts.debian-kernel-dsa-6528-1.es";
 import { apacheHttpServer2469PostEs } from "./posts.apache-http-server-2-4-69.es";
 import { googleChromeUpdateFixesPostEs } from "./posts.google-chrome-update-fixes.es";
 import { phishingBlobPostEs } from "./posts.phishing-blob.es";
@@ -10,6 +11,7 @@ import { cloudflareContainersTenantsPostEs } from "./posts.cloudflare-containers
 import { click2shellWordpressPostEs } from "./posts.click2shell-wordpress.es";
 
 export const blogPostsEs: BlogPost[] = [
+  debianKernelDsa65281PostEs,
   apacheHttpServer2469PostEs,
   googleChromeUpdateFixesPostEs,
   cloudflareContainersTenantsPostEs,

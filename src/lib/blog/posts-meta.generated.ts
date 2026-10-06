@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "debian-kernel-dsa-6528-1-vulnerabilidades",
+    "title": "Debian Security Update Fixes 1,313 Vulnerabilities in the Linux Kernel",
+    "category": "Threat Intelligence",
+    "excerpt": "Debian published advisory DSA-6528-1 with fixes for 1,313 CVE entries in the Linux kernel of the stable release Trixie, flaws that can lead to privilege escalation, denial of service, and information leaks.",
+    "date": "October 6, 2026",
+    "dateISO": "2026-10-06",
+    "readTime": "6 min read",
+    "image": "/assets/blog/debian-kernel-dsa-6528-1-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 Fixes 20 Vulnerabilities, Including Flaws That Can Lead to Code Execution",
     "category": "Threat Intelligence",
@@ -184,6 +195,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "debian-kernel-dsa-6528-1-vulnerabilidades",
+    "title": "Atualização de segurança do Debian corrige 1.313 vulnerabilidades no kernel Linux",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O Debian publicou o alerta DSA-6528-1 com correções para 1.313 entradas CVE no kernel Linux da versão estável Trixie, falhas que podem levar à elevação de privilégios, negação de serviço e vazamento de informações.",
+    "date": "6 de Outubro, 2026",
+    "dateISO": "2026-10-06",
+    "readTime": "6 min",
+    "image": "/assets/blog/debian-kernel-dsa-6528-1-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluindo falhas que podem levar à execução de código",
@@ -374,6 +396,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "debian-kernel-dsa-6528-1-vulnerabilidades",
+    "title": "Actualización de seguridad de Debian corrige 1.313 vulnerabilidades en el kernel Linux",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Debian publicó el aviso DSA-6528-1 con correcciones para 1.313 entradas CVE en el kernel Linux de la versión estable Trixie, fallas que pueden llevar a la elevación de privilegios, denegación de servicio y filtración de información.",
+    "date": "6 de octubre de 2026",
+    "dateISO": "2026-10-06",
+    "readTime": "6 min de lectura",
+    "image": "/assets/blog/debian-kernel-dsa-6528-1-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluidas fallas que pueden llevar a la ejecución de código",

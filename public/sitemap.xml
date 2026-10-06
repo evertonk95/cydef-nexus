@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.cydef.com.br/en/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/about/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/academy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/academy/gratuito/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/blog/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/about/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/academy/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/academy/gratuito/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
@@ -14,6 +14,7 @@
   <url><loc>https://www.cydef.com.br/en/blog/click2shell-wordpress-instalacao-tema-execucao-remota/</loc><lastmod>2026-09-21</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/cloudflare-containers-isolamento-entre-tenants/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/como-estruturar-um-soc-do-zero/</loc><lastmod>2026-08-24</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/debian-kernel-dsa-6528-1-vulnerabilidades/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/hardening-linux-cis-benchmarks/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/inteligencia-de-ameacas-como-usar-iocs/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/mitre-attack-deteccao-tecnicas-adversarios/</loc><lastmod>2026-08-24</lastmod></url>
@@ -21,20 +22,20 @@
   <url><loc>https://www.cydef.com.br/en/blog/seguranca-cloud-aws-melhores-praticas/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/threat-hunting-por-onde-comecar/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/contact/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/courses/blue-team-advanced/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/courses/cybersecurity-fundamentals/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/courses/soc-analyst/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/ecosystem/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/labs/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/privacy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/research/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/terms/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/academy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/academy/gratuito/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/blog/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/contact/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/courses/blue-team-advanced/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/courses/cybersecurity-fundamentals/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/courses/soc-analyst/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/ecosystem/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/labs/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/privacy/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/research/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/terms/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/academy/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/academy/gratuito/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
@@ -44,6 +45,7 @@
   <url><loc>https://www.cydef.com.br/es/blog/click2shell-wordpress-instalacao-tema-execucao-remota/</loc><lastmod>2026-09-21</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/cloudflare-containers-isolamento-entre-tenants/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/como-estruturar-um-soc-do-zero/</loc><lastmod>2026-08-24</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/debian-kernel-dsa-6528-1-vulnerabilidades/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/hardening-linux-cis-benchmarks/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/inteligencia-de-ameacas-como-usar-iocs/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/mitre-attack-deteccao-tecnicas-adversarios/</loc><lastmod>2026-08-24</lastmod></url>
@@ -51,21 +53,21 @@
   <url><loc>https://www.cydef.com.br/es/blog/seguranca-cloud-aws-melhores-praticas/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/threat-hunting-por-onde-comecar/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/contacto/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/cursos/blue-team-advanced/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/cursos/cybersecurity-fundamentals/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/cursos/soc-analyst/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/ecosistema/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/labs/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/nosotros/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/privacidad/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/research/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/terminos/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/academy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/academy/gratuito/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/blog/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/contacto/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/cursos/blue-team-advanced/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/cursos/cybersecurity-fundamentals/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/cursos/soc-analyst/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/ecosistema/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/labs/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/nosotros/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/privacidad/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/research/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/terminos/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/academy/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/academy/gratuito/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/blog/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
@@ -75,6 +77,7 @@
   <url><loc>https://www.cydef.com.br/pt/blog/click2shell-wordpress-instalacao-tema-execucao-remota/</loc><lastmod>2026-09-21</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/cloudflare-containers-isolamento-entre-tenants/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/como-estruturar-um-soc-do-zero/</loc><lastmod>2026-08-24</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/blog/debian-kernel-dsa-6528-1-vulnerabilidades/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/hardening-linux-cis-benchmarks/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/inteligencia-de-ameacas-como-usar-iocs/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/mitre-attack-deteccao-tecnicas-adversarios/</loc><lastmod>2026-08-24</lastmod></url>
@@ -83,15 +86,15 @@
   <url><loc>https://www.cydef.com.br/pt/blog/seguranca-cloud-aws-melhores-praticas/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/threat-hunting-por-onde-comecar/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/contato/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/blue-team-advanced/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/cybersecurity-fundamentals/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/soc-analyst/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/labs/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/privacidade/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/research/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/servicos/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/sobre/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/termos/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/contato/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/blue-team-advanced/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/cybersecurity-fundamentals/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/soc-analyst/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/labs/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/labs/siem-health-maturity-framework/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/privacidade/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/research/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/servicos/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/sobre/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/termos/</loc><lastmod>2026-10-06</lastmod></url>
 </urlset>
