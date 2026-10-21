@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell chains two WordPress flaws to create admin accounts and install web shells without login",
+    "category": "Threat Intelligence",
+    "excerpt": "The WP2Shell chain combines route confusion in the REST API batch endpoint (CVE-2026-63030) with an SQL injection in the author_exclude parameter (CVE-2026-60137) to reach code execution on WordPress installations without authentication.",
+    "date": "October 21, 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min read",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 Fixes 20 Vulnerabilities, Including Flaws That Can Lead to Code Execution",
     "category": "Threat Intelligence",
@@ -184,6 +195,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell encadeia duas falhas do WordPress para criar administradores e instalar web shell sem login",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A cadeia WP2Shell combina a confusão de rotas da API REST em lote (CVE-2026-63030) com uma injeção SQL no parâmetro author_exclude (CVE-2026-60137) para chegar à execução de código em instalações WordPress sem autenticação.",
+    "date": "21 de Outubro, 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluindo falhas que podem levar à execução de código",
@@ -374,6 +396,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell encadena dos fallos de WordPress para crear administradores e instalar web shell sin login",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "La cadena WP2Shell combina la confusión de rutas de la API REST por lotes (CVE-2026-63030) con una inyección SQL en el parámetro author_exclude (CVE-2026-60137) para llegar a la ejecución de código en instalaciones WordPress sin autenticación.",
+    "date": "21 de octubre de 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min de lectura",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "apache-http-server-2-4-69-vulnerabilidades",
     "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluidas fallas que pueden llevar a la ejecución de código",
