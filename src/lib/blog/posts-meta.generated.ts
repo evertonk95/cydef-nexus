@@ -6,6 +6,28 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell chains two WordPress flaws to create admin accounts and install web shells without login",
+    "category": "Threat Intelligence",
+    "excerpt": "The WP2Shell chain combines route confusion in the REST API batch endpoint (CVE-2026-63030) with an SQL injection in the author_exclude parameter (CVE-2026-60137) to reach code execution on WordPress installations without authentication.",
+    "date": "October 21, 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min read",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 Fixes 20 Vulnerabilities, Including Flaws That Can Lead to Code Execution",
+    "category": "Threat Intelligence",
+    "excerpt": "The Apache Software Foundation released Apache HTTP Server 2.4.69 with fixes for 20 vulnerabilities, including flaws that can cause code execution, crashes, data leaks, and authentication bypass under specific conditions.",
+    "date": "October 2, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min read",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Google Chrome Update Fixes Critical and High Severity Vulnerabilities",
     "category": "Threat Intelligence",
@@ -173,6 +195,28 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
+  {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell encadeia duas falhas do WordPress para criar administradores e instalar web shell sem login",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A cadeia WP2Shell combina a confusão de rotas da API REST em lote (CVE-2026-63030) com uma injeção SQL no parâmetro author_exclude (CVE-2026-60137) para chegar à execução de código em instalações WordPress sem autenticação.",
+    "date": "21 de Outubro, 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluindo falhas que podem levar à execução de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Apache Software Foundation lançou o Apache HTTP Server 2.4.69 com correções para 20 vulnerabilidades, entre elas falhas que podem causar execução de código, travamentos, vazamento de dados e bypass de autenticação sob condições específicas.",
+    "date": "2 de Outubro, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "Equipe CyDef"
+  },
   {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Atualização do Google Chrome corrige falhas críticas e de alta severidade",
@@ -352,6 +396,28 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "wp2shell-wordpress-admin-web-shell",
+    "title": "WP2Shell encadena dos fallos de WordPress para crear administradores e instalar web shell sin login",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "La cadena WP2Shell combina la confusión de rutas de la API REST por lotes (CVE-2026-63030) con una inyección SQL en el parámetro author_exclude (CVE-2026-60137) para llegar a la ejecución de código en instalaciones WordPress sin autenticación.",
+    "date": "21 de octubre de 2026",
+    "dateISO": "2026-10-21",
+    "readTime": "7 min de lectura",
+    "image": "/assets/blog/wp2shell-wordpress-thumb.webp",
+    "author": "Equipo CyDef"
+  },
+  {
+    "slug": "apache-http-server-2-4-69-vulnerabilidades",
+    "title": "Apache HTTP Server 2.4.69 corrige 20 vulnerabilidades, incluidas fallas que pueden llevar a la ejecución de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "La Apache Software Foundation publicó Apache HTTP Server 2.4.69 con correcciones para 20 vulnerabilidades, entre ellas fallas que pueden causar ejecución de código, caídas, filtración de datos y omisión de autenticación en condiciones específicas.",
+    "date": "2 de Octubre, 2026",
+    "dateISO": "2026-10-02",
+    "readTime": "6 min de lectura",
+    "image": "/assets/blog/apache-http-server-2-4-69-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "atualizacao-chrome-correcoes-seguranca",
     "title": "Actualización de Google Chrome corrige fallas críticas y de alta severidad",
