@@ -333,9 +333,11 @@ export const en = {
     inoraFacts: [
       "Phase A completed in September 2026: the eight internal product milestones (R0 to R7) validated with an internal cohort, using simulated investigations and no real data",
       "Phase B in progress: versioned playbooks with approval and rollback, unified approvals, post-mortem, knowledge base, executive KPIs with export, STIX 2.1 and OCSF interchange, and a TOTP second factor with recovery codes",
+      "Usability: October round with 10 findings (approval queue, closing classification, global search, single owner field and SLA metrics) closed on Oct 28",
+      "Identity and collaboration: passkeys (WebAuthn), per-organization OIDC SSO, real-time case presence and notification channels with queue and volume limits",
       "End-to-end response governance: every sensitive action requires human approval, with a kill switch and a chained, verifiable audit trail",
       "Two database modes: SQLite for local development and PostgreSQL with RLS for deployment",
-      "October 2026 exploratory QA: 23 findings fixed, critical flows verified in a real browser, and an automated gate with 451 SQLite tests and 100 PostgreSQL tests",
+      "October 2026 exploratory QA: 23 findings fixed, critical flows verified in a real browser, and an automated gate with 499 SQLite tests and 117 PostgreSQL tests",
       "Not public: no demo, no third-party access, no release date",
     ],
     inoraLicense: "License: Apache-2.0",

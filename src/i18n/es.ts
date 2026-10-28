@@ -334,9 +334,11 @@ export const es: Dict = {
     inoraFacts: [
       "Fase A concluida en septiembre de 2026: los ocho hitos internos del producto (R0 a R7) validados en cohorte interna, con investigaciones simuladas y ningún dato real",
       "Fase B en curso: playbooks versionados con aprobación y rollback, aprobaciones unificadas, post-mortem, base de conocimiento, KPIs ejecutivos con exportación, intercambio STIX 2.1 y OCSF, y segundo factor TOTP con códigos de recuperación",
+      "Usabilidad: ronda de octubre con 10 hallazgos (cola de aprobaciones, clasificación de cierre, búsqueda global, responsable único y métricas de SLA) cerrada el 28/10",
+      "Identidad y colaboración: passkeys (WebAuthn), SSO OIDC por organización, presencia en tiempo real en el caso y canales de notificación con cola y límite de volumen",
       "Gobernanza de respuesta de extremo a extremo: toda acción sensible requiere aprobación humana, con kill switch y registro de auditoría encadenado y verificable",
       "Dos modos de base de datos: SQLite en el desarrollo local y PostgreSQL con RLS para el despliegue",
-      "QA exploratoria de octubre de 2026: 23 hallazgos corregidos, flujos críticos verificados en el navegador y gate automatizado con 451 pruebas en SQLite y 100 en PostgreSQL",
+      "QA exploratoria de octubre de 2026: 23 hallazgos corregidos, flujos críticos verificados en el navegador y gate automatizado con 499 pruebas en SQLite y 117 en PostgreSQL",
       "No es público: sin demo, sin acceso de terceros, sin fecha de lanzamiento",
     ],
     inoraLicense: "Licencia: Apache-2.0",
