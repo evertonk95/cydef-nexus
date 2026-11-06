@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
@@ -16,7 +16,7 @@ import {
   ListTree,
   User,
 } from "lucide-react";
-import { getPostBySlug } from "@/lib/blog/posts.content";
+import { loadPost } from "@/lib/blog/posts.loaders";
 import { L, currentLang } from "@/lib/lang";
 import { htmlTitles } from "@/i18n";
 import { JsonLd } from "@/lib/seo";
@@ -295,9 +295,24 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   useScrollReveal();
   const { t } = useTranslation();
-  const post: BlogPost | undefined = slug
-    ? getPostBySlug(slug, currentLang())
-    : undefined;
+  const lang = currentLang();
+  const [state, setState] = useState<{
+    slug?: string;
+    lang?: string;
+    post?: BlogPost;
+  }>({});
+  const loading = !slug || state.slug !== slug || state.lang !== lang;
+
+  useEffect(() => {
+    let alive = true;
+    if (!slug) return () => { alive = false; };
+    loadPost(slug, lang).then((p) => {
+      if (alive) setState({ slug, lang, post: p });
+    });
+    return () => { alive = false; };
+  }, [slug, lang]);
+
+  const post = loading ? undefined : state.post;
 
   useEffect(() => {
     if (post) {
@@ -318,6 +333,46 @@ const BlogPost = () => {
         : [],
     [post],
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
+        <Navigation />
+        <main id="conteudo" tabIndex={-1} className="outline-none">
+          <section className="relative pt-40 pb-12 px-4 border-b border-white/5">
+            <div className="container mx-auto max-w-4xl">
+              <div className="h-4 w-28 bg-white/10 rounded mb-6 animate-pulse" />
+              <div className="h-6 w-24 bg-white/10 rounded-full mb-6 animate-pulse" />
+              <div className="h-10 w-3/4 bg-white/10 rounded mb-4 animate-pulse" />
+              <div className="h-10 w-1/2 bg-white/10 rounded mb-6 animate-pulse" />
+              <div className="flex gap-4">
+                <div className="h-4 w-24 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-12 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-white/10 rounded animate-pulse" />
+              </div>
+            </div>
+          </section>
+          <section className="px-4 pt-8">
+            <div className="container mx-auto max-w-4xl">
+              <div className="aspect-video w-full bg-white/10 rounded-2xl animate-pulse" />
+            </div>
+          </section>
+          <article className="py-16 px-4">
+            <div className="container mx-auto max-w-3xl space-y-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-4 bg-white/10 rounded animate-pulse"
+                  style={{ width: `${90 - (i % 3) * 18}%` }}
+                />
+              ))}
+            </div>
+          </article>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!post) {
     return (
