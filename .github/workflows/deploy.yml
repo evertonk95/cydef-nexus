@@ -71,3 +71,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          # O site tem 112 rotas pré-renderizadas; em dias lentos o Pages leva
+          # mais de 10 min no "updating_pages" -> "syncing_files" e o default de
+          # 10 min do action cancelava no meio. 25 min dá folga sem risco.
+          timeout: '1500000'
