@@ -119,6 +119,7 @@ const Figure = ({ figure }: { figure: BlogFigure }) => (
         src={figure.src}
         alt={figure.alt}
         loading="lazy"
+        decoding="async"
         className="w-full h-auto object-contain bg-[#0a0a0a]"
       />
     </div>
@@ -403,8 +404,12 @@ const BlogPost = () => {
             <img
               src={post.image}
               alt={post.title}
+              width={1200}
+              height={675}
               className="w-full h-auto object-cover"
               loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
           </div>
         </div>

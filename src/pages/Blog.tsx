@@ -130,8 +130,11 @@ const Blog = () => {
                   <img
                     src={post.image}
                     alt={post.title}
+                    width={1200}
+                    height={675}
                     className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="flex items-center gap-2 mb-4">

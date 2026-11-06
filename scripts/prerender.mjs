@@ -6,7 +6,7 @@
 // Cada rota renderiza num PROCESSO FILHO (scripts/prerender-worker.mjs):
 // isolamento total — crash/timer de uma rota não derruba o build; timers do
 // React (scheduler/polling) morrem com o processo.
-import { readFileSync, writeFileSync, mkdtempSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
@@ -106,6 +106,55 @@ function renderRoute(route) {
   });
 }
 
+// Preload do chunk da rota (06/11/2026).
+// A rota é lazy: o HTML já chega com conteúdo, mas o React só assume a árvore
+// depois de baixar o chunk dela. Sem o preload o download só começa quando o
+// bundle principal executa, em série: no 4G simulado do Lighthouse o chunk do
+// artigo iniciava em 4,0 s e terminava em 5,5 s, e o LCP ia a 5,9 s mesmo com o
+// conteúdo no HTML. Com o preload o download começa junto com o bundle.
+const ASSETS = readdirSync(path.join(ROOT, "dist", "assets"));
+const chunkOf = (prefix) => {
+  const file = ASSETS.find(
+    (f) => f.startsWith(`${prefix}-`) && f.endsWith(".js"),
+  );
+  return file ? `/assets/${file}` : null;
+};
+
+const ACADEMY_CHUNKS = {
+  gratuito: "AcademyLanding",
+  privacidade: "AcademyPrivacy",
+  "status-confirmacao": "AcademyStatusConfirmation",
+  obrigado: "AcademyThankYou",
+  entrar: "AcademyLogin",
+};
+
+/** Chunk da rota: mesma divisão declarada em src/App.tsx. */
+const chunkForRoute = (route) => {
+  // Resto do caminho depois do idioma: /pt/blog/<slug> -> ["pt","blog","<slug>"]
+  const [, , section, sub] = route.split("/");
+  // Home do idioma: renderizada por src/pages/Index.tsx, que já está no bundle
+  // principal. Preload aqui só baixaria chunk à toa.
+  if (!section) return null;
+  if (section === "blog") return sub ? "BlogPost" : "SeoRouter";
+  if (section === "labs") return sub ? "LabsArtifact" : "SeoRouter";
+  if (section === "academy" && sub && ACADEMY_CHUNKS[sub]) {
+    return ACADEMY_CHUNKS[sub];
+  }
+  // Demais páginas e áreas de curso vêm de src/lib/SeoRouter.tsx.
+  return "SeoRouter";
+};
+
+const withModulePreload = (html, route) => {
+  const chunk = chunkOf(chunkForRoute(route));
+  if (!chunk || html.includes(`rel="modulepreload" href="${chunk}"`)) {
+    return html;
+  }
+  const tag = `<link rel="modulepreload" href="${chunk}">`;
+  return html.includes("</head>")
+    ? html.replace("</head>", `  ${tag}\n</head>`)
+    : html;
+};
+
 let ok = 0;
 const failed = [];
 for (let i = 0; i < routes.length; i += CONCURRENCY) {
@@ -120,7 +169,7 @@ for (let i = 0; i < routes.length; i += CONCURRENCY) {
           "dist",
           route === "/" ? "index.html" : path.join(route, "index.html"),
         );
-        writeFileSync(file, parsed.html, "utf8");
+        writeFileSync(file, withModulePreload(parsed.html, route), "utf8");
         ok += 1;
         continue;
       } catch (e) {
