@@ -48,16 +48,17 @@ const Index = () => {
       <Navigation />
       <main id="conteudo" tabIndex={-1} className="outline-none">
 
-      {/* background-image-overlay */}
-      <div className="fixed top-0 right-0 bottom-0 left-0 pointer-events-none -z-20">
-        <img alt="" className="w-full h-full object-cover opacity-65" src="/assets/cydef-hero-bg.webp" srcSet="/assets/cydef-hero-bg-960.webp 960w, /assets/cydef-hero-bg.webp 1920w" sizes="100vw" loading="eager" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/45 to-[#050505]"></div>
+      {/* background-image-overlay: a imagem vale só na primeira dobra; da seção do ecossistema para baixo o fundo é sólido */}
+      <div className="absolute inset-x-0 top-0 -z-20 h-[95vh] max-h-[1100px] overflow-hidden pointer-events-none">
+        <img alt="" className="w-full h-full object-cover opacity-60" src="/assets/cydef-hero-bg.webp" srcSet="/assets/cydef-hero-bg-960.webp 960w, /assets/cydef-hero-bg.webp 1920w" sizes="100vw" loading="eager" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,_rgba(5,5,5,0.30)_0%,_rgba(5,5,5,0.58)_45%,_rgba(5,5,5,0.90)_100%)]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/45 via-[#050505]/70 to-[#050505]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/0 to-[#050505]/0"></div>
       </div>
 
       {/* aura-background */}
       <div
-        className="fixed top-0 w-full h-screen -z-10 hue-rotate-0 saturate-100 mix-blend-screen opacity-50"
+        className="absolute top-0 w-full h-[95vh] max-h-[1100px] -z-10 hue-rotate-0 saturate-100 mix-blend-screen opacity-50"
         style={{
           maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'
@@ -78,7 +79,7 @@ const Index = () => {
             {t("home.h1a")}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600 block mt-2">{t("home.h1b")}</span>
           </h1>
-          <p className="leading-relaxed text-lg md:text-xl font-medium text-white/60 max-w-2xl animate-on-scroll mb-12">
+          <p className="leading-relaxed text-lg md:text-xl font-medium text-neutral-200 max-w-2xl animate-on-scroll mb-12">
             {t("home.lead")}
           </p>
           <div className="flex flex-wrap justify-center gap-6 items-center animate-on-scroll">
