@@ -477,11 +477,22 @@ export const pt: Dict = {
     title: "Inscrição recebida!",
     body: "Enviamos um e-mail com o link de confirmação (válido por 48 horas). Não encontrou? Verifique a caixa de spam ou lixo eletrônico.",
     back: "Voltar à pré-inscrição",
+    explore: "Conhecer a Academy",
+    stepsLabel: "Próximos passos",
+    done: "Concluído",
+    now: "Agora",
+    steps: [
+      { title: "Pré-inscrição enviada", desc: "Recebemos seus dados." },
+      { title: "Confirme seu e-mail", desc: "Abra o link que enviamos. Ele vale por 48 horas." },
+      { title: "Receba o acesso", desc: "As instruções de acesso chegam no seu e-mail quando o conteúdo for publicado." },
+    ],
   },
   status: {
     title: "Obrigado!",
     body: "Sua confirmação foi processada. Se você confirmou sua pré-inscrição recentemente, o próximo passo é aguardar o e-mail com as instruções de acesso.",
     back: "Voltar à pré-inscrição",
+    explore: "Conhecer a Academy",
+    note: "O link de confirmação vale por 48 horas. Se ele expirou, basta fazer a pré-inscrição de novo.",
   },
   academyPrivacy: {
     badgePre: "Aviso de Privacidade · versão",

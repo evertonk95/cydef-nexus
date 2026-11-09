@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Info, ShieldCheck } from "lucide-react";
+import { AcademyMessageLayout } from "@/components/academy/AcademyMessageLayout";
 import { track } from "@/lib/analytics";
 import { LANDING_PATH } from "@/lib/config";
 import { L } from "@/lib/lang";
@@ -13,6 +12,8 @@ import { L } from "@/lib/lang";
  * aqui pela MESMA URL, SEM query string — a página não diferencia estados
  * (sem oracle para o cliente). O estado vive apenas no servidor.
  * Beacon `confirmacao_concluida` dispara daqui (sem token presente — M02).
+ * A nota sobre o prazo de 48 horas aparece sempre, para qualquer desfecho,
+ * e por isso não revela o estado do token.
  */
 const AcademyStatusConfirmation = () => {
   const { t } = useTranslation();
@@ -22,28 +23,18 @@ const AcademyStatusConfirmation = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
-      <Navigation />
-      <main id="conteudo" tabIndex={-1} className="pt-40 pb-24 px-4">
-        <div className="container mx-auto max-w-xl text-center">
-          <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12">
-            <h1 className="text-3xl font-bold mb-4 tracking-tighter">
-              {t("status.title")}
-            </h1>
-            <p className="text-neutral-400 leading-relaxed mb-8">
-              {t("status.body")}
-            </p>
-            <Link
-              to={L(LANDING_PATH)}
-              className="inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-[#F46B27] to-[#F69021] hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
-            >
-              {t("status.back")}
-            </Link>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <AcademyMessageLayout
+      icon={<ShieldCheck className="w-7 h-7 text-orange-400" aria-hidden="true" />}
+      title={t("status.title")}
+      body={<p>{t("status.body")}</p>}
+      primary={{ to: L("/academy"), label: t("status.explore") }}
+      secondary={{ to: L(LANDING_PATH), label: t("status.back") }}
+    >
+      <p className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 text-sm text-neutral-400 leading-relaxed">
+        <Info className="w-5 h-5 shrink-0 text-orange-400 mt-0.5" aria-hidden="true" />
+        {t("status.note")}
+      </p>
+    </AcademyMessageLayout>
   );
 };
 

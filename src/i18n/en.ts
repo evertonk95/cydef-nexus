@@ -476,11 +476,22 @@ export const en = {
     title: "Enrollment received!",
     body: "We sent an email with the confirmation link (valid for 48 hours). Did not receive it? Check your spam or junk folder.",
     back: "Back to pre-enrollment",
+    explore: "Explore the Academy",
+    stepsLabel: "Next steps",
+    done: "Done",
+    now: "Now",
+    steps: [
+      { title: "Pre-enrollment sent", desc: "We received your details." },
+      { title: "Confirm your email", desc: "Open the link we sent. It is valid for 48 hours." },
+      { title: "Receive access", desc: "Access instructions arrive by email when the content is published." },
+    ],
   },
   status: {
     title: "Thank you!",
     body: "Your confirmation was processed. If you recently confirmed your pre-enrollment, the next step is to wait for the email with access instructions.",
     back: "Back to pre-enrollment",
+    explore: "Explore the Academy",
+    note: "The confirmation link is valid for 48 hours. If it expired, just pre-enroll again.",
   },
   academyPrivacy: {
     badgePre: "Privacy Notice · version",
