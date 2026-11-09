@@ -228,7 +228,7 @@ export const es: Dict = {
     ctaTitle: "Empieza tu camino hoy",
     ctaBody: "Elige el curso gratuito de entrada y da el siguiente paso en tu carrera en ciberseguridad.",
     courses: {
-      fundamentals: "Cybersecurity Fundamentals",
+      fundamentals: "Ciberseguridad Avanzada",
       soc: "SOC Analyst: Formación Completa",
       blue: "Blue Team Advanced",
       sc900: "Preparatorio SC-900",
@@ -237,7 +237,7 @@ export const es: Dict = {
       incident: "Investigación de Incidentes (MITRE ATT&CK)",
     },
     descs: {
-      fundamentals: "Base sólida en seguridad de la información: redes, criptografía y principios de defensa.",
+      fundamentals: "Redes y protocolos, criptografía, amenazas y vulnerabilidades, gestión de identidades y prácticas de protección.",
       soc: "Formación completa para analistas SOC N1 y N2: detección, análisis y respuesta a incidentes.",
       blue: "Técnicas avanzadas de defensa, threat hunting, análisis forense y controles de seguridad.",
       sc900: "Preparación completa para el examen Microsoft Security, Compliance, and Identity Fundamentals.",

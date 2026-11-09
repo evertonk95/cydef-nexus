@@ -21,10 +21,10 @@ export interface Course {
 
 export const courseDataPt: Record<string, Course> = {
   "cybersecurity-fundamentals": {
-    levelKey: "beginner",
+    levelKey: "advanced",
     duration: "40 horas",
     description:
-      "Construa uma base sólida em segurança da informação com este curso completo que aborda desde conceitos fundamentais até práticas essenciais de proteção.",
+      "Formação completa em segurança da informação: redes e protocolos, criptografia, ameaças e vulnerabilidades, gestão de identidade e práticas de proteção.",
     objectives: [
       "Compreender os princípios fundamentais de segurança da informação",
       "Dominar conceitos de redes e protocolos essenciais",
@@ -99,7 +99,7 @@ export const courseDataPt: Record<string, Course> = {
     target:
       "Profissionais que desejam atuar em SOC, analistas de suporte buscando especialização, profissionais de TI migrando para segurança.",
     prerequisites:
-      "Conhecimentos em redes, sistemas operacionais e fundamentos de segurança. Recomendado ter concluído Cybersecurity Fundamentals ou experiência equivalente.",
+      "Conhecimentos em redes, sistemas operacionais e fundamentos de segurança. Recomendado ter concluído Cybersecurity Avançado ou experiência equivalente.",
     modules: [
       {
         title: "Introdução ao SOC",
@@ -216,10 +216,10 @@ export const courseDataPt: Record<string, Course> = {
 
 export const courseDataEn: Record<string, Course> = {
   "cybersecurity-fundamentals": {
-    levelKey: "beginner",
+    levelKey: "advanced",
     duration: "40 hours",
     description:
-      "Build a solid foundation in information security with this complete course, from fundamental concepts to essential protection practices.",
+      "Complete course in information security: networks and protocols, cryptography, threats and vulnerabilities, identity management and protection practices.",
     objectives: [
       "Understand the core principles of information security",
       "Master essential networking concepts and protocols",
@@ -294,7 +294,7 @@ export const courseDataEn: Record<string, Course> = {
     target:
       "Professionals who want to work in a SOC, support analysts seeking specialization, and IT professionals moving into security.",
     prerequisites:
-      "Knowledge of networks, operating systems and security fundamentals. Completing Cybersecurity Fundamentals or equivalent experience is recommended.",
+      "Knowledge of networks, operating systems and security fundamentals. Completing Advanced Cybersecurity or equivalent experience is recommended.",
     modules: [
       {
         title: "Introduction to the SOC",
@@ -411,10 +411,10 @@ export const courseDataEn: Record<string, Course> = {
 
 export const courseDataEs: Record<string, Course> = {
   "cybersecurity-fundamentals": {
-    levelKey: "beginner",
+    levelKey: "advanced",
     duration: "40 horas",
     description:
-      "Construye una base sólida en seguridad de la información con este curso completo, desde los conceptos fundamentales hasta las prácticas esenciales de protección.",
+      "Formación completa en seguridad de la información: redes y protocolos, criptografía, amenazas y vulnerabilidades, gestión de identidades y prácticas de protección.",
     objectives: [
       "Comprender los principios fundamentales de la seguridad de la información",
       "Dominar conceptos esenciales de redes y protocolos",
@@ -489,7 +489,7 @@ export const courseDataEs: Record<string, Course> = {
     target:
       "Profesionales que desean trabajar en un SOC, analistas de soporte que buscan especializarse y profesionales de TI que migran hacia la seguridad.",
     prerequisites:
-      "Conocimientos de redes, sistemas operativos y fundamentos de seguridad. Se recomienda haber completado Cybersecurity Fundamentals o tener experiencia equivalente.",
+      "Conocimientos de redes, sistemas operativos y fundamentos de seguridad. Se recomienda haber completado Ciberseguridad Avanzada o tener experiencia equivalente.",
     modules: [
       {
         title: "Introducción al SOC",
