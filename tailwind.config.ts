@@ -14,9 +14,14 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        "display-lg": ["clamp(2.75rem, 6vw, 6rem)", { lineHeight: "0.95", letterSpacing: "-0.03em" }],
+        "display-md": ["clamp(2rem, 4vw, 3rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+      },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         "instrument-serif": ["Instrument Serif", "serif"],
+        display: ["Space Grotesk", "Inter", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
