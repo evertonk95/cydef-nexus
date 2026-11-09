@@ -6,11 +6,12 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { currentLang } from "@/lib/lang";
 import { trackPageview } from "@/lib/analytics";
 import { PreEnrollmentForm } from "./form/PreEnrollmentForm";
-import { Hero, Courses, HowItWorks, Proof, Faq, LandingFooter } from "./sections";
+import { Hero, Courses, HowItWorks, Proof, Faq, FinalCta, LandingFooter } from "./sections";
 
 /**
  * Landing de captura — CyDef Academy (S-02, UX package v8).
  * Rota: /academy/gratuito (proposta; constante única em src/lib/config.ts).
+ * Layout (09/11/2026): formulário no hero, ao lado da proposta; CTA final volta ao formulário.
  * Fluxo J1 100% navegável por teclado; WCAG 2.2 AA (labels, foco visível,
  * erro inline, aria-live, reflow 320px, prefers-reduced-motion global).
  * key={lang} no formulário: schema zod localizado é reconstruído por idioma.
@@ -28,12 +29,12 @@ const AcademyLanding = () => {
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
       <main id="conteudo">
-        <Hero />
+        <Hero form={<PreEnrollmentForm key={lang} />} />
         <Courses />
         <HowItWorks />
         <Proof />
         <Faq />
-        <PreEnrollmentForm key={lang} />
+        <FinalCta />
       </main>
       <LandingFooter />
       <Footer />

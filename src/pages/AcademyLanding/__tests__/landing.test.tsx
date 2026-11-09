@@ -34,7 +34,7 @@ describe("AcademyLanding (S-02)", () => {
   it("renderiza hero com H1 e CTA âncora", () => {
     renderLanding();
     expect(
-      screen.getByRole("heading", { level: 1, name: /Comece sua carreira de Cybersecurity/i }),
+      screen.getByRole("heading", { level: 1, name: /Comece sua carreira em cibersegurança/i }),
     ).toBeInTheDocument();
     const cta = screen.getByRole("link", { name: /Quero meu acesso gratuito/i });
     expect(cta).toHaveAttribute("href", "#pre-inscricao");
@@ -51,6 +51,27 @@ describe("AcademyLanding (S-02)", () => {
     expect(screen.getByText("Como funciona")).toBeInTheDocument();
     expect(screen.getByText("Pré-inscreva-se")).toBeInTheDocument();
     expect(screen.getByText("Conteúdo de quem vive a segurança no dia a dia")).toBeInTheDocument();
+  });
+
+  it("referências NIST, MITRE ATT&CK e CIS apontam para os sites oficiais, em nova aba", () => {
+    renderLanding();
+    const esperado: [RegExp, string][] = [
+      [/^NIST/, "https://www.nist.gov/cyberframework"],
+      [/^MITRE ATT&CK/, "https://attack.mitre.org/"],
+      [/^CIS Controls/, "https://www.cisecurity.org/controls"],
+    ];
+    for (const [nome, href] of esperado) {
+      const link = screen.getByRole("link", { name: nome });
+      expect(link).toHaveAttribute("href", href);
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    }
+  });
+
+  it("CTA final leva de volta ao formulário no topo", () => {
+    renderLanding();
+    expect(screen.getByRole("heading", { level: 2, name: /Sua base em cibersegurança começa aqui/i })).toBeInTheDocument();
+    expect(document.getElementById("pre-inscricao")).not.toBeNull();
   });
 
   it("FAQ acessível por teclado (botões com aria-expanded)", async () => {
