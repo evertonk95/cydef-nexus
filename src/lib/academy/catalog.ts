@@ -14,7 +14,7 @@ export interface AcademyCourseCard {
 }
 
 export const academyCatalog: AcademyCourseCard[] = [
-  { id: "fundamentals", slug: "cybersecurity-fundamentals", levelKey: "beginner", duration: "40h", available: true },
+  { id: "fundamentals", slug: "cybersecurity-fundamentals", levelKey: "advanced", duration: "40h", available: true },
   { id: "soc", slug: "soc-analyst", levelKey: "intermediate", duration: "80h", available: true },
   { id: "blue", slug: "blue-team-advanced", levelKey: "advanced", duration: "60h", available: true },
   { id: "sc900", slug: "sc-900-prep", levelKey: "beginner", duration: "30h", available: false },
