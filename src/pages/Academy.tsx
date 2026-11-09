@@ -348,7 +348,6 @@ const Academy = () => {
                     </span>
                     <div className="flex flex-col gap-3 md:items-center">
                       <h3 className="text-xl font-bold text-white leading-tight">{t(`academy.courses.${course.id}`)}</h3>
-                      <span className={`${badgeOrange} self-start md:self-center`}>{t(`academy.level.${course.levelKey}`)}</span>
                       <p className="text-sm text-neutral-400 leading-relaxed max-w-xs">{t(`academy.descs.${course.id}`)}</p>
                     </div>
                   </li>
