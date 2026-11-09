@@ -9,7 +9,7 @@ import { L, waLink, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
 import { availableAcademyCourses } from "@/lib/academy/catalog";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
-import { PostsSection, AcademySection, LabsSection } from "@/components/home/HomeSections";
+import { PostsSection, AcademySection, LabsSection, PrinciplesSection } from "@/components/home/HomeSections";
 import { countPostsForLang, postsForLangMeta } from "@/lib/blog/posts";
 
 const Index = () => {
@@ -153,6 +153,7 @@ const Index = () => {
         <PostsSection posts={ultimosArtigos} />
         <AcademySection courses={cursosDisponiveis} />
         <LabsSection visible={labsDisponivel} />
+        <PrinciplesSection />
 
       </div>
 

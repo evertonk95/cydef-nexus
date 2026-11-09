@@ -157,3 +157,36 @@ export const LabsSection = ({ visible }: { visible: boolean }) => {
     </section>
   );
 };
+
+export const PrinciplesSection = () => {
+  const { t } = useTranslation();
+  const principles = t("home.principles", { returnObjects: true }) as
+    | { title: string; desc: string }[]
+    | string;
+  if (!Array.isArray(principles) || principles.length === 0) return null;
+
+  return (
+    <section aria-labelledby="home-principios" className="mt-8 pt-16 pb-24 border-t border-white/5">
+      <div className="px-6 md:px-10">
+        <h2 id="home-principios" className="text-3xl md:text-4xl font-bold tracking-tighter text-white mb-2">
+          {t("home.principlesTitle")}
+        </h2>
+        <p className="text-neutral-400 max-w-xl mb-10">{t("home.principlesLead")}</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {principles.map((item, i) => (
+            <div
+              key={item.title}
+              className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/40 transition-colors duration-200"
+            >
+              <span className="block text-xs font-semibold tracking-widest text-orange-400/80 mb-4">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="text-lg font-semibold text-white mb-2 leading-snug">{item.title}</h3>
+              <p className="text-sm text-neutral-400 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
