@@ -559,6 +559,36 @@ no tempo de reuniões e dobrou a velocidade de entregas no T3.
 </div>
 </div>
 
+<!-- CyDef: tipografia e tokens (issue #145) -->
+<section id="cydef-tokens" style="background:#050505;color:#fff;font-family:Inter,sans-serif;padding:4rem 1.5rem;border-top:1px solid rgba(255,255,255,.08)">
+  <div style="max-width:64rem;margin:0 auto">
+    <p style="color:#fb923c;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin:0 0 .75rem">Design system</p>
+    <h2 style="font-family:'Space Grotesk',Inter,sans-serif;font-size:2.5rem;letter-spacing:-.02em;margin:0 0 1rem">Tipografia e tokens</h2>
+    <p style="color:#a3a3a3;max-width:40rem;margin:0 0 2.5rem">Inter no corpo, Space Grotesk nos titulos. Ambas com licenca OFL, auto-hospedadas em <code>/public/fonts</code> e <code>display: swap</code>.</p>
+
+    <h3 style="font-family:'Space Grotesk',Inter,sans-serif;font-size:1.25rem;margin:2rem 0 .75rem">Escala de titulo</h3>
+    <div style="display:grid;gap:1.5rem">
+      <div><p style="font-family:'Space Grotesk',Inter,sans-serif;font-size:clamp(2.75rem,6vw,6rem);line-height:.95;letter-spacing:-.03em;margin:0">Seguranca que evolui</p><p style="color:#737373;font-size:.75rem;margin:.5rem 0 0">display-lg: clamp(2.75rem, 6vw, 6rem) / 0.95 / -0.03em</p></div>
+      <div><p style="font-family:'Space Grotesk',Inter,sans-serif;font-size:clamp(2rem,4vw,3rem);line-height:1.05;letter-spacing:-.02em;margin:0">O ecossistema CyDef</p><p style="color:#737373;font-size:.75rem;margin:.5rem 0 0">display-md: clamp(2rem, 4vw, 3rem) / 1.05 / -0.02em</p></div>
+      <div><p style="font-size:1.125rem;line-height:1.7;margin:0;color:#d4d4d4">Corpo: Inter 400, 18px, entrelinha 1.7. Texto secundario em neutral-400 (#a3a3a3) sobre #050505.</p></div>
+    </div>
+
+    <h3 style="font-family:'Space Grotesk',Inter,sans-serif;font-size:1.25rem;margin:3rem 0 .75rem">Tokens</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:.875rem;color:#d4d4d4">
+      <thead><tr style="text-align:left;color:#737373"><th style="padding:.5rem 0">Token</th><th>Valor</th><th>Onde vive</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:.5rem 0">Cor de fundo</td><td>#050505</td><td>body / bg-neutral-950</td></tr>
+        <tr><td style="padding:.5rem 0">Laranja da marca</td><td>hsl(24 95% 53%)</td><td>--primary / orange-500</td></tr>
+        <tr><td style="padding:.5rem 0">Ambar de apoio</td><td>hsl(38 92% 50%)</td><td>--lumina-amber</td></tr>
+        <tr><td style="padding:.5rem 0">Raio</td><td>0.5rem</td><td>--radius</td></tr>
+        <tr><td style="padding:.5rem 0">Sombra de card</td><td>var(--shadow-card)</td><td>shadow-card</td></tr>
+        <tr><td style="padding:.5rem 0">Glow laranja</td><td>var(--shadow-glow)</td><td>shadow-glow</td></tr>
+        <tr><td style="padding:.5rem 0">Motion</td><td>120 a 240 ms, ease-out na entrada</td><td>transition-* do Tailwind</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <!-- js -->
 <!-- Initializes UnicornStudio runtime that powers the Aura background -->
 <script src="assets/js/unicorn-studio.js"></script>
