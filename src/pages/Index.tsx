@@ -3,37 +3,24 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowRight, Shield, Newspaper, GraduationCap, FlaskConical, Microscope, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { LANGS } from "@/i18n";
 import { L, waLink, currentLang } from "@/lib/lang";
-import { fetchAcademyStats, isAcademyStatsAvailable, STATS_POLL_INTERVAL_MS } from "@/lib/academy/stats";
+import { coursesByLang } from "@/lib/courses";
+import { labsArtifactsMeta } from "@/lib/labs/artifacts";
 import { countPostsForLang } from "@/lib/blog/posts";
 
 const Index = () => {
   useScrollReveal();
   const { t } = useTranslation();
-  const [alunosMatriculados, setAlunosMatriculados] = useState<number | null>(null);
-
-  // Contagem real de alunos matriculados na Academy (atualiza automático — polling).
-  // Só roda quando a feature está habilitada no build (fail secure).
-  useEffect(() => {
-    if (!isAcademyStatsAvailable()) return;
-    let ativo = true;
-    const carregar = async () => {
-      try {
-        const stats = await fetchAcademyStats();
-        if (ativo) setAlunosMatriculados(stats.matriculados);
-      } catch {
-        // Mantém o último valor exibido; sem quebrar a home se a API falhar.
-      }
-    };
-    carregar();
-    const interval = setInterval(carregar, STATS_POLL_INTERVAL_MS);
-    return () => {
-      ativo = false;
-      clearInterval(interval);
-    };
-  }, []);
+  const lang = currentLang();
+  // Metricas da home: cada numero vem de fonte de dados real, nenhum e digitado a mao (issue #141).
+  const metricas = [
+    { key: "statArticles", valor: countPostsForLang(lang) },
+    { key: "statLangs", valor: LANGS.length },
+    { key: "statCourses", valor: Object.keys(coursesByLang[lang]).length },
+    { key: "statLabs", valor: labsArtifactsMeta.length },
+  ];
 
   const pilares = [
     { key: "media", icon: Newspaper, para: "/blog", ativo: true },
@@ -141,20 +128,14 @@ const Index = () => {
           </div>
         </div>
 
-        {/* stats — apenas números reais */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8 mt-20 pt-12 border-t border-white/5 pb-24 relative z-20">
-          <div className="flex flex-col gap-2 items-center md:items-start animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">{countPostsForLang(currentLang())}</div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">{t("home.statArticles")}</div>
-          </div>
-          <div className="flex flex-col gap-2 items-center md:items-start animate-on-scroll">
-            <div className="md:text-7xl lg:text-8xl leading-none text-6xl font-light text-white tracking-tighter">
-              {isAcademyStatsAvailable()
-                ? (alunosMatriculados !== null ? alunosMatriculados : "—")
-                : "—"}
+        {/* metricas: apenas numeros derivados do conteudo real */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-20 pt-12 border-t border-white/5 pb-24 relative z-20">
+          {metricas.map((m) => (
+            <div key={m.key} className="flex flex-col gap-2 items-center md:items-start animate-on-scroll">
+              <div data-testid={`metric-${m.key}`} className="text-5xl md:text-6xl lg:text-7xl leading-none font-light text-white tracking-tighter">{m.valor}</div>
+              <div className="text-base font-medium pl-1 text-neutral-400 text-center md:text-left">{t(`home.${m.key}`)}</div>
             </div>
-            <div className="text-xl font-medium pl-1 text-neutral-400">{t("home.statStudents")}</div>
-          </div>
+          ))}
         </div>
 
       </div>

@@ -40,11 +40,13 @@ const loaders: Record<string, Loader> = {
     ),
   "pt:click2shell-wordpress-instalacao-tema-execucao-remota": () =>
     import("./posts.click2shell-wordpress").then((m) => m.click2shellWordpressPost),
-  // PT-only (sem tradução): EN/ES caem no fallback para o original PT.
+  // rathat: PT, EN e ES em arquivo próprio desde 09/11/2026 (paridade editorial).
   "pt:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan").then((m) => m.rathatAndroidTrojanPost),
 
   // --- EN ---
+  "en:rathat-trojan-bancario-android-controle-ia": () =>
+    import("./posts.rathat-android-trojan.en").then((m) => m.rathatAndroidTrojanPostEn),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -75,6 +77,8 @@ const loaders: Record<string, Loader> = {
     ),
 
   // --- ES ---
+  "es:rathat-trojan-bancario-android-controle-ia": () =>
+    import("./posts.rathat-android-trojan.es").then((m) => m.rathatAndroidTrojanPostEs),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>

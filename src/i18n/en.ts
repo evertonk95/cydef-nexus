@@ -50,6 +50,9 @@ export const en = {
       consulting: { name: "Consulting", role: "Protect organizations", state: "Under construction" },
     },
     statArticles: "Published technical articles",
+    statLangs: "Published languages",
+    statCourses: "Academy courses",
+    statLabs: "Labs projects",
     statStudents: "Students enrolled in the Academy",
   },
   about: {

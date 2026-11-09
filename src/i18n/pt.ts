@@ -51,6 +51,9 @@ export const pt: Dict = {
       consulting: { name: "Consulting", role: "Proteger organizações", state: "Em construção" },
     },
     statArticles: "Artigos técnicos publicados",
+    statLangs: "Idiomas publicados",
+    statCourses: "Cursos na Academy",
+    statLabs: "Projetos no Labs",
     statStudents: "Alunos matriculados na Academy",
   },
   about: {

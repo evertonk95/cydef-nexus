@@ -50,6 +50,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
     "author": "CyDef Team"
   },
   {
+    "slug": "rathat-trojan-bancario-android-controle-ia",
+    "title": "RatHat: Android banking trojan uses AI to steal credentials, codes and rebuild PINs",
+    "category": "Threat Intelligence",
+    "excerpt": "An Android banking trojan identified as RatHat combines social engineering, abuse of the accessibility service and misuse of the Android Debug Bridge to overlay screens of financial apps, intercept authentication codes and rebuild PINs and unlock patterns from touch coordinates.",
+    "date": "September 21, 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "10 min read",
+    "image": "/assets/blog/rathat-android-banking-trojan-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "click2shell-wordpress-instalacao-tema-execucao-remota",
     "title": "Click2Shell: WordPress flaw installs a theme via link and leads to remote code execution",
     "category": "Threat Intelligence",
@@ -438,6 +449,17 @@ export const blogPostsEsMeta: BlogPostMeta[] = [
     "dateISO": "2026-09-25",
     "readTime": "11 min de lectura",
     "image": "/assets/blog/cloudflare-containers-cross-tenant-thumb.webp",
+    "author": "Equipo CyDef"
+  },
+  {
+    "slug": "rathat-trojan-bancario-android-controle-ia",
+    "title": "RatHat: troyano bancario en Android usa IA para robar credenciales, códigos y reconstruir PINs",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Un troyano bancario para Android identificado como RatHat combina ingeniería social, abuso del servicio de accesibilidad y uso indebido del Android Debug Bridge para superponer pantallas de aplicaciones financieras, interceptar códigos de autenticación y reconstruir PINs y patrones de desbloqueo a partir de las coordenadas de toque.",
+    "date": "21 de septiembre de 2026",
+    "dateISO": "2026-09-21",
+    "readTime": "10 min de lectura",
+    "image": "/assets/blog/rathat-android-banking-trojan-thumb.webp",
     "author": "Equipo CyDef"
   },
   {

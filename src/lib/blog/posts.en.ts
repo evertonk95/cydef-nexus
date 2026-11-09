@@ -8,6 +8,7 @@ import { claudeSkillsPostEn } from "./posts.claude-skills.en";
 import { wazuhEmMovimentoPostEn } from "./posts.wazuh.en";
 import { ciscoSegEmailGatewayPostEn } from "./posts.cisco-seg-email-gateway.en";
 import { cloudflareContainersTenantsPostEn } from "./posts.cloudflare-containers-tenants.en";
+import { rathatAndroidTrojanPostEn } from "./posts.rathat-android-trojan.en";
 import { click2shellWordpressPostEn } from "./posts.click2shell-wordpress.en";
 
 export const blogPostsEn: BlogPost[] = [
@@ -15,6 +16,7 @@ export const blogPostsEn: BlogPost[] = [
   apacheHttpServer2469PostEn,
   googleChromeUpdateFixesPostEn,
   cloudflareContainersTenantsPostEn,
+  rathatAndroidTrojanPostEn,
   click2shellWordpressPostEn,
   ciscoSegEmailGatewayPostEn,
   phishingBlobPostEn,
