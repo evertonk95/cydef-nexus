@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { academyCatalog } from "@/lib/academy/catalog";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { L } from "@/lib/lang";
@@ -18,25 +19,11 @@ const Academy = () => {
   useScrollReveal();
   const { t } = useTranslation();
 
-  const slugById: Record<string, string> = {
-    fundamentals: "cybersecurity-fundamentals",
-    soc: "soc-analyst",
-    blue: "blue-team-advanced",
-    sc900: "sc-900-prep",
-    secplus: "security-plus-prep",
-    malware: "malware-analysis",
-    incident: "incident-investigation",
-  };
+  const slugById: Record<string, string> = Object.fromEntries(
+    academyCatalog.map((c) => [c.id, c.slug]),
+  );
 
-  const courses = [
-    { id: "fundamentals", levelKey: "beginner", duration: "40h", available: true },
-    { id: "soc", levelKey: "intermediate", duration: "80h", available: true },
-    { id: "blue", levelKey: "advanced", duration: "60h", available: true },
-    { id: "sc900", levelKey: "beginner", duration: "30h", available: false },
-    { id: "secplus", levelKey: "intermediate", duration: "50h", available: false },
-    { id: "malware", levelKey: "intermediate", duration: "40h", available: false },
-    { id: "incident", levelKey: "advanced", duration: "45h", available: false },
-  ];
+  const courses = academyCatalog;
 
   const benefits = t("academy.benefits", { returnObjects: true }) as { title: string; desc: string }[];
   const features = t("academy.features", { returnObjects: true }) as { title: string; desc: string }[];
