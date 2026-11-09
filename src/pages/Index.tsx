@@ -114,6 +114,9 @@ const Index = () => {
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">{t(`home.pillars.${p.key}.name`)}</h3>
                 <p className="text-xs text-neutral-500 mb-3">{t(`home.pillars.${p.key}.role`)}</p>
+                {!p.ativo ? (
+                  <p className="text-[11px] leading-snug text-neutral-400 mb-3">{t(`home.pillars.${p.key}.next`)}</p>
+                ) : null}
                 <span
                   className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${
                     p.ativo
