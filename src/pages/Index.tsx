@@ -7,8 +7,10 @@ import { useTranslation } from "react-i18next";
 import { LANGS } from "@/i18n";
 import { L, waLink, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
+import { availableAcademyCourses } from "@/lib/academy/catalog";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
-import { countPostsForLang } from "@/lib/blog/posts";
+import { PostsSection, AcademySection, LabsSection } from "@/components/home/HomeSections";
+import { countPostsForLang, postsForLangMeta } from "@/lib/blog/posts";
 
 const Index = () => {
   useScrollReveal();
@@ -21,6 +23,13 @@ const Index = () => {
     { key: "statCourses", valor: Object.keys(coursesByLang[lang]).length },
     { key: "statLabs", valor: labsArtifactsMeta.length },
   ];
+
+  // Secoes alimentadas por dado real: sem fonte, a secao nao renderiza (issue #143).
+  const ultimosArtigos = [...postsForLangMeta(lang)]
+    .sort((a, b) => b.dateISO.localeCompare(a.dateISO))
+    .slice(0, 3);
+  const cursosDisponiveis = availableAcademyCourses;
+  const labsDisponivel = labsArtifactsMeta.length > 0;
 
   const pilares = [
     { key: "media", icon: Newspaper, para: "/blog", ativo: true },
@@ -140,6 +149,10 @@ const Index = () => {
             </div>
           ))}
         </div>
+
+        <PostsSection posts={ultimosArtigos} />
+        <AcademySection courses={cursosDisponiveis} />
+        <LabsSection visible={labsDisponivel} />
 
       </div>
 
