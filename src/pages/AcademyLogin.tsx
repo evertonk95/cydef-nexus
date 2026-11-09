@@ -1,90 +1,137 @@
-import { useState, FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ArrowLeft, Info, Lock, Mail } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { PrimaryCtaContent } from "@/components/academy/PrimaryCta";
+import { StudentAreaPreview } from "@/components/academy/StudentAreaPreview";
+import { focusRing, primaryCtaClass } from "@/components/academy/ctaStyles";
 import { L } from "@/lib/lang";
 import { LANDING_PATH } from "@/lib/config";
 
-// Tela de login (protótipo). Sem contas de demonstração: o acesso real
-// chega por e-mail após a pré-inscrição confirmada na landing de captura.
+/**
+ * Tela de login da Academy (redesenho de 09/11/2026).
+ * O portal ainda não existe: o formulário mostra o modelo de acesso previsto
+ * (link por e-mail, sem senha), mas o envio NÃO coleta nem transmite o e-mail.
+ * Ao enviar, a tela só informa, de forma honesta, que o login ainda não está
+ * disponível. Quando a autenticação existir, o envio passa a chamar o backend
+ * e o aviso de "portal em desenvolvimento" sai.
+ */
 const AcademyLogin = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
-  const [erro, setErro] = useState(false);
+  const [avisoVisivel, setAvisoVisivel] = useState(false);
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
-    setErro(true);
+    setAvisoVisivel(true);
   };
 
   return (
-    <div className="academy-login">
+    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
       <Navigation />
-      <main id="conteudo" tabIndex={-1} style={{ paddingTop: 96, minHeight: "100vh" }}>
-        <div className="al-wrap">
-          <div className="al-login-card">
-            <h1>{t("login.title")}</h1>
-            <p className="al-sub">{t("login.sub")}</p>
-            <p className="al-note">{t("login.note")}</p>
-            <form onSubmit={enviar}>
-              <div className="al-field">
-                <label>{t("login.email")}</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t("login.emailPh")}
-                  autoComplete="off"
-                />
-              </div>
-              <div className="al-field">
-                <label>{t("login.password")}</label>
-                <input type="password" placeholder={t("login.passwordPh")} />
-              </div>
-              <button type="submit" className="al-btn">
-                {t("login.submit")}
-              </button>
-            </form>
-            {erro && (
-              <div className="al-erro">
-                {t("login.error")}
-              </div>
-            )}
-            <div className="al-foot-links">
-              <span>{t("login.noAccount")} </span>
-              <Link to={L(LANDING_PATH)} className="al-link">
-                {t("login.preRegister")}
-              </Link>
+      <main id="conteudo" tabIndex={-1} className="relative isolate overflow-hidden outline-none pt-32 md:pt-40 pb-24 md:pb-28 px-2 sm:px-6">
+        <div aria-hidden="true" className="absolute inset-0 -z-10 pointer-events-none">
+          <img
+            alt=""
+            className="w-full h-full object-cover opacity-35"
+            src="/assets/cydef-hero-bg.webp"
+            srcSet="/assets/cydef-hero-bg-960.webp 960w, /assets/cydef-hero-bg.webp 1920w"
+            sizes="100vw"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,_rgba(5,5,5,0.35)_0%,_rgba(5,5,5,0.75)_55%,_rgba(5,5,5,0.95)_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-[#050505]/60 to-[#050505]" />
+        </div>
+
+        <div className="container mx-auto max-w-7xl grid lg:grid-cols-[1.1fr_1fr] gap-14 lg:gap-16 items-center">
+          {/* Apresentação: no mobile vem depois do card, que é a ação principal */}
+          <div className="order-2 lg:order-1">
+            <div className="inline-flex items-center gap-2 mb-8">
+              <span className="flex h-2 w-2 rounded-full bg-orange-500" aria-hidden="true" />
+              <span className="text-xs font-bold tracking-widest uppercase text-orange-500/90">{t("login.badge")}</span>
             </div>
-            <Link to={L("/academy")} className="al-back">
-              ← {t("login.back")}
-            </Link>
+            <p className="text-4xl md:text-5xl leading-[0.95] tracking-tighter font-medium text-white mb-6">
+              {t("login.h1a")}
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600">
+                {t("login.h1b")}
+              </span>
+            </p>
+            <p className="text-lg leading-relaxed text-neutral-300 max-w-xl mb-12">{t("login.lead")}</p>
+            <StudentAreaPreview />
+          </div>
+
+          {/* Card de login */}
+          <div className="order-1 lg:order-2 relative">
+            <div aria-hidden="true" className="absolute -inset-6 bg-orange-500/10 blur-[70px] rounded-full pointer-events-none" />
+            <section
+              aria-labelledby="login-titulo"
+              className="relative rounded-3xl border border-orange-500/30 bg-neutral-900/95 backdrop-blur-md p-6 sm:p-8 md:p-10 shadow-[0_0_60px_-15px_rgba(249,115,22,0.45)]"
+            >
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center mb-6">
+                <Lock className="w-6 h-6 text-orange-400" aria-hidden="true" />
+              </div>
+              <h1 id="login-titulo" className="text-3xl md:text-4xl font-medium tracking-tighter text-white mb-2">
+                {t("login.title")}
+              </h1>
+              <p className="text-neutral-400 mb-6">{t("login.sub")}</p>
+
+              <p className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-neutral-300 leading-relaxed mb-6">
+                <Info className="w-5 h-5 shrink-0 text-orange-400 mt-0.5" aria-hidden="true" />
+                {t("login.note")}
+              </p>
+
+              <form onSubmit={enviar} noValidate className="space-y-5 [color-scheme:dark]">
+                <div>
+                  <label htmlFor="login-email" className="block text-sm font-medium text-white mb-2">
+                    {t("login.email")}
+                  </label>
+                  <input
+                    id="login-email"
+                    type="email"
+                    autoComplete="off"
+                    placeholder={t("login.emailPh")}
+                    className={`w-full min-h-[48px] px-4 py-3 rounded-lg bg-[#0A0A0A] border border-white/10 hover:border-white/20 text-white placeholder:text-neutral-500 transition-colors duration-200 ${focusRing}`}
+                  />
+                </div>
+                <button type="submit" className={`${primaryCtaClass} w-full justify-between min-h-[48px]`}>
+                  <PrimaryCtaContent icon={<Mail className="w-4 h-4 text-white" aria-hidden="true" />}>
+                    {t("login.submit")}
+                  </PrimaryCtaContent>
+                </button>
+                <div aria-live="polite">
+                  {avisoVisivel ? (
+                    <p role="status" className="flex items-start gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 p-4 text-sm text-orange-200">
+                      <Info className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+                      {t("login.error")}
+                    </p>
+                  ) : null}
+                </div>
+              </form>
+
+              <div className="mt-6 pt-6 border-t border-white/10 text-center text-sm">
+                <p className="text-neutral-300">
+                  {t("login.noAccount")}{" "}
+                  <Link
+                    to={L(LANDING_PATH)}
+                    className={`font-medium text-orange-400 underline underline-offset-4 hover:text-orange-300 transition-colors duration-200 rounded ${focusRing}`}
+                  >
+                    {t("login.preRegister")}
+                  </Link>
+                </p>
+                <Link
+                  to={L("/academy")}
+                  className={`mt-4 inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors duration-200 rounded ${focusRing}`}
+                >
+                  <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                  {t("login.back")}
+                </Link>
+              </div>
+            </section>
           </div>
         </div>
       </main>
       <Footer />
-
-      <style>{`
-        .academy-login{--bg:#0A0A0C;--panel:#131318;--panel2:#17171D;--border:#24242C;--orange:#F46B27;--orange2:#F69021;--green:#22C55E;--amber:#F59E0B;--red:#EF4444;--text:#EDEDF0;--muted:#9CA3AF;--mono:'Cascadia Code',Consolas,'Courier New',monospace;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
-        .al-wrap{max-width:1080px;margin:0 auto;padding:24px 24px 60px}
-        .al-login-card{max-width:440px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
-        .al-login-card h1{font-size:22px;margin-bottom:6px}
-        .al-sub{color:var(--muted);font-size:13.5px;margin-bottom:16px}
-        .al-note{font-size:12.5px;color:var(--amber);margin-bottom:20px;line-height:1.5}
-        .al-field{margin-bottom:16px}
-        .al-field label{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
-        .al-field input{width:100%;background:#0E0E12;border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;padding:11px 13px;outline:none;box-sizing:border-box}
-        .al-field input:focus{border-color:var(--orange)}
-        .al-btn{display:block;width:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));border:none;border-radius:9px;color:#0A0A0C;font-weight:700;font-size:14.5px;padding:12px;cursor:pointer;margin-top:6px;font-family:inherit}
-        .al-btn:hover{filter:brightness(1.08)}
-        .al-btn-inline{width:auto;display:inline-block;padding:12px 22px}
-        .al-erro{font-family:var(--mono);font-size:12px;color:var(--red);margin-top:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:9px 12px;line-height:1.5}
-        .al-foot-links{margin-top:20px;font-size:13px;color:var(--muted)}
-        .al-link{color:var(--orange2);text-decoration:underline}
-        .al-back{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-        .al-back:hover{color:var(--text)}
-      `}</style>
     </div>
   );
 };
