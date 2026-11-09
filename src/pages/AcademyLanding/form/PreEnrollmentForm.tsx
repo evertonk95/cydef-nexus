@@ -12,6 +12,8 @@ import {
 import { captureApiUrl, isCaptureEnabled, isEmailEnabled, privacyPath } from "@/lib/config";
 import { L } from "@/lib/lang";
 import { track } from "@/lib/analytics";
+import { PrimaryCtaContent } from "@/components/academy/PrimaryCta";
+import { primaryCtaClass } from "@/components/academy/ctaStyles";
 
 /**
  * Formulário de pré-inscrição (J1) — estados: initial · submitting ·
@@ -135,7 +137,7 @@ export const PreEnrollmentForm = () => {
     errors[field]?.message ? String(errors[field]?.message) : undefined;
 
   const inputClass = (hasError?: string) =>
-    `w-full min-h-[48px] px-4 py-3 rounded-lg bg-[#0F0F10] border text-white placeholder:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] transition ${
+    `w-full min-h-[48px] px-4 py-3 rounded-lg bg-[#0F0F10] border text-white placeholder:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] transition ${
       hasError ? "border-red-500" : "border-[#26262A] hover:border-white/20"
     }`;
 
@@ -144,17 +146,17 @@ export const PreEnrollmentForm = () => {
   // -------------------------------------------------------------------------
   if (!captureEnabled) {
     return (
-      <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="py-20 px-4">
-        <div className="container mx-auto max-w-2xl">
-          <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12 text-center">
-            <h2 id="pre-inscricao-titulo" className="text-3xl font-bold text-white mb-4 tracking-tighter">
+      <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="scroll-mt-28">
+        <div className="w-full">
+          <div className="rounded-3xl border border-orange-500/30 bg-neutral-900/95 backdrop-blur-md p-6 sm:p-8 shadow-[0_0_60px_-15px_rgba(249,115,22,0.45)] text-center">
+            <h2 id="pre-inscricao-titulo" className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tighter">
               {t("form.soonTitle")}
             </h2>
             <p className="text-neutral-400 leading-relaxed mb-6">
               {t("form.soonBodyA")}
               <a
                 href={L(privacyPath())}
-                className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
+                className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded"
               >
                 {t("form.soonLink")}
               </a>
@@ -179,22 +181,22 @@ export const PreEnrollmentForm = () => {
   if (state.kind === "success" || state.kind === "email-failure") {
     const isEmailFailure = state.kind === "email-failure";
     return (
-      <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="py-20 px-4">
-        <div className="container mx-auto max-w-2xl">
+      <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="scroll-mt-28">
+        <div className="w-full">
           <div
-            className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12 text-center"
+            className="rounded-3xl border border-orange-500/30 bg-neutral-900/95 backdrop-blur-md p-6 sm:p-8 shadow-[0_0_60px_-15px_rgba(249,115,22,0.45)] text-center"
             role={isEmailFailure ? "alert" : "status"}
           >
             {isEmailFailure ? (
               <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" aria-hidden="true" />
             ) : (
-              <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />
+              <CheckCircle2 className="h-12 w-12 text-orange-400 mx-auto mb-4" aria-hidden="true" />
             )}
             <h2
               id="pre-inscricao-titulo"
               ref={successRef}
               tabIndex={-1}
-              className="text-3xl font-bold text-white mb-4 tracking-tighter focus:outline-none"
+              className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tighter focus:outline-none"
             >
               {isEmailFailure ? t("form.emailFailTitle") : t("form.successTitle")}
             </h2>
@@ -214,7 +216,7 @@ export const PreEnrollmentForm = () => {
                 type="button"
                 onClick={handleResend}
                 disabled={isSubmitting || !emailEnabled}
-                className="inline-flex items-center gap-2 px-6 py-3 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-[#F46B27] to-[#F69021] hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-6 py-3 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-orange-500 to-amber-500 hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Mail className="h-4 w-4" aria-hidden="true" />}
                 {t("form.resend")}
@@ -238,13 +240,13 @@ export const PreEnrollmentForm = () => {
   const isSubmittingUi = state.kind === "submitting" || isSubmitting;
 
   return (
-    <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="py-20 px-4">
-      <div className="container mx-auto max-w-2xl">
-        <div className="bg-[#141416] border border-[#26262A] rounded-3xl p-8 md:p-12">
-          <h2 id="pre-inscricao-titulo" className="text-3xl font-bold text-white mb-2 tracking-tighter">
+    <section id="pre-inscricao" aria-labelledby="pre-inscricao-titulo" className="scroll-mt-28">
+      <div className="w-full">
+        <div className="rounded-3xl border border-orange-500/30 bg-neutral-900/95 backdrop-blur-md p-6 sm:p-8 shadow-[0_0_60px_-15px_rgba(249,115,22,0.45)]">
+          <h2 id="pre-inscricao-titulo" className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tighter">
             {t("form.formTitle")}
           </h2>
-          <p className="text-neutral-400 mb-8">{t("form.formSub")}</p>
+          <p className="text-neutral-400 mb-6">{t("form.formSub")}</p>
 
           {/* Anúncios de status (WCAG 4.1.3) */}
           <div aria-live="polite" className="mb-4">
@@ -262,7 +264,7 @@ export const PreEnrollmentForm = () => {
             )}
           </div>
 
-          <form onSubmit={onSubmit} noValidate className="space-y-6">
+          <form onSubmit={onSubmit} noValidate className="space-y-5 [color-scheme:dark]">
             {/* Honeypot (oculto para humanos; bots preenchem) */}
             <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
               <label htmlFor={`${idBase}-website`}>{t("form.honeyLabel")}</label>
@@ -361,7 +363,7 @@ export const PreEnrollmentForm = () => {
                   type="checkbox"
                   aria-invalid={err("aceito") ? true : undefined}
                   aria-describedby={err("aceito") ? `${idBase}-aceito-erro` : undefined}
-                  className="mt-1 h-5 w-5 rounded border-[#26262A] bg-[#0F0F10] accent-[#F69021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+                  className="mt-0.5 h-5 w-5 shrink-0 rounded border-[#26262A] bg-[#0F0F10] accent-orange-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
                   disabled={isSubmittingUi}
                   {...register("aceito")}
                 />
@@ -371,7 +373,7 @@ export const PreEnrollmentForm = () => {
                     href={L(privacyPath())}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
+                    className="text-orange-400 underline underline-offset-4 hover:text-orange-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded"
                   >
                     {t("form.consentLink")}
                   </a>{" "}
@@ -392,7 +394,7 @@ export const PreEnrollmentForm = () => {
                   type="checkbox"
                   aria-invalid={err("declaracao_idade") ? true : undefined}
                   aria-describedby={err("declaracao_idade") ? `${idBase}-idade-erro` : undefined}
-                  className="mt-1 h-5 w-5 rounded border-[#26262A] bg-[#0F0F10] accent-[#F69021] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+                  className="mt-0.5 h-5 w-5 shrink-0 rounded border-[#26262A] bg-[#0F0F10] accent-orange-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
                   disabled={isSubmittingUi}
                   {...register("declaracao_idade")}
                 />
@@ -408,19 +410,12 @@ export const PreEnrollmentForm = () => {
               )}
             </fieldset>
 
-            <button
-              type="submit"
-              disabled={isSubmittingUi}
-              className="w-full inline-flex items-center justify-center gap-2 px-7 py-3.5 min-h-[48px] rounded-full font-semibold text-black bg-gradient-to-r from-[#F46B27] to-[#F69021] hover:brightness-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {isSubmittingUi ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                  {t("form.submitSending")}
-                </>
-              ) : (
-                t("form.submit")
-              )}
+            <button type="submit" disabled={isSubmittingUi} className={`${primaryCtaClass} w-full justify-between min-h-[48px]`}>
+              <PrimaryCtaContent
+                icon={isSubmittingUi ? <Loader2 className="w-4 h-4 text-white animate-spin" aria-hidden="true" /> : undefined}
+              >
+                {isSubmittingUi ? t("form.submitSending") : t("form.submit")}
+              </PrimaryCtaContent>
             </button>
             <p className="text-xs text-neutral-500 text-center">
               {t("form.footnotePre")}{" "}
@@ -428,7 +423,7 @@ export const PreEnrollmentForm = () => {
                 href={L(privacyPath())}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400 underline underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F69021] rounded"
+                className="text-neutral-400 underline underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded"
               >
                 {t("form.footnoteLink")}
               </a>

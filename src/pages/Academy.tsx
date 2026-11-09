@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { PrimaryCta } from "@/components/academy/PrimaryCta";
+import { badgeFree, badgeNeutral, badgeOrange, focusRing } from "@/components/academy/ctaStyles";
+import { freeCourseArt } from "@/lib/academy/art";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -39,38 +42,8 @@ interface FreeCourse {
   topics: readonly string[];
 }
 
-/** Arte de cada curso gratuito (assets existentes do site, laranja sobre preto). */
-const freeCourseArt: Record<string, string> = {
-  "fundamentos-para-soc": "/assets/cydef-card-deteccao.webp",
-  "cybersecurity-fundamentals": "/assets/cydef-card-resposta.webp",
-};
-
 /** Etapas da trilha: ids reais do catalogo, na ordem de progressao. */
 const TRAIL_IDS = ["fundamentals", "soc", "blue"] as const;
-
-const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]";
-
-const badgeOrange =
-  "inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-orange-500/10 border border-orange-500/30 text-orange-400";
-const badgeNeutral =
-  "inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/5 border border-white/15 text-neutral-400";
-
-/** CTA principal no padrao da home: pilula escura, icone laranja, seta e brilho. */
-const PrimaryCta = ({ to, children }: { to: string; children: ReactNode }) => (
-  <Link
-    to={to}
-    className={`group inline-flex items-center gap-3 rounded-full bg-neutral-950/90 border border-white/10 py-2 pl-2 pr-3 text-base font-medium text-white shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)] hover:border-orange-500/50 hover:shadow-[0_0_40px_rgba(249,115,22,0.45)] hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-200 ease-out ${focusRing}`}
-  >
-    <span className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-b from-orange-400 to-orange-600 flex items-center justify-center ring-1 ring-white/20 shadow-lg shadow-orange-500/30">
-      <GraduationCap className="w-4 h-4 text-white" aria-hidden="true" />
-    </span>
-    <span className="tracking-tight sm:whitespace-nowrap">{children}</span>
-    <span className="shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white/80 group-hover:translate-x-0.5 transition-transform duration-200 ease-out">
-      <ArrowRight className="w-3 h-3" aria-hidden="true" />
-    </span>
-  </Link>
-);
 
 const SectionHeader = ({ id, title, lead, aside }: { id: string; title: string; lead: string; aside?: ReactNode }) => (
   <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
@@ -174,7 +147,7 @@ const FreeCourseCard = ({ course, open }: { course: FreeCourse; open: boolean })
       ) : null}
       <div className="flex flex-col gap-4 p-5 sm:p-6 md:p-8 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-orange-500 text-black">
+          <span className={badgeFree}>
             {t("academy.freeTag")}
           </span>
           <span className={open ? badgeOrange : badgeNeutral}>{open ? t("academy.freeOpen") : t("academy.freeSoon")}</span>
