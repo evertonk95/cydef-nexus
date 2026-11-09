@@ -64,6 +64,14 @@ export const pt: Dict = {
     labsSectionTitle: "Labs",
     labsSectionLead: "Ferramentas e frameworks construídos em casa, com estado real publicado.",
     labsSectionCta: "Conhecer o Labs",
+    principlesTitle: "Como trabalhamos",
+    principlesLead: "Quatro regras que valem para tudo o que a CyDef publica.",
+    principles: [
+      { title: "Evidência primeiro", desc: "Toda afirmação técnica cita a fonte, com data e link verificável." },
+      { title: "Publicar só o que existe", desc: "Pilar, curso ou ferramenta só entra no ar quando há entrega real para mostrar." },
+      { title: "Formação gratuita de verdade", desc: "O conteúdo da Academy é aberto e a pré-inscrição não custa nada." },
+      { title: "Código aberto quando possível", desc: "Ferramentas do Labs vão para repositório público sempre que a licença permitir." },
+    ],
   },
   about: {
     badge: "Sobre a CyDef",

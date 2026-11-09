@@ -63,6 +63,14 @@ export const en = {
     labsSectionTitle: "Labs",
     labsSectionLead: "Tools and frameworks built in-house, with real status published.",
     labsSectionCta: "Explore Labs",
+    principlesTitle: "How we work",
+    principlesLead: "Four rules that apply to everything CyDef publishes.",
+    principles: [
+      { title: "Evidence first", desc: "Every technical statement cites its source, with a date and a verifiable link." },
+      { title: "Publish only what exists", desc: "A pillar, course or tool goes live only when there is real delivery to show." },
+      { title: "Free education, for real", desc: "Academy content is open and pre-enrollment costs nothing." },
+      { title: "Open source whenever possible", desc: "Labs tools go to a public repository whenever the license allows." },
+    ],
   },
   about: {
     badge: "About CyDef",
