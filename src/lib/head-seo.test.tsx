@@ -401,10 +401,10 @@ describe("HeadSeo · og/twitter por rota", () => {
   it("cai no card do idioma ativo quando não há conteúdo na rota", async () => {
     await translateInto("en");
     const en = (key: string) => String(i18n.getFixedT("en")(key));
-    // Artigo publicado só em PT (rathat-trojan-bancario-android-controle-ia).
+    // Slug sem versão no idioma pedido (o rathat passou a ter EN/ES em 09/11/2026).
     expect(
       ogForBase(
-        "/blog/rathat-trojan-bancario-android-controle-ia",
+        "/blog/artigo-sem-versao-no-idioma",
         "en",
         en,
         htmlTitles.en,
