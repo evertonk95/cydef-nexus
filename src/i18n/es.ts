@@ -54,7 +54,6 @@ export const es: Dict = {
     statLangs: "Idiomas publicados",
     statCourses: "Cursos en la Academy",
     statLabs: "Proyectos en Labs",
-    statStudents: "Estudiantes matriculados en la Academy",
     blogSectionTitle: "Últimos artículos",
     blogSectionLead: "Contenido técnico verificable, publicado con fuentes.",
     blogSectionCta: "Ver todos los artículos",

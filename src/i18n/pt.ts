@@ -54,7 +54,6 @@ export const pt: Dict = {
     statLangs: "Idiomas publicados",
     statCourses: "Cursos na Academy",
     statLabs: "Projetos no Labs",
-    statStudents: "Alunos matriculados na Academy",
     blogSectionTitle: "Últimos artigos",
     blogSectionLead: "Conteúdo técnico verificável, publicado com fonte.",
     blogSectionCta: "Ver todos os artigos",

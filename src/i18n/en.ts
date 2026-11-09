@@ -53,7 +53,6 @@ export const en = {
     statLangs: "Published languages",
     statCourses: "Academy courses",
     statLabs: "Labs projects",
-    statStudents: "Students enrolled in the Academy",
     blogSectionTitle: "Latest articles",
     blogSectionLead: "Verifiable technical content, published with sources.",
     blogSectionCta: "See all articles",

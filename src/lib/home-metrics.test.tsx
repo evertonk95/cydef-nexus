@@ -34,7 +34,7 @@ describe("metricas da home", () => {
     expect(valorDe(container, "statLabs")).toBe(String(labsArtifactsMeta.length));
   });
 
-  it("nao exibe alunos matriculados enquanto o limiar nao for definido", () => {
+  it("nao exibe alunos matriculados: a construcao da Academy ainda nao fechou (decisao 09/11/2026)", () => {
     const { container } = renderHome();
     expect(valorDe(container, "statStudents")).toBeNull();
   });

@@ -57,6 +57,7 @@ Nunca rodar `npx tsc --noEmit` puro: em tsconfig solution-style ele passa em fal
 - Sem travessão eme no meio do texto.
 - Sem claim sem realidade verificável (oferta, rating, perfil social não confirmado); preço sempre "sob consulta".
 - Alteração de frase no i18n exige paridade PT/EN/ES e varredura do `src` pelas ocorrências restantes.
+- Métrica de alunos matriculados na home: fora até a construção da Academy fechar (decisão de 09/11/2026). Quando voltar, o número vem da API, não de limiar estimado.
 
 ## Pós-deploy
 
