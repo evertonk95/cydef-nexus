@@ -29,7 +29,7 @@ export const orgLd = () => ({
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+15086305886",
+    email: "contato@cydef.com.br",
     contactType: "customer service",
     availableLanguage: ["en", "pt", "es"],
   },

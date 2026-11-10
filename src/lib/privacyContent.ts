@@ -23,7 +23,7 @@ export interface PrivacyDoc {
 export const privacyDocPt: PrivacyDoc = {
   docTitle: "Política de Privacidade",
   updatedLabel: "Última atualização:",
-  updatedAt: "4 de setembro de 2026",
+  updatedAt: "10 de novembro de 2026",
   contactIntro: "Dúvidas sobre esta Política? Fale com nosso encarregado:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -45,7 +45,7 @@ export const privacyDocPt: PrivacyDoc = {
     {
       title: "2. Dados que coletamos",
       paragraphs: [
-        "**2.1. Contato e mensagens (WhatsApp, e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Fornecido voluntariamente por você.",
+        "**2.1. Contato e mensagens (e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Fornecido voluntariamente por você.",
         "**2.2. Pré-inscrição na CyDef Academy**: Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. Quando a área do aluno for liberada, poderá incluir dados de progresso e histórico de acesso.",
         "**2.3. Dados de navegação e análise**: Endereço IP, tipo de navegador, páginas visitadas e tempo de permanência, coletados por ferramentas de análise (ex.: Google Analytics 4), quando aplicável e com seu consentimento.",
         "**2.4. Dados de pagamento (quando disponível)**: Processados exclusivamente por provedores de pagamento. Não armazenamos números de cartão ou dados completos de pagamento.",
@@ -181,7 +181,7 @@ export const privacyDocPt: PrivacyDoc = {
 export const privacyDocEn: PrivacyDoc = {
   docTitle: "Privacy Policy",
   updatedLabel: "Last updated:",
-  updatedAt: "September 4, 2026",
+  updatedAt: "November 10, 2026",
   contactIntro: "Questions about this Policy? Contact our data protection officer:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -203,7 +203,7 @@ export const privacyDocEn: PrivacyDoc = {
     {
       title: "2. Data we collect",
       paragraphs: [
-        "**2.1. Contact and messages (WhatsApp, email and forms)**: Name, email, country and message (including goals you share). Provided voluntarily by you.",
+        "**2.1. Contact and messages (email and forms)**: Name, email, country and message (including goals you share). Provided voluntarily by you.",
         "**2.2. CyDef Academy pre-enrollment**: Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. When the student area is released, it may also include course progress and access history.",
         "**2.3. Browsing and analytics data**: IP address, browser type, pages visited and time on site, collected by analytics tools (e.g., Google Analytics 4) when applicable and with your consent.",
         "**2.4. Payment data (when available)**: Processed exclusively by payment providers. We do not store card numbers or complete payment data.",
@@ -339,7 +339,7 @@ export const privacyDocEn: PrivacyDoc = {
 export const privacyDocEs: PrivacyDoc = {
   docTitle: "Política de Privacidad",
   updatedLabel: "Última actualización:",
-  updatedAt: "4 de septiembre de 2026",
+  updatedAt: "10 de noviembre de 2026",
   contactIntro: "¿Dudas sobre esta Política? Habla con nuestro encargado de datos:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -361,7 +361,7 @@ export const privacyDocEs: PrivacyDoc = {
     {
       title: "2. Datos que recopilamos",
       paragraphs: [
-        "**2.1. Contacto y mensajes (WhatsApp, correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). Proporcionados voluntariamente por ti.",
+        "**2.1. Contacto y mensajes (correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). Proporcionados voluntariamente por ti.",
         "**2.2. Preinscripción en la CyDef Academy**: Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. Cuando se libere el área de estudiantes, podrá incluir datos de progreso e historial de acceso.",
         "**2.3. Datos de navegación y análisis**: Dirección IP, tipo de navegador, páginas visitadas y tiempo de permanencia, recopilados por herramientas de análisis (p. ej., Google Analytics 4), cuando corresponda y con tu consentimiento.",
         "**2.4. Datos de pago (cuando estén disponibles)**: Procesados exclusivamente por proveedores de pago. No almacenamos números de tarjeta ni datos completos de pago.",

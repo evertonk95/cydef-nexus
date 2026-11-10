@@ -19,11 +19,6 @@ export const L = (path: string): string => {
   return localizePath(path, lang, "pt");
 };
 
-/** Official WhatsApp number (Everton, 03/09/2026). */
-export const WA_NUMBER = "15086305886";
-export const waLink = (message: string): string =>
-  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
-
 /** Strips the language prefix from a pathname. */
 export const stripLang = (pathname: string): string => {
   const parts = pathname.split("/");
