@@ -9,6 +9,7 @@ import { ciscoSegEmailGatewayPost } from "./posts.cisco-seg-email-gateway";
 import { click2shellWordpressPost } from "./posts.click2shell-wordpress";
 import { cloudflareContainersTenantsPost } from "./posts.cloudflare-containers-tenants";
 import { rathatAndroidTrojanPost } from "./posts.rathat-android-trojan";
+import { windowsActiveDirectoryRcePost } from "./posts.windows-active-directory-rce";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -22,6 +23,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  windowsActiveDirectoryRcePost,
   wp2shellWordpressPost,
   apacheHttpServer2469Post,
   googleChromeUpdateFixesPost,
