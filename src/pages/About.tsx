@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { L, waLink } from "@/lib/lang";
+import { L } from "@/lib/lang";
 import { Shield, Target, Globe, ArrowRight, Compass, HandHeart, Scale, Users, BookOpen, Lightbulb, Flag } from "lucide-react";
 
 const About = () => {
@@ -152,11 +152,11 @@ const About = () => {
                   <span className="inner flex items-center gap-2">{t("about.ctaStart")} <ArrowRight className="w-4 h-4" /></span>
                 </button>
               </Link>
-              <a href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer" className="inline-block">
+              <Link to={L("/")} className="inline-block">
                 <button className="px-6 py-4 rounded-lg border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors font-medium text-sm" type="button">
                   {t("common.talkToCydef")}
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

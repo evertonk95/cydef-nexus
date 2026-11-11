@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { L, waLink, currentLang } from "@/lib/lang";
+import { L, currentLang } from "@/lib/lang";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 import {
   Eye,
@@ -219,14 +219,14 @@ const Services = () => {
             <p className="text-white/70 text-lg mb-10 max-w-2xl mx-auto">
               {t("services.ctaBody")}
             </p>
-            <a href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer" className="inline-block">
+            <Link to={L("/")} className="inline-block">
               <button className="button-custom" type="button">
                 <div className="points_wrapper">
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
                 <span className="inner flex items-center gap-2">{t("services.ctaButton")} <ArrowRight className="w-4 h-4" /></span>
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

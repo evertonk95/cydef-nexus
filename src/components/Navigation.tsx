@@ -2,7 +2,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { L, waLink } from "@/lib/lang";
+import { L } from "@/lib/lang";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SkipLink } from "@/components/SkipLink";
 
@@ -40,12 +40,12 @@ export const Navigation = () => {
             <Link to={L("/academy/entrar")} className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
               {t("nav.signIn")}
             </Link>
-            <a href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer" className="button-custom scale-95">
+            <Link to={L("/")} className="button-custom scale-95">
               <div className="points_wrapper">
                 <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
               </div>
               <span className="inner">{t("common.talkToCydef")}</span>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,10 +88,8 @@ export const Navigation = () => {
               <Link to={L("/academy/entrar")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.signIn")}
               </Link>
-              <a
-                href={waLink(t("contact.waMsg"))}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={L("/")}
                 onClick={() => setIsOpen(false)}
                 className="button-custom w-full mt-4"
               >
@@ -99,7 +97,7 @@ export const Navigation = () => {
                   <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
                 </div>
                 <span className="inner">{t("common.talkToCydef")}</span>
-              </a>
+              </Link>
             </div>
           </div>
         )}
