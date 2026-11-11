@@ -43,10 +43,18 @@ const loaders: Record<string, Loader> = {
   // rathat: PT, EN e ES em arquivo próprio desde 09/11/2026 (paridade editorial).
   "pt:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan").then((m) => m.rathatAndroidTrojanPost),
+  "pt:windows-active-directory-rce-cve-2026-119948": () =>
+    import("./posts.windows-active-directory-rce").then(
+      (m) => m.windowsActiveDirectoryRcePost,
+    ),
 
   // --- EN ---
   "en:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.en").then((m) => m.rathatAndroidTrojanPostEn),
+  "en:windows-active-directory-rce-cve-2026-119948": () =>
+    import("./posts.windows-active-directory-rce.en").then(
+      (m) => m.windowsActiveDirectoryRcePostEn,
+    ),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -79,6 +87,10 @@ const loaders: Record<string, Loader> = {
   // --- ES ---
   "es:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.es").then((m) => m.rathatAndroidTrojanPostEs),
+  "es:windows-active-directory-rce-cve-2026-119948": () =>
+    import("./posts.windows-active-directory-rce.es").then(
+      (m) => m.windowsActiveDirectoryRcePostEs,
+    ),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>

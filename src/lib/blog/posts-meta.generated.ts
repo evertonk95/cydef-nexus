@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-active-directory-rce-cve-2026-119948",
+    "title": "Windows Active Directory: buffer overflow allows remote code execution by an authenticated attacker",
+    "category": "Threat Intelligence",
+    "excerpt": "Microsoft fixed a stack-based buffer overflow in Windows Active Directory (CVE-2026-119948) on November 10, 2026 that may allow an authenticated attacker to execute code over a network. Exploitation requires low privileges, no user interaction and has high attack complexity.",
+    "date": "November 11, 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "8 min read",
+    "image": "/assets/blog/windows-active-directory-rce-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell chains two WordPress flaws to create admin accounts and install web shells without login",
     "category": "Threat Intelligence",
@@ -207,6 +218,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-active-directory-rce-cve-2026-119948",
+    "title": "Windows Active Directory: estouro de buffer permite execução remota de código por atacante autenticado",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Microsoft corrigiu em 10 de novembro de 2026 uma falha de estouro de buffer baseado em pilha no Windows Active Directory (CVE-2026-119948) que pode permitir que um atacante autenticado execute código pela rede. A exploração exige privilégios baixos, não requer interação do usuário e tem complexidade alta.",
+    "date": "11 de Novembro, 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "8 min",
+    "image": "/assets/blog/windows-active-directory-rce-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell encadeia duas falhas do WordPress para criar administradores e instalar web shell sem login",
     "category": "Inteligência de Ameaças",
@@ -407,6 +429,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "windows-active-directory-rce-cve-2026-119948",
+    "title": "Windows Active Directory: desbordamiento de búfer permite ejecución remota de código por un atacante autenticado",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Microsoft corrigió el 10 de noviembre de 2026 una falla de desbordamiento de búfer basado en pila en Windows Active Directory (CVE-2026-119948) que puede permitir que un atacante autenticado ejecute código por la red. La explotación exige privilegios bajos, no requiere interacción del usuario y tiene una complejidad de ataque alta.",
+    "date": "11 de noviembre de 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "8 min de lectura",
+    "image": "/assets/blog/windows-active-directory-rce-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell encadena dos fallos de WordPress para crear administradores e instalar web shell sin login",

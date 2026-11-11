@@ -10,8 +10,10 @@ import { ciscoSegEmailGatewayPostEn } from "./posts.cisco-seg-email-gateway.en";
 import { cloudflareContainersTenantsPostEn } from "./posts.cloudflare-containers-tenants.en";
 import { rathatAndroidTrojanPostEn } from "./posts.rathat-android-trojan.en";
 import { click2shellWordpressPostEn } from "./posts.click2shell-wordpress.en";
+import { windowsActiveDirectoryRcePostEn } from "./posts.windows-active-directory-rce.en";
 
 export const blogPostsEn: BlogPost[] = [
+  windowsActiveDirectoryRcePostEn,
   wp2shellWordpressPostEn,
   apacheHttpServer2469PostEn,
   googleChromeUpdateFixesPostEn,
