@@ -47,6 +47,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-active-directory-rce").then(
       (m) => m.windowsActiveDirectoryRcePost,
     ),
+  "pt:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
+    import("./posts.fortinet-rce").then((m) => m.fortinetRcePost),
 
   // --- EN ---
   "en:rathat-trojan-bancario-android-controle-ia": () =>
@@ -55,6 +57,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-active-directory-rce.en").then(
       (m) => m.windowsActiveDirectoryRcePostEn,
     ),
+  "en:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
+    import("./posts.fortinet-rce.en").then((m) => m.fortinetRcePostEn),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -91,6 +95,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-active-directory-rce.es").then(
       (m) => m.windowsActiveDirectoryRcePostEs,
     ),
+  "es:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
+    import("./posts.fortinet-rce.es").then((m) => m.fortinetRcePostEs),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>
