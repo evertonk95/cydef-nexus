@@ -10,10 +10,8 @@ import { ciscoSegEmailGatewayPostEs } from "./posts.cisco-seg-email-gateway.es";
 import { cloudflareContainersTenantsPostEs } from "./posts.cloudflare-containers-tenants.es";
 import { rathatAndroidTrojanPostEs } from "./posts.rathat-android-trojan.es";
 import { click2shellWordpressPostEs } from "./posts.click2shell-wordpress.es";
-import { cydefInoraRedesignPostEs } from "./posts.cydef-inora-redesign.es";
 
 export const blogPostsEs: BlogPost[] = [
-  cydefInoraRedesignPostEs,
   wp2shellWordpressPostEs,
   apacheHttpServer2469PostEs,
   googleChromeUpdateFixesPostEs,

@@ -16,14 +16,6 @@ type Loader = () => Promise<BlogPost>;
  */
 const loaders: Record<string, Loader> = {
   // --- PT ---
-  "pt:cydef-inora-andamento-redesign": () =>
-    import("./posts.cydef-inora-redesign").then((m) => m.cydefInoraRedesignPost),
-  // --- EN ---
-  "en:cydef-inora-andamento-redesign": () =>
-    import("./posts.cydef-inora-redesign.en").then((m) => m.cydefInoraRedesignPostEn),
-  // --- ES ---
-  "es:cydef-inora-andamento-redesign": () =>
-    import("./posts.cydef-inora-redesign.es").then((m) => m.cydefInoraRedesignPostEs),
   "pt:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress").then((m) => m.wp2shellWordpressPost),
   "pt:apache-http-server-2-4-69-vulnerabilidades": () =>

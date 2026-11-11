@@ -6,17 +6,6 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
-    "slug": "cydef-inora-andamento-redesign",
-    "title": "CyDef Inora: where the platform redesign stands",
-    "category": "SOC Engineering",
-    "excerpt": "A full interface redesign, migration to React 19 and Tailwind 4, a rebuilt knowledge base and a new search. What has already shipped in CyDef Inora, what validation covered and what is still missing.",
-    "date": "11 de Novembro, 2026",
-    "dateISO": "2026-11-11",
-    "readTime": "6 min",
-    "image": "/assets/blog/cydef-inora-redesign-thumb.webp",
-    "author": "Equipe CyDef"
-  },
-  {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell chains two WordPress flaws to create admin accounts and install web shells without login",
     "category": "Threat Intelligence",
@@ -218,17 +207,6 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
-    "slug": "cydef-inora-andamento-redesign",
-    "title": "CyDef Inora: o andamento do redesign da plataforma",
-    "category": "SOC Engineering",
-    "excerpt": "Redesign completo da interface, migração para React 19 e Tailwind 4, base de conhecimento reconstruída e busca nova. O que já está entregue no CyDef Inora, o que a validação cobriu e o que ainda falta.",
-    "date": "11 de Novembro, 2026",
-    "dateISO": "2026-11-11",
-    "readTime": "6 min",
-    "image": "/assets/blog/cydef-inora-redesign-thumb.webp",
-    "author": "Equipe CyDef"
-  },
-  {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell encadeia duas falhas do WordPress para criar administradores e instalar web shell sem login",
     "category": "Inteligência de Ameaças",
@@ -429,17 +407,6 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
-  {
-    "slug": "cydef-inora-andamento-redesign",
-    "title": "CyDef Inora: el avance del rediseño de la plataforma",
-    "category": "SOC Engineering",
-    "excerpt": "Rediseño completo de la interfaz, migración a React 19 y Tailwind 4, base de conocimiento reconstruida y búsqueda nueva. Lo que ya está entregado en CyDef Inora, lo que cubrió la validación y lo que todavía falta.",
-    "date": "11 de Novembro, 2026",
-    "dateISO": "2026-11-11",
-    "readTime": "6 min",
-    "image": "/assets/blog/cydef-inora-redesign-thumb.webp",
-    "author": "Equipe CyDef"
-  },
   {
     "slug": "wp2shell-wordpress-admin-web-shell",
     "title": "WP2Shell encadena dos fallos de WordPress para crear administradores e instalar web shell sin login",
