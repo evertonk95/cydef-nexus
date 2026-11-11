@@ -360,7 +360,7 @@ export const es: Dict = {
     ],
     inoraLicense: "Licencia: Apache-2.0",
     inoraRepo: "Repositorio: privado durante la validación",
-    inoraUpdated: "Estado actualizado: octubre de 2026",
+    inoraUpdated: "Estado actualizado: noviembre de 2026",
     notTitle: "Lo que no es",
     notBody: "Inora no es un servicio que CyDef venda hoy y no hay lista de espera. Cuando se vuelva público, CyDef lo anunciará en sus canales oficiales.",
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",

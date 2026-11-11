@@ -359,7 +359,7 @@ export const en = {
     ],
     inoraLicense: "License: Apache-2.0",
     inoraRepo: "Repository: private during validation",
-    inoraUpdated: "Status updated: October 2026",
+    inoraUpdated: "Status updated: November 2026",
     notTitle: "What it is not",
     notBody: "Inora is not a service CyDef sells today and there is no waiting list. When it becomes public, CyDef will announce it on its official channels.",
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
