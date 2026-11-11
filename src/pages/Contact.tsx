@@ -1,9 +1,10 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Mail, MapPin, MessageSquare, Phone, MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageSquare, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { waLink } from "@/lib/lang";
+import { L } from "@/lib/lang";
 
 const Contact = () => {
   useScrollReveal();
@@ -47,10 +48,8 @@ const Contact = () => {
               </p>
 
               <div className="space-y-4">
-                <a
-                  href={waLink(t("contact.waMsg"))}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to={L("/")}
                   className="flex items-start gap-5 bg-neutral-900 border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-colors group"
                 >
                   <div className="h-12 w-12 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 border border-green-500/25">
@@ -58,11 +57,11 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
-                      {t("contact.waLabel")} · +1 (508) 630-5886
+                      {t("contact.waLabel")}
                     </h3>
                     <p className="text-neutral-400 text-sm leading-relaxed">{t("contact.waHint")}</p>
                   </div>
-                </a>
+                </Link>
 
                 <a
                   href="mailto:contato@cydef.com.br"
@@ -128,18 +127,6 @@ const Contact = () => {
                           academy@cydef.com.br
                         </a>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors flex items-start gap-6">
-                    <div className="h-14 w-14 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
-                      <Phone className="h-6 w-6 text-orange-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.phoneLabel")}</h3>
-                      <a href="tel:+15086305886" className="block text-neutral-400 hover:text-orange-400 transition-colors">
-                        +1 (508) 630-5886
-                      </a>
                     </div>
                   </div>
 

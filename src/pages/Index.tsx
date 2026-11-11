@@ -5,7 +5,7 @@ import { ArrowRight, Shield, Newspaper, GraduationCap, FlaskConical, Microscope,
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LANGS } from "@/i18n";
-import { L, waLink, currentLang } from "@/lib/lang";
+import { L, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
 import { availableAcademyCourses } from "@/lib/academy/catalog";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
@@ -79,7 +79,7 @@ const Index = () => {
             {t("home.lead")}
           </p>
           <div className="flex flex-wrap justify-center gap-6 items-center animate-on-scroll">
-            <a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_10px_rgba(249,115,22,0.45)] bg-gradient-to-b from-white/20 via-white/0 to-white/5 rounded-full relative shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)]" href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer">
+            <Link className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_10px_rgba(249,115,22,0.45)] bg-gradient-to-b from-white/20 via-white/0 to-white/5 rounded-full relative shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)]" to={L("/")}>
               <div className="absolute inset-0 overflow-hidden rounded-full">
                 <div className="absolute inset-[-100%] w-[300%] h-[300%] left-[-100%] top-[-100%] animate-[spin_3s_linear_infinite]" style={{ background: 'conic-gradient(from 0deg, transparent 0deg, transparent 80deg, rgba(253,186,116,0.8) 180deg, transparent 280deg, transparent 360deg)' }}></div>
               </div>
@@ -93,7 +93,7 @@ const Index = () => {
                   <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
-            </a>
+            </Link>
             <Link to={L("/academy")} className="inline-flex items-center gap-2 px-6 py-4 rounded-full border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors font-medium text-sm">
               {t("home.ctaFree")}
               <ArrowRight className="w-4 h-4" />

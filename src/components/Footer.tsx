@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { L, waLink } from "@/lib/lang";
+import { L } from "@/lib/lang";
 import { LANDING_PATH } from "@/lib/config";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
@@ -39,9 +39,9 @@ export const Footer = () => {
               <a href="https://www.linkedin.com/company/cydef-group/" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
                 <LinkedinIcon className="h-4 w-4" />
               </a>
-              <a href={waLink(t("contact.waMsg"))} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors text-xs font-medium">
+              <Link to={L("/")} className="text-neutral-500 hover:text-white transition-colors text-xs font-medium">
                 WhatsApp
-              </a>
+              </Link>
             </div>
           </div>
 

@@ -29,7 +29,6 @@ export const orgLd = () => ({
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+15086305886",
     contactType: "customer service",
     availableLanguage: ["en", "pt", "es"],
   },
