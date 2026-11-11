@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
+    "title": "Fortinet fixes critical flaws in FortiManager and FortiAnalyzer with unauthenticated code execution",
+    "category": "Threat Intelligence",
+    "excerpt": "Fortinet disclosed critical flaws in FortiManager, FortiAnalyzer and related products on November 10, 2026, including CVE-2026-126170 (CVSS 9.8), which allows unauthenticated code or command execution when the JSON API is enabled.",
+    "date": "November 11, 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "9 min read",
+    "image": "/assets/blog/fortinet-fortimanager-fortianalyzer-rce-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "windows-active-directory-rce-cve-2026-119948",
     "title": "Windows Active Directory: buffer overflow allows remote code execution by an authenticated attacker",
     "category": "Threat Intelligence",
@@ -218,6 +229,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
+    "title": "Fortinet corrige falhas críticas no FortiManager e FortiAnalyzer com execução de código sem autenticação",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Fortinet divulgou em 10 de novembro de 2026 falhas críticas em FortiManager, FortiAnalyzer e produtos relacionados, incluindo a CVE-2026-126170 (CVSS 9,8), que permite execução de código ou comandos sem autenticação quando a API JSON está habilitada.",
+    "date": "11 de Novembro, 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "9 min",
+    "image": "/assets/blog/fortinet-fortimanager-fortianalyzer-rce-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "windows-active-directory-rce-cve-2026-119948",
     "title": "Windows Active Directory: estouro de buffer permite execução remota de código por atacante autenticado",
     "category": "Inteligência de Ameaças",
@@ -429,6 +451,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
+    "title": "Fortinet corrige fallas críticas en FortiManager y FortiAnalyzer con ejecución de código sin autenticación",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Fortinet divulgó el 10 de noviembre de 2026 fallas críticas en FortiManager, FortiAnalyzer y productos relacionados, incluida la CVE-2026-126170 (CVSS 9,8), que permite ejecución de código o comandos sin autenticación cuando la API JSON está habilitada.",
+    "date": "11 de noviembre de 2026",
+    "dateISO": "2026-11-11",
+    "readTime": "9 min de lectura",
+    "image": "/assets/blog/fortinet-fortimanager-fortianalyzer-rce-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "windows-active-directory-rce-cve-2026-119948",
     "title": "Windows Active Directory: desbordamiento de búfer permite ejecución remota de código por un atacante autenticado",
