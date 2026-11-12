@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-bitlocker-bypass-cve-2026-97015",
+    "title": "BitLocker: two flaws allow bypassing disk encryption on Windows devices",
+    "category": "Threat Intelligence",
+    "excerpt": "Microsoft disclosed two Windows BitLocker vulnerabilities on November 10, 2026, CVE-2026-97015 and CVE-2026-119832, that allow bypassing security features through a physical attack. CVE-2026-119832 requires physical access and basic privileges to bypass system drive encryption.",
+    "date": "November 12, 2026",
+    "dateISO": "2026-11-12",
+    "readTime": "8 min read",
+    "image": "/assets/blog/windows-bitlocker-bypass-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
     "title": "Fortinet fixes critical flaws in FortiManager and FortiAnalyzer with unauthenticated code execution",
     "category": "Threat Intelligence",
@@ -229,6 +240,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-bitlocker-bypass-cve-2026-97015",
+    "title": "BitLocker: duas falhas permitem contornar a criptografia do disco em dispositivos Windows",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Microsoft divulgou em 10 de novembro de 2026 duas vulnerabilidades no Windows BitLocker, CVE-2026-97015 e CVE-2026-119832, que permitem contornar recursos de segurança por meio de ataque físico. A CVE-2026-119832 exige acesso físico e privilégios básicos para contornar a criptografia da unidade do sistema.",
+    "date": "12 de Novembro, 2026",
+    "dateISO": "2026-11-12",
+    "readTime": "8 min",
+    "image": "/assets/blog/windows-bitlocker-bypass-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
     "title": "Fortinet corrige falhas críticas no FortiManager e FortiAnalyzer com execução de código sem autenticação",
     "category": "Inteligência de Ameaças",
@@ -451,6 +473,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "windows-bitlocker-bypass-cve-2026-97015",
+    "title": "BitLocker: dos fallas permiten eludir el cifrado de disco en dispositivos Windows",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Microsoft divulgó el 10 de noviembre de 2026 dos vulnerabilidades en Windows BitLocker, CVE-2026-97015 y CVE-2026-119832, que permiten eludir funciones de seguridad mediante un ataque físico. La CVE-2026-119832 exige acceso físico y privilegios básicos para eludir el cifrado de la unidad del sistema.",
+    "date": "12 de noviembre de 2026",
+    "dateISO": "2026-11-12",
+    "readTime": "8 min de lectura",
+    "image": "/assets/blog/windows-bitlocker-bypass-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170",
     "title": "Fortinet corrige fallas críticas en FortiManager y FortiAnalyzer con ejecución de código sin autenticación",

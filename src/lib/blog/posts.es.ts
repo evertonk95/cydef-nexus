@@ -12,8 +12,10 @@ import { rathatAndroidTrojanPostEs } from "./posts.rathat-android-trojan.es";
 import { click2shellWordpressPostEs } from "./posts.click2shell-wordpress.es";
 import { windowsActiveDirectoryRcePostEs } from "./posts.windows-active-directory-rce.es";
 import { fortinetRcePostEs } from "./posts.fortinet-rce.es";
+import { windowsBitlockerBypassPostEs } from "./posts.windows-bitlocker-bypass.es";
 
 export const blogPostsEs: BlogPost[] = [
+  windowsBitlockerBypassPostEs,
   fortinetRcePostEs,
   windowsActiveDirectoryRcePostEs,
   wp2shellWordpressPostEs,

@@ -11,6 +11,7 @@ import { cloudflareContainersTenantsPost } from "./posts.cloudflare-containers-t
 import { rathatAndroidTrojanPost } from "./posts.rathat-android-trojan";
 import { windowsActiveDirectoryRcePost } from "./posts.windows-active-directory-rce";
 import { fortinetRcePost } from "./posts.fortinet-rce";
+import { windowsBitlockerBypassPost } from "./posts.windows-bitlocker-bypass";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -24,6 +25,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  windowsBitlockerBypassPost,
   fortinetRcePost,
   windowsActiveDirectoryRcePost,
   wp2shellWordpressPost,
