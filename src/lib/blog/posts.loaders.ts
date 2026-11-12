@@ -49,6 +49,10 @@ const loaders: Record<string, Loader> = {
     ),
   "pt:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
     import("./posts.fortinet-rce").then((m) => m.fortinetRcePost),
+  "pt:windows-bitlocker-bypass-cve-2026-97015": () =>
+    import("./posts.windows-bitlocker-bypass").then(
+      (m) => m.windowsBitlockerBypassPost,
+    ),
 
   // --- EN ---
   "en:rathat-trojan-bancario-android-controle-ia": () =>
@@ -59,6 +63,10 @@ const loaders: Record<string, Loader> = {
     ),
   "en:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
     import("./posts.fortinet-rce.en").then((m) => m.fortinetRcePostEn),
+  "en:windows-bitlocker-bypass-cve-2026-97015": () =>
+    import("./posts.windows-bitlocker-bypass.en").then(
+      (m) => m.windowsBitlockerBypassPostEn,
+    ),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -97,6 +105,10 @@ const loaders: Record<string, Loader> = {
     ),
   "es:fortinet-fortimanager-fortianalyzer-rce-cve-2026-126170": () =>
     import("./posts.fortinet-rce.es").then((m) => m.fortinetRcePostEs),
+  "es:windows-bitlocker-bypass-cve-2026-97015": () =>
+    import("./posts.windows-bitlocker-bypass.es").then(
+      (m) => m.windowsBitlockerBypassPostEs,
+    ),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>
