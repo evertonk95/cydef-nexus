@@ -7,6 +7,7 @@
   <url><loc>https://www.cydef.com.br/en/blog/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/certificacoes-ciberseguranca-carreira/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/cisco-secure-email-gateway-cve-2026-76461-root/</loc><lastmod>2026-09-15</lastmod></url>
@@ -42,6 +43,7 @@
   <url><loc>https://www.cydef.com.br/es/blog/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/certificacoes-ciberseguranca-carreira/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/cisco-secure-email-gateway-cve-2026-76461-root/</loc><lastmod>2026-09-15</lastmod></url>
@@ -78,6 +80,7 @@
   <url><loc>https://www.cydef.com.br/pt/blog/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/atualizacao-chrome-correcoes-seguranca/</loc><lastmod>2026-10-01</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/certificacoes-ciberseguranca-carreira/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/cisco-secure-email-gateway-cve-2026-76461-root/</loc><lastmod>2026-09-15</lastmod></url>

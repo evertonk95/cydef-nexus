@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
+    "title": "Apache fixes critical mod_http2 flaw allowing remote code execution",
+    "category": "Threat Intelligence",
+    "excerpt": "Apache released HTTP Server 2.4.71 on November 11, 2026, fixing CVE-2026-119618, a critical flaw in the mod_http2 module that may allow remote code execution through heap corruption in the assign_headers() function.",
+    "date": "November 13, 2026",
+    "dateISO": "2026-11-13",
+    "readTime": "8 min read",
+    "image": "/assets/blog/apache-http-server-2-4-71-mod-http2-rce-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "windows-bitlocker-bypass-cve-2026-97015",
     "title": "BitLocker: two flaws allow bypassing disk encryption on Windows devices",
     "category": "Threat Intelligence",
@@ -240,6 +251,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
+    "title": "Apache corrige vulnerabilidade crítica no mod_http2 que permite execução remota de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O Apache lançou em 11 de novembro de 2026 a versão 2.4.71 do HTTP Server, corrigindo a CVE-2026-119618, uma falha crítica no módulo mod_http2 que pode permitir execução remota de código por corrupção de heap na função assign_headers().",
+    "date": "13 de Novembro, 2026",
+    "dateISO": "2026-11-13",
+    "readTime": "8 min",
+    "image": "/assets/blog/apache-http-server-2-4-71-mod-http2-rce-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "windows-bitlocker-bypass-cve-2026-97015",
     "title": "BitLocker: duas falhas permitem contornar a criptografia do disco em dispositivos Windows",
     "category": "Inteligência de Ameaças",
@@ -473,6 +495,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
+    "title": "Apache corrige vulnerabilidad crítica en mod_http2 que permite ejecución remota de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Apache lanzó el 11 de noviembre de 2026 la versión 2.4.71 de HTTP Server, corrigiendo la CVE-2026-119618, una falla crítica en el módulo mod_http2 que puede permitir ejecución remota de código por corrupción de heap en la función assign_headers().",
+    "date": "13 de noviembre de 2026",
+    "dateISO": "2026-11-13",
+    "readTime": "8 min de lectura",
+    "image": "/assets/blog/apache-http-server-2-4-71-mod-http2-rce-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "windows-bitlocker-bypass-cve-2026-97015",
     "title": "BitLocker: dos fallas permiten eludir el cifrado de disco en dispositivos Windows",

@@ -53,6 +53,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-bitlocker-bypass").then(
       (m) => m.windowsBitlockerBypassPost,
     ),
+  "pt:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
+    import("./posts.apache-http2-rce").then((m) => m.apacheHttp2RcePost),
 
   // --- EN ---
   "en:rathat-trojan-bancario-android-controle-ia": () =>
@@ -67,6 +69,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-bitlocker-bypass.en").then(
       (m) => m.windowsBitlockerBypassPostEn,
     ),
+  "en:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
+    import("./posts.apache-http2-rce.en").then((m) => m.apacheHttp2RcePostEn),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -109,6 +113,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.windows-bitlocker-bypass.es").then(
       (m) => m.windowsBitlockerBypassPostEs,
     ),
+  "es:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
+    import("./posts.apache-http2-rce.es").then((m) => m.apacheHttp2RcePostEs),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>
