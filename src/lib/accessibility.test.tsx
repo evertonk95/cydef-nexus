@@ -12,7 +12,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
-import Services from "@/pages/Services";
+import Consulting from "@/pages/Consulting";
 import Labs from "@/pages/Labs";
 import LabsArtifact from "@/pages/LabsArtifact";
 import Research from "@/pages/Research";
@@ -42,7 +42,7 @@ const POST_SLUG = "como-estruturar-um-soc-do-zero";
 const pages: [string, React.ReactNode][] = [
   ["Home (Index)", withRouter(<Index />)],
   ["About", withRouter(<About />)],
-  ["Services (Ecossistema)", withRouter(<Services />)],
+  ["Consulting (Consultoria)", withRouter(<Consulting />)],
   ["Labs", withRouter(<Labs />)],
   ["Research", withRouter(<Research />)],
   ["Contact", withRouter(<Contact />)],

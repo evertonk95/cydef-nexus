@@ -39,9 +39,6 @@ export const Footer = () => {
               <a href="https://www.linkedin.com/company/cydef-group/" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
                 <LinkedinIcon className="h-4 w-4" />
               </a>
-              <Link to={L("/")} className="text-neutral-500 hover:text-white transition-colors text-xs font-medium">
-                WhatsApp
-              </Link>
             </div>
           </div>
 
@@ -63,7 +60,7 @@ export const Footer = () => {
                 <Link to={L("/labs")} className={linkClass}>{t("nav.labs")}</Link>
                 <Link to={L("/research")} className={linkClass}>{t("footer.research")}</Link>
                 <Link to={L("/blog")} className={linkClass}>{t("nav.blog")}</Link>
-                <Link to={L("/servicos")} className={linkClass}>{t("footer.whatWeBuild")}</Link>
+                <Link to={L("/consultoria")} className={linkClass}>{t("footer.consulting")}</Link>
                 <Link to={L("/contato")} className={linkClass}>{t("contact.badge")}</Link>
               </div>
             </div>

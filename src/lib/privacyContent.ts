@@ -1,6 +1,6 @@
 // CyDef site — Privacy Policy content per language.
 // PT canonical (honest revision, 2026-09-03, aligning copy with the real
-// ecosystem state: no managed services yet). EN/ES editorial translations.
+// consulting opened on 13/11/2026). EN/ES editorial translations.
 // Gate: human/legal review via PR before merge.
 import type { Lang } from "@/i18n";
 
@@ -23,14 +23,14 @@ export interface PrivacyDoc {
 export const privacyDocPt: PrivacyDoc = {
   docTitle: "Política de Privacidade",
   updatedLabel: "Última atualização:",
-  updatedAt: "4 de setembro de 2026",
+  updatedAt: "13 de novembro de 2026",
   contactIntro: "Dúvidas sobre esta Política? Fale com nosso encarregado:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quem somos",
       paragraphs: [
-        "A **CyDef** é um ecossistema de cibersegurança em construção. Hoje publicamos conteúdo técnico verificável (Blog) e mantemos a CyDef Academy, com cursos gratuitos de entrada e pré-inscrição aberta. Ainda não prestamos serviços gerenciados de segurança; quando passarmos a oferecer novos produtos ou serviços, esta Política será revisada e atualizada antes.",
+        "A **CyDef** é uma empresa de cibersegurança. Prestamos serviços de consultoria em segurança para organizações, publicamos conteúdo técnico verificável (Blog) e mantemos a CyDef Academy, com cursos gratuitos de entrada e pré-inscrição aberta. Quando passarmos a oferecer novos produtos ou serviços, esta Política será revisada e atualizada antes.",
       ],
       list: {
         items: [
@@ -181,14 +181,14 @@ export const privacyDocPt: PrivacyDoc = {
 export const privacyDocEn: PrivacyDoc = {
   docTitle: "Privacy Policy",
   updatedLabel: "Last updated:",
-  updatedAt: "September 4, 2026",
+  updatedAt: "November 13, 2026",
   contactIntro: "Questions about this Policy? Contact our data protection officer:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Who we are",
       paragraphs: [
-        "**CyDef** is a cybersecurity ecosystem under construction. Today we publish verifiable technical content (Blog) and run the CyDef Academy, with free entry courses and open pre-enrollment. We do not provide managed security services yet; whenever we start offering new products or services, this Policy will be reviewed and updated in advance.",
+        "**CyDef** is a cybersecurity company. We provide security consulting services to organizations, publish verifiable technical content (Blog) and run the CyDef Academy, with free entry courses and open pre-enrollment. Whenever we start offering new products or services, this Policy will be reviewed and updated in advance.",
       ],
       list: {
         items: [
@@ -339,14 +339,14 @@ export const privacyDocEn: PrivacyDoc = {
 export const privacyDocEs: PrivacyDoc = {
   docTitle: "Política de Privacidad",
   updatedLabel: "Última actualización:",
-  updatedAt: "4 de septiembre de 2026",
+  updatedAt: "13 de noviembre de 2026",
   contactIntro: "¿Dudas sobre esta Política? Habla con nuestro encargado de datos:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quiénes somos",
       paragraphs: [
-        "**CyDef** es un ecosistema de ciberseguridad en construcción. Hoy publicamos contenido técnico verificable (Blog) y mantenemos la CyDef Academy, con cursos gratuitos de entrada y preinscripción abierta. Todavía no prestamos servicios gestionados de seguridad; cuando empecemos a ofrecer nuevos productos o servicios, esta Política será revisada y actualizada con antelación.",
+        "**CyDef** es una empresa de ciberseguridad. Prestamos servicios de consultoría en seguridad a organizaciones, publicamos contenido técnico verificable (Blog) y mantenemos la CyDef Academy, con cursos gratuitos de entrada y preinscripción abierta. Cuando empecemos a ofrecer nuevos productos o servicios, esta Política será revisada y actualizada con antelación.",
       ],
       list: {
         items: [

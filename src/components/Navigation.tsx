@@ -27,7 +27,7 @@ export const Navigation = () => {
           <div className="hidden xl:flex items-center gap-7">
             <Link to={L("/")} className={itemClass}>{t("nav.home")}</Link>
             <Link to={L("/sobre")} className={itemClass}>{t("nav.about")}</Link>
-            <Link to={L("/servicos")} className={itemClass}>{t("nav.ecosystem")}</Link>
+            <Link to={L("/consultoria")} className={itemClass}>{t("nav.consulting")}</Link>
             <Link to={L("/academy")} className={itemClass}>{t("nav.academy")}</Link>
             <Link to={L("/labs")} className={itemClass}>{t("nav.labs")}</Link>
             <Link to={L("/blog")} className={itemClass}>{t("nav.blog")}</Link>
@@ -40,7 +40,7 @@ export const Navigation = () => {
             <Link to={L("/academy/entrar")} className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
               {t("nav.signIn")}
             </Link>
-            <Link to={L("/")} className="button-custom scale-95">
+            <Link to={L("/contato")} className="button-custom scale-95">
               <div className="points_wrapper">
                 <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
               </div>
@@ -73,8 +73,8 @@ export const Navigation = () => {
               <Link to={L("/sobre")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.about")}
               </Link>
-              <Link to={L("/servicos")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
-                {t("nav.ecosystem")}
+              <Link to={L("/consultoria")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
+                {t("nav.consulting")}
               </Link>
               <Link to={L("/academy")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.academy")}
@@ -89,7 +89,7 @@ export const Navigation = () => {
                 {t("nav.signIn")}
               </Link>
               <Link
-                to={L("/")}
+                to={L("/contato")}
                 onClick={() => setIsOpen(false)}
                 className="button-custom w-full mt-4"
               >

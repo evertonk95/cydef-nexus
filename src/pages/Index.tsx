@@ -9,7 +9,7 @@ import { L, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
 import { availableAcademyCourses } from "@/lib/academy/catalog";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
-import { PostsSection, AcademySection, LabsSection, PrinciplesSection } from "@/components/home/HomeSections";
+import { ConsultingSection, PostsSection, AcademySection, LabsSection, PrinciplesSection } from "@/components/home/HomeSections";
 import { countPostsForLang, postsForLangMeta } from "@/lib/blog/posts";
 
 const Index = () => {
@@ -36,7 +36,7 @@ const Index = () => {
     { key: "academy", icon: GraduationCap, para: "/academy", ativo: true },
     { key: "labs", icon: FlaskConical, para: "/labs", ativo: true },
     { key: "research", icon: Microscope, para: "/research", ativo: false },
-    { key: "consulting", icon: Briefcase, para: "/servicos", ativo: false },
+    { key: "consulting", icon: Briefcase, para: "/consultoria", ativo: true },
   ];
 
   return (
@@ -79,7 +79,7 @@ const Index = () => {
             {t("home.lead")}
           </p>
           <div className="flex flex-wrap justify-center gap-6 items-center animate-on-scroll">
-            <Link className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_10px_rgba(249,115,22,0.45)] bg-gradient-to-b from-white/20 via-white/0 to-white/5 rounded-full relative shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)]" to={L("/")}>
+            <Link className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_10px_rgba(249,115,22,0.45)] bg-gradient-to-b from-white/20 via-white/0 to-white/5 rounded-full relative shadow-[0_0_25px_rgba(249,115,22,0.3),0_8px_40px_rgba(249,115,22,0.15)]" to={L("/contato")}>
               <div className="absolute inset-0 overflow-hidden rounded-full">
                 <div className="absolute inset-[-100%] w-[300%] h-[300%] left-[-100%] top-[-100%] animate-[spin_3s_linear_infinite]" style={{ background: 'conic-gradient(from 0deg, transparent 0deg, transparent 80deg, rgba(253,186,116,0.8) 180deg, transparent 280deg, transparent 360deg)' }}></div>
               </div>
@@ -94,14 +94,14 @@ const Index = () => {
                 </span>
               </div>
             </Link>
-            <Link to={L("/academy")} className="inline-flex items-center gap-2 px-6 py-4 rounded-full border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors font-medium text-sm">
-              {t("home.ctaFree")}
+            <Link to={L("/consultoria")} className="inline-flex items-center gap-2 px-6 py-4 rounded-full border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors font-medium text-sm">
+              {t("home.ctaConsulting")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        {/* ecossistema — 5 pilares com estado honesto */}
+        {/* ecossistema: 5 pilares com o estado de cada um */}
         <div className="md:px-10 mt-24 pt-16 pb-10 border-t border-white/5 relative z-20">
           <div className="text-center mb-12 animate-on-scroll">
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-4">
@@ -150,6 +150,7 @@ const Index = () => {
           ))}
         </div>
 
+        <ConsultingSection />
         <PostsSection posts={ultimosArtigos} />
         <AcademySection courses={cursosDisponiveis} />
         <LabsSection visible={labsDisponivel} />

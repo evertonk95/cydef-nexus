@@ -8,7 +8,7 @@
 import type { Lang } from "@/i18n";
 import type { BlogPost } from "@/lib/blog/posts";
 import { SITE_ORIGIN } from "@/lib/site";
-import { areaSlugFor } from "@/lib/routes";
+import { areaSlugFor, slugFor, withTrailingSlash } from "@/lib/routes";
 
 /** schema.org inLanguage: pt -> pt-BR; en/es são códigos válidos diretos. */
 const htmlLang = (lang: Lang): string => (lang === "pt" ? "pt-BR" : lang);
@@ -107,3 +107,31 @@ export const courseLd = ({
     url: SITE_ORIGIN,
   },
 });
+
+/** Serviços da CyDef Consulting (página de Consultoria). Um `Service` por
+ *  serviço, com a CyDef como provedora. Sem offers (preço sob consulta), sem
+ *  ratings e sem prazos: só nome, descrição e tipo do serviço. */
+export const consultingServicesLd = (
+  lang: Lang,
+  services: { key: string; title: string; desc: string }[],
+) => {
+  const url = `${SITE_ORIGIN}${withTrailingSlash(`/${lang}/${slugFor("consulting", lang)}`)}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    url,
+    inLanguage: htmlLang(lang),
+    itemListElement: services.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Service",
+        "@id": `${url}#${s.key}`,
+        name: s.title,
+        description: s.desc,
+        serviceType: s.title,
+        provider: { "@id": `${SITE_ORIGIN}/#org` },
+      },
+    })),
+  };
+};
