@@ -13,8 +13,10 @@ import { click2shellWordpressPostEn } from "./posts.click2shell-wordpress.en";
 import { windowsActiveDirectoryRcePostEn } from "./posts.windows-active-directory-rce.en";
 import { fortinetRcePostEn } from "./posts.fortinet-rce.en";
 import { windowsBitlockerBypassPostEn } from "./posts.windows-bitlocker-bypass.en";
+import { apacheHttp2RcePostEn } from "./posts.apache-http2-rce.en";
 
 export const blogPostsEn: BlogPost[] = [
+  apacheHttp2RcePostEn,
   windowsBitlockerBypassPostEn,
   fortinetRcePostEn,
   windowsActiveDirectoryRcePostEn,
