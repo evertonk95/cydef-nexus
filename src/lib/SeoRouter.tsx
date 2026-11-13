@@ -1,6 +1,12 @@
 import { Navigate, useParams } from "react-router-dom";
 import { DEFAULT_LANG, isLang, type Lang } from "@/i18n";
-import { areaSlugFor, pageKeyForSlug, slugFor, type PageKey } from "@/lib/routes";
+import {
+  areaSlugFor,
+  legacyPageKeyForSlug,
+  pageKeyForSlug,
+  slugFor,
+  type PageKey,
+} from "@/lib/routes";
 import { PAGE_COMPONENTS } from "@/lib/page-components";
 import NotFound from "../pages/NotFound";
 import CoursePage from "../pages/CoursePage";
@@ -22,6 +28,16 @@ export const PageRouter = () => {
     // para o slug canônico do idioma atual.
     for (const other of ["pt", "en", "es"] as Lang[]) {
       const k = pageKeyForSlug(other, page);
+      if (k) {
+        key = k;
+        break;
+      }
+    }
+  }
+  if (!key) {
+    // Slug antigo de página substituída (ex.: /pt/servicos -> /pt/consultoria).
+    for (const other of [l, "pt", "en", "es"] as Lang[]) {
+      const k = legacyPageKeyForSlug(other, page);
       if (k) {
         key = k;
         break;

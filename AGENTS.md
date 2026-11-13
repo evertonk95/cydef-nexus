@@ -55,7 +55,8 @@ Nunca rodar `npx tsc --noEmit` puro: em tsconfig solution-style ele passa em fal
 
 - Marca sempre **CyDef** (nunca "Cydef" em texto exibido).
 - Sem travessão eme no meio do texto.
-- Sem claim sem realidade verificável (oferta, rating, perfil social não confirmado); preço sempre "sob consulta".
+- Oferta de consultoria liberada (decisão do Everton, 12/11/2026). Continua proibido: depoimento, logo de cliente, métrica, certificação ou parceria com fabricante sem fonte real. Preço sempre "sob consulta". Nenhum prazo de atendimento (SLA) publicado.
+- A CyDef não é apresentada como atrelada a uma pessoa: sem experiência pessoal, currículo ou nome de cliente no site.
 - Alteração de frase no i18n exige paridade PT/EN/ES e varredura do `src` pelas ocorrências restantes.
 - Métrica de alunos matriculados na home: fora até a construção da Academy fechar (decisão de 09/11/2026). Quando voltar, o número vem da API, não de limiar estimado.
 

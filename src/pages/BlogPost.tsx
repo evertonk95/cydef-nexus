@@ -554,7 +554,7 @@ const BlogPost = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
-                  to={L("/servicos")}
+                  to={L("/consultoria")}
                   className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-black font-bold rounded-xl transition-colors shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)]"
                 >
                   {t("blogPost.ctaSoc")}

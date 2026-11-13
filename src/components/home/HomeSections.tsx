@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { L } from "@/lib/lang";
 import type { BlogPostMeta } from "@/lib/blog/posts";
 import type { AcademyCourseCard } from "@/lib/academy/catalog";
+import { CONSULTING_ICONS, CONSULTING_KEYS } from "@/lib/consulting";
 
 /**
  * Secoes da home alimentadas por dado real (issue #143).
@@ -40,6 +41,44 @@ const SectionHeading = ({
     </Link>
   </div>
 );
+
+/** Serviços da Consultoria na home: cada card leva ao serviço na página. */
+export const ConsultingSection = () => {
+  const { t } = useTranslation();
+  return (
+    <section aria-labelledby="home-consultoria" className="mt-8 pt-16 pb-8 border-t border-white/5">
+      <SectionHeading
+        id="home-consultoria"
+        title={t("home.consultingSectionTitle")}
+        lead={t("home.consultingSectionLead")}
+        cta={t("home.consultingSectionCta")}
+        href={L("/consultoria")}
+      />
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 px-6 md:px-10">
+        {CONSULTING_KEYS.map((key) => {
+          const Icon = CONSULTING_ICONS[key];
+          return (
+            <Link
+              key={key}
+              to={L(`/consultoria#${key}`)}
+              className="group flex items-start gap-4 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 transition-colors duration-200"
+            >
+              <div className="w-11 h-11 shrink-0 rounded-lg bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                <Icon className="w-5 h-5 text-orange-400" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                  {t(`consulting.items.${key}.title`)}
+                </h3>
+                <p className="text-sm text-neutral-400 leading-snug line-clamp-2">{t(`consulting.items.${key}.format`)}</p>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
 
 export const PostsSection = ({ posts }: { posts: BlogPostMeta[] }) => {
   const { t } = useTranslation();

@@ -13,7 +13,7 @@
 import type { ComponentType } from "react";
 import type { PageKey } from "@/lib/routes";
 import About from "@/pages/About";
-import Services from "@/pages/Services";
+import Consulting from "@/pages/Consulting";
 import Labs from "@/pages/Labs";
 import Research from "@/pages/Research";
 import Academy from "@/pages/Academy";
@@ -24,7 +24,7 @@ import Terms from "@/pages/Terms";
 
 export const PAGE_COMPONENTS: Record<PageKey, ComponentType> = {
   about: About,
-  ecosystem: Services,
+  consulting: Consulting,
   academy: Academy,
   labs: Labs,
   research: Research,

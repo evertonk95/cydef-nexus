@@ -19,7 +19,7 @@ import type { Lang } from "@/i18n";
 
 export const pageSlugs = {
   about: { pt: "sobre", en: "about", es: "nosotros" },
-  ecosystem: { pt: "servicos", en: "ecosystem", es: "ecosistema" },
+  consulting: { pt: "consultoria", en: "consulting", es: "consultoria" },
   academy: { pt: "academy", en: "academy", es: "academy" },
   labs: { pt: "labs", en: "labs", es: "labs" },
   research: { pt: "research", en: "research", es: "research" },
@@ -30,6 +30,18 @@ export const pageSlugs = {
 } as const;
 
 export type PageKey = keyof typeof pageSlugs;
+
+/** Slugs antigos que continuam respondendo e redirecionam para a página nova.
+ *  `servicos` / `ecosystem` / `ecosistema` eram a página "O que estamos
+ *  construindo", substituída pela Consultoria (decisão do Everton, 12/11/2026).
+ *  O `PageRouter` redireciona no cliente e o `scripts/postbuild.mjs` grava uma
+ *  página de redirecionamento física em cada URL antiga (GitHub Pages não faz
+ *  301), para links e resultados de busca antigos não caírem no 404. */
+export const legacyPageSlugs: Record<Lang, Record<string, PageKey>> = {
+  pt: { servicos: "consulting" },
+  en: { ecosystem: "consulting" },
+  es: { ecosistema: "consulting" },
+};
 
 /** Áreas de conteúdo com slug localizado (prefixo de rota, não página). */
 export const contentAreaSlugs = {
@@ -72,6 +84,12 @@ export const areaSlugFor = (key: ContentAreaKey, lang: Lang): string =>
 export const pageKeyForSlug = (lang: Lang, slug: string): PageKey | undefined =>
   slugToKey[lang][slug];
 
+/** Resolves a legacy slug (old page that now redirects) to its new page key. */
+export const legacyPageKeyForSlug = (
+  lang: Lang,
+  slug: string,
+): PageKey | undefined => legacyPageSlugs[lang][slug];
+
 /** Resolves a first-segment slug (in a given language) to a content area key. */
 export const areaKeyForSlug = (
   lang: Lang,
@@ -81,7 +99,7 @@ export const areaKeyForSlug = (
 /** Localized route for an internal path: translates the first segment (if it
  *  is a known page slug OR the prefix of a content area, ex. `/cursos/<id>`)
  *  into the target language and prefixes the language.
- *  Handles hash (e.g. "/servicos#soc") and keeps deeper segments untouched. */
+ *  Handles hash (e.g. "/consultoria#soc") and keeps deeper segments untouched. */
 export const localizePath = (path: string, toLang: Lang, fromLang?: Lang): string => {
   if (path === "/") return `/${toLang}`;
   const hashIdx = path.indexOf("#");

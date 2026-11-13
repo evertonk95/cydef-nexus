@@ -1,16 +1,21 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Mail, MapPin, MessageSquare, MessageCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Mail, MapPin, MessageSquare, Siren, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { L } from "@/lib/lang";
 
 const Contact = () => {
   useScrollReveal();
   const { t } = useTranslation();
 
   const faq = t("contact.faq", { returnObjects: true }) as { q: string; a: string }[];
+
+  // E-mail de consultoria já com assunto e roteiro; incidente com assunto URGENTE.
+  const mailto = (subject: string, body?: string) =>
+    `mailto:contato@cydef.com.br?subject=${encodeURIComponent(subject)}` +
+    (body ? `&body=${encodeURIComponent(body)}` : "");
+  const consultingMail = mailto(t("contact.mailSubject"), t("contact.mailBody"));
+  const incidentMail = mailto(t("contact.incidentSubject"));
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -48,33 +53,36 @@ const Contact = () => {
               </p>
 
               <div className="space-y-4">
-                <Link
-                  to={L("/")}
-                  className="flex items-start gap-5 bg-neutral-900 border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-colors group"
-                >
-                  <div className="h-12 w-12 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 border border-green-500/25">
-                    <MessageCircle className="h-6 w-6 text-green-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-green-400 transition-colors">
-                      {t("contact.waLabel")}
-                    </h3>
-                    <p className="text-neutral-400 text-sm leading-relaxed">{t("contact.waHint")}</p>
-                  </div>
-                </Link>
-
                 <a
-                  href="mailto:contato@cydef.com.br"
-                  className="flex items-start gap-5 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors group"
+                  href={consultingMail}
+                  className="flex items-start gap-5 bg-neutral-900 border border-orange-500/30 rounded-2xl p-6 hover:border-orange-500/60 transition-colors group"
                 >
-                  <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
+                  <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/25">
                     <Mail className="h-6 w-6 text-orange-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
                       {t("contact.businessTitle")}
                     </h3>
-                    <p className="text-neutral-400 break-all">contato@cydef.com.br</p>
+                    <p className="text-neutral-400 break-all mb-2">contato@cydef.com.br</p>
+                    <span className="inline-flex items-center gap-2 text-orange-400 text-sm font-medium">
+                      {t("contact.mailCta")} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </a>
+
+                <a
+                  href={incidentMail}
+                  className="flex items-start gap-5 bg-neutral-900 border border-red-500/25 rounded-2xl p-6 hover:border-red-500/50 transition-colors group"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-red-500/10 flex items-center justify-center flex-shrink-0 border border-red-500/25">
+                    <Siren className="h-6 w-6 text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-red-300 transition-colors">
+                      {t("contact.incidentTitle")}
+                    </h3>
+                    <p className="text-neutral-400 text-sm leading-relaxed">{t("contact.incidentBody")}</p>
                   </div>
                 </a>
 

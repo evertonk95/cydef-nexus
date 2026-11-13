@@ -56,7 +56,7 @@ const About = () => {
                 {paragraph}
               </p>
             ))}
-            <Link to={L("/servicos")} className="inline-flex items-center gap-2 mt-6 text-orange-400 hover:text-orange-300 transition-colors font-medium text-sm">
+            <Link to={L("/consultoria")} className="inline-flex items-center gap-2 mt-6 text-orange-400 hover:text-orange-300 transition-colors font-medium text-sm">
               {t("about.whereLink")} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

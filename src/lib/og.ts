@@ -46,7 +46,7 @@ export interface OgMeta {
  *  follow-up anotado). */
 const PAGE_OG: Record<PageKey, OgKeys> = {
   about: { title: ["about.h1a", "about.h1b"], description: ["about.lead"] },
-  ecosystem: { title: ["services.h1a", "services.h1b"], description: ["services.lead"] },
+  consulting: { title: ["consulting.h1a", "consulting.h1b"], description: ["consulting.lead"] },
   academy: { title: ["academy.h1"], description: ["academy.lead"] },
   labs: { title: ["labs.h1a", "labs.h1b"], description: ["labs.lead"] },
   research: { title: ["research.h1a", "research.h1b"], description: ["research.lead"] },

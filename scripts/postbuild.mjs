@@ -27,6 +27,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { loadPrivateRoutes } from "./lib/load-private-routes.mjs";
 import { loadDefaultLang } from "./lib/load-default-lang.mjs";
+import { loadLegacyRoutes } from "./lib/load-legacy-routes.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(ROOT, "dist");
@@ -68,6 +69,26 @@ for (const pathname of privateRoutes) {
   if (writeRouteFile(pathname)) privateCount++;
 }
 
+// Slugs antigos (src/lib/routes.ts: legacyPageSlugs) -> página de
+// redirecionamento física. O GitHub Pages não faz 301; sem este arquivo a URL
+// antiga (ex.: /pt/servicos/, substituída pela Consultoria em 12/11/2026) cairia
+// no 404.html com status 404. A página aponta a canônica para o destino, tem
+// noindex e redireciona por meta refresh (sem script inline, por causa da CSP). Não entra no sitemap nem
+// no pré-render.
+const legacyRoutes = await loadLegacyRoutes();
+for (const { from, to } of legacyRoutes) {
+  const dir = join(DIST, from.replace(/^\/|\/$/g, ""));
+  mkdirSync(dir, { recursive: true });
+  const target = `${origin}${to}`;
+  writeFileSync(
+    join(dir, "index.html"),
+    `<!doctype html><html><head><meta charset="utf-8"><title>CyDef</title>` +
+      `<meta name="robots" content="noindex"><link rel="canonical" href="${target}">` +
+      `<meta http-equiv="refresh" content="0; url=${to}">` +
+      `</head><body><a href="${to}">${target}</a></body></html>`,
+  );
+}
+
 // Canônica da raiz (etapa 77). Depois dos arquivos acima, que saem do template
 // SEM canônica. A URL é a mesma que o HeadSeo (src/lib/head-seo.tsx) emite para
 // a home do idioma padrão, na mesma forma do sitemap (COM barra final, via
@@ -103,5 +124,5 @@ if (rootTags.length !== 1 || rootTags[0] !== rootCanonical || fallbackTags.lengt
 }
 
 console.log(
-  `postbuild: 404.html ok · ${count} rotas do sitemap + ${privateCount} rotas utilitárias com index.html físico (HTTP 200 no Pages) · raiz com canônica ${origin}/${DEFAULT_LANG}/`,
+  `postbuild: 404.html ok · ${count} rotas do sitemap + ${privateCount} rotas utilitárias com index.html físico (HTTP 200 no Pages) · ${legacyRoutes.length} redirecionamentos de slug antigo · raiz com canônica ${origin}/${DEFAULT_LANG}/`,
 );
