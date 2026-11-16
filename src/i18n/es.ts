@@ -1,4 +1,5 @@
 import type { Dict } from "./en";
+import { inoraEs } from "./inora.es";
 
 // CyDef site — Español (neutral). Sin rayas largas, frases naturales.
 export const es: Dict = {
@@ -16,6 +17,7 @@ export const es: Dict = {
     home: "Inicio",
     about: "Nosotros",
     consulting: "Consultoría",
+    inora: "Inora",
     academy: "Academy",
     labs: "Labs",
     blog: "Blog",
@@ -28,6 +30,7 @@ export const es: Dict = {
     freeEnrollment: "Preinscripción gratuita",
     companyTitle: "Empresa",
     consulting: "Consultoría",
+    inora: "CyDef Inora",
     research: "Research",
     rights: "© {{year}} CyDef. Todos los derechos reservados.",
     privacy: "Privacidad",
@@ -395,13 +398,14 @@ export const es: Dict = {
       "Gobernanza de respuesta de extremo a extremo: toda acción sensible requiere aprobación humana, con kill switch y registro de auditoría encadenado y verificable",
       "Dos modos de base de datos: SQLite en el desarrollo local y PostgreSQL con RLS para el despliegue",
       "QA exploratoria de octubre de 2026: 23 hallazgos corregidos, flujos críticos verificados en el navegador y gate automatizado con 499 pruebas en SQLite y 117 en PostgreSQL",
-      "No es público: sin demo, sin acceso de terceros, sin fecha de lanzamiento",
+      "Acceso anticipado: demostraciones con cita previa y versión 1.0 en preparación, sin fecha de lanzamiento anunciada",
     ],
-    inoraLicense: "Licencia: Apache-2.0",
+    inoraLicense: "Licencia: comercial (código propietario de CyDef)",
     inoraRepo: "Repositorio: privado durante la validación",
     inoraUpdated: "Estado actualizado: noviembre de 2026",
-    notTitle: "Lo que no es",
-    notBody: "Inora está en validación y todavía no se comercializa.",
+    notTitle: "Acceso anticipado",
+    notBody: "Inora está en acceso anticipado: la versión 1.0 está en preparación y las demostraciones se agendan a pedido.",
+    inoraCta: "Conocer Inora",
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
     fwRole: "Framework abierto para evaluar y madurar SIEM en producción",
     fwState: "Público",
@@ -545,6 +549,15 @@ export const es: Dict = {
     hashPending: "calculando…",
     ptNote: "El Aviso de Privacidad vigente se publica en portugués. Las versiones en inglés y español se publicarán tras la revisión jurídica (documento legal en validación).",
   },
+  pledge: {
+    eyebrow: "Nuestro compromiso",
+    figure: "1%",
+    title: "El 1% de nuestras ganancias va a quienes más lo necesitan.",
+    body: "Cada mes en que CyDef tenga beneficio neto, el 1% se destina a instituciones de caridad. Vale para todo lo que CyDef vende: consultoría, Inora y lo que venga después.",
+    fine: "Calculado sobre el beneficio neto, no sobre la facturación.",
+    tagline: "Proteger a las personas va más allá de la tecnología.",
+  },
+  inora: inoraEs,
   notfound: {
     title: "Página no encontrada",
     body: "Esta dirección no existe o cambió de lugar. Te llevamos de vuelta a una página del sitio.",

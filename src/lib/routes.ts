@@ -20,6 +20,9 @@ import type { Lang } from "@/i18n";
 export const pageSlugs = {
   about: { pt: "sobre", en: "about", es: "nosotros" },
   consulting: { pt: "consultoria", en: "consulting", es: "consultoria" },
+  // Página comercial do CyDef Inora (decisão do Everton, 16/11/2026): rota no
+  // site principal; o subdomínio fica reservado para a aplicação em nuvem.
+  inora: { pt: "inora", en: "inora", es: "inora" },
   academy: { pt: "academy", en: "academy", es: "academy" },
   labs: { pt: "labs", en: "labs", es: "labs" },
   research: { pt: "research", en: "research", es: "research" },

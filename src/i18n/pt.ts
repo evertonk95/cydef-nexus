@@ -1,4 +1,5 @@
 import type { Dict } from "./en";
+import { inoraPt } from "./inora.pt";
 
 // CyDef site — Português (Brasil). Sem travessões na copy (regra do Everton).
 export const pt: Dict = {
@@ -16,6 +17,7 @@ export const pt: Dict = {
     home: "Home",
     about: "Sobre",
     consulting: "Consultoria",
+    inora: "Inora",
     academy: "Academy",
     labs: "Labs",
     blog: "Blog",
@@ -28,6 +30,7 @@ export const pt: Dict = {
     freeEnrollment: "Pré-inscrição gratuita",
     companyTitle: "Empresa",
     consulting: "Consultoria",
+    inora: "CyDef Inora",
     research: "Research",
     rights: "© {{year}} CyDef. Todos os direitos reservados.",
     privacy: "Privacidade",
@@ -395,13 +398,14 @@ export const pt: Dict = {
       "Governança de resposta de ponta a ponta: ação sensível exige aprovação humana, com kill switch e trilha de auditoria encadeada e verificável",
       "Dois modos de banco: SQLite no desenvolvimento local e PostgreSQL com RLS para implantação",
       "QA exploratória de outubro de 2026: 23 achados corrigidos, fluxos críticos verificados no navegador e gate automatizado com 499 testes no SQLite e 117 no PostgreSQL",
-      "Não é público: sem demo, sem acesso para terceiros, sem data de lançamento",
+      "Acesso antecipado: demonstração sob agendamento e versão 1.0 em preparação, sem data de lançamento divulgada",
     ],
-    inoraLicense: "Licença: Apache-2.0",
+    inoraLicense: "Licença: comercial (código proprietário da CyDef)",
     inoraRepo: "Repositório: privado durante a validação",
     inoraUpdated: "Status atualizado: novembro de 2026",
-    notTitle: "O que ele não é",
-    notBody: "O Inora está em validação e ainda não é comercializado.",
+    notTitle: "Acesso antecipado",
+    notBody: "O Inora está em acesso antecipado: a versão 1.0 está em preparação e as demonstrações são feitas sob agendamento.",
+    inoraCta: "Conhecer o Inora",
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
     fwRole: "Framework aberto para avaliar e amadurecer SIEMs em produção",
     fwState: "Público",
@@ -545,6 +549,15 @@ export const pt: Dict = {
     hashPending: "calculando…",
     ptNote: "O Aviso de Privacidade vigente é publicado em português. Versões em inglês e espanhol serão publicadas após revisão jurídica (documento legal em validação).",
   },
+  pledge: {
+    eyebrow: "Nosso compromisso",
+    figure: "1%",
+    title: "1% do nosso lucro vai para quem mais precisa.",
+    body: "Todo mês em que a CyDef tiver lucro líquido, 1% dele é destinado a instituições de caridade. Vale para tudo o que a CyDef vende: consultoria, Inora e o que vier depois.",
+    fine: "Calculado sobre o lucro líquido, não sobre o faturamento.",
+    tagline: "Proteger pessoas vai além da tecnologia.",
+  },
+  inora: inoraPt,
   notfound: {
     title: "Página não encontrada",
     body: "Este endereço não existe ou mudou de lugar. Vamos te levar de volta a uma página do site.",

@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { Pledge } from "@/components/Pledge";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowRight, Shield, Newspaper, GraduationCap, FlaskConical, Microscope, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -155,6 +156,8 @@ const Index = () => {
         <AcademySection courses={cursosDisponiveis} />
         <LabsSection visible={labsDisponivel} />
         <PrinciplesSection />
+        {/* Compromisso social: 1% do lucro líquido (decisão do Everton, 16/11/2026) */}
+        <Pledge />
 
       </div>
 
