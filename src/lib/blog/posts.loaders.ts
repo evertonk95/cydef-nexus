@@ -55,6 +55,8 @@ const loaders: Record<string, Loader> = {
     ),
   "pt:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
     import("./posts.apache-http2-rce").then((m) => m.apacheHttp2RcePost),
+  "pt:noisytcp-linux-kernel-tcp-dos-cve-2026-99288": () =>
+    import("./posts.noisytcp-linux").then((m) => m.noisytcpLinuxPost),
 
   // --- EN ---
   "en:rathat-trojan-bancario-android-controle-ia": () =>
@@ -71,6 +73,8 @@ const loaders: Record<string, Loader> = {
     ),
   "en:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
     import("./posts.apache-http2-rce.en").then((m) => m.apacheHttp2RcePostEn),
+  "en:noisytcp-linux-kernel-tcp-dos-cve-2026-99288": () =>
+    import("./posts.noisytcp-linux.en").then((m) => m.noisytcpLinuxPostEn),
   "en:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.en").then((m) => m.wp2shellWordpressPostEn),
   "en:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -115,6 +119,8 @@ const loaders: Record<string, Loader> = {
     ),
   "es:apache-http-server-mod-http2-rce-cve-2026-119618": () =>
     import("./posts.apache-http2-rce.es").then((m) => m.apacheHttp2RcePostEs),
+  "es:noisytcp-linux-kernel-tcp-dos-cve-2026-99288": () =>
+    import("./posts.noisytcp-linux.es").then((m) => m.noisytcpLinuxPostEs),
   "es:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress.es").then((m) => m.wp2shellWordpressPostEs),
   "es:apache-http-server-2-4-69-vulnerabilidades": () =>

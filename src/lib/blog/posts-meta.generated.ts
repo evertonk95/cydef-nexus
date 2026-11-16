@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
+    "title": "NoisyTCP: 11-year-old Linux TCP flaw lets attackers crash servers remotely without authentication",
+    "category": "Threat Intelligence",
+    "excerpt": "After the embargo ended, CVE-2026-99288 (NoisyTCP) was disclosed, a race condition in the Linux kernel's TCP code that can be triggered remotely and without authentication to cause a kernel panic. The flaw has existed since 2015 and affects almost all Linux distributions.",
+    "date": "November 16, 2026",
+    "dateISO": "2026-11-16",
+    "readTime": "8 min read",
+    "image": "/assets/blog/noisytcp-linux-kernel-tcp-dos-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
     "title": "Apache fixes critical mod_http2 flaw allowing remote code execution",
     "category": "Threat Intelligence",
@@ -251,6 +262,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
+    "title": "NoisyTCP: falha de 11 anos no TCP do Linux permite derrubar servidores remotamente sem autenticação",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "Após o fim do embargo, foi divulgada a CVE-2026-99288 (NoisyTCP), uma condição de corrida no código TCP do kernel Linux que pode ser acionada remotamente e sem autenticação para causar panic do kernel. A falha existe desde 2015 e afeta quase todas as distribuições Linux.",
+    "date": "16 de Novembro, 2026",
+    "dateISO": "2026-11-16",
+    "readTime": "8 min",
+    "image": "/assets/blog/noisytcp-linux-kernel-tcp-dos-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
     "title": "Apache corrige vulnerabilidade crítica no mod_http2 que permite execução remota de código",
     "category": "Inteligência de Ameaças",
@@ -495,6 +517,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
+    "title": "NoisyTCP: falla de 11 años en el TCP de Linux permite tumbar servidores remotamente sin autenticación",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Tras el fin del embargo, se divulgó la CVE-2026-99288 (NoisyTCP), una condición de carrera en el código TCP del kernel de Linux que puede activarse remotamente y sin autenticación para causar panic del kernel. La falla existe desde 2015 y afecta a casi todas las distribuciones de Linux.",
+    "date": "16 de noviembre de 2026",
+    "dateISO": "2026-11-16",
+    "readTime": "8 min de lectura",
+    "image": "/assets/blog/noisytcp-linux-kernel-tcp-dos-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "apache-http-server-mod-http2-rce-cve-2026-119618",
     "title": "Apache corrige vulnerabilidad crítica en mod_http2 que permite ejecución remota de código",
