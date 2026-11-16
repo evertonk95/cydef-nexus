@@ -13,6 +13,7 @@ import { windowsActiveDirectoryRcePost } from "./posts.windows-active-directory-
 import { fortinetRcePost } from "./posts.fortinet-rce";
 import { windowsBitlockerBypassPost } from "./posts.windows-bitlocker-bypass";
 import { apacheHttp2RcePost } from "./posts.apache-http2-rce";
+import { noisytcpLinuxPost } from "./posts.noisytcp-linux";
 import { blogPostsEn } from "./posts.en";
 import { blogPostsEs } from "./posts.es";
 import type { BlogPost } from "./posts";
@@ -26,6 +27,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  noisytcpLinuxPost,
   apacheHttp2RcePost,
   windowsBitlockerBypassPost,
   fortinetRcePost,

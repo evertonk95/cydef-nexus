@@ -14,8 +14,10 @@ import { windowsActiveDirectoryRcePostEn } from "./posts.windows-active-director
 import { fortinetRcePostEn } from "./posts.fortinet-rce.en";
 import { windowsBitlockerBypassPostEn } from "./posts.windows-bitlocker-bypass.en";
 import { apacheHttp2RcePostEn } from "./posts.apache-http2-rce.en";
+import { noisytcpLinuxPostEn } from "./posts.noisytcp-linux.en";
 
 export const blogPostsEn: BlogPost[] = [
+  noisytcpLinuxPostEn,
   apacheHttp2RcePostEn,
   windowsBitlockerBypassPostEn,
   fortinetRcePostEn,
