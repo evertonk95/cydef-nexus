@@ -110,7 +110,7 @@ export const inoraEn = {
   },
   deploy: {
     title: "Deployment with people who live SOC.",
-    body: "The CyDef team installs it, integrates it with your Wazuh and stays close to the operation through the first weeks.",
+    body: "Installation, integration with your Wazuh and support are defined when you sign up, according to the size and needs of your operation.",
     cta: "Meet CyDef consulting",
     alt: "Security analyst in a dimly lit operations center",
   },
@@ -124,7 +124,7 @@ export const inoraEn = {
     installed: {
       name: "Installed",
       desc: "In your environment, with Docker. Your data stays under your control.",
-      bullets: ["Installation with Docker", "Data in your environment", "Integration with your Wazuh", "Support and updates"],
+      bullets: ["Installation with Docker", "Data in your environment", "Integration with your Wazuh", "Support defined in the contract"],
     },
     mssp: {
       name: "MSSP",
@@ -159,7 +159,7 @@ export const inoraEn = {
       },
       {
         q: "How does deployment work?",
-        a: "The CyDef team installs Inora, connects it to your Wazuh and stays close to the operation through the first weeks.",
+        a: "Installation, integration with your Wazuh and support are agreed when you sign up, according to the size and needs of your operation.",
       },
       {
         q: "Why are there no prices on the site?",

@@ -5,6 +5,7 @@ import { es } from "@/i18n/es";
 import { LANGS } from "@/i18n";
 import { localizePath, pageSlugs } from "@/lib/routes";
 import { PAGE_COMPONENTS } from "@/lib/page-components";
+import { privacyDocEn, privacyDocEs, privacyDocPt } from "@/lib/privacyContent";
 
 const dicts = { en, pt, es };
 
@@ -64,6 +65,25 @@ describe("Compromisso social da CyDef (1% do lucro líquido)", () => {
       expect(dicts[lang].pledge.figure, lang).toBe("1%");
       expect(dicts[lang].pledge.title, lang).toMatch(/1%/);
       expect(dicts[lang].pledge.body, lang).toMatch(/1%/);
+    }
+  });
+});
+
+describe("Política de Privacidade revisada para o Inora (16/11/2026)", () => {
+  const docs = { pt: privacyDocPt, en: privacyDocEn, es: privacyDocEs };
+
+  it("cita o CyDef Inora e não cita mais o WhatsApp, nos 3 idiomas", () => {
+    for (const [lang, doc] of Object.entries(docs)) {
+      const text = JSON.stringify(doc.sections);
+      expect(text, lang).toMatch(/CyDef Inora/);
+      expect(text, lang).not.toMatch(/WhatsApp/i);
+    }
+  });
+
+  it("a página do Inora não promete acompanhamento nem suporte fora do contrato", () => {
+    for (const lang of LANGS) {
+      const text = JSON.stringify(dicts[lang].inora);
+      expect(text, lang).not.toMatch(/primeiras semanas|first weeks|primeras semanas/i);
     }
   });
 });

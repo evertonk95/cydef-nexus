@@ -110,7 +110,7 @@ export const inoraPt: InoraDict = {
   },
   deploy: {
     title: "Implantação com quem vive SOC.",
-    body: "A equipe da CyDef instala, integra com o seu Wazuh e acompanha a operação nas primeiras semanas.",
+    body: "Instalação, integração com o seu Wazuh e suporte são definidos na contratação, de acordo com o tamanho e a necessidade da sua operação.",
     cta: "Conhecer a consultoria CyDef",
     alt: "Analista de segurança num centro de operações com pouca luz",
   },
@@ -124,7 +124,7 @@ export const inoraPt: InoraDict = {
     installed: {
       name: "Instalado",
       desc: "No seu ambiente, com Docker. Os dados ficam sob o seu controle.",
-      bullets: ["Instalação via Docker", "Dados no seu ambiente", "Integração com o seu Wazuh", "Suporte e atualização"],
+      bullets: ["Instalação via Docker", "Dados no seu ambiente", "Integração com o seu Wazuh", "Suporte definido na contratação"],
     },
     mssp: {
       name: "MSSP",
@@ -159,7 +159,7 @@ export const inoraPt: InoraDict = {
       },
       {
         q: "Como funciona a implantação?",
-        a: "A equipe da CyDef instala o Inora, conecta ao seu Wazuh e acompanha a operação nas primeiras semanas.",
+        a: "Instalação, integração com o seu Wazuh e suporte são combinados na contratação, de acordo com o tamanho e a necessidade da sua operação.",
       },
       {
         q: "Por que não há preços no site?",

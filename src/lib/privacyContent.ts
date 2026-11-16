@@ -1,6 +1,7 @@
 // CyDef site — Privacy Policy content per language.
 // PT canonical (honest revision, 2026-09-03, aligning copy with the real
-// consulting opened on 13/11/2026). EN/ES editorial translations.
+// consulting opened on 13/11/2026; CyDef Inora offered on the site and
+// WhatsApp removed on 16/11/2026). EN/ES editorial translations.
 // Gate: human/legal review via PR before merge.
 import type { Lang } from "@/i18n";
 
@@ -23,14 +24,14 @@ export interface PrivacyDoc {
 export const privacyDocPt: PrivacyDoc = {
   docTitle: "Política de Privacidade",
   updatedLabel: "Última atualização:",
-  updatedAt: "13 de novembro de 2026",
+  updatedAt: "16 de novembro de 2026",
   contactIntro: "Dúvidas sobre esta Política? Fale com nosso encarregado:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quem somos",
       paragraphs: [
-        "A **CyDef** é uma empresa de cibersegurança. Prestamos serviços de consultoria em segurança para organizações, publicamos conteúdo técnico verificável (Blog) e mantemos a CyDef Academy, com cursos gratuitos de entrada e pré-inscrição aberta. Quando passarmos a oferecer novos produtos ou serviços, esta Política será revisada e atualizada antes.",
+        "A **CyDef** é uma empresa de cibersegurança. Prestamos serviços de consultoria em segurança para organizações, desenvolvemos e comercializamos o **CyDef Inora**, plataforma de gestão de incidentes de segurança, publicamos conteúdo técnico verificável (Blog) e mantemos a CyDef Academy, com cursos gratuitos de entrada e pré-inscrição aberta. Quando passarmos a oferecer novos produtos ou serviços, esta Política será revisada e atualizada antes.",
       ],
       list: {
         items: [
@@ -40,12 +41,13 @@ export const privacyDocPt: PrivacyDoc = {
       },
       closing: [
         "Esta Política explica como tratamos seus dados pessoais, em conformidade com a **Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018)**.",
+        "Ela trata dos dados coletados por este site e pelo nosso contato comercial. Os dados que uma organização cliente trata dentro do CyDef Inora, instalado no ambiente dela, ficam sob o controle dessa organização, e esse tratamento é regido pelo contrato firmado com a CyDef.",
       ],
     },
     {
       title: "2. Dados que coletamos",
       paragraphs: [
-        "**2.1. Contato e mensagens (WhatsApp, e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Fornecido voluntariamente por você.",
+        "**2.1. Contato e mensagens (e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Nos pedidos de demonstração ou proposta, também os dados da empresa e do ambiente que você decidir informar (como segmento, SIEM em uso e tamanho do time). Fornecido voluntariamente por você.",
         "**2.2. Pré-inscrição na CyDef Academy**: Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. Quando a área do aluno for liberada, poderá incluir dados de progresso e histórico de acesso.",
         "**2.3. Dados de navegação e análise**: Endereço IP, tipo de navegador, páginas visitadas e tempo de permanência, coletados por ferramentas de análise (ex.: Google Analytics 4), quando aplicável e com seu consentimento.",
         "**2.4. Dados de pagamento (quando disponível)**: Processados exclusivamente por provedores de pagamento. Não armazenamos números de cartão ou dados completos de pagamento.",
@@ -57,6 +59,7 @@ export const privacyDocPt: PrivacyDoc = {
       list: {
         items: [
           "Responder a solicitações de contato e mensagens: *Consentimento (art. 7º, I)*",
+          "Responder a pedidos de demonstração e de proposta comercial (consultoria e CyDef Inora): *Procedimentos preliminares relacionados a contrato, a pedido do titular (art. 7º, V)*",
           "Processar pré-inscrição e entrega dos cursos gratuitos da Academy: *Execução de contrato ou de procedimentos preliminares (art. 7º, V)*",
           "Segurança do site (proteção contra fraudes e ataques): *Legítimo interesse (art. 7º, IX)*",
           "Análise de audiência e melhoria do site: *Consentimento (quando exigido)*",
@@ -94,7 +97,7 @@ export const privacyDocPt: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Mensagens de contato: até **12 meses** após o último contato;",
+          "Mensagens de contato e pedidos de demonstração ou proposta: até **12 meses** após o último contato; se resultarem em contrato, pelo prazo do contrato e das obrigações legais;",
           "Pré-inscrições da Academy: enquanto a oferta gratuita estiver ativa e pelo prazo previsto no aviso de privacidade da pré-inscrição;",
           "Dados de navegação/análise: conforme período definido pela ferramenta utilizada (ex.: até 14 meses no GA4).",
         ],
@@ -181,14 +184,14 @@ export const privacyDocPt: PrivacyDoc = {
 export const privacyDocEn: PrivacyDoc = {
   docTitle: "Privacy Policy",
   updatedLabel: "Last updated:",
-  updatedAt: "November 13, 2026",
+  updatedAt: "November 16, 2026",
   contactIntro: "Questions about this Policy? Contact our data protection officer:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Who we are",
       paragraphs: [
-        "**CyDef** is a cybersecurity company. We provide security consulting services to organizations, publish verifiable technical content (Blog) and run the CyDef Academy, with free entry courses and open pre-enrollment. Whenever we start offering new products or services, this Policy will be reviewed and updated in advance.",
+        "**CyDef** is a cybersecurity company. We provide security consulting services to organizations, develop and sell **CyDef Inora**, a security incident management platform, publish verifiable technical content (Blog) and run the CyDef Academy, with free entry courses and open pre-enrollment. Whenever we start offering new products or services, this Policy will be reviewed and updated in advance.",
       ],
       list: {
         items: [
@@ -198,12 +201,13 @@ export const privacyDocEn: PrivacyDoc = {
       },
       closing: [
         "This Policy explains how we process your personal data, in compliance with the Brazilian **General Data Protection Law (LGPD, Law No. 13.709/2018)**.",
+        "It covers the data collected by this site and through our sales contact. Data that a client organization processes inside CyDef Inora, installed in its own environment, remains under that organization's control, and that processing is governed by the contract signed with CyDef.",
       ],
     },
     {
       title: "2. Data we collect",
       paragraphs: [
-        "**2.1. Contact and messages (WhatsApp, email and forms)**: Name, email, country and message (including goals you share). Provided voluntarily by you.",
+        "**2.1. Contact and messages (email and forms)**: Name, email, country and message (including goals you share). For demo or proposal requests, also the company and environment details you choose to share (such as industry, SIEM in use and team size). Provided voluntarily by you.",
         "**2.2. CyDef Academy pre-enrollment**: Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. When the student area is released, it may also include course progress and access history.",
         "**2.3. Browsing and analytics data**: IP address, browser type, pages visited and time on site, collected by analytics tools (e.g., Google Analytics 4) when applicable and with your consent.",
         "**2.4. Payment data (when available)**: Processed exclusively by payment providers. We do not store card numbers or complete payment data.",
@@ -215,6 +219,7 @@ export const privacyDocEn: PrivacyDoc = {
       list: {
         items: [
           "Reply to contact requests and messages: *Consent (Art. 7, I)*",
+          "Reply to demo and sales proposal requests (consulting and CyDef Inora): *Preliminary steps related to a contract, at the data subject's request (Art. 7, V)*",
           "Process Academy pre-enrollment and delivery of free entry courses: *Performance of a contract or preliminary steps (Art. 7, V)*",
           "Site security (protection against fraud and attacks): *Legitimate interest (Art. 7, IX)*",
           "Audience analytics and site improvement: *Consent (where required)*",
@@ -252,7 +257,7 @@ export const privacyDocEn: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Contact messages: up to **12 months** after the last contact;",
+          "Contact messages and demo or proposal requests: up to **12 months** after the last contact; if they lead to a contract, for the term of the contract and the applicable legal obligations;",
           "Academy pre-enrollments: while the free offer is active and for the period set out in the pre-enrollment privacy notice;",
           "Browsing/analytics data: according to the period defined by the tool used (e.g., up to 14 months in GA4).",
         ],
@@ -339,14 +344,14 @@ export const privacyDocEn: PrivacyDoc = {
 export const privacyDocEs: PrivacyDoc = {
   docTitle: "Política de Privacidad",
   updatedLabel: "Última actualización:",
-  updatedAt: "13 de noviembre de 2026",
+  updatedAt: "16 de noviembre de 2026",
   contactIntro: "¿Dudas sobre esta Política? Habla con nuestro encargado de datos:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
     {
       title: "1. Quiénes somos",
       paragraphs: [
-        "**CyDef** es una empresa de ciberseguridad. Prestamos servicios de consultoría en seguridad a organizaciones, publicamos contenido técnico verificable (Blog) y mantenemos la CyDef Academy, con cursos gratuitos de entrada y preinscripción abierta. Cuando empecemos a ofrecer nuevos productos o servicios, esta Política será revisada y actualizada con antelación.",
+        "**CyDef** es una empresa de ciberseguridad. Prestamos servicios de consultoría en seguridad a organizaciones, desarrollamos y comercializamos **CyDef Inora**, una plataforma de gestión de incidentes de seguridad, publicamos contenido técnico verificable (Blog) y mantenemos la CyDef Academy, con cursos gratuitos de entrada y preinscripción abierta. Cuando empecemos a ofrecer nuevos productos o servicios, esta Política será revisada y actualizada con antelación.",
       ],
       list: {
         items: [
@@ -356,12 +361,13 @@ export const privacyDocEs: PrivacyDoc = {
       },
       closing: [
         "Esta Política explica cómo tratamos tus datos personales, en cumplimiento de la **Ley General de Protección de Datos de Brasil (LGPD, Ley n.º 13.709/2018)**.",
+        "Cubre los datos recopilados por este sitio y por nuestro contacto comercial. Los datos que una organización cliente trata dentro de CyDef Inora, instalado en su propio entorno, quedan bajo el control de esa organización, y ese tratamiento se rige por el contrato firmado con CyDef.",
       ],
     },
     {
       title: "2. Datos que recopilamos",
       paragraphs: [
-        "**2.1. Contacto y mensajes (WhatsApp, correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). Proporcionados voluntariamente por ti.",
+        "**2.1. Contacto y mensajes (correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). En las solicitudes de demostración o propuesta, también los datos de la empresa y del entorno que decidas compartir (como sector, SIEM en uso y tamaño del equipo). Proporcionados voluntariamente por ti.",
         "**2.2. Preinscripción en la CyDef Academy**: Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. Cuando se libere el área de estudiantes, podrá incluir datos de progreso e historial de acceso.",
         "**2.3. Datos de navegación y análisis**: Dirección IP, tipo de navegador, páginas visitadas y tiempo de permanencia, recopilados por herramientas de análisis (p. ej., Google Analytics 4), cuando corresponda y con tu consentimiento.",
         "**2.4. Datos de pago (cuando estén disponibles)**: Procesados exclusivamente por proveedores de pago. No almacenamos números de tarjeta ni datos completos de pago.",
@@ -373,6 +379,7 @@ export const privacyDocEs: PrivacyDoc = {
       list: {
         items: [
           "Responder a solicitudes de contacto y mensajes: *Consentimiento (art. 7.º, I)*",
+          "Responder a solicitudes de demostración y de propuesta comercial (consultoría y CyDef Inora): *Procedimientos preliminares relacionados con un contrato, a pedido del titular (art. 7.º, V)*",
           "Procesar la preinscripción y la entrega de los cursos gratuitos de la Academy: *Ejecución de un contrato o de trámites preliminares (art. 7.º, V)*",
           "Seguridad del sitio (protección contra fraudes y ataques): *Interés legítimo (art. 7.º, IX)*",
           "Análisis de audiencia y mejora del sitio: *Consentimiento (cuando se exija)*",
@@ -410,7 +417,7 @@ export const privacyDocEs: PrivacyDoc = {
       paragraphs: [],
       list: {
         items: [
-          "Mensajes de contacto: hasta **12 meses** después del último contacto;",
+          "Mensajes de contacto y solicitudes de demostración o propuesta: hasta **12 meses** después del último contacto; si resultan en un contrato, durante la vigencia del contrato y de las obligaciones legales;",
           "Preinscripciones de la Academy: mientras la oferta gratuita esté activa y durante el plazo previsto en el aviso de privacidad de la preinscripción;",
           "Datos de navegación/análisis: según el período definido por la herramienta utilizada (p. ej., hasta 14 meses en GA4).",
         ],
