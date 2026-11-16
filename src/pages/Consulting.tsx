@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { Pledge } from "@/components/Pledge";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -182,6 +183,9 @@ const Consulting = () => {
           <p className="text-center text-neutral-400 mt-10">{t("consulting.formatsNote")}</p>
         </div>
       </section>
+
+      {/* Compromisso social: 1% do lucro líquido (decisão do Everton, 16/11/2026) */}
+      <Pledge />
 
       {/* CTA */}
       <section className="py-24 px-4 relative overflow-hidden">

@@ -167,6 +167,12 @@ const Labs = () => {
                 <p className="text-neutral-400 text-sm leading-relaxed">
                   {t("labs.notBody")}
                 </p>
+                <Link
+                  to={L("/inora")}
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-orange-400 hover:text-orange-300 transition-colors"
+                >
+                  {t("labs.inoraCta")} <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
               </div>
             </article>
 

@@ -28,6 +28,7 @@ export const Navigation = () => {
             <Link to={L("/")} className={itemClass}>{t("nav.home")}</Link>
             <Link to={L("/sobre")} className={itemClass}>{t("nav.about")}</Link>
             <Link to={L("/consultoria")} className={itemClass}>{t("nav.consulting")}</Link>
+            <Link to={L("/inora")} className={itemClass}>{t("nav.inora")}</Link>
             <Link to={L("/academy")} className={itemClass}>{t("nav.academy")}</Link>
             <Link to={L("/labs")} className={itemClass}>{t("nav.labs")}</Link>
             <Link to={L("/blog")} className={itemClass}>{t("nav.blog")}</Link>
@@ -75,6 +76,9 @@ export const Navigation = () => {
               </Link>
               <Link to={L("/consultoria")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.consulting")}
+              </Link>
+              <Link to={L("/inora")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
+                {t("nav.inora")}
               </Link>
               <Link to={L("/academy")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.academy")}

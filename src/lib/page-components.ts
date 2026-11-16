@@ -14,6 +14,7 @@ import type { ComponentType } from "react";
 import type { PageKey } from "@/lib/routes";
 import About from "@/pages/About";
 import Consulting from "@/pages/Consulting";
+import Inora from "@/pages/Inora";
 import Labs from "@/pages/Labs";
 import Research from "@/pages/Research";
 import Academy from "@/pages/Academy";
@@ -25,6 +26,7 @@ import Terms from "@/pages/Terms";
 export const PAGE_COMPONENTS: Record<PageKey, ComponentType> = {
   about: About,
   consulting: Consulting,
+  inora: Inora,
   academy: Academy,
   labs: Labs,
   research: Research,

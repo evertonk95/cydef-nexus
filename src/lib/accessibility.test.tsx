@@ -9,10 +9,11 @@ import { render } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import "vitest-axe/extend-expect";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Consulting from "@/pages/Consulting";
+import Inora from "@/pages/Inora";
 import Labs from "@/pages/Labs";
 import LabsArtifact from "@/pages/LabsArtifact";
 import Research from "@/pages/Research";
@@ -37,12 +38,19 @@ const withRouter = (ui: React.ReactNode) => (
   <MemoryRouter initialEntries={["/en"]}>{ui}</MemoryRouter>
 );
 
+// A página do Inora tem dez telas ilustrativas e o axe passa dos 5 s padrão
+// quando a suíte inteira roda em paralelo. Um timeout deixa o axe "já rodando"
+// e derruba todos os testes seguintes do arquivo; 30 s dá folga sem esconder
+// violação (o teste continua falhando se houver violação crítica/séria).
+vi.setConfig({ testTimeout: 30_000 });
+
 const POST_SLUG = "como-estruturar-um-soc-do-zero";
 
 const pages: [string, React.ReactNode][] = [
   ["Home (Index)", withRouter(<Index />)],
   ["About", withRouter(<About />)],
   ["Consulting (Consultoria)", withRouter(<Consulting />)],
+  ["Inora (página comercial)", withRouter(<Inora />)],
   ["Labs", withRouter(<Labs />)],
   ["Research", withRouter(<Research />)],
   ["Contact", withRouter(<Contact />)],

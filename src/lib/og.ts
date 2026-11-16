@@ -47,6 +47,7 @@ export interface OgMeta {
 const PAGE_OG: Record<PageKey, OgKeys> = {
   about: { title: ["about.h1a", "about.h1b"], description: ["about.lead"] },
   consulting: { title: ["consulting.h1a", "consulting.h1b"], description: ["consulting.lead"] },
+  inora: { title: ["inora.ogTitle"], description: ["inora.lead"] },
   academy: { title: ["academy.h1"], description: ["academy.lead"] },
   labs: { title: ["labs.h1a", "labs.h1b"], description: ["labs.lead"] },
   research: { title: ["research.h1a", "research.h1b"], description: ["research.lead"] },

@@ -135,3 +135,22 @@ export const consultingServicesLd = (
     })),
   };
 };
+
+/** CyDef Inora (página comercial). `SoftwareApplication` com a CyDef como
+ *  publicadora. Sem `offers` (preço sob consulta) e sem avaliações: só nome,
+ *  descrição, categoria e plataforma. */
+export const inoraSoftwareLd = (lang: Lang, description: string) => {
+  const url = `${SITE_ORIGIN}${withTrailingSlash(`/${lang}/${slugFor("inora", lang)}`)}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${url}#software`,
+    name: "CyDef Inora",
+    url,
+    description,
+    inLanguage: htmlLang(lang),
+    applicationCategory: "SecurityApplication",
+    operatingSystem: "Linux (Docker)",
+    publisher: { "@id": `${SITE_ORIGIN}/#org` },
+  };
+};

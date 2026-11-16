@@ -1,5 +1,7 @@
 // CyDef site — English catalog (source of truth).
 // Copy rules: no em-dashes, plain human phrasing, honest states only.
+import { inoraEn } from "./inora.en";
+
 export const en = {
   common: {
     tagline: "Security that evolves with you.",
@@ -15,6 +17,7 @@ export const en = {
     home: "Home",
     about: "About",
     consulting: "Consulting",
+    inora: "Inora",
     academy: "Academy",
     labs: "Labs",
     blog: "Blog",
@@ -27,6 +30,7 @@ export const en = {
     freeEnrollment: "Free enrollment",
     companyTitle: "Company",
     consulting: "Consulting",
+    inora: "CyDef Inora",
     research: "Research",
     rights: "© {{year}} CyDef. All rights reserved.",
     privacy: "Privacy",
@@ -394,13 +398,14 @@ export const en = {
       "End-to-end response governance: every sensitive action requires human approval, with a kill switch and a chained, verifiable audit trail",
       "Two database modes: SQLite for local development and PostgreSQL with RLS for deployment",
       "October 2026 exploratory QA: 23 findings fixed, critical flows verified in a real browser, and an automated gate with 499 SQLite tests and 117 PostgreSQL tests",
-      "Not public: no demo, no third-party access, no release date",
+      "Early access: demos by appointment and version 1.0 in preparation, with no release date announced",
     ],
-    inoraLicense: "License: Apache-2.0",
+    inoraLicense: "License: commercial (proprietary CyDef code)",
     inoraRepo: "Repository: private during validation",
     inoraUpdated: "Status updated: November 2026",
-    notTitle: "What it is not",
-    notBody: "Inora is in validation and is not commercially available yet.",
+    notTitle: "Early access",
+    notBody: "Inora is in early access: version 1.0 is in preparation and demos are scheduled on request.",
+    inoraCta: "Discover Inora",
     fwName: "CyDef SIEM Health and Maturity Assessment Framework",
     fwRole: "Open framework to assess and mature SIEMs in production",
     fwState: "Public",
@@ -544,6 +549,15 @@ export const en = {
     hashPending: "calculating…",
     ptNote: "The current Privacy Notice is published in Portuguese. English and Spanish versions will be published after legal review (the notice is a legal document under validation).",
   },
+  pledge: {
+    eyebrow: "Our commitment",
+    figure: "1%",
+    title: "1% of our profit goes to those who need it most.",
+    body: "In every month CyDef makes a net profit, 1% of it goes to charitable institutions. It applies to everything CyDef sells: consulting, Inora and whatever comes next.",
+    fine: "Calculated on net profit, not on revenue.",
+    tagline: "Protecting people goes beyond technology.",
+  },
+  inora: inoraEn,
   notfound: {
     title: "Page not found",
     body: "This address does not exist or has moved. Let us take you back to a page on the site.",

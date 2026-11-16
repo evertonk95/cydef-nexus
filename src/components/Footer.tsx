@@ -61,6 +61,7 @@ export const Footer = () => {
                 <Link to={L("/research")} className={linkClass}>{t("footer.research")}</Link>
                 <Link to={L("/blog")} className={linkClass}>{t("nav.blog")}</Link>
                 <Link to={L("/consultoria")} className={linkClass}>{t("footer.consulting")}</Link>
+                <Link to={L("/inora")} className={linkClass}>{t("footer.inora")}</Link>
                 <Link to={L("/contato")} className={linkClass}>{t("contact.badge")}</Link>
               </div>
             </div>
