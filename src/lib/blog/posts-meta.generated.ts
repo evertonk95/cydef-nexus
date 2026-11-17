@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "firefox-160-correcoes-seguranca",
+    "title": "Mozilla fixes 99 flaws in Firefox 160, including sandbox escapes and privilege escalation",
+    "category": "Threat Intelligence",
+    "excerpt": "Mozilla released Firefox 160 with fixes for 99 vulnerabilities, 57 of them high impact, covering sandbox escapes, privilege escalation, same-origin policy bypass and memory errors in graphics, networking and storage components.",
+    "date": "November 17, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "7 min",
+    "image": "/assets/blog/firefox-160-correcoes-seguranca-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
     "title": "NoisyTCP: 11-year-old Linux TCP flaw lets attackers crash servers remotely without authentication",
     "category": "Threat Intelligence",
@@ -262,6 +273,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "firefox-160-correcoes-seguranca",
+    "title": "Mozilla corrige 99 falhas no Firefox 160, incluindo escapes de sandbox e elevação de privilégios",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Mozilla publicou o Firefox 160 com correções para 99 vulnerabilidades, sendo 57 de impacto alto, entre escapes de sandbox, elevação de privilégios, bypass da política de mesma origem e erros de memória em componentes gráficos, de rede e de armazenamento.",
+    "date": "17 de Novembro, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "7 min",
+    "image": "/assets/blog/firefox-160-correcoes-seguranca-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
     "title": "NoisyTCP: falha de 11 anos no TCP do Linux permite derrubar servidores remotamente sem autenticação",
     "category": "Inteligência de Ameaças",
@@ -517,6 +539,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "firefox-160-correcoes-seguranca",
+    "title": "Mozilla corrige 99 fallas en Firefox 160, incluidos escapes de sandbox y elevación de privilegios",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Mozilla publicó Firefox 160 con correcciones para 99 vulnerabilidades, 57 de ellas de impacto alto, entre escapes de sandbox, elevación de privilegios, bypass de la política de mismo origen y errores de memoria en componentes gráficos, de red y de almacenamiento.",
+    "date": "17 de Noviembre, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "7 min",
+    "image": "/assets/blog/firefox-160-correcoes-seguranca-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "noisytcp-linux-kernel-tcp-dos-cve-2026-99288",
     "title": "NoisyTCP: falla de 11 años en el TCP de Linux permite tumbar servidores remotamente sin autenticación",

@@ -16,6 +16,10 @@ type Loader = () => Promise<BlogPost>;
  */
 const loaders: Record<string, Loader> = {
   // --- PT ---
+  "pt:firefox-160-correcoes-seguranca": () =>
+    import("./posts.firefox-160-correcoes-seguranca").then(
+      (m) => m.firefox160CorrecoesSegurancaPost,
+    ),
   "pt:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress").then((m) => m.wp2shellWordpressPost),
   "pt:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -59,6 +63,10 @@ const loaders: Record<string, Loader> = {
     import("./posts.noisytcp-linux").then((m) => m.noisytcpLinuxPost),
 
   // --- EN ---
+  "en:firefox-160-correcoes-seguranca": () =>
+    import("./posts.firefox-160-correcoes-seguranca.en").then(
+      (m) => m.firefox160CorrecoesSegurancaPostEn,
+    ),
   "en:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.en").then((m) => m.rathatAndroidTrojanPostEn),
   "en:windows-active-directory-rce-cve-2026-119948": () =>
@@ -105,6 +113,10 @@ const loaders: Record<string, Loader> = {
     ),
 
   // --- ES ---
+  "es:firefox-160-correcoes-seguranca": () =>
+    import("./posts.firefox-160-correcoes-seguranca.es").then(
+      (m) => m.firefox160CorrecoesSegurancaPostEs,
+    ),
   "es:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.es").then((m) => m.rathatAndroidTrojanPostEs),
   "es:windows-active-directory-rce-cve-2026-119948": () =>
