@@ -55,6 +55,39 @@ jobs:
           path: sbom/cyclonedx.json
           if-no-files-found: error
 
+  academy:
+    name: Portal da Academy · Lint · Typecheck · Testes (com Postgres) · Build · SCA
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: academy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: academy/package-lock.json
+      - name: Instalar dependências
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Testes (telas, acessibilidade e banco com todas as migrações)
+        run: npm test
+      - name: Build de produção
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: "https://fawtpustzzzplzivsdwq.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "build-de-verificacao"
+          VITE_ACESSO_API_URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/academy-acesso"
+          VITE_TURNSTILE_SITE_KEY: "build-de-verificacao"
+      - name: SCA — dependências sem Critical/High
+        run: npm audit --audit-level=high
+
   gitleaks:
     name: Gitleaks — secret scan (HEL-M04)
     runs-on: ubuntu-latest

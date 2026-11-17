@@ -51,7 +51,9 @@ function main() {
   }
   const prefixo = sql.slice(0, start + begin.length);
   const sufixo = sql.slice(stop);
-  const novoBloco = `\n${gerarSeed()}\n`;
+  // O marcador final é um comentário SQL: o "-- " antes dele faz parte do bloco
+  // reescrito e precisa voltar, senão a migração deixa de ser SQL válido.
+  const novoBloco = `\n${gerarSeed()}\n-- `;
   const novo = `${prefixo}${novoBloco}${sufixo}`;
 
   if (novo === sql) {

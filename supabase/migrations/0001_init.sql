@@ -152,4 +152,4 @@ values (
   true
 )
 on conflict (versao) do nothing;
->>> AVISO_SEED_END
+-- >>> AVISO_SEED_END
