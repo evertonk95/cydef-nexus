@@ -95,11 +95,35 @@ function rodarAudit(pasta) {
     falhar(`npm audit nao devolveu JSON em ${pasta}${resultado.stderr ? `: ${resultado.stderr.trim()}` : ""}`);
   }
 
+  let relatorio;
   try {
-    return JSON.parse(resultado.stdout);
+    relatorio = JSON.parse(resultado.stdout);
   } catch (erro) {
     falhar(`saida do npm audit nao e JSON valido em ${pasta}: ${erro.message}`);
   }
+
+  // Quando nao alcanca o registro (rede, proxy, endpoint fora), o npm audit
+  // devolve {"message","error"} sem "vulnerabilities". Relatorio incompleto
+  // nunca vale como dependencia limpa.
+  const erroNpm = relatorio?.error;
+  const mensagemNpm =
+    (typeof erroNpm === "object" && erroNpm ? erroNpm.message || erroNpm.summary : null) ||
+    relatorio?.message ||
+    (resultado.stderr ? resultado.stderr.trim() : null);
+
+  if (erroNpm || relatorio?.message) {
+    falhar(
+      `npm audit falhou em ${pasta}${mensagemNpm ? `: ${mensagemNpm}` : ""}. Sem relatorio, nenhuma dependencia e dada como limpa (fail closed).`,
+    );
+  }
+
+  if (!relatorio?.metadata?.vulnerabilities || typeof relatorio.metadata.vulnerabilities !== "object") {
+    falhar(
+      `npm audit devolveu relatorio sem metadata.vulnerabilities em ${pasta}${mensagemNpm ? `: ${mensagemNpm}` : ""} (fail closed).`,
+    );
+  }
+
+  return relatorio;
 }
 
 function ghsaDoAdvisory(via) {
@@ -129,10 +153,13 @@ function auditar() {
   const semAdvisoryProprio = [];
 
   for (const [pacote, dados] of graves) {
-    const advisories = (Array.isArray(dados.via) ? dados.via : []).filter((via) => typeof via === "object");
+    const advisories = (Array.isArray(dados.via) ? dados.via : []).filter(
+      (via) => typeof via === "object" && via !== null && SEVERIDADES.has(via.severity),
+    );
 
     if (advisories.length === 0) {
-      // Severidade herdada de um pacote filho: o filho e avaliado por conta propria.
+      // Sem advisory high/critical proprio: a severidade vem de dependencia filha
+      // (avaliada na origem) ou apenas de advisory moderado, que nao bloqueia.
       semAdvisoryProprio.push(pacote);
       continue;
     }
@@ -186,7 +213,7 @@ function auditar() {
   }
 
   if (semAdvisoryProprio.length > 0) {
-    console.log(`  severidade herdada de dependencia filha (avaliada na origem): ${semAdvisoryProprio.join(", ")}`);
+    console.log(`  sem advisory high/critical proprio (herdada ou moderada, avaliada na origem): ${semAdvisoryProprio.join(", ")}`);
   }
 
   if (bloqueios.length > 0) {
