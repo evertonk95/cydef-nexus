@@ -11,11 +11,13 @@ export const inoraEn = {
   sub: "Who saw it, who acted and who approved it. On record.",
   lead: "Alerts, cases, analysis and response in one place, with an audit trail from end to end. Built for SOC teams and managed security providers.",
   ctaDemo: "Book a demo",
+  ctaShort: "Book a demo",
   ctaPlatform: "See the platform",
   chips: ["Native Wazuh integration", "Runs in your environment", "Ready for MSSPs"],
   mockNote: "Illustrative screens with demo data.",
   subnav: {
     label: "Sections of the Inora page",
+    home: "Go to the CyDef home page",
     platform: "Platform",
     features: "Features",
     integrations: "Integrations",

@@ -11,11 +11,13 @@ export const inoraPt: InoraDict = {
   sub: "Quem viu, quem agiu e quem autorizou. Provado.",
   lead: "Alertas, casos, análise e resposta num só lugar, com trilha de auditoria de ponta a ponta. Feito para SOCs e provedores de serviços gerenciados de segurança.",
   ctaDemo: "Agendar demonstração",
+  ctaShort: "Demonstração",
   ctaPlatform: "Ver a plataforma",
   chips: ["Integração nativa com Wazuh", "Roda no seu ambiente", "Pronto para MSSP"],
   mockNote: "Telas ilustrativas, com dados de demonstração.",
   subnav: {
     label: "Seções da página do Inora",
+    home: "Ir para a home da CyDef",
     platform: "Plataforma",
     features: "Recursos",
     integrations: "Integrações",

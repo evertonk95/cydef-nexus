@@ -32,7 +32,8 @@ import {
   Building2,
   type LucideIcon,
 } from "lucide-react";
-import { Navigation } from "@/components/Navigation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SkipLink } from "@/components/SkipLink";
 import { Footer } from "@/components/Footer";
 import { Pledge } from "@/components/Pledge";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -187,37 +188,43 @@ const Inora = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-clip selection:bg-orange-500/30">
       <JsonLd data={inoraSoftwareLd(lang, s("lead"))} />
-      <Navigation />
-
-      {/* Navegação da página do produto: fica presa logo abaixo do menu do site. */}
-      <div className="sticky top-[69px] z-40 mt-[69px] border-b border-white/5 bg-[#050505]/85 backdrop-blur-md">
-        <div className="container mx-auto flex items-center gap-6 px-6 py-2.5 md:px-10">
-          <a href="#plataforma" className="shrink-0" aria-label="CyDef Inora">
-            <InoraLockup size="sm" />
-          </a>
-          <nav aria-label={s("subnav.label")} className="hidden lg:block min-w-0">
-            <ul className="flex items-center gap-5">
+      {/* Cabeçalho próprio da página do produto (decisão do Everton, 16/11/2026):
+          sem o menu do site, só a barra do Inora. O logo leva à home da CyDef. */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#050505]/85 backdrop-blur-md animate-fadeSlideIn">
+        <SkipLink />
+        <div className="container mx-auto flex items-center gap-4 px-5 py-4 md:gap-8 md:px-10">
+          <Link to={L("/")} aria-label={s("subnav.home")} className="shrink-0">
+            <InoraLockup size="md" />
+          </Link>
+          <nav aria-label={s("subnav.label")} className="hidden min-w-0 lg:block">
+            <ul className="flex items-center gap-7">
               {subnav.map(([id, label]) => (
                 <li key={id}>
-                  <a href={`#${id}`} className="text-xs font-medium text-neutral-400 transition-colors hover:text-white">
+                  <a href={`#${id}`} className="text-sm font-medium text-neutral-400 transition-colors hover:text-white">
                     {label}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
-          <a
-            href={demoHref}
-            className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-orange-500 px-4 py-1.5 text-xs font-semibold text-black shadow-[0_6px_20px_-8px_rgba(249,115,22,0.7)] transition-colors hover:bg-orange-400"
-          >
-            {s("ctaDemo")}
-          </a>
+          <div className="ml-auto flex shrink-0 items-center gap-4">
+            <div className="hidden sm:block">
+              <LanguageSwitcher compact />
+            </div>
+            <a
+              href={demoHref}
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-black shadow-[0_6px_20px_-8px_rgba(249,115,22,0.7)] transition-colors hover:bg-orange-400"
+            >
+              <span className="sm:hidden">{s("ctaShort")}</span>
+              <span className="hidden sm:inline">{s("ctaDemo")}</span>
+            </a>
+          </div>
         </div>
-      </div>
+      </header>
 
       <main id="conteudo" tabIndex={-1} className="outline-none">
         {/* Hero */}
-        <section id="plataforma" aria-labelledby="inora-titulo" className="relative scroll-mt-32 overflow-hidden px-4 pb-20 pt-14 md:pt-20">
+        <section id="plataforma" aria-labelledby="inora-titulo" className="relative scroll-mt-32 overflow-hidden px-4 pb-20 pt-32 md:pt-40">
           <div className="pointer-events-none absolute right-[-10%] top-0 -z-10 h-[620px] w-[720px] rounded-full bg-orange-500/[0.13] blur-[140px]" aria-hidden="true" />
           <div
             className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35] [background-image:radial-gradient(rgba(249,115,22,0.35)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_70%_30%,black,transparent_65%)]"
