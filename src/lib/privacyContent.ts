@@ -77,7 +77,7 @@ export const privacyDocPt: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Provedores de infraestrutura e hospedagem** (ex.: GitHub Pages, Cloudflare): necessários ao funcionamento do site;",
+          "**Provedores de infraestrutura, hospedagem e segurança** (ex.: GitHub Pages, Cloudflare): necessários ao funcionamento e à segurança do site, incluindo a verificação antirrobô dos formulários (Cloudflare Turnstile), que analisa o endereço IP e sinais técnicos do navegador para confirmar que o envio é feito por uma pessoa;",
           "**Ferramentas de análise** (ex.: Google Analytics): para medir audiência, quando você consente;",
           "**Provedores de autenticação, e-mail e pagamento**: para viabilizar a Academy e transações, quando disponíveis;",
           "**Autoridades públicas**: quando exigido por lei ou ordem judicial.",
@@ -237,7 +237,7 @@ export const privacyDocEn: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Infrastructure and hosting providers** (e.g., GitHub Pages, Cloudflare): required for the site to work;",
+          "**Infrastructure, hosting and security providers** (e.g., GitHub Pages, Cloudflare): required for the site to work and stay secure, including the anti-bot check on forms (Cloudflare Turnstile), which analyzes the IP address and technical browser signals to confirm that a person is submitting the form;",
           "**Analytics tools** (e.g., Google Analytics): to measure audience, when you consent;",
           "**Authentication, email and payment providers**: to run the Academy and transactions, when available;",
           "**Public authorities**: when required by law or court order.",
@@ -397,7 +397,7 @@ export const privacyDocEs: PrivacyDoc = {
       ],
       list: {
         items: [
-          "**Proveedores de infraestructura y alojamiento** (p. ej., GitHub Pages, Cloudflare): necesarios para el funcionamiento del sitio;",
+          "**Proveedores de infraestructura, alojamiento y seguridad** (p. ej., GitHub Pages, Cloudflare): necesarios para el funcionamiento y la seguridad del sitio, incluida la verificación antibots de los formularios (Cloudflare Turnstile), que analiza la dirección IP y señales técnicas del navegador para confirmar que el envío lo realiza una persona;",
           "**Herramientas de análisis** (p. ej., Google Analytics): para medir la audiencia, cuando das tu consentimiento;",
           "**Proveedores de autenticación, correo y pago**: para operar la Academy y las transacciones, cuando estén disponibles;",
           "**Autoridades públicas**: cuando lo exija la ley o una orden judicial.",
