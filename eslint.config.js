@@ -11,7 +11,7 @@ import tseslint from "typescript-eslint";
  * do Academy) foram ajustados no PR que promoveu esta configuracao.
  */
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", "academy"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

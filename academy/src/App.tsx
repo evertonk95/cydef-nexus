@@ -1,0 +1,46 @@
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { MotionConfig } from "motion/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Config } from "@/lib/config";
+import { ProvedorPortal } from "@/lib/contexto";
+import { ProvedorAvisos } from "@/components/ui/Avisos";
+import { ExigeLogin } from "@/components/layout/ExigeLogin";
+import { Moldura } from "@/components/layout/Moldura";
+import { NaoEncontrado } from "@/pages/Estados";
+
+const Painel = lazy(() => import("@/pages/Painel"));
+const MeusCursos = lazy(() => import("@/pages/MeusCursos"));
+const Curso = lazy(() => import("@/pages/Curso"));
+const Entrar = lazy(() => import("@/pages/Entrar"));
+const Retorno = lazy(() => import("@/pages/Retorno"));
+
+export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseClient; queryClient: QueryClient }) {
+  return (
+    <MotionConfig reducedMotion="user">
+      <QueryClientProvider client={queryClient}>
+        <ProvedorPortal config={config} sb={sb}>
+          <ProvedorAvisos>
+            <BrowserRouter>
+              <Suspense fallback={<div aria-busy="true" className="min-h-dvh bg-bg" />}>
+                <Routes>
+                  <Route path="/entrar" element={<Entrar />} />
+                  <Route path="/entrar/retorno" element={<Retorno />} />
+                  <Route element={<ExigeLogin />}>
+                    <Route element={<Moldura />}>
+                      <Route index element={<Painel />} />
+                      <Route path="cursos" element={<MeusCursos />} />
+                      <Route path="cursos/:slug" element={<Curso />} />
+                      <Route path="*" element={<NaoEncontrado />} />
+                    </Route>
+                  </Route>
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </ProvedorAvisos>
+        </ProvedorPortal>
+      </QueryClientProvider>
+    </MotionConfig>
+  );
+}

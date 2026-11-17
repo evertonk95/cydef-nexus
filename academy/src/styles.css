@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Tokens do portal: central de operações escura, laranja como ação e progresso.
+   Mesma família visual do site da CyDef e do Inora (protótipos aprovados em 17/11/2026). */
+@theme {
+  --color-bg: #050505;
+  --color-panel: #0e0e10;
+  --color-panel-2: #141416;
+  --color-line: #232326;
+  --color-line-hi: #3a3a3e;
+  --color-ink: #f5f5f4;
+  --color-muted: #a8a8ad;
+  --color-dim: #8b8b91;
+  --color-orange: #f97316;
+  --color-orange-hi: #fb923c;
+  --color-orange-ink: #1c0d02;
+  --color-ok: #4ade80;
+  --color-bad: #f87171;
+  --color-warn: #fbbf24;
+
+  --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-soft: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@layer base {
+  html { color-scheme: dark; background: var(--color-bg); }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :focus-visible { outline: 2px solid var(--color-orange-hi); outline-offset: 3px; border-radius: 8px; }
+  h1, h2, h3 { text-wrap: balance; }
+  ::selection { background: rgba(249, 115, 22, 0.35); color: #fff; }
+}
+
+@layer components {
+  .painel-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(20, 20, 22, 0.88), rgba(12, 12, 14, 0.94));
+    transition: border-color 200ms var(--ease-out-soft), transform 200ms var(--ease-out-soft), box-shadow 200ms var(--ease-out-soft);
+  }
+  /* holofote e borda que acompanham o cursor (variáveis --mx/--my do Card) */
+  .painel-card::before,
+  .painel-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms var(--ease-out-soft);
+  }
+  .painel-card::before {
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(249, 115, 22, 0.12), transparent 45%);
+  }
+  .painel-card::after {
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(251, 146, 60, 0.7), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .painel-card[data-interativo="true"]:hover { border-color: #2d2d31; transform: translateY(-2px); box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9); }
+  .painel-card[data-interativo="true"]:hover::before,
+  .painel-card[data-interativo="true"]:hover::after { opacity: 1; }
+
+  .rotulo-mono { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #17171a;
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    animation: brilho-skeleton 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes brilho-skeleton { to { transform: translateX(100%); } }
+@keyframes pulso-anel { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.6); opacity: 0; } }
+@keyframes ping-laranja { 0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); } 80%, 100% { box-shadow: 0 0 0 9px rgba(249, 115, 22, 0); } }
+@keyframes respirar {
+  0%, 100% { box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+  50% { box-shadow: 0 12px 42px -6px rgba(249, 115, 22, 1), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+}
+@keyframes reflexo { from { transform: translateX(-120%) skewX(-18deg); } to { transform: translateX(320%) skewX(-18deg); } }
+@keyframes girar { to { transform: rotate(360deg); } }
+@keyframes brilho-texto { to { background-position: -200% 0; } }
+@keyframes varrer { to { transform: translateX(100%); } }
+@keyframes piscar { 50% { opacity: 0; } }
+@keyframes correr { from { transform: translateX(-50%); } to { transform: translateX(50%); } }
+@keyframes acender { from { transform: scale(0.6); opacity: 0.2; } to { transform: none; opacity: 1; } }
+@keyframes chama { 0%, 100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.08) rotate(2deg); } }
+@keyframes tremer { 0%, 100% { transform: none; } 20% { transform: translateX(-7px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@keyframes desenhar { to { stroke-dashoffset: 0; } }
