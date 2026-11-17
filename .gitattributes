@@ -1,0 +1,4 @@
+# Fim de linha: LF em todo o repositorio, em qualquer sistema.
+# Sem isso, o clone no Windows com core.autocrlf=true deixa o worktree em CRLF
+# e o sync-aviso-seed --check acusa divergencia falsa ao comparar com a migracao.
+* text=auto eol=lf
