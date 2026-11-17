@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { createCaptureHandler, type CaptureStorage, type EmailServico } from "./index.ts";
+import {
+  comCors,
+  createCaptureHandler,
+  origensPermitidas,
+  type CaptureStorage,
+  type EmailServico,
+} from "./index.ts";
 
 /**
  * Testes da Capture API (S-03..S-05) com dependências injetadas.
@@ -219,5 +225,61 @@ describe("POST /api/capture — matriz de segurança", () => {
     // storage recebe apenas os campos do contrato — nenhuma versão enviada
     const args = (deps.storage.captureLead as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(args).not.toHaveProperty("versao_aviso");
+  });
+});
+
+describe("CORS do formulario do site (origem cruzada)", () => {
+  const ORIGEM = "https://www.cydef.com.br";
+
+  function reqComOrigem(origem: string, metodo = "POST"): Request {
+    if (metodo === "OPTIONS") {
+      return new Request("https://api.cydef.com.br/capture", { method: metodo, headers: { Origin: origem } });
+    }
+    return new Request("https://api.cydef.com.br/capture", {
+      method: metodo,
+      headers: { "Content-Type": "application/json", Origin: origem },
+      body: JSON.stringify(payloadValido),
+    });
+  }
+
+  it("preflight OPTIONS da origem do site responde 204 com Access-Control-Allow-Origin", async () => {
+    const res = await comCors(createCaptureHandler(makeDeps()))(reqComOrigem(ORIGEM, "OPTIONS"));
+    expect(res.status).toBe(204);
+    expect(res.headers.get("access-control-allow-origin")).toBe(ORIGEM);
+    expect(res.headers.get("access-control-allow-methods")).toContain("POST");
+    expect(res.headers.get("vary")).toBe("Origin");
+  });
+
+  it("preflight de origem desconhecida responde 403 e nao libera CORS", async () => {
+    const res = await comCors(createCaptureHandler(makeDeps()))(reqComOrigem("https://evil.example", "OPTIONS"));
+    expect(res.status).toBe(403);
+    expect(res.headers.get("access-control-allow-origin")).toBeNull();
+    expect(await res.json()).toEqual({ erro: "origem_nao_permitida" });
+  });
+
+  it("POST aceito da origem do site leva o cabecalho de CORS na resposta", async () => {
+    const res = await comCors(createCaptureHandler(makeDeps()))(reqComOrigem(ORIGEM));
+    expect(res.status).toBe(202);
+    expect(res.headers.get("access-control-allow-origin")).toBe(ORIGEM);
+  });
+
+  it("POST de origem desconhecida e recusado antes de tocar o banco", async () => {
+    const deps = makeDeps();
+    const res = await comCors(createCaptureHandler(deps))(reqComOrigem("https://evil.example"));
+    expect(res.status).toBe(403);
+    expect(deps.storage.captureLead).not.toHaveBeenCalled();
+  });
+
+  it("sem Origin (servidor, curl) o fluxo segue igual e nenhum cabecalho de CORS e inventado", async () => {
+    const res = await comCors(createCaptureHandler(makeDeps()))(makeRequest(payloadValido));
+    expect(res.status).toBe(202);
+    expect(res.headers.get("access-control-allow-origin")).toBeNull();
+  });
+
+  it("CAPTURE_ALLOWED_ORIGINS soma origens a lista padrao do site", () => {
+    const origens = origensPermitidas("https://preview.cydef.pages.dev, https://www.cydef.com.br");
+    expect(origens).toContain("https://www.cydef.com.br");
+    expect(origens).toContain("https://preview.cydef.pages.dev");
+    expect(origens).toHaveLength(3);
   });
 });

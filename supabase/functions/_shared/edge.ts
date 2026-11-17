@@ -41,3 +41,14 @@ export function ipDoRequest(req: Request): string {
 export function novoRequestId(): string {
   return crypto.randomUUID();
 }
+
+/** Cabecalhos de CORS para uma origem ja validada pela funcao que chama. */
+export function corsHeaders(origem: string): Record<string, string> {
+  return {
+    "Access-Control-Allow-Origin": origem,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "content-type, authorization, apikey, x-client-info",
+    "Access-Control-Max-Age": "600",
+    Vary: "Origin",
+  };
+}

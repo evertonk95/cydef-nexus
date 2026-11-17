@@ -37,6 +37,7 @@ import {
   hashIp,
   ipDoRequest,
   novoRequestId,
+  corsHeaders,
 } from "../_shared/edge.ts";
 
 const MSG_GENERICA = "Pré-inscrição recebida. Confirme seu e-mail.";
@@ -354,12 +355,57 @@ function criarEmailServico(): EmailServico {
   };
 }
 
+const ORIGENS_PADRAO = ["https://www.cydef.com.br", "https://cydef.com.br"];
+
+/** Origens autorizadas: lista padrao do site + `CAPTURE_ALLOWED_ORIGINS` (virgula). */
+export function origensPermitidas(env: string | undefined = getEnv("CAPTURE_ALLOWED_ORIGINS")): string[] {
+  const extra = (env ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+  return [...new Set([...ORIGENS_PADRAO, ...extra])];
+}
+
+/**
+ * Envolve o handler com CORS. O navegador preflighta o POST do formulario de
+ * pre-inscricao do site (origem cruzada); sem `Access-Control-Allow-Origin` a
+ * requisicao e bloqueada antes de sair e o formulario cai em erro generico.
+ * Origem de navegador desconhecida e recusada; sem Origin (servidor/curl) o
+ * fluxo segue normal, porque CORS nao e fronteira de autenticacao aqui.
+ */
+export function comCors(
+  atender: (req: Request) => Promise<Response>,
+  origens: string[] = origensPermitidas(),
+): (req: Request) => Promise<Response> {
+  return async function (req: Request): Promise<Response> {
+    const origem = req.headers.get("origin") ?? "";
+    const permitida = origem !== "" && origens.includes(origem);
+    const cabecalhos: Record<string, string> = permitida ? corsHeaders(origem) : { Vary: "Origin" };
+
+    if (req.method === "OPTIONS") {
+      return permitida
+        ? new Response(null, { status: 204, headers: cabecalhos })
+        : json({ erro: "origem_nao_permitida" }, 403, cabecalhos);
+    }
+    if (origem !== "" && !permitida) {
+      return json({ erro: "origem_nao_permitida" }, 403, cabecalhos);
+    }
+
+    const res = await atender(req);
+    const headers = new Headers(res.headers);
+    for (const [chave, valor] of Object.entries(cabecalhos)) headers.set(chave, valor);
+    return new Response(res.body, { status: res.status, headers });
+  };
+}
+
 // Handler de produção (Supabase Edge Runtime): injeta deps reais.
 export default async function handler(req: Request): Promise<Response> {
-  return createCaptureHandler({
-    storage: criarStorageSupabase(),
-    email: criarEmailServico(),
-  })(req);
+  return comCors(
+    createCaptureHandler({
+      storage: criarStorageSupabase(),
+      email: criarEmailServico(),
+    }),
+  )(req);
 }
 
 // Supabase Edge Runtime (Deno): vincula o servidor HTTP.
