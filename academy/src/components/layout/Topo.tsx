@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LayoutGrid, LogOut, Search } from "lucide-react";
+import { BookOpen, ChevronDown, LayoutGrid, LogOut, Search, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
 import { iniciais } from "@/lib/formato";
 import { cn } from "@/lib/cn";
+import { urlAviso } from "@/lib/privacidade";
 
 const links = [
   { para: "/", rotulo: "Meu painel", icone: LayoutGrid, fim: true },
@@ -13,7 +14,7 @@ const links = [
 ];
 
 export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
-  const { sair, sessao } = usePortal();
+  const { sair, sessao, config } = usePortal();
   const painel = usePainel();
   const nome = painel.data?.nome ?? sessao?.user.email ?? "";
   const [menu, setMenu] = useState(false);
@@ -85,6 +86,9 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
               <NavLink role="menuitem" to="/cursos" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <BookOpen className="size-4" aria-hidden="true" /> Meus cursos
               </NavLink>
+              <a role="menuitem" href={urlAviso(config.siteUrl)} target="_blank" rel="noopener" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
+                <ShieldCheck className="size-4" aria-hidden="true" /> Privacidade
+              </a>
               <button role="menuitem" type="button" onClick={() => { setMenu(false); void sair(); }} className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm hover:bg-white/5">
                 <LogOut className="size-4" aria-hidden="true" /> Sair
               </button>

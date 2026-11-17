@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { AVISOS, versaoVigente } from "./consent";
+import { VERSAO_AVISO } from "../../../academy/src/lib/privacidade";
 
 /**
  * Consistência SPA ↔ migração (HEL-M01): o conteúdo servido pela landing
@@ -76,5 +77,9 @@ describe("consistência do Aviso de Privacidade (SPA ↔ SQL seed)", () => {
     expect(todas).toContain("aviso_calcula_hash");
     expect(todas).toContain("encode(digest(new.conteudo, 'sha256'), 'hex')");
     expect(todas).toContain("aviso_conteudo_imutavel");
+  });
+
+  it("o portal do aluno aponta para a versão vigente do aviso", () => {
+    expect(VERSAO_AVISO).toBe(versaoVigente());
   });
 });
