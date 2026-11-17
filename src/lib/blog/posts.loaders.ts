@@ -16,6 +16,8 @@ type Loader = () => Promise<BlogPost>;
  */
 const loaders: Record<string, Loader> = {
   // --- PT ---
+  "pt:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
+    import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem").then((m) => m.stingybasiliskSmbPipesPost),
   "pt:firefox-160-correcoes-seguranca": () =>
     import("./posts.firefox-160-correcoes-seguranca").then(
       (m) => m.firefox160CorrecoesSegurancaPost,
@@ -63,6 +65,8 @@ const loaders: Record<string, Loader> = {
     import("./posts.noisytcp-linux").then((m) => m.noisytcpLinuxPost),
 
   // --- EN ---
+  "en:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
+    import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem.en").then((m) => m.stingybasiliskSmbPipesPostEn),
   "en:firefox-160-correcoes-seguranca": () =>
     import("./posts.firefox-160-correcoes-seguranca.en").then(
       (m) => m.firefox160CorrecoesSegurancaPostEn,
@@ -113,6 +117,8 @@ const loaders: Record<string, Loader> = {
     ),
 
   // --- ES ---
+  "es:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
+    import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem.es").then((m) => m.stingybasiliskSmbPipesPostEs),
   "es:firefox-160-correcoes-seguranca": () =>
     import("./posts.firefox-160-correcoes-seguranca.es").then(
       (m) => m.firefox160CorrecoesSegurancaPostEs,

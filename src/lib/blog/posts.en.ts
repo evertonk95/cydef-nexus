@@ -1,5 +1,6 @@
 ﻿// CyDef Blog — English editorial translation (source: PT canonical, 2026-09-03). Human review via PR.
 import type { BlogPost } from "./posts";
+import { stingybasiliskSmbPipesPostEn } from "./posts.stingybasilisk-smb-pipes-nomeados-espionagem.en";
 import { firefox160CorrecoesSegurancaPostEn } from "./posts.firefox-160-correcoes-seguranca.en";
 import { wp2shellWordpressPostEn } from "./posts.wp2shell-wordpress.en";
 import { apacheHttpServer2469PostEn } from "./posts.apache-http-server-2-4-69.en";
@@ -18,6 +19,7 @@ import { apacheHttp2RcePostEn } from "./posts.apache-http2-rce.en";
 import { noisytcpLinuxPostEn } from "./posts.noisytcp-linux.en";
 
 export const blogPostsEn: BlogPost[] = [
+  stingybasiliskSmbPipesPostEn,
   firefox160CorrecoesSegurancaPostEn,
   noisytcpLinuxPostEn,
   apacheHttp2RcePostEn,

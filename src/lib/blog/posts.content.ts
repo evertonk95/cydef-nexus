@@ -1,4 +1,5 @@
 import { extraPosts } from "./posts-extra.generated";
+import { stingybasiliskSmbPipesPost } from "./posts.stingybasilisk-smb-pipes-nomeados-espionagem";
 import { firefox160CorrecoesSegurancaPost } from "./posts.firefox-160-correcoes-seguranca";
 import { wp2shellWordpressPost } from "./posts.wp2shell-wordpress";
 import { apacheHttpServer2469Post } from "./posts.apache-http-server-2-4-69";
@@ -28,6 +29,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  stingybasiliskSmbPipesPost,
   firefox160CorrecoesSegurancaPost,
   noisytcpLinuxPost,
   apacheHttp2RcePost,

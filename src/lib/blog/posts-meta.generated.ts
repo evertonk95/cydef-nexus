@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
+    "title": "StingyBasilisk uses SMB and named pipes to spread malware across isolated Windows networks",
+    "category": "Threat Intelligence",
+    "excerpt": "Positive Technologies attributes to the StingyBasilisk group an espionage campaign active since at least April 2022 that uses SMB, scheduled tasks through atexec, COM hijacking and the Windows Time provider to move implants between hosts and reach isolated segments.",
+    "date": "November 17, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "8 min",
+    "image": "/assets/blog/stingybasilisk-smb-pipes-nomeados-espionagem-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "firefox-160-correcoes-seguranca",
     "title": "Mozilla fixes 99 flaws in Firefox 160, including sandbox escapes and privilege escalation",
     "category": "Threat Intelligence",
@@ -273,6 +284,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
+    "title": "StingyBasilisk usa SMB e pipes nomeados para espalhar malware em redes Windows isoladas",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "A Positive Technologies atribui ao grupo StingyBasilisk uma campanha de espionagem ativa desde pelo menos abril de 2022, que usa SMB, tarefas agendadas via atexec, sequestro de COM e o provedor de tempo do Windows para mover implantes entre hosts e alcançar segmentos isolados.",
+    "date": "17 de Novembro, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "8 min",
+    "image": "/assets/blog/stingybasilisk-smb-pipes-nomeados-espionagem-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "firefox-160-correcoes-seguranca",
     "title": "Mozilla corrige 99 falhas no Firefox 160, incluindo escapes de sandbox e elevação de privilégios",
     "category": "Inteligência de Ameaças",
@@ -539,6 +561,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
+    "title": "StingyBasilisk usa SMB y pipes con nombre para propagar malware en redes Windows aisladas",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Positive Technologies atribuye al grupo StingyBasilisk una campaña de espionaje activa desde al menos abril de 2022, que usa SMB, tareas programadas mediante atexec, secuestro de COM y el proveedor de hora de Windows para mover implantes entre hosts y alcanzar segmentos aislados.",
+    "date": "17 de Noviembre, 2026",
+    "dateISO": "2026-11-17",
+    "readTime": "8 min",
+    "image": "/assets/blog/stingybasilisk-smb-pipes-nomeados-espionagem-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "firefox-160-correcoes-seguranca",
     "title": "Mozilla corrige 99 fallas en Firefox 160, incluidos escapes de sandbox y elevación de privilegios",
