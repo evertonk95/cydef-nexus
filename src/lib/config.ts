@@ -48,3 +48,15 @@ export const supabaseAnonKey = (): string =>
 /** Stats públicos da Academy (contagem de alunos na home) — default desligado (fail secure). */
 export const isAcademyStatsEnabled = (): boolean =>
   import.meta.env.VITE_ACADEMY_STATS_ENABLED === "true";
+
+/**
+ * Contato comercial (bot de triagem + formulário).
+ * Flag desligada (default, fail secure): o bot continua filtrando e termina
+ * em um e-mail (mailto) com a triagem no assunto; nenhum dado sai pela rede.
+ */
+export const isContactEnabled = (): boolean => import.meta.env.VITE_CONTACT_ENABLED === "true";
+export const contactApiUrl = (): string =>
+  ((import.meta.env.VITE_CONTACT_API_URL as string | undefined) ?? "").replace(/\/+$/, "");
+/** Site key PÚBLICA do Cloudflare Turnstile (a chave secreta fica só no servidor). */
+export const turnstileSiteKey = (): string =>
+  (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "";

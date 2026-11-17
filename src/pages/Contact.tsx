@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Mail, MapPin, MessageSquare, Siren, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { TriagemBot } from "@/components/contato/TriagemBot";
 
 const Contact = () => {
   useScrollReveal();
@@ -39,23 +40,26 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* Assistente de triagem + canais diretos */}
       <section className="py-24 px-4 relative">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
-            {/* Canais diretos */}
+          <div className="grid lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-12 lg:gap-16 max-w-7xl mx-auto items-start">
             <div className="animate-on-scroll">
+              <TriagemBot />
+            </div>
+
+            <div className="animate-on-scroll" style={{ animationDelay: '150ms' }}>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tighter">
-                {t("contact.panelTitle")}
+                {t("contact.infoTitle")}
               </h2>
               <p className="text-neutral-400 text-lg mb-8">
-                {t("contact.panelBody")}
+                {t("contact.infoBody")}
               </p>
 
               <div className="space-y-4">
                 <a
                   href={consultingMail}
-                  className="flex items-start gap-5 bg-neutral-900 border border-orange-500/30 rounded-2xl p-6 hover:border-orange-500/60 transition-colors group"
+                  className="flex items-start gap-5 bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/40 transition-colors group"
                 >
                   <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/25">
                     <Mail className="h-6 w-6 text-orange-500" />
@@ -101,53 +105,21 @@ const Contact = () => {
                   </div>
                 </a>
 
-                <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-sm font-bold text-white/70 uppercase tracking-widest mb-2">
-                    {t("contact.hoursTitle")}
-                  </h3>
-                  <p className="text-neutral-400">{t("contact.hoursBody")}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-8 animate-on-scroll" style={{ animationDelay: '150ms' }}>
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tighter">
-                  {t("contact.infoTitle")}
-                </h2>
-                <p className="text-neutral-400 text-lg mb-10">
-                  {t("contact.infoBody")}
-                </p>
-
-                <div className="space-y-6">
-                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors flex items-start gap-6">
-                    <div className="h-14 w-14 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
-                      <Mail className="h-6 w-6 text-orange-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.emailLabel")}</h3>
-                      <div className="space-y-1">
-                        <a href="mailto:contato@cydef.com.br" className="block text-neutral-400 hover:text-orange-400 transition-colors">
-                          contato@cydef.com.br
-                        </a>
-                        <a href="mailto:academy@cydef.com.br" className="block text-neutral-400 hover:text-orange-400 transition-colors">
-                          academy@cydef.com.br
-                        </a>
-                      </div>
-                    </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white/70 uppercase tracking-widest mb-2">
+                      {t("contact.hoursTitle")}
+                    </h3>
+                    <p className="text-neutral-400">{t("contact.hoursBody")}</p>
                   </div>
-
-                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/30 transition-colors flex items-start gap-6">
-                    <div className="h-14 w-14 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 border border-orange-500/20">
-                      <MapPin className="h-6 w-6 text-orange-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white mb-2">{t("contact.addressLabel")}</h3>
-                      <p className="text-neutral-400 leading-relaxed">
-                        {t("contact.addressLine1")}<br />{t("contact.addressLine2")}
-                      </p>
-                    </div>
+                  <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white/70 uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-orange-500" aria-hidden="true" />
+                      {t("contact.addressLabel")}
+                    </h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      {t("contact.addressLine1")}<br />{t("contact.addressLine2")}
+                    </p>
                   </div>
                 </div>
               </div>

@@ -11,7 +11,8 @@ export type AnalyticsEventName =
   | "pageview"
   | "preinscricao_submitida"
   | "confirmacao_aberta"
-  | "confirmacao_concluida";
+  | "confirmacao_concluida"
+  | "contato_enviado";
 
 export interface AnalyticsPayload {
   v: 1;
