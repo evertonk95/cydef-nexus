@@ -26,8 +26,7 @@ const renderNav = () =>
     </MemoryRouter>,
   );
 
-/** Abre pelo teclado: no mouse o hover do grupo já abre o submenu e o clique
- *  na seta o fecharia, porque ela alterna o estado. */
+/** Abre o submenu pelo teclado, sem hover: foco no botão e Enter. */
 const openWithKeyboard = async (user: ReturnType<typeof userEvent.setup>) => {
   const btn = trigger();
   btn.focus();
@@ -89,6 +88,20 @@ describe("Navigation — submenu do Labs", () => {
     renderNav();
 
     await user.hover(trigger());
+
+    expect(menu()).not.toBeNull();
+    expect(trigger()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("mantém aberto o clique na seta com o ponteiro sobre o grupo", async () => {
+    const user = userEvent.setup();
+    renderNav();
+
+    // O hover abre o submenu; o clique na seta não pode fechá-lo logo em seguida.
+    await user.hover(trigger());
+    expect(menu()).not.toBeNull();
+
+    await user.click(trigger());
 
     expect(menu()).not.toBeNull();
     expect(trigger()).toHaveAttribute("aria-expanded", "true");

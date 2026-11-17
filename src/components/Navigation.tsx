@@ -9,12 +9,14 @@ import { SkipLink } from "@/components/SkipLink";
 const FRAMEWORK_PATH = "/labs/siem-health-maturity-framework";
 
 /** Labs com submenu: CyDef Inora e o SIEM Health Framework (decisão do Everton,
- *  16/11/2026). Abre no hover e no clique da seta; fecha no Esc, ao sair o
- *  foco do grupo e ao escolher um item. */
+ *  16/11/2026). Abre no hover; a seta alterna o estado, mas mantém aberto quando
+ *  o ponteiro já está sobre o grupo (senão o hover abre e o clique fecharia na
+ *  hora). Fecha no Esc, ao sair o foco do grupo e ao escolher um item. */
 const LabsMenu = ({ itemClass }: { itemClass: string }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const hovering = useRef(false);
 
   useEffect(() => {
     if (!open) return;
@@ -34,8 +36,14 @@ const LabsMenu = ({ itemClass }: { itemClass: string }) => {
     <div
       ref={ref}
       className="relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={() => {
+        hovering.current = true;
+        setOpen(true);
+      }}
+      onMouseLeave={() => {
+        hovering.current = false;
+        setOpen(false);
+      }}
       onBlur={(e) => {
         if (!ref.current?.contains(e.relatedTarget as Node | null)) setOpen(false);
       }}
@@ -47,7 +55,7 @@ const LabsMenu = ({ itemClass }: { itemClass: string }) => {
           aria-label={t("nav.labsMenu")}
           aria-expanded={open}
           aria-controls="menu-labs"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen((v) => (hovering.current ? true : !v))}
           className="rounded p-0.5 text-neutral-400 transition-colors hover:text-white"
         >
           <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} aria-hidden="true" />
