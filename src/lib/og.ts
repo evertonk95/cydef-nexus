@@ -57,6 +57,13 @@ const PAGE_OG: Record<PageKey, OgKeys> = {
   terms: { title: ["terms.h1a", "terms.h1b"], description: ["terms.docBody"] },
 };
 
+/** Imagem de compartilhamento própria de uma página, por idioma. Quem não está
+ *  aqui usa o card padrão do site. Página do Inora: card com o título do hero
+ *  e a tela do produto em cada idioma (1200x630, 16/11/2026). */
+export const PAGE_OG_IMAGE: Partial<Record<PageKey, (lang: Lang) => string>> = {
+  inora: (lang) => `/assets/inora/inora-og-${lang}.jpg`,
+};
+
 /** og de rotas com slug universal que não passam pelo PageRouter. */
 const BASE_OG: Record<string, OgKeys> = {
   // Landing de captura da Academy: o hero vem do i18n `landing` (sections.tsx).
@@ -121,7 +128,10 @@ export const ogForBase = (
 
   const pageKey = pageKeyForSlug(lang, base.split("/")[1] ?? "");
   const keys = BASE_OG[base] ?? (pageKey ? PAGE_OG[pageKey] : undefined);
-  if (keys) return { ...resolveKeys(keys, t), image: DEFAULT_OG_IMAGE };
+  if (keys) {
+    const pageImage = !BASE_OG[base] && pageKey ? PAGE_OG_IMAGE[pageKey]?.(lang) : undefined;
+    return { ...resolveKeys(keys, t), image: pageImage ?? DEFAULT_OG_IMAGE };
+  }
 
   return {
     title: siteTitle,
