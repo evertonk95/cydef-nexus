@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { en } from "@/i18n/en";
 import { pt } from "@/i18n/pt";
@@ -5,6 +6,7 @@ import { es } from "@/i18n/es";
 import { LANGS } from "@/i18n";
 import { localizePath, pageSlugs } from "@/lib/routes";
 import { PAGE_COMPONENTS } from "@/lib/page-components";
+import { DEFAULT_OG_IMAGE, ogForBase } from "@/lib/og";
 import { privacyDocEn, privacyDocEs, privacyDocPt } from "@/lib/privacyContent";
 
 const dicts = { en, pt, es };
@@ -85,5 +87,22 @@ describe("Política de Privacidade revisada para o Inora (16/11/2026)", () => {
       const text = JSON.stringify(dicts[lang].inora);
       expect(text, lang).not.toMatch(/primeiras semanas|first weeks|primeras semanas/i);
     }
+  });
+});
+
+describe("Card de compartilhamento do Inora (16/11/2026)", () => {
+  const t = (key: string) => key;
+
+  it("usa um card próprio em cada idioma, e o arquivo existe", () => {
+    for (const lang of LANGS) {
+      const og = ogForBase("/inora", lang, t, "CyDef");
+      expect(og.image, lang).toBe(`/assets/inora/inora-og-${lang}.jpg`);
+      expect(existsSync(`public${og.image}`), lang).toBe(true);
+    }
+  });
+
+  it("as outras páginas continuam com o card padrão do site", () => {
+    expect(ogForBase("/consultoria", "pt", t, "CyDef").image).toBe(DEFAULT_OG_IMAGE);
+    expect(ogForBase("/labs", "en", t, "CyDef").image).toBe(DEFAULT_OG_IMAGE);
   });
 });
