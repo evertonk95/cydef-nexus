@@ -2,7 +2,7 @@
 # CI — Gates de qualidade e segurança (S-07, HEL-M04/L07, SEC-011/015)
 # Rodada em pull_request (gate de merge) e push em main.
 # - Lint, typecheck, testes (vitest + axe-core), build de produção
-# - SCA: npm audit (zero Critical/High — SEC-015)
+# - SCA: scripts/sca-check.mjs (zero Critical/High; excecao com prazo em .github/sca-excecoes.json - SEC-015)
 # - SBOM versionado (cyclonedx — SEC-015)
 # - Gitleaks em todo PR (HEL-M04) — falha bloqueia merge
 # Actions pinadas por SHA completo (HEL-L07). Node 22 LTS.
@@ -45,7 +45,7 @@ jobs:
       - name: Build de produção
         run: npm run build
       - name: SCA — dependências sem Critical/High (SEC-015)
-        run: npm audit --audit-level=high
+        run: node scripts/sca-check.mjs
       - name: SBOM (SEC-015)
         run: npm run sbom
       - name: Upload SBOM
@@ -86,7 +86,7 @@ jobs:
           VITE_ACESSO_API_URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/academy-acesso"
           VITE_TURNSTILE_SITE_KEY: "build-de-verificacao"
       - name: SCA — dependências sem Critical/High
-        run: npm audit --audit-level=high
+        run: node ../scripts/sca-check.mjs --pasta academy
 
   gitleaks:
     name: Gitleaks — secret scan (HEL-M04)

@@ -1,0 +1,12 @@
+{
+  "atualizadoEm": "2026-11-17",
+  "excecoes": [
+    {
+      "ghsa": "GHSA-fc5q-39xc-vjpf",
+      "pacote": "picomatch",
+      "motivo": "picomatch só em ferramentas de build e teste (vite, vitest, tinyglobby), padrões glob escritos pelo time, nenhum caminho de produção recebe glob de usuário; sem versão corrigida até a 4.0.7",
+      "revisao": "2026-12-17",
+      "aprovadoPor": "Everton, 17/11/2026"
+    }
+  ]
+}
