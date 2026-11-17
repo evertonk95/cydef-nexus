@@ -1,5 +1,6 @@
 import type { Dict } from "./en";
 import { inoraPt } from "./inora.pt";
+import { contatoPt } from "./contato.pt";
 
 // CyDef site — Português (Brasil). Sem travessões na copy (regra do Everton).
 export const pt: Dict = {
@@ -200,8 +201,6 @@ export const pt: Dict = {
     h1a: "Entre em",
     h1b: "contato",
     lead: "Fale com a CyDef sobre consultoria, formação ou parcerias. Conte o cenário da sua organização e um especialista retorna para entender a necessidade.",
-    panelTitle: "Falar com a CyDef",
-    panelBody: "Conte o cenário da sua organização por e-mail. O botão abaixo já abre a mensagem com um roteiro: é só completar e enviar.",
     businessTitle: "Consultoria para empresas",
     academyTitle: "CyDef Academy",
     hoursTitle: "Atendimento",
@@ -212,9 +211,8 @@ export const pt: Dict = {
     incidentTitle: "Incidente em andamento?",
     incidentBody: "Escreva com o assunto URGENTE. Não envie logs, credenciais ou dados sensíveis por e-mail: vamos orientar um canal seguro.",
     incidentSubject: "URGENTE: incidente em andamento",
-    infoTitle: "Informações de contato",
-    infoBody: "Fale conosco por qualquer um dos canais abaixo.",
-    emailLabel: "E-mail",
+    infoTitle: "Canais diretos",
+    infoBody: "Prefere escrever direto? Use um dos canais abaixo.",
     addressLabel: "Endereço",
     addressLine1: "Boston Post Road East",
     addressLine2: "Boston, Massachusetts, EUA",
@@ -563,6 +561,7 @@ export const pt: Dict = {
     tagline: "Proteger pessoas vai além da tecnologia.",
   },
   inora: inoraPt,
+  contactAssist: contatoPt,
   notfound: {
     title: "Página não encontrada",
     body: "Este endereço não existe ou mudou de lugar. Vamos te levar de volta a uma página do site.",

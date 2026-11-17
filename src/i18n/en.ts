@@ -1,6 +1,7 @@
 // CyDef site — English catalog (source of truth).
 // Copy rules: no em-dashes, plain human phrasing, honest states only.
 import { inoraEn } from "./inora.en";
+import { contatoEn } from "./contato.en";
 
 export const en = {
   common: {
@@ -200,8 +201,6 @@ export const en = {
     h1a: "Get in",
     h1b: "touch",
     lead: "Talk to CyDef about consulting, education or partnerships. Tell us about your organization and a specialist will get back to you to understand your needs.",
-    panelTitle: "Talk to CyDef",
-    panelBody: "Tell us about your organization by email. The button below opens a message with a short outline: just fill it in and send.",
     businessTitle: "Consulting for organizations",
     academyTitle: "CyDef Academy",
     hoursTitle: "Availability",
@@ -212,9 +211,8 @@ export const en = {
     incidentTitle: "Incident in progress?",
     incidentBody: "Email us with the subject URGENT. Do not send logs, credentials or sensitive data by email: we will set up a secure channel.",
     incidentSubject: "URGENT: incident in progress",
-    infoTitle: "Contact information",
-    infoBody: "Reach us through any channel below.",
-    emailLabel: "Email",
+    infoTitle: "Direct channels",
+    infoBody: "Prefer to write directly? Use one of the channels below.",
     addressLabel: "Address",
     addressLine1: "Boston Post Road East",
     addressLine2: "Boston, Massachusetts, USA",
@@ -563,6 +561,7 @@ export const en = {
     tagline: "Protecting people goes beyond technology.",
   },
   inora: inoraEn,
+  contactAssist: contatoEn,
   notfound: {
     title: "Page not found",
     body: "This address does not exist or has moved. Let us take you back to a page on the site.",

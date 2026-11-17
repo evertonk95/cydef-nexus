@@ -1,5 +1,6 @@
 import type { Dict } from "./en";
 import { inoraEs } from "./inora.es";
+import { contatoEs } from "./contato.es";
 
 // CyDef site — Español (neutral). Sin rayas largas, frases naturales.
 export const es: Dict = {
@@ -200,8 +201,6 @@ export const es: Dict = {
     h1a: "Ponte en",
     h1b: "contacto",
     lead: "Habla con CyDef sobre consultoría, formación o alianzas. Cuéntanos el escenario de tu organización y un especialista te responderá para entender la necesidad.",
-    panelTitle: "Hablar con CyDef",
-    panelBody: "Cuéntanos el escenario de tu organización por correo. El botón de abajo abre el mensaje con una guía: solo completa y envía.",
     businessTitle: "Consultoría para empresas",
     academyTitle: "CyDef Academy",
     hoursTitle: "Atención",
@@ -212,9 +211,8 @@ export const es: Dict = {
     incidentTitle: "¿Incidente en curso?",
     incidentBody: "Escríbenos con el asunto URGENTE. No envíes logs, credenciales ni datos sensibles por correo: te indicaremos un canal seguro.",
     incidentSubject: "URGENTE: incidente en curso",
-    infoTitle: "Información de contacto",
-    infoBody: "Contáctanos por cualquiera de los canales siguientes.",
-    emailLabel: "Correo",
+    infoTitle: "Canales directos",
+    infoBody: "¿Prefieres escribir directamente? Usa uno de los canales siguientes.",
     addressLabel: "Dirección",
     addressLine1: "Boston Post Road East",
     addressLine2: "Boston, Massachusetts, EE. UU.",
@@ -563,6 +561,7 @@ export const es: Dict = {
     tagline: "Proteger a las personas va más allá de la tecnología.",
   },
   inora: inoraEs,
+  contactAssist: contatoEs,
   notfound: {
     title: "Página no encontrada",
     body: "Esta dirección no existe o cambió de lugar. Te llevamos de vuelta a una página del sitio.",
