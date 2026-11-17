@@ -8,6 +8,7 @@ import { Botao } from "@/components/ui/Botao";
 import { Logo } from "@/components/ui/Logo";
 import { Turnstile } from "@/components/Turnstile";
 import { FundoParticulas } from "@/components/fx/FundoParticulas";
+import { urlAviso } from "@/lib/privacidade";
 
 const ESPERA_REENVIO = 60;
 
@@ -175,6 +176,11 @@ export default function Entrar() {
                   Ainda não tem inscrição?{" "}
                   <a href={`${config.siteUrl}/academy/gratuito`} className="font-medium text-orange-hi underline underline-offset-[3px]">
                     Inscreva-se grátis
+                  </a>
+                </p>
+                <p className="mt-3 mb-0 text-center text-xs text-dim">
+                  <a href={urlAviso(config.siteUrl)} target="_blank" rel="noopener" className="underline underline-offset-[3px] hover:text-muted">
+                    Aviso de privacidade
                   </a>
                 </p>
               </motion.form>

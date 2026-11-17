@@ -1,7 +1,8 @@
 // CyDef site — Privacy Policy content per language.
 // PT canonical (honest revision, 2026-09-03, aligning copy with the real
 // consulting opened on 13/11/2026; CyDef Inora offered on the site and
-// WhatsApp removed on 16/11/2026). EN/ES editorial translations.
+// WhatsApp removed on 16/11/2026; Academy student portal covered on
+// 17/11/2026, details in the Academy notice v2026.3). EN/ES editorial translations.
 // Gate: human/legal review via PR before merge.
 import type { Lang } from "@/i18n";
 
@@ -24,7 +25,7 @@ export interface PrivacyDoc {
 export const privacyDocPt: PrivacyDoc = {
   docTitle: "Política de Privacidade",
   updatedLabel: "Última atualização:",
-  updatedAt: "16 de novembro de 2026",
+  updatedAt: "17 de novembro de 2026",
   contactIntro: "Dúvidas sobre esta Política? Fale com nosso encarregado:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -48,7 +49,7 @@ export const privacyDocPt: PrivacyDoc = {
       title: "2. Dados que coletamos",
       paragraphs: [
         "**2.1. Contato e mensagens (e-mail e formulários)**: Nome, e-mail, país e mensagem (incluindo objetivos informados). Nos pedidos de demonstração ou proposta, também os dados da empresa e do ambiente que você decidir informar (como segmento, SIEM em uso e tamanho do time). Fornecido voluntariamente por você.",
-        "**2.2. Pré-inscrição na CyDef Academy**: Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. Quando a área do aluno for liberada, poderá incluir dados de progresso e histórico de acesso.",
+        "**2.2. Pré-inscrição na CyDef Academy**: Nome, e-mail e perfil declarado, para processar sua pré-inscrição nos cursos gratuitos e enviar o e-mail de confirmação. No portal do aluno (academy.cydef.com.br), também tratamos os dados da conta, o progresso nos cursos, as respostas e notas das questões e avaliações e os dados do certificado. Os detalhes estão no Aviso de Privacidade da Academy.",
         "**2.3. Dados de navegação e análise**: Endereço IP, tipo de navegador, páginas visitadas e tempo de permanência, coletados por ferramentas de análise (ex.: Google Analytics 4), quando aplicável e com seu consentimento.",
         "**2.4. Dados de pagamento (quando disponível)**: Processados exclusivamente por provedores de pagamento. Não armazenamos números de cartão ou dados completos de pagamento.",
       ],
@@ -98,7 +99,7 @@ export const privacyDocPt: PrivacyDoc = {
       list: {
         items: [
           "Mensagens de contato e pedidos de demonstração ou proposta: até **12 meses** após o último contato; se resultarem em contrato, pelo prazo do contrato e das obrigações legais;",
-          "Pré-inscrições da Academy: enquanto a oferta gratuita estiver ativa e pelo prazo previsto no aviso de privacidade da pré-inscrição;",
+          "Pré-inscrições e contas da Academy: pelos prazos previstos no Aviso de Privacidade da Academy;",
           "Dados de navegação/análise: conforme período definido pela ferramenta utilizada (ex.: até 14 meses no GA4).",
         ],
       },
@@ -184,7 +185,7 @@ export const privacyDocPt: PrivacyDoc = {
 export const privacyDocEn: PrivacyDoc = {
   docTitle: "Privacy Policy",
   updatedLabel: "Last updated:",
-  updatedAt: "November 16, 2026",
+  updatedAt: "November 17, 2026",
   contactIntro: "Questions about this Policy? Contact our data protection officer:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -208,7 +209,7 @@ export const privacyDocEn: PrivacyDoc = {
       title: "2. Data we collect",
       paragraphs: [
         "**2.1. Contact and messages (email and forms)**: Name, email, country and message (including goals you share). For demo or proposal requests, also the company and environment details you choose to share (such as industry, SIEM in use and team size). Provided voluntarily by you.",
-        "**2.2. CyDef Academy pre-enrollment**: Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. When the student area is released, it may also include course progress and access history.",
+        "**2.2. CyDef Academy pre-enrollment**: Name, email and declared profile, to process your pre-enrollment in the free courses and send the confirmation email. In the student portal (academy.cydef.com.br), we also process account data, course progress, answers and scores for quizzes and assessments, and certificate data. The details are in the Academy Privacy Notice.",
         "**2.3. Browsing and analytics data**: IP address, browser type, pages visited and time on site, collected by analytics tools (e.g., Google Analytics 4) when applicable and with your consent.",
         "**2.4. Payment data (when available)**: Processed exclusively by payment providers. We do not store card numbers or complete payment data.",
       ],
@@ -258,7 +259,7 @@ export const privacyDocEn: PrivacyDoc = {
       list: {
         items: [
           "Contact messages and demo or proposal requests: up to **12 months** after the last contact; if they lead to a contract, for the term of the contract and the applicable legal obligations;",
-          "Academy pre-enrollments: while the free offer is active and for the period set out in the pre-enrollment privacy notice;",
+          "Academy pre-enrollments and accounts: for the periods set out in the Academy Privacy Notice;",
           "Browsing/analytics data: according to the period defined by the tool used (e.g., up to 14 months in GA4).",
         ],
       },
@@ -344,7 +345,7 @@ export const privacyDocEn: PrivacyDoc = {
 export const privacyDocEs: PrivacyDoc = {
   docTitle: "Política de Privacidad",
   updatedLabel: "Última actualización:",
-  updatedAt: "16 de noviembre de 2026",
+  updatedAt: "17 de noviembre de 2026",
   contactIntro: "¿Dudas sobre esta Política? Habla con nuestro encargado de datos:",
   dpoEmail: "contato@cydef.com.br",
   sections: [
@@ -368,7 +369,7 @@ export const privacyDocEs: PrivacyDoc = {
       title: "2. Datos que recopilamos",
       paragraphs: [
         "**2.1. Contacto y mensajes (correo electrónico y formularios)**: Nombre, correo electrónico, país y mensaje (incluidos los objetivos que compartes). En las solicitudes de demostración o propuesta, también los datos de la empresa y del entorno que decidas compartir (como sector, SIEM en uso y tamaño del equipo). Proporcionados voluntariamente por ti.",
-        "**2.2. Preinscripción en la CyDef Academy**: Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. Cuando se libere el área de estudiantes, podrá incluir datos de progreso e historial de acceso.",
+        "**2.2. Preinscripción en la CyDef Academy**: Nombre, correo electrónico y perfil declarado, para procesar tu preinscripción en los cursos gratuitos y enviar el correo de confirmación. En el portal del estudiante (academy.cydef.com.br), también tratamos los datos de la cuenta, el progreso en los cursos, las respuestas y notas de las preguntas y evaluaciones y los datos del certificado. Los detalles están en el Aviso de Privacidad de la Academy.",
         "**2.3. Datos de navegación y análisis**: Dirección IP, tipo de navegador, páginas visitadas y tiempo de permanencia, recopilados por herramientas de análisis (p. ej., Google Analytics 4), cuando corresponda y con tu consentimiento.",
         "**2.4. Datos de pago (cuando estén disponibles)**: Procesados exclusivamente por proveedores de pago. No almacenamos números de tarjeta ni datos completos de pago.",
       ],
@@ -418,7 +419,7 @@ export const privacyDocEs: PrivacyDoc = {
       list: {
         items: [
           "Mensajes de contacto y solicitudes de demostración o propuesta: hasta **12 meses** después del último contacto; si resultan en un contrato, durante la vigencia del contrato y de las obligaciones legales;",
-          "Preinscripciones de la Academy: mientras la oferta gratuita esté activa y durante el plazo previsto en el aviso de privacidad de la preinscripción;",
+          "Preinscripciones y cuentas de la Academy: durante los plazos previstos en el Aviso de Privacidad de la Academy;",
           "Datos de navegación/análisis: según el período definido por la herramienta utilizada (p. ej., hasta 14 meses en GA4).",
         ],
       },

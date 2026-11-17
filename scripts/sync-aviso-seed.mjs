@@ -1,73 +1,87 @@
 /**
  * scripts/sync-aviso-seed.mjs
  *
- * Garante que o seed do Aviso de Privacidade na migração
- * `supabase/migrations/0001_init.sql` seja IDÊNTICO ao conteúdo servido pela
- * landing (`src/lib/academy/consent.ts`) — fonte única de verdade = consent.ts.
+ * Confere se o seed da versão VIGENTE do Aviso de Privacidade é IDÊNTICO ao
+ * conteúdo servido pela landing (`src/lib/academy/consent.ts`, fonte única de
+ * verdade).
+ *
+ * Cada versão é semeada na migração que contém a sua URL estável
+ * (`/academy/privacidade/<versão>`): v2026.1 na 0001, v2026.2 na 0006, e assim
+ * por diante. O script procura essa migração e compara o bloco
+ * `insert into public.aviso_privacidade ... on conflict (versao) do nothing;`
+ * com o que seria gerado a partir de consent.ts.
  *
  * Uso: node scripts/sync-aviso-seed.mjs [--check]
- *   sem flag: reescreve o bloco entre os marcadores AVISO_SEED_BEGIN/END;
- *   --check: apenas verifica (exit 1 se divergente) — usado no CI/typecheck.
+ *   --check: só verifica (exit 1 se divergente).
+ *   sem flag: se não houver migração para a versão vigente, imprime o bloco
+ *             para criar uma migração nova. Nunca reescreve migração existente:
+ *             migração aplicada é imutável (HEL-M01), e texto novo exige
+ *             versão nova.
  *
- * O hash é computado pelo trigger do banco a partir do conteúdo armazenado
- * (HEL-M01): conteúdo igual → hash igual ao da página servida.
+ * O hash é computado pelo trigger do banco a partir do conteúdo armazenado:
+ * conteúdo igual, hash igual ao da página servida.
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { AVISOS, versaoVigente } from "../src/lib/academy/consent.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const MIGRATION = join(ROOT, "supabase", "migrations", "0001_init.sql");
+const PASTA = join(ROOT, "supabase", "migrations");
 
 function escaparE(s) {
   return s.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/\t/g, "\\t").replace(/\n/g, "\\n");
 }
 
-function gerarSeed() {
-  const versao = versaoVigente();
-  const conteudo = AVISOS[versao].texto;
+function gerarSeed(versao) {
+  const aviso = AVISOS[versao];
   return `insert into public.aviso_privacidade (versao, conteudo, url_estavel, vigente)
 values (
   '${versao}',
-  E'${escaparE(conteudo)}',
-  '${AVISOS[versao].urlEstavel}',
+  E'${escaparE(aviso.texto)}',
+  '${aviso.urlEstavel}',
   true
 )
 on conflict (versao) do nothing;`;
 }
 
+function blocoDaMigracao(sql, url) {
+  const inicio = sql.lastIndexOf("insert into public.aviso_privacidade", sql.indexOf(url));
+  const marca = "on conflict (versao) do nothing;";
+  const fim = sql.indexOf(marca, inicio);
+  if (inicio === -1 || fim === -1) return null;
+  return sql.slice(inicio, fim + marca.length);
+}
+
 function main() {
   const checkOnly = process.argv.includes("--check");
-  const sql = readFileSync(MIGRATION, "utf8");
-  const begin = ">>> AVISO_SEED_BEGIN";
-  const end = ">>> AVISO_SEED_END";
-  const start = sql.indexOf(begin);
-  const stop = sql.indexOf(end);
-  if (start === -1 || stop === -1) {
-    console.error(`marcadores ${begin}/${end} não encontrados em ${MIGRATION}`);
-    process.exit(2);
-  }
-  const prefixo = sql.slice(0, start + begin.length);
-  const sufixo = sql.slice(stop);
-  // O marcador final é um comentário SQL: o "-- " antes dele faz parte do bloco
-  // reescrito e precisa voltar, senão a migração deixa de ser SQL válido.
-  const novoBloco = `\n${gerarSeed()}\n-- `;
-  const novo = `${prefixo}${novoBloco}${sufixo}`;
+  const versao = versaoVigente();
+  const url = AVISOS[versao].urlEstavel;
+  const esperado = gerarSeed(versao);
 
-  if (novo === sql) {
-    console.log("aviso seed em sincronia ✓");
+  const arquivos = readdirSync(PASTA).filter((f) => f.endsWith(".sql")).sort();
+  const alvo = arquivos.find((f) => readFileSync(join(PASTA, f), "utf8").includes(url));
+
+  if (!alvo) {
+    if (checkOnly) {
+      console.error(`nenhuma migração semeia ${versao} (${url})`);
+      process.exit(1);
+    }
+    console.log(`Crie uma migração nova para ${versao} com este bloco:\n\n${esperado}\n`);
     process.exit(0);
   }
-  if (checkOnly) {
-    console.error(
-      "aviso seed DIVERGENTE — rode `node scripts/sync-aviso-seed.mjs` (SPA ↔ migração, HEL-M01)",
-    );
-    process.exit(1);
+
+  const atual = blocoDaMigracao(readFileSync(join(PASTA, alvo), "utf8"), url);
+  if (atual === esperado) {
+    console.log(`aviso ${versao} em sincronia com ${alvo} ✓`);
+    process.exit(0);
   }
-  writeFileSync(MIGRATION, novo);
-  console.log("aviso seed atualizado ✓ (rode novamente com --check para confirmar)");
+  console.error(
+    `aviso ${versao} DIVERGENTE entre consent.ts e ${alvo}. Migração aplicada não muda (HEL-M01): ` +
+      "se o texto mudou, crie uma versão nova em consent.ts e uma migração nova.",
+  );
+  process.exit(1);
 }
 
 main();
