@@ -24,6 +24,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Catálogo: formações, trilhas, cursos, módulos, aulas e competências. A leitura é pública só para o que está publicado e só nas colunas públicas. A referência do vídeo (`video_ref`) não é liberada para ninguém pela API de tabelas.
 - Dados do aluno (matrícula, progresso, dias de estudo): cada aluno lê só os próprios. Ninguém grava direto nas tabelas; a escrita passa por funções do banco que conferem quem chama.
 - Os testes em `tests/sql` rodam todas as migrações num Postgres real (PGlite) e conferem essas regras.
+- Privilégios das funções: a 0012 fecha `EXECUTE` em todas as funções de `public` e reafirma a matriz (anon só em `contagem_alunos`, authenticated só nas quatro do portal, service_role em todas). O `alter default privileges` vai em duas camadas: `in schema public` tira o que o Supabase deixou concedido, e a forma global (`for role postgres`, sem `in schema`) remove o grant embutido que o Postgres dá a `PUBLIC`. O default global vale para tudo que o papel `postgres` criar, inclusive extensões. Função nova nasce com `proacl = {postgres=X/postgres}`: quem precisar de grant concede na própria migração e termina com `revoke execute on function ... from public` como reforço.
 
 ## Publicar conteúdo
 
@@ -42,7 +43,9 @@ update public.aulas a
 
 ### Publicar
 
-Ordem segura: merge, Pages no ar com a sala de aula, `supabase db push` e só então o SQL abaixo. Publicar é decisão do Everton.
+Ordem segura: merge, Pages no ar com a sala de aula, migração aplicada no banco e só então o SQL abaixo. Publicar é decisão do Everton.
+
+Aplicação da migração neste projeto: por `psql` no pooler `aws-0-us-east-2.pooler.supabase.com:5432`, com a senha do `.env.local` em `PGPASSWORD`, `-v ON_ERROR_STOP=1 --single-transaction -f`, sem registrar no histórico. O `supabase db push` **não roda aqui**: o histórico `supabase_migrations.schema_migrations` só tem `0006` a `0009` (a `0010` foi aplicada por `psql` sem registro e a `0001` a `0005` nunca entraram), então o CLI recusa e pede `--include-all` para reaplicar 0001 a 0005, o que não se faz num banco que já tem esses objetos. Alinhar o histórico com `supabase migration repair` é decisão do Everton.
 
 ```sql
 -- só a aula de boas-vindas, por enquanto

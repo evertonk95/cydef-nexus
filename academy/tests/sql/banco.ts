@@ -27,9 +27,24 @@ grant usage on schema auth to anon, authenticated, service_role;
 grant execute on function auth.uid() to anon, authenticated, service_role;
 `;
 
-export async function novoBanco(): Promise<PGlite> {
+/**
+ * Default privileges do Supabase: toda função nova de public nasce com EXECUTE
+ * para anon, authenticated e service_role. É o que a 0012 precisa fechar.
+ */
+const PADRAO_SUPABASE = `
+alter default privileges for role postgres in schema public
+  grant execute on functions to anon, authenticated, service_role;
+`;
+
+export interface OpcoesBanco {
+  /** Recria os default privileges do Supabase antes das migrações. */
+  padraoSupabase?: boolean;
+}
+
+export async function novoBanco(opcoes: OpcoesBanco = {}): Promise<PGlite> {
   const db = new PGlite({ extensions: { pgcrypto } });
   await db.exec(SUPABASE_MINIMO);
+  if (opcoes.padraoSupabase) await db.exec(PADRAO_SUPABASE);
   const arquivos = readdirSync(PASTA_MIGRACOES).filter((f) => f.endsWith(".sql")).sort();
   for (const f of arquivos) {
     try {
