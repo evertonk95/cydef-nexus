@@ -17,7 +17,7 @@ function servidor(over: Partial<Servidor> = {}): Servidor {
     elegibilidade: vi.fn().mockResolvedValue({ elegivel: true, user_id: null, aluno: false, lead_id: "lead-1", nome: "Ana Souza" }),
     criarUsuario: vi.fn().mockResolvedValue({ ok: true, userId: "user-1" }),
     provisionarAluno: vi.fn().mockResolvedValue(undefined),
-    gerarLink: vi.fn().mockResolvedValue("https://x.supabase.co/auth/v1/verify?token=abc&type=magiclink"),
+    gerarLink: vi.fn().mockResolvedValue("https://academy.cydef.com.br/entrar/retorno?token_hash=abc0123456789abcdef&type=email"),
     enviarPeloSupabase: vi.fn().mockResolvedValue(undefined),
     ...over,
   };
@@ -174,10 +174,22 @@ describe("modelo do e-mail", () => {
 });
 
 describe("ligação com o Supabase", () => {
-  it("só aceita link gerado pelo próprio projeto", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify({ properties: { action_link: "https://outro.example/verify" } }), { status: 200 }));
+  it("monta o link do e-mail no domínio do portal, com o token de uso único", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ properties: { action_link: "https://proj.supabase.co/auth/v1/verify?token=x", hashed_token: "a1b2c3d4e5f6a7b8c9d0e1f2" } }), { status: 200 }),
+    );
     const s = servidorSupabase("https://proj.supabase.co", "chave", fetchImpl as unknown as typeof fetch);
-    await expect(s.gerarLink("a@b.com", `${ORIGEM}/entrar/retorno`)).rejects.toThrow("gerar_link_resposta");
+    const link = await s.gerarLink("a@b.com", `${ORIGEM}/entrar/retorno`);
+    expect(link).toBe(`${ORIGEM}/entrar/retorno?token_hash=a1b2c3d4e5f6a7b8c9d0e1f2&type=email`);
+    expect(link).not.toContain("supabase.co");
+  });
+
+  it("recusa resposta sem token ou com token fora do formato", async () => {
+    for (const corpo of [{ properties: { action_link: "https://outro.example/verify" } }, { properties: { hashed_token: "../../x" } }]) {
+      const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify(corpo), { status: 200 }));
+      const s = servidorSupabase("https://proj.supabase.co", "chave", fetchImpl as unknown as typeof fetch);
+      await expect(s.gerarLink("a@b.com", `${ORIGEM}/entrar/retorno`)).rejects.toThrow("gerar_link_resposta");
+    }
   });
 
   it("pede o envio pelo Supabase sem criar usuário e com o retorno fixo", async () => {

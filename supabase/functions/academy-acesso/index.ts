@@ -225,6 +225,14 @@ export function createAcessoHandler(deps: AcessoDeps) {
   };
 }
 
+/**
+ * Link do e-mail: aponta para o próprio portal (mesmo domínio do remetente), e
+ * o portal troca o token por sessão só quando o aluno clica em "Entrar".
+ */
+export function linkDoPortal(retorno: string, tokenHash: string): string {
+  return `${retorno}?token_hash=${encodeURIComponent(tokenHash)}&type=email`;
+}
+
 // ---------------------------------------------------------------------------
 // Ligação com o Supabase em produção
 // ---------------------------------------------------------------------------
@@ -262,10 +270,10 @@ export function servidorSupabase(url: string, serviceKey: string, fetchImpl: typ
     async gerarLink(email, redirect) {
       const res = await chamar("/auth/v1/admin/generate_link", { type: "magiclink", email, redirect_to: redirect });
       if (!res.ok) throw new Error(`gerar_link_${res.status}`);
-      const d = (await res.json()) as { action_link?: string; properties?: { action_link?: string } };
-      const link = d.properties?.action_link ?? d.action_link;
-      if (!link || !link.startsWith(url)) throw new Error("gerar_link_resposta");
-      return link;
+      const d = (await res.json()) as { hashed_token?: string; properties?: { hashed_token?: string } };
+      const hash = d.properties?.hashed_token ?? d.hashed_token;
+      if (!hash || !/^[A-Za-z0-9_-]{16,256}$/.test(hash)) throw new Error("gerar_link_resposta");
+      return linkDoPortal(redirect, hash);
     },
     async enviarPeloSupabase(email, redirect) {
       const res = await chamar(`/auth/v1/otp?redirect_to=${encodeURIComponent(redirect)}`, { email, create_user: false });
