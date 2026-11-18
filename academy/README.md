@@ -100,6 +100,17 @@ npm run lint && npm run typecheck && npm test && npm run build
 
 Para testar o login no ambiente local, `http://localhost:5180` precisa estar em `ACADEMY_ALLOWED_ORIGINS` da função e nas Redirect URLs do Supabase.
 
+### Testes de ponta a ponta
+
+`npm run e2e` sobe o build de produção (`vite preview`, porta 4180) e um Supabase falso (`e2e/supabase-falso.mjs`, porta 54399) e percorre o portal num navegador de verdade: pedido de link, link do e-mail com a tela de confirmação, link vencido, painel, sala de aula (o vídeo carrega uma vez, grava o progresso e conclui sem recarregar), navegação entre aulas e o celular sem rolagem lateral. Turnstile e YouTube são simulados nos testes; nada sai para a internet.
+
+```
+npx playwright install chromium   # uma vez
+npm run e2e
+```
+
+Com um Chrome já instalado, dá para pular o download: `PW_CHROME=<caminho do chrome> npm run e2e`. O CI roda os mesmos testes no job do portal e guarda o relatório quando algo falha.
+
 ## Cloudflare Pages
 
 - Repositório: `evertonk95/cydef-nexus`, branch de produção `main`.
