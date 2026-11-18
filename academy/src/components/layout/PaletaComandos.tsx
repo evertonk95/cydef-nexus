@@ -34,7 +34,7 @@ function Conteudo({ fechar }: { fechar: () => void }) {
     const l: Item[] = [];
     const c = painel.data?.continuar;
     if (c) {
-      l.push({ id: "continuar", grupo: "Continuar", titulo: `Aula ${String(c.aula_numero).padStart(2, "0")}: ${c.aula_titulo}`, detalhe: c.curso_titulo, icone: PlayCircle, acao: ir(`/cursos/${c.curso_slug}`) });
+      l.push({ id: "continuar", grupo: "Continuar", titulo: `Aula ${String(c.aula_numero).padStart(2, "0")}: ${c.aula_titulo}`, detalhe: c.curso_titulo, icone: PlayCircle, acao: ir(`/cursos/${c.curso_slug}/aulas/${c.aula_numero}`) });
     }
     for (const curso of painel.data?.cursos ?? []) {
       l.push({ id: `curso-${curso.slug}`, grupo: "Cursos", titulo: curso.titulo, detalhe: `${curso.concluidas} de ${curso.total} aulas`, icone: BookOpen, acao: ir(`/cursos/${curso.slug}`) });

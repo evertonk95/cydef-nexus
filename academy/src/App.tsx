@@ -13,6 +13,7 @@ import { NaoEncontrado } from "@/pages/Estados";
 const Painel = lazy(() => import("@/pages/Painel"));
 const MeusCursos = lazy(() => import("@/pages/MeusCursos"));
 const Curso = lazy(() => import("@/pages/Curso"));
+const Aula = lazy(() => import("@/pages/Aula"));
 const Entrar = lazy(() => import("@/pages/Entrar"));
 const Retorno = lazy(() => import("@/pages/Retorno"));
 
@@ -32,6 +33,7 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                       <Route index element={<Painel />} />
                       <Route path="cursos" element={<MeusCursos />} />
                       <Route path="cursos/:slug" element={<Curso />} />
+                      <Route path="cursos/:slug/aulas/:numero" element={<Aula />} />
                       <Route path="*" element={<NaoEncontrado />} />
                     </Route>
                   </Route>

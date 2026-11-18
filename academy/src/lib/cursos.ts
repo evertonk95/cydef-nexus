@@ -8,6 +8,8 @@ export interface AulaLista {
   resumo: string;
   duracao_seg: number;
   concluida: boolean;
+  /** Onde o aluno parou, em segundos (0 se nunca abriu). */
+  posicao_seg: number;
 }
 
 export interface ModuloLista {
@@ -33,7 +35,7 @@ interface LinhaCurso {
   descricao: string;
   nivel: CursoDetalhe["nivel"];
   gratuito: boolean;
-  modulos: { id: string; ordem: number; titulo: string; aulas: Omit<AulaLista, "concluida">[] }[];
+  modulos: { id: string; ordem: number; titulo: string; aulas: Omit<AulaLista, "concluida" | "posicao_seg">[] }[];
 }
 
 export async function buscarCurso(sb: SupabaseClient, slug: string, userId: string): Promise<CursoDetalhe | null> {
@@ -50,15 +52,13 @@ export async function buscarCurso(sb: SupabaseClient, slug: string, userId: stri
   const ids = curso.modulos.flatMap((m) => m.aulas.map((a) => a.id));
   const [{ data: prog, error: e2 }, { data: mat, error: e3 }] = await Promise.all([
     ids.length
-      ? sb.from("progresso_aulas").select("aula_id, concluida_em").eq("user_id", userId).in("aula_id", ids)
+      ? sb.from("progresso_aulas").select("aula_id, posicao_seg, concluida_em").eq("user_id", userId).in("aula_id", ids)
       : Promise.resolve({ data: [], error: null }),
     sb.from("matriculas").select("curso_slug").eq("user_id", userId).eq("curso_slug", slug).maybeSingle(),
   ]);
   if (e2 || e3) throw new Error("curso_indisponivel");
-  const feitas = new Set(
-    ((prog ?? []) as { aula_id: string; concluida_em: string | null }[])
-      .filter((p) => p.concluida_em)
-      .map((p) => p.aula_id),
+  const progresso = new Map(
+    ((prog ?? []) as { aula_id: string; posicao_seg: number; concluida_em: string | null }[]).map((p) => [p.aula_id, p]),
   );
 
   return {
@@ -74,7 +74,13 @@ export async function buscarCurso(sb: SupabaseClient, slug: string, userId: stri
         id: m.id,
         ordem: m.ordem,
         titulo: m.titulo,
-        aulas: [...m.aulas].sort((a, b) => a.ordem - b.ordem).map((a) => ({ ...a, concluida: feitas.has(a.id) })),
+        aulas: [...m.aulas]
+          .sort((a, b) => a.ordem - b.ordem)
+          .map((a) => ({
+            ...a,
+            concluida: Boolean(progresso.get(a.id)?.concluida_em),
+            posicao_seg: progresso.get(a.id)?.posicao_seg ?? 0,
+          })),
       })),
   };
 }

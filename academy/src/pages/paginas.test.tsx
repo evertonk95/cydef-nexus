@@ -20,7 +20,7 @@ describe("Painel do aluno", () => {
     expect(screen.getByLabelText("Carregando o painel")).toBeInTheDocument();
     expect(await screen.findByText("Olá, Ana")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Aula 05: O que é um SIEM na prática/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continuar" })).toHaveAttribute("href", "/cursos/fundamentos-para-soc");
+    expect(screen.getByRole("link", { name: "Continuar" })).toHaveAttribute("href", "/cursos/fundamentos-para-soc/aulas/5");
     expect(screen.getByRole("heading", { name: "Formação Analista SOC" })).toBeInTheDocument();
     expect(screen.getByText("3 dias seguidos")).toBeInTheDocument();
     expect(screen.getByRole("progressbar", { name: "Competência Triagem de alertas" })).toHaveAttribute("aria-valuenow", "60");
