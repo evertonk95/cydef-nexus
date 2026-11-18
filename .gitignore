@@ -20,6 +20,11 @@ dist-ssr
 # Cobertura de testes
 coverage/
 
+# Testes de ponta a ponta da Academy (build e relatórios gerados)
+academy/dist-e2e/
+academy/test-results/
+academy/playwright-report/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
