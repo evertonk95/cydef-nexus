@@ -5,6 +5,7 @@ import { Barra } from "@/components/ui/Barra";
 import { Contador } from "@/components/ui/Contador";
 import { Capa } from "./Capa";
 import { relogio } from "@/lib/formato";
+import { caminhoAula, rotuloModuloCurto } from "@/lib/aula";
 import type { Painel } from "@/lib/painel";
 
 export function CartaoContinuar({ painel }: { painel: Painel }) {
@@ -26,11 +27,11 @@ export function CartaoContinuar({ painel }: { painel: Painel }) {
   return (
     <Cartao indice={0} rotulo="Continue de onde parou">
       <CabecalhoCartao id="h-continuar" titulo="Continue de onde parou" icone={<Play />} />
-      <Link to={`/cursos/${c.curso_slug}`} className="group block rounded-xl" aria-label={`Abrir o curso ${c.curso_titulo} na aula ${numero}, ${c.aula_titulo}`}>
+      <Link to={caminhoAula(c.curso_slug, c.aula_numero)} className="group block rounded-xl" aria-label={`Abrir a aula ${numero}, ${c.aula_titulo}, do curso ${c.curso_titulo}`}>
         <Capa curso={c.curso_titulo} rotuloTempo={c.posicao_seg > 0 ? relogio(c.posicao_seg) : relogio(c.duracao_seg)} />
       </Link>
       <p className="rotulo-mono mt-4 mb-1">
-        {c.curso_titulo} · Módulo {c.modulo_ordem}
+        {c.curso_titulo} · {rotuloModuloCurto(c.modulo_ordem, c.modulo_titulo)}
       </p>
       <h3 className="m-0 text-xl font-semibold tracking-tight">
         Aula {numero}: {c.aula_titulo}
@@ -42,7 +43,7 @@ export function CartaoContinuar({ painel }: { painel: Painel }) {
         </span>
       </div>
       <Link
-        to={`/cursos/${c.curso_slug}`}
+        to={caminhoAula(c.curso_slug, c.aula_numero)}
         className="group/cta relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-[linear-gradient(180deg,var(--color-orange-hi),var(--color-orange)_55%,#ea580c)] p-4 text-lg font-bold text-orange-ink transition-transform duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-0.5 active:translate-y-0 animate-[respirar_3.2s_ease-in-out_infinite]"
       >
         <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-2/5 -translate-x-[120%] bg-[linear-gradient(100deg,transparent,rgba(255,255,255,0.55),transparent)] group-hover/cta:animate-[reflexo_900ms_var(--ease-out-soft)]" />

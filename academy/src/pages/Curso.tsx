@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, ChevronDown, Clock, Layers, PlayCircle } from "lucide-react";
+import { Check, ChevronDown, Clock, Layers, Play, PlayCircle } from "lucide-react";
 import { useCurso } from "@/lib/consultas";
 import { NIVEL } from "@/lib/cursos";
+import { aulaParaContinuar, caminhoAula, rotuloModulo } from "@/lib/aula";
 import { duracao, percentual } from "@/lib/formato";
 import { Cartao } from "@/components/ui/Cartao";
 import { Barra } from "@/components/ui/Barra";
@@ -32,6 +33,7 @@ export default function Curso() {
   const aulas = c.modulos.flatMap((m) => m.aulas);
   const feitas = aulas.filter((a) => a.concluida).length;
   const total = aulas.reduce((s, a) => s + a.duracao_seg, 0);
+  const seguir = aulaParaContinuar(c);
   const primeiroAberto = c.modulos.find((m) => m.aulas.some((a) => !a.concluida))?.id ?? c.modulos[0]?.id;
   const estaAberto = (id: string) => abertos[id] ?? id === primeiroAberto;
 
@@ -65,7 +67,7 @@ export default function Curso() {
                       className={cn("flex w-full items-center gap-3 px-4 py-3.5 text-left text-[15px] font-semibold transition-colors duration-150", aberto && "bg-orange/6 text-orange-hi")}
                     >
                       <ChevronDown className={cn("size-4 flex-none text-muted transition-transform duration-200", aberto && "rotate-180 text-orange")} aria-hidden="true" />
-                      Módulo {m.ordem} · {m.titulo}
+                      {rotuloModulo(m.ordem, m.titulo)}
                       <span className={cn("ml-auto font-mono text-[12.5px]", ok === m.aulas.length && m.aulas.length > 0 ? "text-ok" : "text-muted")}>
                         {ok}/{m.aulas.length}
                       </span>
@@ -80,7 +82,8 @@ export default function Curso() {
                         className="m-0 list-none p-0"
                       >
                         {m.aulas.map((a) => (
-                          <li key={a.id} className="flex items-center gap-3 border-t border-[#1a1a1d] px-4 py-3 text-sm">
+                          <li key={a.id} className="border-t border-[#1a1a1d]">
+                            <Link to={caminhoAula(c.slug, a.numero)} className="flex items-center gap-3 px-4 py-3 text-sm transition-colors duration-150 hover:bg-white/[0.03]">
                             <span className={cn("grid size-[22px] flex-none place-items-center rounded-full border-[1.5px]", a.concluida ? "border-ok bg-ok text-[#052e13]" : "border-line-hi")}>
                               {a.concluida && <Check className="size-3" strokeWidth={3.5} aria-hidden="true" />}
                             </span>
@@ -90,6 +93,7 @@ export default function Curso() {
                               <span className="sr-only">{a.concluida ? ", concluída" : ""}</span>
                             </span>
                             <span className="font-mono text-xs whitespace-nowrap text-dim">{duracao(a.duracao_seg)}</span>
+                            </Link>
                           </li>
                         ))}
                       </motion.ul>
@@ -114,6 +118,15 @@ export default function Curso() {
               </div>
             </div>
             <Barra valor={percentual(feitas, aulas.length)} rotulo={`Progresso em ${c.titulo}`} />
+            {c.matriculado && seguir && (
+              <Link
+                to={caminhoAula(c.slug, seguir.numero)}
+                className="group/cta relative mt-5 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-[linear-gradient(180deg,var(--color-orange-hi),var(--color-orange)_55%,#ea580c)] p-3.5 text-base font-bold text-orange-ink transition-transform duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Play className="size-[18px] fill-current" aria-hidden="true" />
+                {feitas === 0 ? "Começar o curso" : feitas === aulas.length ? "Rever o curso" : "Continuar o curso"}
+              </Link>
+            )}
             <ul className="m-0 mt-5 flex list-none flex-col gap-2.5 p-0 text-sm text-muted">
               <li className="flex items-center gap-2.5"><Clock className="size-4 text-orange" aria-hidden="true" /> {duracao(total)} de vídeo</li>
               <li className="flex items-center gap-2.5"><PlayCircle className="size-4 text-orange" aria-hidden="true" /> {aulas.length} aulas em {c.modulos.length} módulos</li>

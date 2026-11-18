@@ -27,23 +27,43 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 
 ## Publicar conteúdo
 
-A migração 0009 cria a estrutura dos dois cursos gratuitos com tudo **não publicado**. Quando as aulas de um curso estiverem gravadas, rode no SQL Editor do Supabase:
+A migração 0009 cria a estrutura dos dois cursos gratuitos com tudo **não publicado**. A 0011 acrescenta ao Cybersecurity Fundamentals o módulo **Introdução** (ordem 0) com a aula 01, "Boas-vindas ao curso", já ligada ao vídeo `AKtr_lmAB6Y`. As demais aulas andaram uma posição: o curso tem 17 aulas, e a antiga aula 01 (CID) passou a ser a aula 02. Os títulos dos vídeos no YouTube seguem essa numeração.
+
+### Vincular o vídeo de uma aula
+
+O id é o trecho depois de `youtu.be/` ou de `v=` no link. Cadastre também a duração real em segundos: ela aparece na capa e define quando a aula conta como concluída.
 
 ```sql
--- 1. vídeo de cada aula (YouTube nos gratuitos; o id é o trecho depois de v= no link)
-update public.aulas a set video_provedor = 'youtube', video_ref = 'ID_DO_VIDEO'
+update public.aulas a
+   set video_provedor = 'youtube', video_ref = 'ID_DO_VIDEO', duracao_seg = 754
   from public.modulos m
- where m.id = a.modulo_id and m.curso_slug = 'fundamentos-para-soc' and a.numero = 1;
+ where m.id = a.modulo_id and m.curso_slug = 'cybersecurity-fundamentals' and a.numero = 2;
+```
 
--- 2. publicar aulas, curso, trilha e formação
-update public.aulas set publicado = true
- where modulo_id in (select id from public.modulos where curso_slug = 'fundamentos-para-soc');
-update public.cursos set publicado = true, atualizado_em = now() where slug = 'fundamentos-para-soc';
+### Publicar
+
+Ordem segura: merge, Pages no ar com a sala de aula, `supabase db push` e só então o SQL abaixo. Publicar é decisão do Everton.
+
+```sql
+-- só a aula de boas-vindas, por enquanto
+update public.aulas a set publicado = true
+  from public.modulos m
+ where m.id = a.modulo_id and m.curso_slug = 'cybersecurity-fundamentals' and m.ordem = 0 and a.numero = 1;
+
+-- curso, trilha e formação
+update public.cursos set publicado = true, atualizado_em = now() where slug = 'cybersecurity-fundamentals';
 update public.trilhas set publicado = true where slug = 'fundamentos';
 update public.formacoes set publicado = true where slug = 'analista-soc';
 ```
 
-Aluno que já entrou antes da publicação é matriculado no próximo acesso.
+Aula não publicada aparece no catálogo como "em breve" e não abre a sala de aula. Aluno que já entrou antes da publicação é matriculado no próximo acesso.
+
+### Sala de aula
+
+- Endereço: `/cursos/<slug>/aulas/<numero>`. O número é o da aula no curso (1 a 17 no Cybersecurity Fundamentals).
+- O vídeo só é entregue a aluno matriculado, pela função `academy_video_aula`; a coluna `video_ref` continua fora do alcance das consultas diretas.
+- O player do YouTube é carregado em `youtube-nocookie.com` só depois do clique, sem script de terceiros. A conversa com ele é por `postMessage`, aceitando apenas mensagens da origem do YouTube.
+- A posição é gravada a cada 15 s, ao pausar e ao sair da aba. A aula conta como concluída ao terminar o vídeo, ao passar de 92% ou pelo botão "Marcar como concluída". Conclusão não volta atrás.
 
 ## Boletim do SOC
 

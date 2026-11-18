@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { LinkIcon, ShieldAlert, UserX } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { retornoInicial } from "@/lib/retorno";
+import { marcarAcessoRegistrado } from "@/lib/sessao-acesso";
 import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { Logo } from "@/components/ui/Logo";
 
@@ -40,6 +41,7 @@ export default function Retorno() {
         }
         return;
       }
+      marcarAcessoRegistrado(sessao.user.id);
       await qc.invalidateQueries();
       navegar("/", { replace: true });
     })();
