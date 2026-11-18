@@ -10,7 +10,16 @@ import { Turnstile } from "@/components/Turnstile";
 import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { urlAviso } from "@/lib/privacidade";
 
-const ESPERA_REENVIO = 60;
+/**
+ * Espera antes de pedir outro link para o mesmo e-mail. Cada pedido novo
+ * cancela o link anterior e, enquanto um provedor (como o Outlook) segura os
+ * e-mails de um remetente novo, pedido repetido só aumenta a fila.
+ */
+const ESPERA_REENVIO = 300;
+
+function mmss(s: number): string {
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+}
 
 const MENSAGENS = {
   email_invalido: "Digite um e-mail válido, como nome@empresa.com.br.",
@@ -118,15 +127,17 @@ export default function Entrar() {
               >
                 <CheckCircle2 className="mb-4 size-11 text-ok" aria-hidden="true" />
                 <h1 id="titulo-entrar" className="m-0 mb-3 font-display text-[26px] font-bold">Confira seu e-mail</h1>
-                <p className="m-0 mb-2 leading-relaxed text-[#d6d6d6]" role="status">
-                  Se <b className="break-all text-ink">{enviado}</b> tem inscrição na CyDef Academy, o link de acesso chega em instantes.
+                <p className="m-0 mb-3 leading-relaxed text-[#d6d6d6]" role="status">
+                  Se <b className="break-all text-ink">{enviado}</b> tem inscrição na CyDef Academy, o link de acesso chega em alguns minutos.
                 </p>
-                <p className="m-0 mb-7 text-sm leading-relaxed text-muted">
-                  O link vale uma vez. Não chegou? Olhe a caixa de spam ou peça outro.
-                </p>
+                <ul className="m-0 mb-7 flex list-none flex-col gap-1.5 p-0 text-sm leading-relaxed text-muted">
+                  <li>Em Hotmail e Outlook, a entrega pode demorar um pouco mais. Olhe também o lixo eletrônico.</li>
+                  <li>Pedir outro link cancela o anterior. Se puder, espere o primeiro chegar.</li>
+                  <li>O link vale uma vez, por 60 minutos.</li>
+                </ul>
                 <div className="flex flex-wrap gap-3">
                   <Botao variante="fantasma" className="px-4 py-2.5 text-sm" disabled={espera > 0 || enviando} onClick={() => void enviar()}>
-                    {espera > 0 ? `Pedir outro link em ${espera}s` : "Pedir outro link"}
+                    {espera > 0 ? `Pedir outro link em ${mmss(espera)}` : "Pedir outro link"}
                   </Botao>
                   <Botao variante="fantasma" className="px-4 py-2.5 text-sm" onClick={() => { setEnviado(null); setEmail(""); }}>
                     Usar outro e-mail

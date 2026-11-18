@@ -94,7 +94,9 @@ describe("Entrar", () => {
     await userEvent.click(screen.getByRole("button", { name: /Enviar link de acesso/ }));
     expect(await screen.findByRole("heading", { name: "Confira seu e-mail" })).toBeInTheDocument();
     expect(screen.getByText(/tem inscrição na CyDef Academy, o link de acesso chega/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Pedir outro link em/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Pedir outro link em 5:00" })).toBeDisabled();
+    expect(screen.getByText(/Pedir outro link cancela o anterior/)).toBeInTheDocument();
+    expect(screen.getByText(/Hotmail e Outlook/)).toBeInTheDocument();
     const [, init] = fetchSpy.mock.calls[0]!;
     const corpo = JSON.parse(String((init as RequestInit).body));
     expect(corpo).toMatchObject({ email: "ana@empresa.com.br", turnstile_token: "tok-teste" });
