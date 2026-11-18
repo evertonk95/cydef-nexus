@@ -6,7 +6,7 @@ export interface Video {
   ref: string;
 }
 
-export type CodigoErroAula = "sem_matricula" | "aula_indisponivel" | "sem_video" | "falha";
+export type CodigoErroAula = "sem_matricula" | "aula_indisponivel" | "sem_video" | "modulo_bloqueado" | "falha";
 
 export class ErroAula extends Error {
   constructor(public readonly codigo: CodigoErroAula) {
@@ -15,7 +15,7 @@ export class ErroAula extends Error {
 }
 
 function codigoDe(mensagem?: string): CodigoErroAula {
-  for (const c of ["sem_matricula", "aula_indisponivel", "sem_video"] as const) {
+  for (const c of ["sem_matricula", "aula_indisponivel", "sem_video", "modulo_bloqueado"] as const) {
     if (mensagem?.includes(c)) return c;
   }
   return "falha";

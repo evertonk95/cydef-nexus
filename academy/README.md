@@ -79,6 +79,45 @@ Aula não publicada aparece no catálogo como "em breve" e não abre a sala de a
 - O player do YouTube é carregado em `youtube-nocookie.com` só depois do clique, sem script de terceiros. A conversa com ele é por `postMessage`, aceitando apenas mensagens da origem do YouTube.
 - A posição é gravada a cada 15 s, ao pausar e ao sair da aba. A aula conta como concluída ao terminar o vídeo, ao passar de 92% ou pelo botão "Marcar como concluída". Conclusão não volta atrás.
 
+### Questões, avaliação final e certificado (0013)
+
+Os requisitos são de cada curso, na tabela `cursos_requisitos`. O painel do instrutor vai editar essa tabela; até ele existir, mude por SQL. Os dois cursos gratuitos usam os mesmos requisitos:
+
+| Campo | Valor nos gratuitos | O que faz |
+|---|---|---|
+| `exige_todas_aulas` | sim | Todas as aulas do curso concluídas. Aula ainda não publicada impede o certificado. |
+| `exige_modulos` | sim | Módulo com questões precisa ser aprovado para liberar o seguinte (vale também no servidor: aula de módulo bloqueado não entrega vídeo nem grava progresso). |
+| `nota_minima_modulo` / `questoes_modulo` | 70 / 5 | Sorteio de 5 questões do módulo; 4 de 5 aprova. Refaz na hora. |
+| `nota_minima_final` / `questoes_final` | 80 / 20 | Sorteio de 20 do banco do curso. Sem cronômetro; a prova aberta volta se o aluno fechar a aba. |
+| `espera_final_horas` / `tentativas_final_max` | 24 / ilimitadas | Espera depois de reprovar. Vazio é ilimitado. |
+| `carga_horaria_h` | 6 (Cybersecurity Fundamentals); vazio (Fundamentos para SOC) | Vazio: o curso não emite certificado. |
+
+Módulo sem questões publicadas não bloqueia (a Introdução não tem). Questão só vai para o aluno publicada, com 2 a 8 alternativas e exatamente uma correta. Do banco da avaliação final (questões com `modulo_id` vazio) sai só a nota, nunca a correção.
+
+Cadastrar uma questão (módulo: informe o `modulo_id`; avaliação final: deixe `null`):
+
+```sql
+with q as (
+  insert into public.questoes (curso_slug, modulo_id, enunciado, explicacao, publicado)
+  values ('cybersecurity-fundamentals', 'ID_DO_MODULO',
+          'Qual pilar da tríade CID é afetado quando um ransomware cifra os arquivos?',
+          'A informação continua lá, mas ninguém consegue usar: é a disponibilidade.', true)
+  returning id
+)
+insert into public.questoes_alternativas (questao_id, ordem, texto, correta)
+select q.id, x.ordem, x.texto, x.correta from q, (values
+  (1, 'Disponibilidade', true),
+  (2, 'Confidencialidade', false),
+  (3, 'Integridade', false),
+  (4, 'Autenticidade', false)) as x(ordem, texto, correta);
+```
+
+Certificado: o aluno confere o nome antes de emitir; depois de emitido, correção só pela CyDef. O código tem o formato `CYD-XXXX-XXXX-XXXX-XXXX` e é validado em `academy.cydef.com.br/certificado/CODIGO`, que mostra só nome, curso, carga horária e data. A pedido do aluno (Aviso de Privacidade, item 4), desative a validação pública:
+
+```sql
+update public.certificados set validacao_publica = false where codigo = 'CYD-....';
+```
+
 ## Boletim do SOC
 
 ```sql

@@ -18,6 +18,7 @@ const MENSAGEM: Record<string, string> = {
   sem_matricula: "Este curso ainda não está na sua conta. Volte para Meus cursos e tente de novo.",
   aula_indisponivel: "Esta aula não está disponível agora.",
   sem_video: "O vídeo desta aula está indisponível no momento.",
+  modulo_bloqueado: "Esta aula abre depois que você passar nas questões do módulo anterior.",
   falha: "Não conseguimos carregar o vídeo. Verifique a conexão e tente de novo.",
 };
 
