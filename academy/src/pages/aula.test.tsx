@@ -110,6 +110,28 @@ describe("sala de aula", () => {
     expect(await screen.findByText("Aula concluída")).toBeInTheDocument();
   });
 
+  it("gravar o progresso não recarrega o vídeo (o endereço do player fica fixo)", async () => {
+    const { sb, chamadas } = sbAula({ progresso: [{ aula_id: "a2", posicao_seg: 40, concluida_em: null }] });
+    abrir(2, sb);
+    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula 02/ }));
+    const iframe = (await screen.findByTitle(/Vídeo da aula 02/)) as HTMLIFrameElement;
+    const srcInicial = iframe.getAttribute("src");
+    expect(new URL(srcInicial!).searchParams.get("start")).toBe("40");
+    const enviar = (info: Record<string, number>) =>
+      act(() => {
+        window.dispatchEvent(new MessageEvent("message", { origin: ORIGEM_YOUTUBE, source: iframe.contentWindow, data: JSON.stringify({ event: "infoDelivery", info }) }));
+      });
+    // gravação periódica: a posição salva muda na página
+    enviar({ currentTime: 300, duration: 1020, playerState: 1 });
+    await waitFor(() => expect(chamadas.some((c) => c.nome === "academy_registrar_progresso" && c.args.p_posicao === 300)).toBe(true));
+    // conclusão aos 92%: a aula passa a concluída na página
+    enviar({ currentTime: 960, duration: 1020, playerState: 1 });
+    expect(await screen.findByText("Aula concluída")).toBeInTheDocument();
+    const depois = screen.getByTitle(/Vídeo da aula 02/);
+    expect(depois).toBe(iframe);
+    expect(depois.getAttribute("src")).toBe(srcInicial);
+  });
+
   it("marcar como concluída grava e troca o botão pelo estado concluído", async () => {
     const { sb, chamadas } = sbAula();
     abrir(2, sb);

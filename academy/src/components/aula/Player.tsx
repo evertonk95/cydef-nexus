@@ -32,7 +32,11 @@ export function Player({
 }) {
   const { sb, sessao } = usePortal();
   const reduzir = useReducedMotion();
-  const [tocando, setTocando] = useState(false);
+  // O endereço do player é fixado no clique em "Assistir". Ele não pode
+  // depender da posição salva: cada gravação de progresso atualiza a aula na
+  // página, e um src novo faria o navegador recarregar o vídeo a cada 15 s.
+  const [src, setSrc] = useState<string | null>(null);
+  const tocando = src !== null;
   const iframe = useRef<HTMLIFrameElement>(null);
   const video = useQuery({
     queryKey: ["video", aula.id, sessao?.user.id],
@@ -101,10 +105,10 @@ export function Player({
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-line bg-[#09090a] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
-      {tocando && video.data?.provedor === "youtube" ? (
+      {src && video.data?.provedor === "youtube" ? (
         <iframe
           ref={iframe}
-          src={urlEmbed(video.data.ref, { inicio, origem: window.location.origin })}
+          src={src}
           title={`Vídeo da aula ${numeroAula(aula.numero)}: ${aula.titulo}`}
           allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
           allowFullScreen
@@ -165,7 +169,7 @@ export function Player({
             ) : (
               <button
                 type="button"
-                onClick={() => setTocando(true)}
+                onClick={() => video.data && setSrc(urlEmbed(video.data.ref, { inicio, origem: window.location.origin }))}
                 disabled={!video.data}
                 aria-label={video.data ? `Assistir à aula ${numeroAula(aula.numero)}: ${aula.titulo}` : "Preparando o vídeo"}
                 className="group/play relative grid size-[60px] place-items-center sm:size-[76px] rounded-full bg-[radial-gradient(circle_at_35%_30%,var(--color-orange-hi),var(--color-orange)_60%,#ea580c)] text-orange-ink shadow-[0_0_0_10px_rgba(249,115,22,0.12),0_18px_50px_-10px_rgba(249,115,22,0.8)] transition-transform duration-200 ease-[var(--ease-out-soft)] hover:scale-105 active:scale-95 disabled:cursor-wait sm:size-[92px]"
