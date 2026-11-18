@@ -117,21 +117,17 @@ describe("privilégios das funções (0012)", () => {
     }
   });
 
-  it("default privileges não devolvem EXECUTE a anon e authenticated para função nova", async () => {
+  it("função nova nasce fechada, sem revoke manual", async () => {
     await db.exec(`create function public.teste_funcao_nova() returns integer language sql as $$ select 1 $$;`);
     const r = await db.query<{ proacl: string[] | null }>(`select proacl from pg_proc where proname = 'teste_funcao_nova'`);
-    const acl = (r.rows[0]?.proacl ?? []).join(",");
-    expect(acl).not.toMatch(/anon=/);
-    expect(acl).not.toMatch(/authenticated=/);
-    // O grant embutido do Postgres para PUBLIC continua em toda função nova.
-    // É por isso que a migração que cria função precisa fechar com
-    // `revoke execute on function ... from public`.
-    expect(acl).toMatch(/=X\/postgres/);
-    await db.exec(`revoke execute on function public.teste_funcao_nova() from public;`);
-    const fechada = await db.query<{ anon_ok: boolean }>(
-      `select has_function_privilege('anon', 'public.teste_funcao_nova()', 'execute') as anon_ok`,
+    expect(r.rows[0]?.proacl).toEqual(["postgres=X/postgres"]);
+    const fechada = await db.query<{ anon_ok: boolean; svc_ok: boolean }>(
+      `select has_function_privilege('anon', 'public.teste_funcao_nova()', 'execute') as anon_ok,
+              has_function_privilege('service_role', 'public.teste_funcao_nova()', 'execute') as svc_ok`,
     );
     expect(fechada.rows[0]?.anon_ok).toBe(false);
+    expect(fechada.rows[0]?.svc_ok).toBe(false);
+    expect(await erroDe(como("anon", "select public.teste_funcao_nova()"))).toMatch(/permission denied/);
     await db.exec(`drop function public.teste_funcao_nova();`);
   });
 

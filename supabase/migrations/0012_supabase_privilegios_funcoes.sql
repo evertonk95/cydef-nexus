@@ -78,8 +78,17 @@ grant execute on function public._contato_contar(text),
   to service_role;
 
 -- 3. Default privileges -------------------------------------------------------
--- Função criada daqui em diante nasce fechada para anon e authenticated; quem
--- abrir precisa conceder de propósito, na migração que cria a função.
-
+-- Duas camadas. No schema public, o que o Supabase deixou concedido; sem esta
+-- linha a função nova já nasce com grant explícito para service_role.
 alter default privileges for role postgres in schema public
-  revoke execute on functions from public, anon, authenticated;
+  revoke execute on functions from public, anon, authenticated, service_role;
+
+-- No padrão global do papel postgres, que o "in schema" não alcança: o
+-- Postgres dá EXECUTE a PUBLIC em toda função criada. Vale para tudo que o
+-- papel postgres criar, inclusive extensões.
+alter default privileges for role postgres
+  revoke execute on functions from public;
+
+-- Resultado: função nova nasce com proacl = {postgres=X/postgres}. Quem
+-- precisar de grant concede de propósito, na migração que cria a função, e
+-- termina com `revoke execute on function ... from public` como reforço.

@@ -24,7 +24,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Catálogo: formações, trilhas, cursos, módulos, aulas e competências. A leitura é pública só para o que está publicado e só nas colunas públicas. A referência do vídeo (`video_ref`) não é liberada para ninguém pela API de tabelas.
 - Dados do aluno (matrícula, progresso, dias de estudo): cada aluno lê só os próprios. Ninguém grava direto nas tabelas; a escrita passa por funções do banco que conferem quem chama.
 - Os testes em `tests/sql` rodam todas as migrações num Postgres real (PGlite) e conferem essas regras.
-- Privilégios das funções: a 0012 fecha `EXECUTE` em todas as funções de `public` e reafirma a matriz (anon só em `contagem_alunos`, authenticated só nas quatro do portal, service_role em todas). Função nova precisa de `revoke execute on function ... from public` na própria migração: o `alter default privileges` tira os grants explícitos de `anon` e `authenticated`, mas o grant embutido do Postgres para `PUBLIC` continua aparecendo em toda função criada.
+- Privilégios das funções: a 0012 fecha `EXECUTE` em todas as funções de `public` e reafirma a matriz (anon só em `contagem_alunos`, authenticated só nas quatro do portal, service_role em todas). O `alter default privileges` vai em duas camadas: `in schema public` tira o que o Supabase deixou concedido, e a forma global (`for role postgres`, sem `in schema`) remove o grant embutido que o Postgres dá a `PUBLIC`. O default global vale para tudo que o papel `postgres` criar, inclusive extensões. Função nova nasce com `proacl = {postgres=X/postgres}`: quem precisar de grant concede na própria migração e termina com `revoke execute on function ... from public` como reforço.
 
 ## Publicar conteúdo
 
