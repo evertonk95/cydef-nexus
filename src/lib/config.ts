@@ -15,6 +15,9 @@ import { versaoVigente } from "@/lib/academy/consent";
 
 export const LANDING_PATH = "/academy/gratuito";
 
+/** Entrada do portal do aluno (app próprio em academy.cydef.com.br). */
+export const ACADEMY_PORTAL_URL = "https://academy.cydef.com.br/entrar";
+
 /** URL do Aviso de Privacidade. Sem argumento usa a versão VIGENTE publicada;
  *  com argumento serve versões históricas (imutabilidade por versão, HEL-M01). */
 export const privacyPath = (version: string = versaoVigente()) =>

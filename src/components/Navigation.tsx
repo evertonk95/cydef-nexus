@@ -3,6 +3,7 @@ import { ChevronDown, FlaskConical, Gauge, Menu, ShieldCheck, X } from "lucide-r
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { L } from "@/lib/lang";
+import { ACADEMY_PORTAL_URL } from "@/lib/config";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SkipLink } from "@/components/SkipLink";
 
@@ -125,9 +126,9 @@ export const Navigation = () => {
           </div>
 
           <div className="hidden xl:flex items-center gap-6">
-            <Link to={L("/academy/entrar")} className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
+            <a href={ACADEMY_PORTAL_URL} className="text-sm font-medium hover:text-white transition-colors text-neutral-400">
               {t("nav.signIn")}
-            </Link>
+            </a>
             <Link to={L("/contato")} className="button-custom scale-95">
               <div className="points_wrapper">
                 <i className="point"></i><i className="point"></i><i className="point"></i><i className="point"></i>
@@ -181,9 +182,9 @@ export const Navigation = () => {
               <Link to={L("/blog")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.blog")}
               </Link>
-              <Link to={L("/academy/entrar")} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
+              <a href={ACADEMY_PORTAL_URL} className="text-sm font-medium text-neutral-400 hover:text-white transition-colors uppercase tracking-widest" onClick={() => setIsOpen(false)}>
                 {t("nav.signIn")}
-              </Link>
+              </a>
               <Link
                 to={L("/contato")}
                 onClick={() => setIsOpen(false)}
