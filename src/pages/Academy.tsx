@@ -32,6 +32,7 @@ interface FreeCourse {
 }
 
 /** Etapas da trilha: ids reais do catalogo, na ordem de progressao. */
+/** Progressão: Cybersecurity Fundamentals (gratuito), SOC Analyst e Blue Team. */
 const TRAIL_IDS = ["fundamentals", "soc", "blue"] as const;
 
 const SectionHeader = ({ id, title, lead, aside }: { id: string; title: string; lead: string; aside?: ReactNode }) => (
@@ -139,9 +140,8 @@ const Academy = () => {
   const trustIcons = [CreditCard, MailCheck, ShieldCheck];
   const principlesRaw = t("home.principles", { returnObjects: true }) as { title: string; desc: string }[] | string;
   const principles = Array.isArray(principlesRaw) ? principlesRaw : [];
-  const trail = TRAIL_IDS.map((id) => academyCatalog.find((c) => c.id === id)).filter(
-    (c): c is AcademyCourseCard => Boolean(c),
-  );
+  // A trilha começa pelo curso gratuito de entrada, que não está no catálogo pago.
+  const trail = TRAIL_IDS.map((id) => ({ id }));
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">

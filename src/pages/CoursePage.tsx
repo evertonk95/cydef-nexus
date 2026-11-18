@@ -1,10 +1,11 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { L, currentLang } from "@/lib/lang";
 import { coursesByLang } from "@/lib/courses";
+import { legacyCoursePaths } from "@/lib/routes";
 import { JsonLd } from "@/lib/seo";
 import { courseLd } from "@/lib/seo-data";
 import {
@@ -38,7 +39,6 @@ const plannedCourses: Record<string, { title: string; description: string }> = {
 };
 
 const courseKeyById: Record<string, string> = {
-  "cybersecurity-fundamentals": "fundamentals",
   "soc-analyst": "soc",
   "blue-team-advanced": "blue",
   "sc-900-prep": "sc900",
@@ -58,11 +58,14 @@ const CoursePage = () => {
   useScrollReveal();
   const { t } = useTranslation();
   const { courseId } = useParams();
+  const destino = courseId ? legacyCoursePaths[courseId] : undefined;
   const course = courseId ? coursesByLang[currentLang()][courseId] : null;
   const planned = courseId ? plannedCourses[courseId] : undefined;
   const plannedKey = courseId ? plannedCourseKeys[courseId] : undefined;
   const plannedTitle = plannedKey ? t(`academy.courses.${plannedKey}`) : undefined;
   const plannedDesc = plannedKey ? t(`academy.planned.${plannedKey}Desc`) : undefined;
+
+  if (destino) return <Navigate to={L(destino)} replace />;
 
   if (!course) {
     return (

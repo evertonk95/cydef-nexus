@@ -46,6 +46,15 @@ export const legacyPageSlugs: Record<Lang, Record<string, PageKey>> = {
   es: { ecosistema: "consulting" },
 };
 
+/** Páginas de curso que deixaram de existir e o caminho (sem idioma) para onde
+ *  redirecionam. O Cybersecurity Fundamentals saiu da lista de cursos pagos e
+ *  fica só entre os gratuitos (decisão do Everton, 18/11/2026). A `CoursePage`
+ *  redireciona no cliente e o `scripts/postbuild.mjs` grava a página física de
+ *  redirecionamento em `/<idioma>/<cursos|courses>/<id>/`. */
+export const legacyCoursePaths: Record<string, string> = {
+  "cybersecurity-fundamentals": "/academy/gratuito",
+};
+
 /** Áreas de conteúdo com slug localizado (prefixo de rota, não página). */
 export const contentAreaSlugs = {
   courses: { pt: "cursos", en: "courses", es: "cursos" },
