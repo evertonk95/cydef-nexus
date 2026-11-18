@@ -139,3 +139,18 @@ describe("Página do Inora — cabeçalho próprio", () => {
     expect(home).toHaveAttribute("href", "/pt");
   });
 });
+
+describe("Entrar do menu", () => {
+  it("leva direto ao portal do aluno, no desktop e no menu do celular", async () => {
+    const user = userEvent.setup();
+    renderNav();
+    const desktop = screen.getAllByRole("link", { name: "Entrar" });
+    expect(desktop.length).toBeGreaterThan(0);
+    for (const a of desktop) expect(a).toHaveAttribute("href", "https://academy.cydef.com.br/entrar");
+    const abrir = document.querySelector('button[aria-controls="menu-mobile"], button[aria-label*="menu" i]') as HTMLButtonElement | null;
+    if (abrir) await user.click(abrir);
+    for (const a of screen.getAllByRole("link", { name: /Entrar/i })) {
+      expect(a).toHaveAttribute("href", "https://academy.cydef.com.br/entrar");
+    }
+  });
+});

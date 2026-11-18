@@ -1,31 +1,24 @@
-import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Info, Lock, Mail } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Info, Lock } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { PrimaryCtaContent } from "@/components/academy/PrimaryCta";
 import { StudentAreaPreview } from "@/components/academy/StudentAreaPreview";
 import { focusRing, primaryCtaClass } from "@/components/academy/ctaStyles";
 import { L } from "@/lib/lang";
-import { LANDING_PATH } from "@/lib/config";
+import { ACADEMY_PORTAL_URL, LANDING_PATH } from "@/lib/config";
 
 /**
- * Tela de login da Academy (redesenho de 09/11/2026).
- * O portal ainda não existe: o formulário mostra o modelo de acesso previsto
- * (link por e-mail, sem senha), mas o envio NÃO coleta nem transmite o e-mail.
- * Ao enviar, a tela só informa, de forma honesta, que o login ainda não está
- * disponível. Quando a autenticação existir, o envio passa a chamar o backend
- * e o aviso de "portal em desenvolvimento" sai.
+ * Entrada da Academy no site institucional.
+ * O login de verdade vive no portal do aluno (academy.cydef.com.br), um app
+ * separado. Esta página fica para quem chega por link antigo ou favorito e
+ * leva ao portal; o "Entrar" do menu já aponta direto para lá. Sem
+ * redirecionamento automático: o pré-render (jsdom) executa a página, e um
+ * botão claro funciona em qualquer navegador.
  */
 const AcademyLogin = () => {
   const { t } = useTranslation();
-  const [avisoVisivel, setAvisoVisivel] = useState(false);
-
-  const enviar = (e: FormEvent) => {
-    e.preventDefault();
-    setAvisoVisivel(true);
-  };
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -81,33 +74,11 @@ const AcademyLogin = () => {
                 {t("login.note")}
               </p>
 
-              <form onSubmit={enviar} noValidate className="space-y-5 [color-scheme:dark]">
-                <div>
-                  <label htmlFor="login-email" className="block text-sm font-medium text-white mb-2">
-                    {t("login.email")}
-                  </label>
-                  <input
-                    id="login-email"
-                    type="email"
-                    autoComplete="off"
-                    placeholder={t("login.emailPh")}
-                    className={`w-full min-h-[48px] px-4 py-3 rounded-lg bg-[#0A0A0A] border border-white/10 hover:border-white/20 text-white placeholder:text-neutral-500 transition-colors duration-200 ${focusRing}`}
-                  />
-                </div>
-                <button type="submit" className={`${primaryCtaClass} w-full justify-between min-h-[48px]`}>
-                  <PrimaryCtaContent icon={<Mail className="w-4 h-4 text-white" aria-hidden="true" />}>
-                    {t("login.submit")}
-                  </PrimaryCtaContent>
-                </button>
-                <div aria-live="polite">
-                  {avisoVisivel ? (
-                    <p role="status" className="flex items-start gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 p-4 text-sm text-orange-200">
-                      <Info className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
-                      {t("login.error")}
-                    </p>
-                  ) : null}
-                </div>
-              </form>
+              <a href={ACADEMY_PORTAL_URL} className={`${primaryCtaClass} w-full justify-between min-h-[48px]`}>
+                <PrimaryCtaContent icon={<ArrowUpRight className="w-4 h-4 text-white" aria-hidden="true" />}>
+                  {t("login.submit")}
+                </PrimaryCtaContent>
+              </a>
 
               <div className="mt-6 pt-6 border-t border-white/10 text-center text-sm">
                 <p className="text-neutral-300">
