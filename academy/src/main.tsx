@@ -7,8 +7,8 @@ import { criarSupabase } from "@/lib/supabase";
 import { guardarRetornoInicial } from "@/lib/retorno";
 import { App } from "./App";
 
-// O fragmento do link de acesso precisa ser lido antes de o Supabase limpá-lo.
-guardarRetornoInicial(window.location.hash);
+// O link de acesso precisa ser lido antes de o Supabase mexer na URL.
+guardarRetornoInicial(window.location, window.history);
 
 const raiz = createRoot(document.getElementById("root")!);
 

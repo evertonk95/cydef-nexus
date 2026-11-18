@@ -17,7 +17,18 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 2. A função `academy-acesso` confere a origem, o Turnstile e o limite de tentativas (por IP e por e-mail, com chaves em HMAC). Depois consulta no banco se o e-mail é de um aluno ou de uma pré-inscrição ativa com consentimento.
 3. Para quem não é elegível, a resposta é a mesma de quem é elegível (202, com o mesmo tempo mínimo). De fora, ninguém descobre quem está cadastrado.
 4. Para quem é elegível, a função cria o usuário de login (se ainda não existir), cria o registro de aluno e envia o link. O endereço de retorno é fixo no servidor (`ACADEMY_URL/entrar/retorno`).
-5. No retorno, o portal chama `academy_registrar_acesso`. Como abrir o link comprova que a pessoa é dona do e-mail, a pré-inscrição pendente passa a confirmada aqui, e o aluno é matriculado nos cursos gratuitos publicados.
+5. O link do e-mail aponta para o próprio portal, no mesmo domínio do remetente: `https://academy.cydef.com.br/entrar/retorno?token_hash=...&type=email`. O portal tira o token da barra de endereço, mostra "Confirme a sua entrada" e só troca o token por sessão (`verifyOtp`) quando o aluno clica em "Entrar na Academy". Verificador automático de e-mail (como o Safe Links da Microsoft) abre o link, mas não clica, então não gasta o acesso de uso único. Links no formato antigo, que passam pelo Supabase e voltam com `#access_token`, continuam funcionando.
+6. No retorno, o portal chama `academy_registrar_acesso`. Como abrir o link comprova que a pessoa é dona do e-mail, a pré-inscrição pendente passa a confirmada aqui, e o aluno é matriculado nos cursos gratuitos publicados.
+
+### Modelo do e-mail no Supabase
+
+Em produção o e-mail sai pelo Supabase (SMTP do Resend), com o modelo **Authentication > Emails > Magic Link** do painel. O botão do modelo precisa apontar para:
+
+```
+https://academy.cydef.com.br/entrar/retorno?token_hash={{ .TokenHash }}&type=email
+```
+
+e não para `{{ .ConfirmationURL }}`, que leva ao domínio `supabase.co`. Ordem segura para mudar o modelo: primeiro o portal com o suporte a `token_hash` no ar, depois o modelo. Com o envio direto pelo Resend ligado (`ACADEMY_EMAIL_ENABLED=true`), a função monta o mesmo link a partir do `hashed_token` do `generate_link`.
 
 ## Banco (migrações 0008 e 0009)
 

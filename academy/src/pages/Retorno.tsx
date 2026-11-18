@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { LinkIcon, ShieldAlert, UserX } from "lucide-react";
+import { ArrowRight, LinkIcon, Loader2, ShieldAlert, UserX } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { retornoInicial } from "@/lib/retorno";
 import { marcarAcessoRegistrado } from "@/lib/sessao-acesso";
 import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { Logo } from "@/components/ui/Logo";
 
-type Estado = "verificando" | "link_invalido" | "sem_cadastro" | "falha";
+type Estado = "confirmar" | "verificando" | "link_invalido" | "sem_cadastro" | "falha";
 
 const LINHAS = ["Validando o link de acesso", "Abrindo sua sessão segura", "Carregando seu painel"];
 
@@ -19,8 +19,21 @@ export default function Retorno() {
   const qc = useQueryClient();
   const reduzir = useReducedMotion();
   const retorno = retornoInicial();
-  const [estado, setEstado] = useState<Estado>(retorno.tipo === "erro" ? "link_invalido" : "verificando");
+  const [estado, setEstado] = useState<Estado>(
+    retorno.tipo === "erro" ? "link_invalido" : retorno.tipo === "token" ? "confirmar" : "verificando",
+  );
+  const [trocando, setTrocando] = useState(false);
   const feito = useRef(false);
+
+  // O token do e-mail só vira sessão neste clique: verificador automático de
+  // e-mail abre o link, mas não clica, então não gasta o acesso do aluno.
+  async function confirmar() {
+    if (retorno.tipo !== "token" || trocando) return;
+    setTrocando(true);
+    const { error } = await sb.auth.verifyOtp({ token_hash: retorno.tokenHash, type: retorno.tipoOtp });
+    setTrocando(false);
+    setEstado(error ? "link_invalido" : "verificando");
+  }
 
   useEffect(() => {
     if (estado !== "verificando" || carregando) return;
@@ -59,6 +72,28 @@ export default function Retorno() {
         aria-live="polite"
       >
         <div className="mb-7"><Logo para="/entrar" /></div>
+        {estado === "confirmar" && (
+          <div>
+            <h1 className="m-0 mb-3 font-display text-2xl font-bold">Confirme a sua entrada</h1>
+            <p className="m-0 mb-6 leading-relaxed text-muted">
+              Clique para abrir o seu painel. Pedimos este clique para que nenhum verificador automático de e-mail use o seu link antes de você.
+            </p>
+            <button
+              type="button"
+              onClick={() => void confirmar()}
+              disabled={trocando}
+              aria-busy={trocando}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-orange px-5 py-3.5 font-semibold text-orange-ink transition-transform duration-150 ease-out hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-70"
+            >
+              {trocando ? (
+                <Loader2 className="size-5 animate-[girar_900ms_linear_infinite]" aria-hidden="true" />
+              ) : (
+                <ArrowRight className="size-5" aria-hidden="true" />
+              )}
+              {trocando ? "Validando o link" : "Entrar na Academy"}
+            </button>
+          </div>
+        )}
         {estado === "verificando" && (
           <div>
             <h1 className="m-0 mb-5 font-display text-2xl font-bold">Entrando na Academy</h1>
