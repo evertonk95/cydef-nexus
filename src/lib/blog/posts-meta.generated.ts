@@ -13,7 +13,7 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
     "date": "November 19, 2026",
     "dateISO": "2026-11-19",
     "readTime": "7 min",
-    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-capa.webp",
     "author": "CyDef Team"
   },
   {
@@ -302,7 +302,7 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
     "date": "19 de Novembro, 2026",
     "dateISO": "2026-11-19",
     "readTime": "7 min",
-    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-capa.webp",
     "author": "Equipe CyDef"
   },
   {
@@ -591,7 +591,7 @@ export const blogPostsEsMeta: BlogPostMeta[] = [
     "date": "19 de Noviembre, 2026",
     "dateISO": "2026-11-19",
     "readTime": "7 min",
-    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-capa.webp",
     "author": "Equipo CyDef"
   },
   {

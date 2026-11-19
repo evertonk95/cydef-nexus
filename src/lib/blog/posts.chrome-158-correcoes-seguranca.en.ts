@@ -3,7 +3,7 @@ import type { BlogPost } from "./posts";
 /**
  * Google Chrome 158 fixes 204 flaws, including six critical ones (EN).
  * Source: Google Chrome Releases (17 November 2026) and Cyber Security News analysis.
- * Cover: public/assets/blog/chrome-158-correcoes-seguranca-thumb.webp
+ * Cover: public/assets/blog/chrome-158-correcoes-seguranca-capa.webp
  */
 export const chrome158CorrecoesSegurancaPostEn: BlogPost = {
   slug: "chrome-158-correcoes-seguranca",
@@ -15,7 +15,7 @@ export const chrome158CorrecoesSegurancaPostEn: BlogPost = {
   date: "November 19, 2026",
   dateISO: "2026-11-19",
   readTime: "7 min",
-  image: "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+  image: "/assets/blog/chrome-158-correcoes-seguranca-capa.webp",
   author: "CyDef Team",
   tags: [
     "Google Chrome",
