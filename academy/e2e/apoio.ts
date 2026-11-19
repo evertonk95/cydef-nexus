@@ -12,6 +12,7 @@ export interface EstadoFalso {
   respostasModulo: { questao: string; alternativa: string }[][];
   provas: { nota: number; aprovado: boolean }[];
   certificado: { codigo: string; nome: string } | null;
+  escritasAdm: { fn: string; p_id?: string | null; p_dados?: Record<string, unknown>; p_direcao?: number }[];
 }
 
 export async function resetar(request: APIRequestContext) {
@@ -19,7 +20,7 @@ export async function resetar(request: APIRequestContext) {
 }
 
 /** Atalho para os testes da avaliação final: aulas concluídas e módulo aprovado. */
-export async function cenario(request: APIRequestContext, c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean }) {
+export async function cenario(request: APIRequestContext, c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean; equipe?: "admin" | "instrutor" }) {
   await request.post(`${API}/__cenario`, { data: c });
 }
 

@@ -7,7 +7,8 @@
  *   GET  /__estado  o que o portal pediu ao "servidor", para as conferências
  *   GET  /__saude   usado pelo Playwright para saber que o servidor subiu
  *   POST /__cenario aulas todas concluídas e/ou módulo aprovado, para os
- *                   testes da avaliação final e do certificado
+ *                   testes da avaliação final e do certificado; equipe
+ *                   ("admin" ou "instrutor") abre o painel do instrutor
  *
  * O Módulo 1 tem questões (a primeira alternativa é sempre a certa) e a
  * avaliação final tem um banco de 4 questões, com nota mínima de 75%.
@@ -82,6 +83,33 @@ function novoEstado() {
     provas: [],
     esperaAte: null,
     certificado: null,
+    equipe: null,
+    adm: {
+      publicado: true,
+      modulos: CURSO.modulos.map((m) => ({
+        id: m.id, ordem: m.ordem, titulo: m.titulo, questoes: m.id === "m1" ? 3 : 0, questoes_publicadas: m.id === "m1" ? 3 : 0,
+        aulas: m.aulas.map((a) => ({ ...a, modulo_id: m.id, video_provedor: "youtube", video_ref: VIDEO.ref, publicado: true, atualizado_em: "2026-11-18T10:00:00Z", alunos_com_progresso: 1 })),
+      })),
+    },
+    escritasAdm: [],
+  };
+}
+
+/** Painel do instrutor: o curso como a equipe vê, com rascunhos. */
+function renumerar() {
+  let k = 0;
+  for (const m of estado.adm.modulos) m.aulas.forEach((a, i) => { a.ordem = i + 1; a.numero = ++k; });
+}
+function cursoAdm() {
+  const todas = estado.adm.modulos.flatMap((m) => m.aulas);
+  return {
+    slug: CURSO.slug, titulo: CURSO.titulo, descricao: CURSO.descricao, nivel: CURSO.nivel, gratuito: true, publicado: estado.adm.publicado, ordem: 1,
+    eh_admin: estado.equipe === "admin",
+    requisitos: { exige_todas_aulas: true, exige_modulos: true, nota_minima_modulo: 70, questoes_modulo: 5, nota_minima_final: 75, questoes_final: 4,
+      espera_final_horas: 24, tentativas_final_max: null, carga_horaria_h: 6, certificado_ativo: true },
+    questoes_final: QUESTOES_FINAL.length, questoes_final_publicadas: QUESTOES_FINAL.length,
+    modulos: estado.adm.modulos,
+    _resumo: { aulas: todas.length, aulas_publicadas: todas.filter((a) => a.publicado).length, aulas_sem_video: todas.filter((a) => !a.video_ref).length },
   };
 }
 
@@ -167,6 +195,7 @@ http
         case "/__cenario":
           if (corpo.aulas_concluidas) for (const a of AULAS) estado.progresso[a.id] = { posicao_seg: a.duracao_seg, concluida_em: "2026-11-18T12:00:00Z" };
           if (corpo.modulo_aprovado) estado.moduloAprovado = true;
+          if (corpo.equipe) estado.equipe = corpo.equipe;
           return enviar({ ok: true });
         case "/functions/v1/academy-acesso":
           estado.pedidosAcesso.push(corpo);
@@ -233,6 +262,58 @@ http
           if (!situacao().certificado.elegivel && !estado.certificado) return enviar({ message: "nao_elegivel" }, 400);
           estado.certificado ??= { codigo: "CYD-1A2B-3C4D-5E6F-7A8B", nome: corpo.p_nome, concluido_em: "2026-11-18" };
           return enviar({ ...estado.certificado, curso_titulo: CURSO.titulo, carga_horaria_h: 6 });
+        case "/rest/v1/rpc/academy_adm_eu":
+          return enviar(estado.equipe ? { papel: estado.equipe, cursos: [CURSO.slug] } : null);
+        case "/rest/v1/rpc/academy_adm_boletim":
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          return enviar([
+            { id: "b1", tipo: "aula", titulo: "Módulo 1 completo: defesa em profundidade e menor privilégio", link: null, publicado: true, publicado_em: "2026-11-18T10:00:00Z" },
+            { id: "b2", tipo: "ameaca", titulo: "Campanha de phishing com QR code mirando bancos", link: "https://www.cydef.com.br/blog", publicado: false, publicado_em: "2026-11-17T09:00:00Z" },
+          ]);
+        case "/rest/v1/rpc/academy_adm_equipe":
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          return enviar([
+            { user_id: USUARIO.id, email: USUARIO.email, nome: "Everton Nascimento", papel: "admin", eu: true, cursos: [] },
+            { user_id: "u2", email: "matheus@exemplo.com", nome: "Matheus", papel: "instrutor", eu: false, cursos: [CURSO.slug] },
+          ]);
+        case "/rest/v1/rpc/academy_adm_cursos":
+        case "/rest/v1/rpc/academy_adm_curso":
+        case "/rest/v1/rpc/academy_adm_questoes":
+        case "/rest/v1/rpc/academy_adm_salvar_aula":
+        case "/rest/v1/rpc/academy_adm_mover_aula": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const fn = u.pathname.split("/").pop();
+          if (fn === "academy_adm_cursos") {
+            const c = cursoAdm();
+            return enviar([{ slug: c.slug, titulo: c.titulo, nivel: c.nivel, gratuito: true, publicado: c.publicado, ordem: 1, modulos: c.modulos.length,
+              ...c._resumo, questoes: 7, questoes_publicadas: 7 }]);
+          }
+          if (fn === "academy_adm_curso") return corpo.p_slug === CURSO.slug ? enviar(cursoAdm()) : enviar({ message: "curso_inexistente" }, 400);
+          if (fn === "academy_adm_questoes") return enviar([]);
+          estado.escritasAdm.push({ fn, ...corpo });
+          if (fn === "academy_adm_mover_aula") {
+            const m = estado.adm.modulos.find((x) => x.aulas.some((a) => a.id === corpo.p_id));
+            const i = m.aulas.findIndex((a) => a.id === corpo.p_id);
+            const j = i + corpo.p_direcao;
+            if (j < 0 || j >= m.aulas.length) return enviar({ message: "limite" }, 400);
+            [m.aulas[i], m.aulas[j]] = [m.aulas[j], m.aulas[i]];
+            renumerar();
+            return enviar(cursoAdm());
+          }
+          const d = corpo.p_dados ?? {};
+          if (d.publicado && !d.video_ref) return enviar({ message: "aula_sem_video" }, 400);
+          const destino = estado.adm.modulos.find((m) => m.id === d.modulo_id);
+          let aula;
+          if (!corpo.p_id) {
+            aula = { id: `nova${estado.escritasAdm.length}`, modulo_id: destino.id, alunos_com_progresso: 0, atualizado_em: "2026-11-19T10:00:00Z" };
+            destino.aulas.push(aula);
+          } else {
+            aula = estado.adm.modulos.flatMap((m) => m.aulas).find((a) => a.id === corpo.p_id);
+          }
+          Object.assign(aula, { titulo: d.titulo, resumo: d.resumo, duracao_seg: d.duracao_seg, video_provedor: d.video_provedor, video_ref: d.video_ref, publicado: Boolean(d.publicado) });
+          renumerar();
+          return enviar(aula);
+        }
         case "/rest/v1/cursos":
           return enviar(CURSO);
         case "/rest/v1/matriculas":

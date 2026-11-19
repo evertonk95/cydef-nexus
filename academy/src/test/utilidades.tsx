@@ -72,7 +72,18 @@ export const cursoDetalheTeste = {
 
 /** Cliente do Supabase falso: rpc e from respondem com o que o teste definir. */
 export function sbFalso(
-  opts: { painel?: Painel | null; boletim?: unknown[]; rpcErro?: string; cursos?: Record<string, unknown>; progresso?: unknown[] } = {},
+  opts: {
+    painel?: Painel | null;
+    boletim?: unknown[];
+    rpcErro?: string;
+    cursos?: Record<string, unknown>;
+    progresso?: unknown[];
+    /** Respostas por nome de função; uma função recebe os argumentos da chamada. */
+    rpcs?: Record<
+      string,
+      ((args: Record<string, unknown>) => { data?: unknown; error?: { message: string } }) | object | string | number | boolean | null
+    >;
+  } = {},
 ): SupabaseClient {
   const cadeia = (tabela: string) => {
     let slug = "";
@@ -92,8 +103,17 @@ export function sbFalso(
     return c;
   };
   return {
-    rpc: (nome: string) => {
+    rpc: (nome: string, args: Record<string, unknown> = {}) => {
+      if (opts.rpcs && nome in opts.rpcs) {
+        const r = opts.rpcs[nome];
+        if (typeof r === "function") {
+          const { data = null, error = null } = r(args);
+          return Promise.resolve({ data, error });
+        }
+        return Promise.resolve({ data: r, error: null });
+      }
       if (opts.rpcErro) return Promise.resolve({ data: null, error: { message: opts.rpcErro } });
+      if (nome === "academy_adm_eu") return Promise.resolve({ data: null, error: null });
       if (nome === "academy_meu_painel") return Promise.resolve({ data: opts.painel ?? null, error: null });
       return Promise.resolve({ data: { nome: "Ana" }, error: null });
     },
