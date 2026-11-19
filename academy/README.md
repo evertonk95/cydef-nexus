@@ -177,6 +177,7 @@ O build do e2e usa o `postcss.config.js` da raiz do repositório: rode `npm ci` 
 - Variáveis de ambiente (todas públicas, configuradas no painel do Pages, Production e Preview): `NODE_VERSION=22`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_ACESSO_API_URL`, `VITE_TURNSTILE_SITE_KEY`. O repositório não versiona arquivos `.env.*` (regra S-07).
 - Domínio personalizado: `academy.cydef.com.br`.
 - `public/_headers` aplica CSP, HSTS, bloqueio de iframe e `noindex`. `public/_redirects` faz o roteamento da SPA.
+- Cloudflare Web Analytics desligado no portal; medição, se houver, só pela telemetria própria com consentimento.
 
 ## Regras de interface
 
