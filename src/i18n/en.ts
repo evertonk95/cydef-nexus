@@ -273,7 +273,7 @@ export const en = {
     ctaTitle: "Start your journey today",
     ctaBody: "Choose the free entry course and take the next step in your cybersecurity career.",
     courses: {
-      fundamentals: "Advanced Cybersecurity",
+      fundamentals: "Cybersecurity Fundamentals",
       soc: "SOC Analyst: Complete Training",
       blue: "Blue Team Advanced",
       sc900: "SC-900 Prep",
@@ -282,7 +282,7 @@ export const en = {
       incident: "Incident Investigation (MITRE ATT&CK)",
     },
     descs: {
-      fundamentals: "Networks and protocols, cryptography, threats and vulnerabilities, identity management and protection practices.",
+      fundamentals: "Security principles, networks and protocols, applied cryptography, threats and vulnerabilities, and good practices.",
       soc: "Complete training for SOC N1 and N2 analysts: detection, analysis and incident response.",
       blue: "Advanced defense techniques, threat hunting, forensic analysis and security controls.",
       sc900: "Full preparation for the Microsoft Security, Compliance, and Identity Fundamentals exam.",

@@ -27,7 +27,7 @@ export async function loadLegacyRoutes() {
     "routes.cjs",
   );
   writeFileSync(tmp, res.outputFiles[0].text, "utf8");
-  const { legacyPageSlugs, pageSlugs, withTrailingSlash } = await import(
+  const { legacyPageSlugs, legacyCoursePaths, contentAreaSlugs, pageSlugs, withTrailingSlash } = await import(
     pathToFileURL(tmp).href
   );
   const out = [];
@@ -36,6 +36,15 @@ export async function loadLegacyRoutes() {
       out.push({
         from: withTrailingSlash(`/${lang}/${slug}`),
         to: withTrailingSlash(`/${lang}/${pageSlugs[key][lang]}`),
+      });
+    }
+  }
+  // Páginas de curso removidas (legacyCoursePaths), nos três idiomas.
+  for (const lang of Object.keys(legacyPageSlugs)) {
+    for (const [id, destino] of Object.entries(legacyCoursePaths)) {
+      out.push({
+        from: withTrailingSlash(`/${lang}/${contentAreaSlugs.courses[lang]}/${id}`),
+        to: withTrailingSlash(`/${lang}${destino}`),
       });
     }
   }
