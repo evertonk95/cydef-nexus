@@ -14,6 +14,9 @@ const Painel = lazy(() => import("@/pages/Painel"));
 const MeusCursos = lazy(() => import("@/pages/MeusCursos"));
 const Curso = lazy(() => import("@/pages/Curso"));
 const Aula = lazy(() => import("@/pages/Aula"));
+const QuestoesModulo = lazy(() => import("@/pages/QuestoesModulo"));
+const Avaliacao = lazy(() => import("@/pages/Avaliacao"));
+const Certificado = lazy(() => import("@/pages/Certificado"));
 const Entrar = lazy(() => import("@/pages/Entrar"));
 const Retorno = lazy(() => import("@/pages/Retorno"));
 
@@ -34,6 +37,9 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                       <Route path="cursos" element={<MeusCursos />} />
                       <Route path="cursos/:slug" element={<Curso />} />
                       <Route path="cursos/:slug/aulas/:numero" element={<Aula />} />
+                      <Route path="cursos/:slug/modulos/:ordem/questoes" element={<QuestoesModulo />} />
+                      <Route path="cursos/:slug/avaliacao" element={<Avaliacao />} />
+                      <Route path="cursos/:slug/certificado" element={<Certificado />} />
                       <Route path="*" element={<NaoEncontrado />} />
                     </Route>
                   </Route>

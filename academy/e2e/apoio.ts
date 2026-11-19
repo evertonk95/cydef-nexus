@@ -9,10 +9,18 @@ export interface EstadoFalso {
   acessosRegistrados: number;
   gravacoes: { p_aula_id: string; p_posicao: number; p_concluida: boolean }[];
   pedidosVideo: string[];
+  respostasModulo: { questao: string; alternativa: string }[][];
+  provas: { nota: number; aprovado: boolean }[];
+  certificado: { codigo: string; nome: string } | null;
 }
 
 export async function resetar(request: APIRequestContext) {
   await request.post(`${API}/__reset`);
+}
+
+/** Atalho para os testes da avaliação final: aulas concluídas e módulo aprovado. */
+export async function cenario(request: APIRequestContext, c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean }) {
+  await request.post(`${API}/__cenario`, { data: c });
 }
 
 export async function estado(request: APIRequestContext): Promise<EstadoFalso> {

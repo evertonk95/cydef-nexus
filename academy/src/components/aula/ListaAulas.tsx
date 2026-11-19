@@ -1,14 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, ChevronDown, Play } from "lucide-react";
+import { Check, ChevronDown, Lock, Play } from "lucide-react";
 import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
 import { duracao } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { CursoDetalhe } from "@/lib/cursos";
+import { moduloPendente, type Situacao } from "@/lib/avaliacao";
+import { AvisoBloqueio, LinhaQuestoes } from "@/components/avaliacao/Marcos";
 
 /** Módulos e aulas do curso, com a aula atual destacada. */
-export function ListaAulas({ curso, atual, moduloAtual }: { curso: CursoDetalhe; atual: string; moduloAtual: string }) {
+export function ListaAulas({
+  curso,
+  atual,
+  moduloAtual,
+  situacao,
+}: {
+  curso: CursoDetalhe;
+  atual: string;
+  moduloAtual: string;
+  situacao?: Situacao;
+}) {
+  const pendente = situacao ? moduloPendente(situacao) : null;
   const [abertos, setAbertos] = useState<Record<string, boolean>>({});
   const aberto = (id: string) => abertos[id] ?? id === moduloAtual;
 
@@ -19,6 +32,8 @@ export function ListaAulas({ curso, atual, moduloAtual }: { curso: CursoDetalhe;
           const estaAberto = aberto(m.id);
           const feitas = m.aulas.filter((a) => a.concluida).length;
           const completo = m.aulas.length > 0 && feitas === m.aulas.length;
+          const ms = situacao?.modulos.find((x) => x.id === m.id);
+          const bloqueado = ms ? !ms.liberado : false;
           return (
             <li key={m.id} className={cn("overflow-hidden rounded-xl border bg-[rgba(9,9,10,0.7)]", m.id === moduloAtual ? "border-orange/30" : "border-line")}>
               <h3 className="m-0">
@@ -29,7 +44,11 @@ export function ListaAulas({ curso, atual, moduloAtual }: { curso: CursoDetalhe;
                   className={cn("flex w-full items-center gap-2.5 px-3.5 py-3 text-left text-[14.5px] font-semibold transition-colors duration-150", estaAberto && "bg-orange/6 text-orange-hi")}
                 >
                   <ChevronDown className={cn("size-4 flex-none text-muted transition-transform duration-200", estaAberto && "rotate-180 text-orange")} aria-hidden="true" />
-                  <span className="flex-1">{rotuloModulo(m.ordem, m.titulo)}</span>
+                  <span className="flex-1">
+                    {rotuloModulo(m.ordem, m.titulo)}
+                    {bloqueado && <span className="sr-only">, bloqueado</span>}
+                  </span>
+                  {bloqueado && <Lock className="size-3.5 flex-none text-dim" aria-hidden="true" />}
                   <span className={cn("inline-flex items-center gap-1 font-mono text-xs", completo ? "text-ok" : "text-muted")}>
                     {feitas}/{m.aulas.length}
                     {completo && <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />}
@@ -44,6 +63,7 @@ export function ListaAulas({ curso, atual, moduloAtual }: { curso: CursoDetalhe;
                     exit={{ opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
                     className="m-0 list-none p-0"
                   >
+                    {bloqueado && <AvisoBloqueio pendente={pendente} />}
                     {m.aulas.map((a) => {
                       const eAtual = a.id === atual;
                       return (
@@ -79,6 +99,7 @@ export function ListaAulas({ curso, atual, moduloAtual }: { curso: CursoDetalhe;
                         </li>
                       );
                     })}
+                    {ms && <LinhaQuestoes slug={curso.slug} modulo={ms} compacta />}
                   </motion.ul>
                 )}
               </AnimatePresence>

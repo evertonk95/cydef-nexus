@@ -2,8 +2,9 @@ import { useCallback } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check, CircleCheck, Layers } from "lucide-react";
-import { useCurso } from "@/lib/consultas";
+import { ArrowLeft, ArrowRight, Check, CircleCheck, ClipboardCheck, Layers, ListChecks, Lock } from "lucide-react";
+import { useCurso, useSituacao } from "@/lib/consultas";
+import { caminhoAvaliacao, caminhoQuestoes, moduloPendente, mostraConclusao } from "@/lib/avaliacao";
 import { usePortal } from "@/lib/portal";
 import { caminhoAula, localizarAula, numeroAula, registrarProgresso, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
 import { percentual } from "@/lib/formato";
@@ -29,6 +30,8 @@ export default function Aula() {
   const reduzir = useReducedMotion();
   const avisar = useAvisos();
   const curso = useCurso(slug);
+  // Complementar: se falhar, a sala de aula segue como antes.
+  const situacao = useSituacao(slug, Boolean(curso.data?.matriculado));
   const chave = ["curso", slug, sessao?.user.id];
 
   const progresso = useMutation({
@@ -95,6 +98,15 @@ export default function Aula() {
   const pct = percentual(feitas, aulas.length);
   const marcando = progresso.isPending && progresso.variables?.concluida === true;
 
+  // Questões do módulo no caminho: a próxima aula de outro módulo só abre depois delas.
+  const sit = situacao.data;
+  const msAtual = sit?.modulos.find((m) => m.id === modulo.id);
+  const bloqueada = msAtual ? !msAtual.liberado : false;
+  const pendente = sit ? moduloPendente(sit) : null;
+  const proximaEmOutroModulo = proxima ? !modulo.aulas.some((a) => a.id === proxima.id) : false;
+  const questoesAntes = msAtual && msAtual.tem_questoes && !msAtual.aprovado && !bloqueada && (!proxima || proximaEmOutroModulo) ? msAtual : null;
+  const fimDoCurso = !proxima && !questoesAntes && mostraConclusao(sit);
+
   const concluir = () => {
     mutate(
       { aulaId: aula.id, posicao: aula.duracao_seg, concluida: true },
@@ -138,16 +150,32 @@ export default function Aula() {
                     <ArrowLeft className="size-4" aria-hidden="true" /> Aula anterior
                   </Link>
                 ) : null}
-                {proxima ? (
+                {questoesAntes ? (
+                  <Link to={caminhoQuestoes(c.slug, questoesAntes.ordem)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
+                    <ListChecks className="size-4" aria-hidden="true" /> Questões do módulo
+                  </Link>
+                ) : proxima ? (
                   <Link to={caminhoAula(c.slug, proxima.numero)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
                     Próxima aula <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                ) : fimDoCurso ? (
+                  <Link to={caminhoAvaliacao(c.slug)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
+                    <ClipboardCheck className="size-4" aria-hidden="true" /> Avaliação final
                   </Link>
                 ) : null}
               </div>
             </div>
 
             <div className="mt-5" aria-live="polite">
-              {aula.concluida ? (
+              {bloqueada ? (
+                <Link
+                  to={pendente ? caminhoQuestoes(c.slug, pendente.ordem) : `/cursos/${c.slug}`}
+                  className={cn(botaoNav, "border border-line-hi bg-transparent hover:border-orange hover:bg-orange/5")}
+                >
+                  <Lock className="size-4" aria-hidden="true" />
+                  {pendente ? `Ir para as questões do ${rotuloModuloCurto(pendente.ordem, pendente.titulo)}` : "Voltar ao curso"}
+                </Link>
+              ) : aula.concluida ? (
                 <p className="m-0 inline-flex items-center gap-2 rounded-xl border border-ok/30 bg-ok/10 px-4 py-2.5 text-[15px] font-semibold text-ok">
                   <CircleCheck className="size-[18px]" aria-hidden="true" /> Aula concluída
                 </p>
@@ -182,8 +210,8 @@ export default function Aula() {
             </div>
             <Barra valor={pct} rotulo={`Progresso em ${c.titulo}`} />
           </Cartao>
-          <ListaAulas curso={c} atual={aula.id} moduloAtual={modulo.id} />
-          {proxima && (
+          <ListaAulas curso={c} atual={aula.id} moduloAtual={modulo.id} situacao={sit} />
+          {proxima && !questoesAntes && (
             <Link
               to={caminhoAula(c.slug, proxima.numero)}
               className="group flex items-center gap-3 rounded-2xl border border-line bg-[rgba(9,9,10,0.7)] px-4 py-3.5 text-sm transition-colors duration-150 hover:border-orange/40"

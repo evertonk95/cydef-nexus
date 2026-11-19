@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, ChevronDown, Clock, Layers, Play, PlayCircle } from "lucide-react";
-import { useCurso } from "@/lib/consultas";
+import { Check, ChevronDown, Clock, Layers, Lock, Play, PlayCircle } from "lucide-react";
+import { useCurso, useSituacao } from "@/lib/consultas";
+import { moduloPendente } from "@/lib/avaliacao";
+import { AvisoBloqueio, CartaoConclusao, LinhaQuestoes } from "@/components/avaliacao/Marcos";
 import { NIVEL } from "@/lib/cursos";
 import { aulaParaContinuar, caminhoAula, rotuloModulo } from "@/lib/aula";
 import { duracao, percentual } from "@/lib/formato";
@@ -16,6 +18,9 @@ export default function Curso() {
   const { slug = "" } = useParams();
   const curso = useCurso(slug);
   const [abertos, setAbertos] = useState<Record<string, boolean>>({});
+  // Complementar: se falhar, a página do curso segue como antes.
+  const situacao = useSituacao(slug, Boolean(curso.data?.matriculado));
+  const sit = situacao.data;
 
   if (curso.isError) return <FalhaCarregamento tentar={() => void curso.refetch()} />;
   if (curso.isSuccess && !curso.data) return <NaoEncontrado />;
@@ -36,6 +41,7 @@ export default function Curso() {
   const seguir = aulaParaContinuar(c);
   const primeiroAberto = c.modulos.find((m) => m.aulas.some((a) => !a.concluida))?.id ?? c.modulos[0]?.id;
   const estaAberto = (id: string) => abertos[id] ?? id === primeiroAberto;
+  const pendente = sit ? moduloPendente(sit) : null;
 
   return (
     <>
@@ -57,6 +63,8 @@ export default function Curso() {
             {c.modulos.map((m) => {
               const aberto = estaAberto(m.id);
               const ok = m.aulas.filter((a) => a.concluida).length;
+              const ms = sit?.modulos.find((x) => x.id === m.id);
+              const bloqueado = ms ? !ms.liberado : false;
               return (
                 <li key={m.id} className="overflow-hidden rounded-xl border border-line bg-[rgba(9,9,10,0.7)]">
                   <h2 className="m-0">
@@ -68,6 +76,12 @@ export default function Curso() {
                     >
                       <ChevronDown className={cn("size-4 flex-none text-muted transition-transform duration-200", aberto && "rotate-180 text-orange")} aria-hidden="true" />
                       {rotuloModulo(m.ordem, m.titulo)}
+                      {bloqueado && (
+                        <>
+                          <Lock className="size-3.5 flex-none text-dim" aria-hidden="true" />
+                          <span className="sr-only">, bloqueado</span>
+                        </>
+                      )}
                       <span className={cn("ml-auto font-mono text-[12.5px]", ok === m.aulas.length && m.aulas.length > 0 ? "text-ok" : "text-muted")}>
                         {ok}/{m.aulas.length}
                       </span>
@@ -81,6 +95,7 @@ export default function Curso() {
                         exit={{ opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
                         className="m-0 list-none p-0"
                       >
+                        {bloqueado && <AvisoBloqueio pendente={pendente} />}
                         {m.aulas.map((a) => (
                           <li key={a.id} className="border-t border-[#1a1a1d]">
                             <Link to={caminhoAula(c.slug, a.numero)} className="flex items-center gap-3 px-4 py-3 text-sm transition-colors duration-150 hover:bg-white/[0.03]">
@@ -96,6 +111,7 @@ export default function Curso() {
                             </Link>
                           </li>
                         ))}
+                        {ms && <LinhaQuestoes slug={c.slug} modulo={ms} />}
                       </motion.ul>
                     )}
                   </AnimatePresence>
@@ -132,6 +148,7 @@ export default function Curso() {
               <li className="flex items-center gap-2.5"><PlayCircle className="size-4 text-orange" aria-hidden="true" /> {aulas.length} aulas em {c.modulos.length} módulos</li>
             </ul>
           </Cartao>
+          {sit && <CartaoConclusao slug={c.slug} s={sit} />}
         </aside>
       </div>
     </>
