@@ -1,9 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { BookOpen, LayoutGrid, LogOut, PlayCircle, Search } from "lucide-react";
+import { useQueries } from "@tanstack/react-query";
+import { BookOpen, Layers, LayoutGrid, LogOut, PlayCircle, Search } from "lucide-react";
 import { usePainel } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
+import { buscarCurso, type CursoDetalhe } from "@/lib/cursos";
+import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
+import { fracao, normalizar } from "@/lib/formato";
 
 interface Item {
   id: string;
@@ -12,6 +16,13 @@ interface Item {
   detalhe?: string;
   icone: typeof Search;
   acao: () => void;
+  /** Só aparece quando há texto na busca. */
+  soBusca?: boolean;
+}
+
+/** Fora do componente para manter a mesma referência entre renderizações. */
+function soCursos(r: { data?: CursoDetalhe | null }[]): CursoDetalhe[] {
+  return r.map((q) => q.data).filter((c): c is CursoDetalhe => Boolean(c));
 }
 
 export function PaletaComandos({ aberta, fechar }: { aberta: boolean; fechar: () => void }) {
@@ -20,8 +31,18 @@ export function PaletaComandos({ aberta, fechar }: { aberta: boolean; fechar: ()
 
 function Conteudo({ fechar }: { fechar: () => void }) {
   const navegar = useNavigate();
-  const { sair } = usePortal();
+  const { sb, sessao, sair } = usePortal();
   const painel = usePainel();
+  // Módulos e aulas entram na busca. Mesma chave de useCurso, então reaproveita
+  // o cache de quem já abriu o curso.
+  const detalhes = useQueries({
+    queries: (painel.data?.cursos ?? []).map((c) => ({
+      queryKey: ["curso", c.slug, sessao?.user.id],
+      queryFn: () => buscarCurso(sb, c.slug, sessao!.user.id),
+      enabled: Boolean(sessao),
+    })),
+    combine: soCursos,
+  });
   const [busca, setBusca] = useState("");
   const [sel, setSel] = useState(0);
   const listaId = useId();
@@ -37,17 +58,29 @@ function Conteudo({ fechar }: { fechar: () => void }) {
       l.push({ id: "continuar", grupo: "Continuar", titulo: `Aula ${String(c.aula_numero).padStart(2, "0")}: ${c.aula_titulo}`, detalhe: c.curso_titulo, icone: PlayCircle, acao: ir(`/cursos/${c.curso_slug}/aulas/${c.aula_numero}`) });
     }
     for (const curso of painel.data?.cursos ?? []) {
-      l.push({ id: `curso-${curso.slug}`, grupo: "Cursos", titulo: curso.titulo, detalhe: `${curso.concluidas} de ${curso.total} aulas`, icone: BookOpen, acao: ir(`/cursos/${curso.slug}`) });
+      l.push({ id: `curso-${curso.slug}`, grupo: "Cursos", titulo: curso.titulo, detalhe: fracao(curso.concluidas, curso.total, "aula", "aulas"), icone: BookOpen, acao: ir(`/cursos/${curso.slug}`) });
+    }
+    for (const curso of detalhes) {
+      for (const m of curso.modulos) {
+        l.push({ id: `modulo-${m.id}`, grupo: "Módulos", titulo: rotuloModulo(m.ordem, m.titulo), detalhe: curso.titulo, icone: Layers, acao: ir(`/cursos/${curso.slug}`), soBusca: true });
+      }
+    }
+    for (const curso of detalhes) {
+      for (const a of curso.modulos.flatMap((m) => m.aulas)) {
+        l.push({ id: `aula-${a.id}`, grupo: "Aulas", titulo: `Aula ${numeroAula(a.numero)}: ${a.titulo}`, detalhe: curso.titulo, icone: PlayCircle, acao: ir(caminhoAula(curso.slug, a.numero)), soBusca: true });
+      }
     }
     l.push({ id: "painel", grupo: "Páginas", titulo: "Meu painel", icone: LayoutGrid, acao: ir("/") });
     l.push({ id: "cursos", grupo: "Páginas", titulo: "Meus cursos", icone: BookOpen, acao: ir("/cursos") });
     l.push({ id: "sair", grupo: "Conta", titulo: "Sair", icone: LogOut, acao: () => { fechar(); void sair(); } });
     return l;
-  }, [painel.data, navegar, fechar, sair]);
+  }, [painel.data, detalhes, navegar, fechar, sair]);
 
   const filtrados = useMemo(() => {
-    const q = busca.trim().toLowerCase();
-    return q ? itens.filter((i) => `${i.titulo} ${i.detalhe ?? ""}`.toLowerCase().includes(q)) : itens;
+    const q = normalizar(busca.trim());
+    // Sem texto, a lista fica curta: módulos e aulas só aparecem quando buscados.
+    if (!q) return itens.filter((i) => !i.soBusca);
+    return itens.filter((i) => normalizar(`${i.titulo} ${i.detalhe ?? ""}`).includes(q));
   }, [itens, busca]);
 
   const teclado = (e: React.KeyboardEvent) => {
@@ -91,7 +124,11 @@ function Conteudo({ fechar }: { fechar: () => void }) {
               <kbd className="rounded-md border border-line-hi bg-[#0b0b0c] px-1.5 py-0.5 font-mono text-[11px] text-muted">Esc</kbd>
             </label>
             <ul id={listaId} role="listbox" aria-label="Resultados" className="m-0 max-h-[340px] list-none overflow-auto p-2">
-              {filtrados.length === 0 && <li className="p-6 text-center text-muted">Nada encontrado.</li>}
+              {filtrados.length === 0 && (
+                <li className="p-6 text-center text-muted">
+                  Nada encontrado para "{busca.trim()}". Tente o nome de um curso, módulo ou aula.
+                </li>
+              )}
               {filtrados.map((it, i) => {
                 const cab = it.grupo !== grupo;
                 grupo = it.grupo;

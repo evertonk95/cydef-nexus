@@ -7,7 +7,7 @@ import { useCurso, useSituacao } from "@/lib/consultas";
 import { caminhoAvaliacao, caminhoQuestoes, moduloPendente, mostraConclusao } from "@/lib/avaliacao";
 import { usePortal } from "@/lib/portal";
 import { caminhoAula, localizarAula, numeroAula, registrarProgresso, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
-import { percentual } from "@/lib/formato";
+import { fracao, percentual } from "@/lib/formato";
 import type { CursoDetalhe } from "@/lib/cursos";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Cartao } from "@/components/ui/Cartao";
@@ -135,7 +135,7 @@ export default function Aula() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
           >
-            <Player key={aula.id} aula={aula} rotulo={rotuloModuloCurto(modulo.ordem, modulo.titulo)} salvar={salvar} />
+            <Player key={aula.id} aula={aula} salvar={salvar} />
 
             <div className="mt-6 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <header className="min-w-0">
@@ -176,7 +176,7 @@ export default function Aula() {
                   {pendente ? `Ir para as questões do ${rotuloModuloCurto(pendente.ordem, pendente.titulo)}` : "Voltar ao curso"}
                 </Link>
               ) : aula.concluida ? (
-                <p className="m-0 inline-flex items-center gap-2 rounded-xl border border-ok/30 bg-ok/10 px-4 py-2.5 text-[15px] font-semibold text-ok">
+                <p className="m-0 inline-flex items-center gap-2 text-[15px] font-medium text-ok">
                   <CircleCheck className="size-[18px]" aria-hidden="true" /> Aula concluída
                 </p>
               ) : (
@@ -204,7 +204,7 @@ export default function Aula() {
               <div className="min-w-0">
                 <p className="m-0 truncate font-display text-lg font-semibold">{c.titulo}</p>
                 <p className="m-0 font-mono text-[12.5px] text-muted">
-                  {feitas} de {aulas.length} aulas · {pct}%
+                  {fracao(feitas, aulas.length, "aula", "aulas")} · {pct}%
                 </p>
               </div>
             </div>

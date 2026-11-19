@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ArrowRight, BookOpen, CheckCircle2 } from "lucide-react";
 import { usePainel } from "@/lib/consultas";
-import { percentual } from "@/lib/formato";
+import { fracao, percentual } from "@/lib/formato";
 import { Cartao } from "@/components/ui/Cartao";
 import { Barra } from "@/components/ui/Barra";
 import { Esqueleto } from "@/components/ui/Esqueleto";
@@ -58,7 +58,7 @@ export default function MeusCursos() {
                   </div>
                   <h2 className="m-0 mb-2 font-display text-xl font-semibold">{c.titulo}</h2>
                   <p className="m-0 mb-5 font-mono text-sm text-muted">
-                    {c.concluidas} de {c.total} aulas
+                    {fracao(c.concluidas, c.total, "aula", "aulas")}
                   </p>
                   <Barra valor={pct} rotulo={`Progresso em ${c.titulo}`} cor={completo ? "verde" : "laranja"} className="mt-auto mb-5" atraso={0.15 + i * 0.06} />
                   <Link

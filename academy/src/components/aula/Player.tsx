@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { AlertTriangle, Check, Clock, Loader2, Play, RotateCcw } from "lucide-react";
+import { AlertTriangle, Clock, Loader2, Play, RotateCcw } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { buscarVideo, ErroAula, numeroAula } from "@/lib/aula";
 import { ESTADO, ouvirPlayer, urlEmbed, type LeituraPlayer } from "@/lib/youtube";
@@ -24,11 +24,9 @@ const MENSAGEM: Record<string, string> = {
 
 export function Player({
   aula,
-  rotulo,
   salvar,
 }: {
   aula: AulaLista;
-  rotulo: string;
   salvar: (posicao: number, concluida: boolean) => void;
 }) {
   const { sb, sessao } = usePortal();
@@ -132,22 +130,11 @@ export function Player({
             />
           </svg>
           <div className="relative flex h-full flex-col p-5 sm:p-8 lg:p-11">
-            <p className="m-0 flex items-center gap-3 font-mono text-[11px] tracking-[0.18em] text-muted uppercase sm:text-xs">
-              <span aria-hidden="true" className="h-px w-7 bg-orange" />
-              Aula {numeroAula(aula.numero)} · {rotulo}
-            </p>
-            <p className="mt-3 mb-0 hidden max-w-[22ch] font-display sm:block text-[clamp(22px,3.2vw,40px)] leading-[1.08] font-bold tracking-tight text-balance">
-              {aula.titulo}
-            </p>
             <div className="mt-auto flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-black/40 px-2.5 py-1 font-mono text-xs text-muted">
                 <Clock className="size-3.5" aria-hidden="true" /> {duracao(aula.duracao_seg)}
               </span>
-              {aula.concluida ? (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-ok/30 bg-ok/10 px-2.5 py-1 font-mono text-xs text-ok">
-                  <Check className="size-3.5" strokeWidth={3} aria-hidden="true" /> Concluída
-                </span>
-              ) : inicio > 0 ? (
+              {inicio > 0 ? (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-orange/30 bg-orange/10 px-2.5 py-1 font-mono text-xs text-orange-hi">
                   Continuar de {relogio(inicio)}
                 </span>

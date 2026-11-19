@@ -1,6 +1,6 @@
 import { Check, Layers } from "lucide-react";
 import { Cartao, CabecalhoCartao } from "@/components/ui/Cartao";
-import { percentual } from "@/lib/formato";
+import { contagem, percentual } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { FormacaoResumo } from "@/lib/painel";
 
@@ -47,7 +47,7 @@ export function CartaoFormacao({ formacao, indice }: { formacao: FormacaoResumo;
       <div className="flex items-center gap-3 rounded-[10px] border border-line bg-[#09090a] px-3.5 py-3 font-mono text-sm text-muted">
         <span aria-hidden="true">&gt;_</span>
         <span>
-          <b className="font-medium text-orange-hi">{formacao.aulas_concluidas}</b> de {formacao.aulas_total} aulas concluídas
+          <b className="font-medium text-orange-hi">{formacao.aulas_concluidas}</b> de {contagem(formacao.aulas_total, "aula concluída", "aulas concluídas")}
         </span>
         <span aria-hidden="true" className="h-4 w-2 bg-orange animate-[piscar_1s_steps(1)_infinite]" />
       </div>
