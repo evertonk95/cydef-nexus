@@ -39,13 +39,18 @@ alter default privileges for role postgres in schema public
 export interface OpcoesBanco {
   /** Recria os default privileges do Supabase antes das migrações. */
   padraoSupabase?: boolean;
+  /** Para antes da migração com este prefixo (ex.: "0014"), para simular um banco antigo. */
+  ate?: string;
 }
 
 export async function novoBanco(opcoes: OpcoesBanco = {}): Promise<PGlite> {
   const db = new PGlite({ extensions: { pgcrypto } });
   await db.exec(SUPABASE_MINIMO);
   if (opcoes.padraoSupabase) await db.exec(PADRAO_SUPABASE);
-  const arquivos = readdirSync(PASTA_MIGRACOES).filter((f) => f.endsWith(".sql")).sort();
+  const arquivos = readdirSync(PASTA_MIGRACOES)
+    .filter((f) => f.endsWith(".sql"))
+    .filter((f) => !opcoes.ate || f < opcoes.ate)
+    .sort();
   for (const f of arquivos) {
     try {
       await db.exec(readFileSync(path.join(PASTA_MIGRACOES, f), "utf8"));

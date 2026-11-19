@@ -31,7 +31,7 @@ describe("migrações", () => {
     const cursos = await db.query<{ slug: string; publicado: boolean }>(`select slug, publicado from public.cursos order by ordem`);
     expect(cursos.rows.map((c) => c.slug)).toEqual(["cybersecurity-fundamentals", "fundamentos-para-soc"]);
     expect(cursos.rows.every((c) => !c.publicado)).toBe(true);
-    expect((await aulasDe("cybersecurity-fundamentals")).length).toBe(17);
+    expect((await aulasDe("cybersecurity-fundamentals")).length).toBe(18);
     expect((await aulasDe("fundamentos-para-soc")).length).toBe(12);
   });
 
@@ -52,7 +52,7 @@ describe("catálogo e leitura pública", () => {
   it("depois de publicado, anon lê o catálogo mas não a referência do vídeo", async () => {
     await publicarCatalogo(db);
     expect((await como(db, "anon", `select slug from public.cursos`)).length).toBe(2);
-    expect((await como(db, "anon", `select id, titulo from public.aulas`)).length).toBe(29);
+    expect((await como(db, "anon", `select id, titulo from public.aulas`)).length).toBe(30);
     expect(await erroDe(como(db, "anon", `select video_ref from public.aulas`))).toMatch(/permission denied/);
     expect(await erroDe(como(db, "authenticated", `select video_ref from public.aulas`, [], uuid()))).toMatch(/permission denied/);
   });
@@ -194,7 +194,7 @@ describe("painel do aluno", () => {
     expect(p.nome).toBe("Ana Teste");
     expect(p.continuar?.curso_slug).toBe("cybersecurity-fundamentals");
     expect(p.continuar?.aula_numero).toBe(1);
-    expect(p.formacoes[0]?.aulas_total).toBe(29);
+    expect(p.formacoes[0]?.aulas_total).toBe(30);
     expect(p.dias_estudo).toEqual([]);
 
     const aulas = await aulasDe("fundamentos-para-soc");
@@ -258,9 +258,10 @@ describe("sala de aula (0011)", () => {
          join public.modulos m on m.id = a.modulo_id
         where m.curso_slug = 'cybersecurity-fundamentals' order by m.ordem, a.ordem`,
     );
-    expect(aulas.rows.map((a) => a.numero)).toEqual(Array.from({ length: 17 }, (_, i) => i + 1));
+    expect(aulas.rows.map((a) => a.numero)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
     expect(aulas.rows[0]).toMatchObject({ numero: 1, titulo: "Boas-vindas ao curso", duracao_seg: 122, video_ref: "AKtr_lmAB6Y", publicado: false });
-    expect(aulas.rows[1]!.titulo).toBe("Confidencialidade, integridade e disponibilidade");
+    expect(aulas.rows[1]!.titulo).toBe("O que é cibersegurança, afinal?");
+    expect(aulas.rows[2]!.titulo).toBe("Confidencialidade, integridade e disponibilidade");
     expect((await aulasDe("fundamentos-para-soc")).map((a) => a.numero)).toEqual(Array.from({ length: 12 }, (_, i) => i + 1));
   });
 
@@ -268,7 +269,7 @@ describe("sala de aula (0011)", () => {
     const { readFileSync } = await import("node:fs");
     await db.exec(readFileSync(`${PASTA_MIGRACOES}/0011_academy_sala_de_aula.sql`, "utf8"));
     const aulas = await aulasDe("cybersecurity-fundamentals");
-    expect(aulas.map((a) => a.numero)).toEqual(Array.from({ length: 17 }, (_, i) => i + 1));
+    expect(aulas.map((a) => a.numero)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
   });
 
   it("o vídeo só sai para aluno matriculado, em aula e curso publicados", async () => {
@@ -287,8 +288,8 @@ describe("sala de aula (0011)", () => {
     await publicarCatalogo(db);
     const { userId } = await criarAluno(db, "g@x.com");
     await como(db, "authenticated", `select public.academy_registrar_acesso()`, [], userId);
-    const [, cia] = await aulasDe("cybersecurity-fundamentals");
-    expect(await erroDe(videoDe(cia!.id, userId))).toMatch(/sem_video/);
+    const [, , , risco] = await aulasDe("cybersecurity-fundamentals");
+    expect(await erroDe(videoDe(risco!.id, userId))).toMatch(/sem_video/);
   });
 
   it("a conclusão não se desfaz quando o aluno reassiste a aula", async () => {
@@ -303,5 +304,63 @@ describe("sala de aula (0011)", () => {
     const [p] = await como<{ posicao_seg: number; concluida_em: string | null }>(db, "authenticated", `select posicao_seg, concluida_em from public.progresso_aulas`, [], userId);
     expect(p!.posicao_seg).toBe(15);
     expect(p!.concluida_em).not.toBeNull();
+  });
+});
+
+describe("aula de abertura do módulo 1 (0014)", () => {
+  async function modulo1() {
+    const r = await db.query<{ ordem: number; numero: number; titulo: string; video_ref: string | null; publicado: boolean }>(
+      `select a.ordem, a.numero, a.titulo, a.video_ref, a.publicado from public.aulas a
+         join public.modulos m on m.id = a.modulo_id
+        where m.curso_slug = 'cybersecurity-fundamentals' and m.ordem = 1 order by a.ordem`,
+    );
+    return r.rows;
+  }
+
+  it("abre o módulo 1 com a nova aula e liga os dois vídeos sem publicar", async () => {
+    expect(await modulo1()).toEqual([
+      { ordem: 1, numero: 2, titulo: "O que é cibersegurança, afinal?", video_ref: "iKAWeoCtbmA", publicado: false },
+      { ordem: 2, numero: 3, titulo: "Confidencialidade, integridade e disponibilidade", video_ref: "J1AD8CV8AHM", publicado: false },
+      { ordem: 3, numero: 4, titulo: "Risco, ameaça, vulnerabilidade e impacto", video_ref: null, publicado: false },
+      { ordem: 4, numero: 5, titulo: "Defesa em profundidade e menor privilégio", video_ref: null, publicado: false },
+    ]);
+    const ultima = await db.query<{ numero: number; titulo: string }>(
+      `select a.numero, a.titulo from public.aulas a join public.modulos m on m.id = a.modulo_id
+        where m.curso_slug = 'cybersecurity-fundamentals' order by a.numero desc limit 1`,
+    );
+    expect(ultima.rows[0]).toEqual({ numero: 18, titulo: "Backup, atualização e resposta a incidentes pessoais" });
+  });
+
+  it("pode rodar de novo sem duplicar nem renumerar outra vez", async () => {
+    const { readFileSync } = await import("node:fs");
+    const antes = await modulo1();
+    await db.exec(readFileSync(`${PASTA_MIGRACOES}/0014_academy_aula_o_que_e_ciberseguranca.sql`, "utf8"));
+    expect(await modulo1()).toEqual(antes);
+    expect((await aulasDe("cybersecurity-fundamentals")).map((a) => a.numero)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
+  });
+
+  it("mantém o progresso do aluno na aula de CID, que só muda de número", async () => {
+    // Cenário de produção: banco até a 0013, aluno com progresso em CID, depois a 0014.
+    const { readFileSync } = await import("node:fs");
+    const antigo = await novoBanco({ ate: "0014" });
+    await publicarCatalogo(antigo);
+    const { userId } = await criarAluno(antigo, "h@x.com");
+    await como(antigo, "authenticated", `select public.academy_registrar_acesso()`, [], userId);
+    const cid = await antigo.query<{ id: string; numero: number }>(
+      `select id, numero from public.aulas where titulo = 'Confidencialidade, integridade e disponibilidade'`,
+    );
+    expect(cid.rows[0]!.numero).toBe(2);
+    await antigo.exec(`update public.aulas set video_provedor = 'youtube', video_ref = 'iKAWeoCtbmA' where id = '${cid.rows[0]!.id}'`);
+    await como(antigo, "authenticated", `select public.academy_registrar_progresso($1, 40, false)`, [cid.rows[0]!.id], userId);
+
+    await antigo.exec(readFileSync(`${PASTA_MIGRACOES}/0014_academy_aula_o_que_e_ciberseguranca.sql`, "utf8"));
+
+    const depois = await antigo.query<{ id: string; numero: number; video_ref: string; publicado: boolean }>(
+      `select id, numero, video_ref, publicado from public.aulas where titulo = 'Confidencialidade, integridade e disponibilidade'`,
+    );
+    // Mesmo id, novo número, vídeo certo e a publicação que já tinha.
+    expect(depois.rows[0]).toEqual({ id: cid.rows[0]!.id, numero: 3, video_ref: "J1AD8CV8AHM", publicado: true });
+    const prog = await antigo.query<{ posicao_seg: number }>(`select posicao_seg from public.progresso_aulas where aula_id = $1`, [cid.rows[0]!.id]);
+    expect(prog.rows[0]!.posicao_seg).toBe(40);
   });
 });
