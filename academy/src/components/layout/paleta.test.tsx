@@ -47,7 +47,7 @@ describe("busca da Academy", () => {
     await screen.findByRole("option", { name: /Cybersecurity Fundamentals/ });
 
     await userEvent.type(campo, "rede");
-    expect(await screen.findByRole("option", { name: /Módulo 2 · Redes e protocolos essenciais/ })).toBeInTheDocument();
+    expect(await screen.findByRole("option", { name: /Módulo 2: Redes e protocolos essenciais/ })).toBeInTheDocument();
 
     await userEvent.clear(campo);
     await userEvent.type(campo, "introducao");

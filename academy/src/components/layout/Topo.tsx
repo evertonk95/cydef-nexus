@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LayoutGrid, LogOut, Search, ShieldCheck } from "lucide-react";
+import { BookOpen, ChevronDown, LogOut, Search, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -9,8 +9,8 @@ import { cn } from "@/lib/cn";
 import { urlAviso } from "@/lib/privacidade";
 
 const links = [
-  { para: "/", rotulo: "Meu painel", icone: LayoutGrid, fim: true },
-  { para: "/cursos", rotulo: "Meus cursos", icone: BookOpen, fim: false },
+  { para: "/", rotulo: "Painel", fim: true },
+  { para: "/cursos", rotulo: "Meus cursos", fim: false },
 ];
 
 export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
@@ -30,25 +30,22 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
   }, [menu]);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-[rgba(5,5,5,0.72)] backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1380px] items-center gap-4 px-4 py-3 sm:gap-7 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-line bg-bg">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-4 px-5 sm:gap-8 sm:px-8">
         <Logo />
-        <nav aria-label="Principal" className="hidden flex-1 gap-1 md:flex">
-          {links.map(({ para, rotulo, icone: Icone, fim }) => (
+        <nav aria-label="Principal" className="hidden h-full flex-1 gap-6 md:flex">
+          {links.map(({ para, rotulo, fim }) => (
             <NavLink
               key={para}
               to={para}
               end={fim}
               className={({ isActive }) =>
                 cn(
-                  "relative flex items-center gap-2 whitespace-nowrap rounded-[10px] px-3 py-2.5 text-[14.5px] font-medium transition-colors duration-150",
-                  isActive
-                    ? "text-orange after:absolute after:inset-x-3 after:-bottom-[13px] after:h-0.5 after:rounded after:bg-orange after:shadow-[0_0_12px_1px_rgba(249,115,22,0.8)]"
-                    : "text-muted hover:bg-white/5 hover:text-ink",
+                  "-mb-px flex items-center whitespace-nowrap border-b-2 text-[15px] font-medium transition-colors duration-150",
+                  isActive ? "border-orange text-ink" : "border-transparent text-muted hover:text-ink",
                 )
               }
             >
-              <Icone className="size-[17px]" aria-hidden="true" />
               {rotulo}
             </NavLink>
           ))}
@@ -57,12 +54,12 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
           type="button"
           onClick={abrirBusca}
           aria-haspopup="dialog"
-          className="ml-auto flex items-center gap-2.5 rounded-xl border border-line bg-[rgba(20,20,22,0.7)] px-3 py-2.5 text-sm text-dim transition-[border-color,box-shadow] duration-200 hover:border-line-hi hover:shadow-[0_0_0_4px_rgba(249,115,22,0.06)] md:ml-0 lg:min-w-[280px]"
+          className="ml-auto flex h-10 items-center gap-2.5 rounded-[10px] border border-line bg-panel px-3 text-sm text-muted transition-colors duration-150 hover:border-line-hi hover:text-ink md:ml-0"
         >
           <Search className="size-4" aria-hidden="true" />
-          <span className="hidden flex-1 text-left lg:inline">Buscar cursos e aulas</span>
+          <span className="hidden flex-1 text-left lg:inline">Buscar</span>
           <span className="sr-only lg:hidden">Buscar</span>
-          <kbd className="hidden rounded-md border border-line-hi bg-[#0b0b0c] px-1.5 py-0.5 font-mono text-[11px] text-muted lg:inline">Ctrl K</kbd>
+          <kbd className="hidden rounded-md border border-line-hi px-1.5 py-px text-xs font-sans text-muted lg:inline">Ctrl K</kbd>
         </button>
         <div ref={caixa} className="relative">
           <button
@@ -73,15 +70,15 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
             aria-label="Menu da conta"
             className="flex items-center gap-1.5 rounded-full p-0.5 pr-1.5 hover:bg-white/5"
           >
-            <span className="grid size-10 place-items-center rounded-full border border-orange/45 bg-[linear-gradient(145deg,#3b1a06,#1a0c03)] text-sm font-bold text-orange-hi">
+            <span className="grid size-10 place-items-center rounded-full border border-line-hi bg-panel text-sm font-semibold text-ink">
               {iniciais(nome)}
             </span>
             <ChevronDown className={cn("size-4 text-muted transition-transform duration-200", menu && "rotate-180")} aria-hidden="true" />
           </button>
           {menu && (
-            <div role="menu" className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-line-hi bg-[rgba(14,14,16,0.98)] p-1.5 shadow-[0_24px_50px_-20px_rgba(0,0,0,0.9)]">
+            <div role="menu" className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-line-hi bg-panel p-1.5">
               <p className="m-0 truncate px-3 pt-2 pb-1 text-sm font-semibold">{painel.data?.nome ?? "Aluno"}</p>
-              <p className="m-0 truncate px-3 pb-2 font-mono text-xs text-dim">{sessao?.user.email}</p>
+              <p className="m-0 truncate px-3 pb-2 text-xs text-dim">{sessao?.user.email}</p>
               <div className="my-1 h-px bg-line" />
               <NavLink role="menuitem" to="/cursos" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <BookOpen className="size-4" aria-hidden="true" /> Meus cursos

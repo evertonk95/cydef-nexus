@@ -55,12 +55,41 @@ export function painelTeste(over: Partial<Painel> = {}): Painel {
   };
 }
 
+/** Curso detalhado de teste: módulo 2 com a aula em andamento e módulo 3 ainda sem aula. */
+export const cursoDetalheTeste = {
+  slug: "fundamentos-para-soc",
+  titulo: "Fundamentos para SOC",
+  descricao: "Como funciona um SOC.",
+  nivel: "iniciante",
+  gratuito: true,
+  ordem: 2,
+  modulos: [
+    { id: "m1", ordem: 1, titulo: "O SOC por dentro", aulas: [{ id: "a4", ordem: 1, numero: 4, titulo: "Papéis no SOC", resumo: "", duracao_seg: 900 }] },
+    { id: "m2", ordem: 2, titulo: "Sinais e dados", aulas: [{ id: "a5", ordem: 1, numero: 5, titulo: "O que é um SIEM na prática", resumo: "", duracao_seg: 1080 }] },
+    { id: "m3", ordem: 3, titulo: "Triagem de alertas", aulas: [] },
+  ],
+};
+
 /** Cliente do Supabase falso: rpc e from respondem com o que o teste definir. */
-export function sbFalso(opts: { painel?: Painel | null; boletim?: unknown[]; rpcErro?: string } = {}): SupabaseClient {
-  const consulta = {
-    select: () => consulta,
-    order: () => consulta,
-    limit: () => Promise.resolve({ data: opts.boletim ?? [], error: null }),
+export function sbFalso(
+  opts: { painel?: Painel | null; boletim?: unknown[]; rpcErro?: string; cursos?: Record<string, unknown>; progresso?: unknown[] } = {},
+): SupabaseClient {
+  const cadeia = (tabela: string) => {
+    let slug = "";
+    const c: Record<string, unknown> = {};
+    for (const m of ["select", "order", "in"]) c[m] = () => c;
+    c.eq = (coluna: string, valor: string) => {
+      if (coluna === "slug" || coluna === "curso_slug") slug = valor;
+      return c;
+    };
+    c.limit = () => Promise.resolve({ data: opts.boletim ?? [], error: null });
+    c.maybeSingle = () => {
+      if (tabela === "cursos") return Promise.resolve({ data: opts.cursos?.[slug] ?? null, error: null });
+      if (tabela === "matriculas") return Promise.resolve({ data: { curso_slug: slug }, error: null });
+      return Promise.resolve({ data: null, error: null });
+    };
+    c.then = (ok: (v: unknown) => unknown) => Promise.resolve({ data: tabela === "progresso_aulas" ? (opts.progresso ?? []) : [], error: null }).then(ok);
+    return c;
   };
   return {
     rpc: (nome: string) => {
@@ -68,7 +97,7 @@ export function sbFalso(opts: { painel?: Painel | null; boletim?: unknown[]; rpc
       if (nome === "academy_meu_painel") return Promise.resolve({ data: opts.painel ?? null, error: null });
       return Promise.resolve({ data: { nome: "Ana" }, error: null });
     },
-    from: () => consulta,
+    from: (tabela: string) => cadeia(tabela),
     auth: { signOut: () => Promise.resolve({ error: null }) },
   } as unknown as SupabaseClient;
 }

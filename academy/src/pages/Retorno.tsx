@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, LinkIcon, Loader2, ShieldAlert, UserX } from "lucide-react";
+import { LinkIcon, Loader2, ShieldAlert, UserX } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { retornoInicial } from "@/lib/retorno";
 import { marcarAcessoRegistrado } from "@/lib/sessao-acesso";
-import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { Logo } from "@/components/ui/Logo";
 
 type Estado = "confirmar" | "verificando" | "link_invalido" | "sem_cadastro" | "falha";
@@ -62,19 +61,17 @@ export default function Retorno() {
 
   return (
     <div className="relative grid min-h-dvh place-items-center px-5">
-      <FundoParticulas intensidade="discreta" />
       <motion.section
         initial={reduzir ? false : { opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
-        data-interativo="false"
-        className="painel-card relative z-10 w-full max-w-[520px] border-line-hi p-8"
+        className="painel-card w-full max-w-[520px] p-8"
         aria-live="polite"
       >
         <div className="mb-7"><Logo para="/entrar" /></div>
         {estado === "confirmar" && (
           <div>
-            <h1 className="m-0 mb-3 font-display text-2xl font-bold">Confirme a sua entrada</h1>
+            <h1 className="m-0 mb-3 font-display text-2xl font-semibold">Confirme a sua entrada</h1>
             <p className="m-0 mb-6 leading-relaxed text-muted">
               Clique para abrir o seu painel. Pedimos este clique para que nenhum verificador automático de e-mail use o seu link antes de você.
             </p>
@@ -83,21 +80,17 @@ export default function Retorno() {
               onClick={() => void confirmar()}
               disabled={trocando}
               aria-busy={trocando}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-orange px-5 py-3.5 font-semibold text-orange-ink transition-transform duration-150 ease-out hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-70"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-orange px-5 py-3.5 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi disabled:opacity-70"
             >
-              {trocando ? (
-                <Loader2 className="size-5 animate-[girar_900ms_linear_infinite]" aria-hidden="true" />
-              ) : (
-                <ArrowRight className="size-5" aria-hidden="true" />
-              )}
+              {trocando && <Loader2 className="size-5 animate-[girar_900ms_linear_infinite]" aria-hidden="true" />}
               {trocando ? "Validando o link" : "Entrar na Academy"}
             </button>
           </div>
         )}
         {estado === "verificando" && (
           <div>
-            <h1 className="m-0 mb-5 font-display text-2xl font-bold">Entrando na Academy</h1>
-            <ul className="m-0 flex list-none flex-col gap-2 rounded-xl border border-line bg-[#08080a] p-4 font-mono text-[13.5px] text-muted">
+            <h1 className="m-0 mb-5 font-display text-2xl font-semibold">Entrando na Academy</h1>
+            <ul className="m-0 flex list-none flex-col gap-2 p-0 text-[15px] text-muted">
               {LINHAS.map((l, i) => (
                 <motion.li
                   key={l}
@@ -105,7 +98,7 @@ export default function Retorno() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: reduzir ? 0 : 0.15 + i * 0.35, duration: 0.2 }}
                 >
-                  &gt; {l}
+                  {l}
                 </motion.li>
               ))}
             </ul>
@@ -114,21 +107,21 @@ export default function Retorno() {
         {estado === "link_invalido" && (
           <div role="alert">
             <LinkIcon className="mb-4 size-10 text-warn" aria-hidden="true" />
-            <h1 className="m-0 mb-3 font-display text-2xl font-bold">Este link não vale mais</h1>
+            <h1 className="m-0 mb-3 font-display text-2xl font-semibold">Este link não vale mais</h1>
             <p className="m-0 mb-6 leading-relaxed text-muted">
               Os links de acesso valem uma vez e por pouco tempo. Peça um novo com o mesmo e-mail.
             </p>
-            <Link to="/entrar" className="inline-flex rounded-xl border-[1.5px] border-orange px-5 py-3 font-semibold text-orange-hi hover:bg-orange/10">
+            <Link to="/entrar" className="inline-flex rounded-[10px] bg-orange px-5 py-3 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi">
               Pedir novo link
             </Link>
           </div>
         )}
         {estado === "sem_cadastro" && (
           <div role="alert">
-            <UserX className="mb-4 size-10 text-orange" aria-hidden="true" />
-            <h1 className="m-0 mb-3 font-display text-2xl font-bold">Cadastro não encontrado</h1>
+            <UserX className="mb-4 size-10 text-muted" aria-hidden="true" />
+            <h1 className="m-0 mb-3 font-display text-2xl font-semibold">Cadastro não encontrado</h1>
             <p className="m-0 mb-6 leading-relaxed text-muted">Este e-mail não tem inscrição ativa na CyDef Academy.</p>
-            <a href={`${config.siteUrl}/academy/gratuito`} className="inline-flex rounded-xl border-[1.5px] border-orange px-5 py-3 font-semibold text-orange-hi hover:bg-orange/10">
+            <a href={`${config.siteUrl}/academy/gratuito`} className="inline-flex rounded-[10px] bg-orange px-5 py-3 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi">
               Fazer a inscrição gratuita
             </a>
           </div>
@@ -136,9 +129,9 @@ export default function Retorno() {
         {estado === "falha" && (
           <div role="alert">
             <ShieldAlert className="mb-4 size-10 text-bad" aria-hidden="true" />
-            <h1 className="m-0 mb-3 font-display text-2xl font-bold">Não foi possível concluir o acesso</h1>
+            <h1 className="m-0 mb-3 font-display text-2xl font-semibold">Não foi possível concluir o acesso</h1>
             <p className="m-0 mb-6 leading-relaxed text-muted">A conexão com a Academy falhou. Tente abrir o painel de novo.</p>
-            <Link to="/" className="inline-flex rounded-xl border-[1.5px] border-orange px-5 py-3 font-semibold text-orange-hi hover:bg-orange/10">
+            <Link to="/" className="inline-flex rounded-[10px] bg-orange px-5 py-3 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi">
               Abrir o painel
             </Link>
           </div>

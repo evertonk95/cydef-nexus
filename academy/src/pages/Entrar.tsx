@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Navigate } from "react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowRight, CheckCircle2, Lock, Mail, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { emailValido, pedirLinkDeAcesso } from "@/lib/acesso";
 import { Botao } from "@/components/ui/Botao";
 import { Logo } from "@/components/ui/Logo";
 import { Turnstile } from "@/components/Turnstile";
-import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { urlAviso } from "@/lib/privacidade";
 
 /**
@@ -85,23 +84,19 @@ export default function Entrar() {
 
   return (
     <div className="relative min-h-dvh">
-      <FundoParticulas />
       <div className="relative z-10 mx-auto grid min-h-dvh max-w-[1240px] items-center gap-10 px-5 py-10 lg:grid-cols-[1.1fr_480px] lg:px-8">
         <section className="hidden lg:block" aria-hidden="true">
-          <p className="rotulo-mono mb-4 flex items-center gap-2.5 before:size-3.5 before:border-t-2 before:border-l-2 before:border-orange before:content-['']">
-            Portal do aluno
-          </p>
-          <h2 className="m-0 mb-5 font-display text-[54px] leading-[1.05] font-bold tracking-tight">
+          <h2 className="m-0 mb-5 font-display text-[52px] leading-[1.05] font-semibold tracking-tight">
             A central de treinamento
             <br />
-            da <span className="text-orange">CyDef</span>.
+            da CyDef.
           </h2>
           <p className="m-0 max-w-[46ch] text-lg leading-relaxed text-muted">
             Aulas, questões e missões práticas de SOC num lugar só, com o seu progresso salvo a cada passo.
           </p>
           <ul className="m-0 mt-8 flex list-none flex-col gap-3 p-0 text-muted">
-            <li className="flex items-center gap-3"><ShieldCheck className="size-5 text-orange" /> Acesso sem senha, por link no seu e-mail</li>
-            <li className="flex items-center gap-3"><Lock className="size-5 text-orange" /> Cada link vale uma vez e expira em pouco tempo</li>
+            <li className="flex items-center gap-3"><ShieldCheck className="size-5 text-muted" /> Acesso sem senha, por link no seu e-mail</li>
+            <li className="flex items-center gap-3"><Lock className="size-5 text-muted" /> Cada link vale uma vez e expira em pouco tempo</li>
           </ul>
         </section>
 
@@ -110,8 +105,7 @@ export default function Entrar() {
           initial={reduzir ? false : tremer ? { x: 0 } : { opacity: 0, y: 16 }}
           animate={tremer && !reduzir ? { x: [0, -7, 6, -4, 2, 0] } : { opacity: 1, y: 0 }}
           transition={{ duration: tremer ? 0.4 : 0.24, ease: [0.2, 0.8, 0.2, 1] }}
-          className="painel-card mx-auto w-full max-w-[480px] border-line-hi bg-[rgba(14,14,16,0.82)] p-7 backdrop-blur-xl sm:p-9"
-          data-interativo="false"
+          className="painel-card mx-auto w-full max-w-[480px] p-7 sm:p-9"
           aria-labelledby="titulo-entrar"
         >
           <div className="mb-8">
@@ -126,7 +120,7 @@ export default function Entrar() {
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
               >
                 <CheckCircle2 className="mb-4 size-11 text-ok" aria-hidden="true" />
-                <h1 id="titulo-entrar" className="m-0 mb-3 font-display text-[26px] font-bold">Confira seu e-mail</h1>
+                <h1 id="titulo-entrar" className="m-0 mb-3 font-display text-[26px] font-semibold">Confira seu e-mail</h1>
                 <p className="m-0 mb-3 leading-relaxed text-[#d6d6d6]" role="status">
                   Se <b className="break-all text-ink">{enviado}</b> tem inscrição na CyDef Academy, o link de acesso chega em alguns minutos.
                 </p>
@@ -154,7 +148,7 @@ export default function Entrar() {
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.22 } }}
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
               >
-                <h1 id="titulo-entrar" className="m-0 mb-2 font-display text-[28px] font-bold">Entrar na Academy</h1>
+                <h1 id="titulo-entrar" className="m-0 mb-2 font-display text-[28px] font-semibold">Entrar na Academy</h1>
                 <p className="m-0 mb-7 leading-relaxed text-muted">Digite o e-mail da sua inscrição. Enviamos um link de acesso, sem senha.</p>
                 <label htmlFor={campoId} className="mb-2 block text-sm font-medium">E-mail</label>
                 <div className="relative mb-4">
@@ -174,18 +168,17 @@ export default function Entrar() {
                     aria-invalid={Boolean(erro)}
                     aria-describedby={erro ? erroId : undefined}
                     placeholder="nome@empresa.com.br"
-                    className="w-full rounded-xl border border-line-hi bg-[#0b0b0c] py-3.5 pr-4 pl-11 text-base text-ink transition-[border-color,box-shadow] duration-200 outline-none placeholder:text-dim focus:border-orange focus:shadow-[0_0_0_4px_rgba(249,115,22,0.14)] aria-[invalid=true]:border-bad"
+                    className="w-full rounded-[10px] border border-line-hi bg-bg py-3.5 pr-4 pl-11 text-base text-ink transition-colors duration-150 outline-none placeholder:text-dim focus:border-orange-hi aria-[invalid=true]:border-bad"
                   />
                 </div>
                 <Turnstile siteKey={config.turnstileSiteKey} reinicio={reinicio} aoToken={aoToken} />
                 {erro && <p id={erroId} role="alert" className="mt-3 mb-0 text-sm text-bad">{erro}</p>}
-                <Botao type="submit" className="mt-5 w-full py-4 text-[17px]" disabled={enviando} respirando={!enviando}>
+                <Botao type="submit" className="mt-5 w-full py-4 text-[17px]" disabled={enviando}>
                   {enviando ? "Enviando..." : "Enviar link de acesso"}
-                  {!enviando && <ArrowRight className="size-5" aria-hidden="true" />}
                 </Botao>
                 <p className="mt-6 mb-0 text-center text-sm text-muted">
                   Ainda não tem inscrição?{" "}
-                  <a href={`${config.siteUrl}/academy/gratuito`} className="font-medium text-orange-hi underline underline-offset-[3px]">
+                  <a href={`${config.siteUrl}/academy/gratuito`} className="font-medium text-ink underline underline-offset-[3px]">
                     Inscreva-se grátis
                   </a>
                 </p>

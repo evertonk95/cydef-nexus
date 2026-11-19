@@ -9,8 +9,8 @@ test.beforeEach(async ({ context, request, page }) => {
   await entrar(page);
 });
 
-test("Continuar do painel leva à próxima aula do curso", async ({ page }) => {
-  await page.getByRole("link", { name: "Continuar" }).first().click();
+test("a ação principal do painel leva à próxima aula do curso", async ({ page }) => {
+  await page.getByRole("link", { name: /^(Continuar|Começar) aula$/ }).click();
   await expect(page).toHaveURL(/\/cursos\/cybersecurity-fundamentals\/aulas\/2$/);
   await expect(page.getByRole("heading", { level: 1, name: "Confidencialidade, integridade e disponibilidade" })).toBeVisible();
 });

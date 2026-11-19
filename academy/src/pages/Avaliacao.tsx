@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Award, Check, CircleCheck, ClipboardCheck, Hourglass, ListChecks, Lock } from "lucide-react";
+import { Award, Check, CircleCheck, ClipboardCheck, Hourglass, ListChecks, Lock } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
@@ -139,8 +139,8 @@ export default function Avaliacao() {
         {trilha}
         <div className="mx-auto max-w-3xl">
           <header className="mb-6">
-            <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-orange uppercase">Avaliação final · em andamento</p>
-            <h1 className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-bold tracking-tight">{c.titulo}</h1>
+            <p className="m-0 mb-2 text-sm text-muted">Avaliação final em andamento</p>
+            <h1 className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight">{c.titulo}</h1>
             <p className="m-0 max-w-[68ch] leading-relaxed text-[#d6d6d6]">
               {total} questões, sem cronômetro. Suas respostas ficam guardadas neste navegador até você enviar. Para passar: {s.requisitos.nota_minima_final}%.
             </p>
@@ -180,7 +180,7 @@ export default function Avaliacao() {
                   initial={reduzir ? false : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: [0.2, 0.8, 0.2, 1] } }}
                   exit={{ opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
-                  className="mt-6 rounded-2xl border border-orange/45 bg-orange/[0.07] p-5"
+                  className="mt-6 rounded-2xl border border-line-hi bg-panel p-5"
                 >
                   <h2 id="h-confirmar" className="m-0 mb-1 font-display text-lg font-semibold">
                     Enviar a avaliação?
@@ -218,8 +218,8 @@ export default function Avaliacao() {
       {trilha}
       <div className="mx-auto max-w-3xl">
         <header className="mb-6">
-          <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-orange uppercase">Avaliação final</p>
-          <h1 ref={tituloRef} tabIndex={-1} className="m-0 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-bold tracking-tight outline-none">
+          <p className="m-0 mb-2 text-sm text-muted">Avaliação final</p>
+          <h1 ref={tituloRef} tabIndex={-1} className="m-0 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight outline-none">
             {c.titulo}
           </h1>
         </header>
@@ -243,16 +243,16 @@ function Resultado({ r, s, slug }: { r: ResultadoFinal; s: Situacao; slug: strin
   return (
     <section
       aria-labelledby="h-resultado"
-      className={cn("rounded-2xl border p-6", r.aprovado ? "border-ok/40 bg-ok/[0.06]" : "border-orange/40 bg-orange/[0.06]")}
+      className={cn("rounded-2xl border p-6", r.aprovado ? "border-ok/40" : "border-line-hi")}
     >
-      <p className="m-0 mb-1 font-mono text-[12px] tracking-[0.14em] text-muted uppercase">Seu resultado</p>
-      <h2 id="h-resultado" className="m-0 mb-2 font-display text-2xl font-bold">
+      <p className="m-0 mb-1 text-sm text-muted">Seu resultado</p>
+      <h2 id="h-resultado" className="m-0 mb-2 font-display text-2xl font-semibold">
         {r.aprovado ? "Você passou na avaliação final" : "Ainda não foi desta vez"}
       </h2>
       <p className="m-0 mb-5 text-[15.5px]">
-        <span className={cn("font-mono text-3xl font-semibold", r.aprovado ? "text-ok" : "text-orange-hi")}>{r.nota}%</span>{" "}
+        <span className={cn("text-3xl font-semibold", r.aprovado ? "text-ok" : "text-ink")}>{r.nota}%</span>{" "}
         <span className="text-muted">
-          · {r.acertos} de {r.total} certas · mínimo {r.nota_minima}%
+          de acerto: {r.acertos} de {r.total} certas, mínimo de {r.nota_minima}%
         </span>
       </p>
       {r.aprovado ? (
@@ -296,7 +296,7 @@ function Estado({
 
   if (f.situacao === "aprovado") {
     return (
-      <Cartao interativo={false}>
+      <Cartao>
         <CircleCheck className="mb-3 size-9 text-ok" aria-hidden="true" />
         <h2 className="m-0 mb-2 font-display text-2xl font-semibold">Você já passou na avaliação final</h2>
         <p className="m-0 mb-5 text-muted">{f.melhor_nota !== null ? `Sua nota: ${f.melhor_nota}%.` : ""}</p>
@@ -311,8 +311,8 @@ function Estado({
 
   if (f.situacao === "sem_banco" || f.situacao === "sem_requisitos") {
     return (
-      <Cartao interativo={false}>
-        <ClipboardCheck className="mb-3 size-9 text-orange" aria-hidden="true" />
+      <Cartao>
+        <ClipboardCheck className="mb-3 size-9 text-muted" aria-hidden="true" />
         <h2 className="m-0 mb-2 font-display text-2xl font-semibold">A avaliação final está sendo preparada</h2>
         <p className="m-0 text-muted">Você já cumpriu o que precisa para fazê-la. Assim que as questões estiverem prontas, ela aparece aqui.</p>
       </Cartao>
@@ -326,8 +326,8 @@ function Estado({
     const aprovados = comQuestoes.filter((m) => m.aprovado).length;
     const seguir = aulaParaContinuar(c);
     return (
-      <Cartao interativo={false}>
-        <Lock className="mb-3 size-9 text-orange" aria-hidden="true" />
+      <Cartao>
+        <Lock className="mb-3 size-9 text-muted" aria-hidden="true" />
         <h2 className="m-0 mb-2 font-display text-2xl font-semibold">Falta pouco para liberar a avaliação</h2>
         <p className="m-0 mb-5 text-muted">A avaliação final abre quando você completar:</p>
         <ul className="m-0 mb-6 flex list-none flex-col gap-3 p-0">
@@ -340,12 +340,12 @@ function Estado({
         </ul>
         <div className="flex flex-wrap gap-3">
           {!aulasOk && seguir && (
-            <Link to={caminhoAula(c.slug, seguir.numero)} className={cn(link, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15")}>
-              Continuar as aulas <ArrowRight className="size-4" aria-hidden="true" />
+            <Link to={caminhoAula(c.slug, seguir.numero)} className={cn(link, "bg-orange text-orange-ink hover:bg-orange-hi")}>
+              Continuar as aulas
             </Link>
           )}
           {pendente && (
-            <Link to={caminhoQuestoes(c.slug, pendente.ordem)} className={cn(link, "border border-line-hi hover:border-orange")}>
+            <Link to={caminhoQuestoes(c.slug, pendente.ordem)} className={cn(link, "border border-line-hi hover:border-muted")}>
               <ListChecks className="size-4" aria-hidden="true" /> Questões do {rotuloModuloCurto(pendente.ordem, pendente.titulo)}
             </Link>
           )}
@@ -356,8 +356,8 @@ function Estado({
 
   if (f.situacao === "sem_tentativas") {
     return (
-      <Cartao interativo={false}>
-        <Lock className="mb-3 size-9 text-orange" aria-hidden="true" />
+      <Cartao>
+        <Lock className="mb-3 size-9 text-muted" aria-hidden="true" />
         <h2 className="m-0 mb-2 font-display text-2xl font-semibold">Suas tentativas acabaram</h2>
         <p className="m-0 text-muted">
           Este curso permite {r.tentativas_final_max} tentativas na avaliação final. Para conversar sobre uma nova chance, escreva para academy@cydef.com.br.
@@ -368,8 +368,8 @@ function Estado({
 
   if (f.situacao === "aguarde") {
     return (
-      <Cartao interativo={false}>
-        <Hourglass className="mb-3 size-9 text-orange" aria-hidden="true" />
+      <Cartao>
+        <Hourglass className="mb-3 size-9 text-muted" aria-hidden="true" />
         <h2 className="m-0 mb-2 font-display text-2xl font-semibold">Nova tentativa {f.proxima_em ? quandoLibera(f.proxima_em) : "em breve"}</h2>
         <p className="m-0 text-muted">
           {f.melhor_nota !== null ? `Sua melhor nota até agora: ${f.melhor_nota}%. ` : ""}
@@ -381,23 +381,22 @@ function Estado({
 
   // disponível (ou com prova aberta)
   return (
-    <Cartao interativo={false}>
-      <ClipboardCheck className="mb-3 size-9 text-orange" aria-hidden="true" />
+    <Cartao>
+      <ClipboardCheck className="mb-3 size-9 text-muted" aria-hidden="true" />
       <h2 className="m-0 mb-2 font-display text-2xl font-semibold">{f.prova_aberta ? "Você tem uma avaliação em andamento" : "Sua avaliação final está liberada"}</h2>
-      <ul className="m-0 mb-6 flex list-none flex-col gap-2 p-0 text-[15px] text-[#d6d6d6]">
-        <li>· {r.questoes_final} questões de múltipla escolha sorteadas de um banco</li>
-        <li>· Sem cronômetro: dá para fechar e voltar depois</li>
-        <li>· Para passar: {r.nota_minima_final}% de acerto</li>
+      <ul className="m-0 mb-6 flex list-disc flex-col gap-2 pl-5 text-[15px] text-[#d6d6d6] marker:text-dim">
+        <li>{r.questoes_final} questões de múltipla escolha sorteadas de um banco</li>
+        <li>Sem cronômetro: dá para fechar e voltar depois</li>
+        <li>Para passar: {r.nota_minima_final}% de acerto</li>
         <li>
-          ·{" "}
           {r.tentativas_final_max
             ? `${r.tentativas_final_max} tentativas no total, com ${r.espera_final_horas} horas entre uma e outra`
             : `Se não passar, nova tentativa depois de ${r.espera_final_horas} horas`}
         </li>
-        {f.tentativas > 0 && <li>· Tentativas feitas: {f.tentativas}</li>}
+        {f.tentativas > 0 && <li>Tentativas feitas: {f.tentativas}</li>}
       </ul>
       <Botao onClick={comecar} disabled={comecando} className="px-5 py-3 text-[15px]">
-        {comecando ? "Abrindo..." : f.prova_aberta ? "Continuar a avaliação" : "Começar a avaliação"} <ArrowRight className="size-4" aria-hidden="true" />
+        {comecando ? "Abrindo..." : f.prova_aberta ? "Continuar a avaliação" : "Começar a avaliação"}
       </Botao>
       {falhou && (
         <p role="alert" className="m-0 mt-3 text-[14px] text-warn">

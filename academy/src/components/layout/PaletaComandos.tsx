@@ -1,11 +1,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { useQueries } from "@tanstack/react-query";
 import { BookOpen, Layers, LayoutGrid, LogOut, PlayCircle, Search } from "lucide-react";
-import { usePainel } from "@/lib/consultas";
+import { useCursosDetalhados, usePainel } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
-import { buscarCurso, type CursoDetalhe } from "@/lib/cursos";
 import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
 import { fracao, normalizar } from "@/lib/formato";
 
@@ -20,29 +18,15 @@ interface Item {
   soBusca?: boolean;
 }
 
-/** Fora do componente para manter a mesma referência entre renderizações. */
-function soCursos(r: { data?: CursoDetalhe | null }[]): CursoDetalhe[] {
-  return r.map((q) => q.data).filter((c): c is CursoDetalhe => Boolean(c));
-}
-
 export function PaletaComandos({ aberta, fechar }: { aberta: boolean; fechar: () => void }) {
   return <AnimatePresence>{aberta && <Conteudo key="paleta" fechar={fechar} />}</AnimatePresence>;
 }
 
 function Conteudo({ fechar }: { fechar: () => void }) {
   const navegar = useNavigate();
-  const { sb, sessao, sair } = usePortal();
+  const { sair } = usePortal();
   const painel = usePainel();
-  // Módulos e aulas entram na busca. Mesma chave de useCurso, então reaproveita
-  // o cache de quem já abriu o curso.
-  const detalhes = useQueries({
-    queries: (painel.data?.cursos ?? []).map((c) => ({
-      queryKey: ["curso", c.slug, sessao?.user.id],
-      queryFn: () => buscarCurso(sb, c.slug, sessao!.user.id),
-      enabled: Boolean(sessao),
-    })),
-    combine: soCursos,
-  });
+  const detalhes = useCursosDetalhados((painel.data?.cursos ?? []).map((c) => c.slug)).cursos;
   const [busca, setBusca] = useState("");
   const [sel, setSel] = useState(0);
   const listaId = useId();
@@ -107,10 +91,10 @@ function Conteudo({ fechar }: { fechar: () => void }) {
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.2, ease: [0.2, 0.8, 0.2, 1] } }}
             exit={{ opacity: 0, y: -6, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
-            className="w-[min(640px,100%)] overflow-hidden rounded-2xl border border-line-hi bg-[rgba(14,14,16,0.97)] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9),0_0_0_1px_rgba(249,115,22,0.15),0_0_60px_-20px_rgba(249,115,22,0.4)]"
+            className="w-[min(640px,100%)] overflow-hidden rounded-2xl border border-line-hi bg-panel"
           >
             <label className="flex items-center gap-3 border-b border-line px-[18px] py-4">
-              <Search className="size-[18px] text-orange" aria-hidden="true" />
+              <Search className="size-[18px] text-muted" aria-hidden="true" />
               <input
                 autoFocus
                 value={busca}
@@ -121,7 +105,7 @@ function Conteudo({ fechar }: { fechar: () => void }) {
                 aria-activedescendant={filtrados[sel] ? `${listaId}-${filtrados[sel]!.id}` : undefined}
                 className="flex-1 border-0 bg-transparent text-base font-medium text-ink outline-none placeholder:text-dim"
               />
-              <kbd className="rounded-md border border-line-hi bg-[#0b0b0c] px-1.5 py-0.5 font-mono text-[11px] text-muted">Esc</kbd>
+              <kbd className="rounded-md border border-line-hi px-1.5 py-px text-xs text-muted">Esc</kbd>
             </label>
             <ul id={listaId} role="listbox" aria-label="Resultados" className="m-0 max-h-[340px] list-none overflow-auto p-2">
               {filtrados.length === 0 && (
@@ -135,18 +119,18 @@ function Conteudo({ fechar }: { fechar: () => void }) {
                 const Icone = it.icone;
                 return (
                   <li key={it.id} role="presentation">
-                    {cab && <p className="rotulo-mono m-0 px-2.5 pt-2.5 pb-1.5 !text-dim">{it.grupo}</p>}
+                    {cab && <p className="rotulo m-0 px-2.5 pt-3 pb-1.5 font-medium">{it.grupo}</p>}
                     <div
                       id={`${listaId}-${it.id}`}
                       role="option"
                       aria-selected={i === sel}
                       onMouseEnter={() => setSel(i)}
                       onClick={it.acao}
-                      className={`flex cursor-pointer items-center gap-3 rounded-[10px] px-3 py-2.5 text-[15px] ${i === sel ? "bg-orange/12 text-orange-hi" : "text-ink"}`}
+                      className={`flex cursor-pointer items-center gap-3 rounded-[10px] px-3 py-2.5 text-[15px] ${i === sel ? "bg-white/[0.07] text-ink" : "text-ink"}`}
                     >
                       <Icone className="size-4 flex-none" aria-hidden="true" />
                       <span className="truncate">{it.titulo}</span>
-                      {it.detalhe && <span className="ml-auto truncate font-mono text-[11.5px] text-dim">{it.detalhe}</span>}
+                      {it.detalhe && <span className="ml-auto truncate text-[13px] text-muted">{it.detalhe}</span>}
                     </div>
                   </li>
                 );

@@ -128,7 +128,7 @@ describe("questões do módulo", () => {
       },
     });
     rotaQuestoes(1, sb);
-    expect(await screen.findByRole("heading", { level: 1, name: "Módulo 1 · Princípios de segurança" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Módulo 1: Princípios de segurança" })).toBeInTheDocument();
     await screen.findByText("Pergunta 1 sobre segurança?");
     const enviar = screen.getByRole("button", { name: /Enviar respostas/ });
     expect(enviar).toBeDisabled();
@@ -339,9 +339,9 @@ describe("curso e sala de aula com questões", () => {
     const { sb } = sbAvaliacao({ academy_situacao_curso: () => ({ data: situacao() }) });
     renderizar(<Curso />, { rota: `/cursos/${CURSO.slug}`, caminho: "/cursos/:slug", sb });
     await screen.findByRole("heading", { level: 1, name: CURSO.titulo });
-    fireEvent.click(await screen.findByRole("button", { name: /Módulo 1 · Princípios de segurança/ }));
+    fireEvent.click(await screen.findByRole("button", { name: /Módulo 1: Princípios de segurança/ }));
     expect(await screen.findByRole("link", { name: /Questões do módulo.*Responder/ })).toHaveAttribute("href", `/cursos/${CURSO.slug}/modulos/1/questoes`);
-    fireEvent.click(screen.getByRole("button", { name: /Módulo 2 · Redes e protocolos essenciais, bloqueado/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Módulo 2: Redes e protocolos essenciais, bloqueado/ }));
     expect(await screen.findByText("Abre depois que você passar nas questões do Módulo 1.")).toBeInTheDocument();
     expect(screen.queryByText("Avaliação final")).not.toBeInTheDocument();
     expect(screen.queryByText(/Certificado/)).not.toBeInTheDocument();

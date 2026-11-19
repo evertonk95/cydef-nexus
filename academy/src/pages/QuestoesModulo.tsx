@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowRight, CircleCheck, ListChecks, Lock, RotateCcw } from "lucide-react";
+import { CircleCheck, ListChecks, Lock, RotateCcw } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
@@ -92,7 +92,7 @@ export default function QuestoesModulo() {
       itens={[
         { rotulo: "Meus cursos", para: "/cursos" },
         { rotulo: c.titulo, para: `/cursos/${c.slug}` },
-        { rotulo: `Questões · ${rotuloModuloCurto(modulo.ordem, modulo.titulo)}` },
+        { rotulo: `Questões do ${rotuloModuloCurto(modulo.ordem, modulo.titulo)}` },
       ]}
     />
   );
@@ -104,11 +104,11 @@ export default function QuestoesModulo() {
     return (
       <>
         {trilha}
-        <Cartao interativo={false} className="mx-auto max-w-xl text-center">
+        <Cartao className="mx-auto max-w-xl text-center">
           {modulo.tem_questoes ? (
-            <Lock className="mx-auto mb-4 size-9 text-orange" aria-hidden="true" />
+            <Lock className="mx-auto mb-4 size-9 text-muted" aria-hidden="true" />
           ) : (
-            <ListChecks className="mx-auto mb-4 size-9 text-orange" aria-hidden="true" />
+            <ListChecks className="mx-auto mb-4 size-9 text-muted" aria-hidden="true" />
           )}
           <h1 className="m-0 mb-2 font-display text-2xl font-semibold">
             {modulo.tem_questoes ? "Este módulo ainda está bloqueado" : "Este módulo não tem questões"}
@@ -122,11 +122,11 @@ export default function QuestoesModulo() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {modulo.tem_questoes && pendente ? (
-              <Link to={caminhoQuestoes(c.slug, pendente.ordem)} className={cn(link, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15")}>
+              <Link to={caminhoQuestoes(c.slug, pendente.ordem)} className={cn(link, "bg-orange text-orange-ink hover:bg-orange-hi")}>
                 Ir para as questões do {rotuloModuloCurto(pendente.ordem, pendente.titulo)}
               </Link>
             ) : null}
-            <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-orange")}>
+            <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-muted")}>
               Voltar ao curso
             </Link>
           </div>
@@ -142,10 +142,10 @@ export default function QuestoesModulo() {
       return (
         <>
           {trilha}
-          <Cartao interativo={false} className="mx-auto max-w-xl text-center">
+          <Cartao className="mx-auto max-w-xl text-center">
             <h1 className="m-0 mb-2 font-display text-2xl font-semibold">As questões deste módulo mudaram</h1>
             <p className="m-0 mb-6 text-muted">Volte ao curso para ver a situação atualizada.</p>
-            <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-orange")}>
+            <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-muted")}>
               Voltar ao curso
             </Link>
           </Cartao>
@@ -175,8 +175,8 @@ export default function QuestoesModulo() {
       {trilha}
       <div className="mx-auto max-w-3xl">
         <header className="mb-6">
-          <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-orange uppercase">Questões do módulo</p>
-          <h1 ref={tituloRef} tabIndex={-1} className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-bold tracking-tight outline-none">
+          <p className="m-0 mb-2 text-sm text-muted">Questões do módulo</p>
+          <h1 ref={tituloRef} tabIndex={-1} className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight outline-none">
             {rotuloModulo(modulo.ordem, modulo.titulo)}
           </h1>
           {!resultado && (
@@ -202,16 +202,16 @@ export default function QuestoesModulo() {
             >
               <section
                 aria-labelledby="h-resultado"
-                className={cn("mb-6 rounded-2xl border p-6", resultado.aprovado ? "border-ok/40 bg-ok/[0.06]" : "border-orange/40 bg-orange/[0.06]")}
+                className={cn("mb-6 rounded-2xl border p-6", resultado.aprovado ? "border-ok/40" : "border-line-hi")}
               >
-                <p className="m-0 mb-1 font-mono text-[12px] tracking-[0.14em] text-muted uppercase">Seu resultado</p>
-                <h2 id="h-resultado" className="m-0 mb-2 font-display text-2xl font-bold">
+                <p className="m-0 mb-1 text-sm text-muted">Seu resultado</p>
+                <h2 id="h-resultado" className="m-0 mb-2 font-display text-2xl font-semibold">
                   {resultado.aprovado ? "Módulo concluído" : "Ainda não foi desta vez"}
                 </h2>
                 <p className="m-0 mb-5 text-[15.5px] text-[#e4e4e4]">
-                  <span className={cn("font-mono text-3xl font-semibold", resultado.aprovado ? "text-ok" : "text-orange-hi")}>{resultado.nota}%</span>{" "}
+                  <span className={cn("text-3xl font-semibold", resultado.aprovado ? "text-ok" : "text-ink")}>{resultado.nota}%</span>{" "}
                   <span className="text-muted">
-                    · {resultado.acertos} de {resultado.total} certas · mínimo {resultado.nota_minima}%
+                    de acerto: {resultado.acertos} de {resultado.total} certas, mínimo de {resultado.nota_minima}%
                   </span>
                 </p>
                 <p className="m-0 mb-5 text-muted">
@@ -225,11 +225,11 @@ export default function QuestoesModulo() {
                   {resultado.aprovado ? (
                     proximoModulo?.aulas[0] ? (
                       <Link to={caminhoAula(c.slug, proximoModulo.aulas[0].numero)} className={cn(link, "bg-orange text-orange-ink hover:bg-orange-hi")}>
-                        Começar o {rotuloModuloCurto(proximoModulo.ordem, proximoModulo.titulo)} <ArrowRight className="size-4" aria-hidden="true" />
+                        Começar o {rotuloModuloCurto(proximoModulo.ordem, proximoModulo.titulo)}
                       </Link>
                     ) : (
                       <Link to={caminhoAvaliacao(c.slug)} className={cn(link, "bg-orange text-orange-ink hover:bg-orange-hi")}>
-                        Ver a avaliação final <ArrowRight className="size-4" aria-hidden="true" />
+                        Ver a avaliação final
                       </Link>
                     )
                   ) : (
@@ -238,12 +238,12 @@ export default function QuestoesModulo() {
                     </Botao>
                   )}
                   {!resultado.aprovado && primeiraAula && (
-                    <Link to={caminhoAula(c.slug, primeiraAula.numero)} className={cn(link, "border border-line-hi hover:border-orange")}>
+                    <Link to={caminhoAula(c.slug, primeiraAula.numero)} className={cn(link, "border border-line-hi hover:border-muted")}>
                       Rever as aulas do módulo
                     </Link>
                   )}
                   {resultado.aprovado && (
-                    <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-orange")}>
+                    <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-muted")}>
                       Voltar ao curso
                     </Link>
                   )}

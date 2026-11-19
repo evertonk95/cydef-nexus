@@ -74,7 +74,7 @@ describe("sala de aula", () => {
     const { sb } = sbAula();
     abrir(2, sb);
     expect(await screen.findByRole("heading", { level: 1, name: "Confidencialidade, integridade e disponibilidade" })).toBeInTheDocument();
-    expect(screen.getByText(/Módulo 1 · Aula 02 de 03/)).toBeInTheDocument();
+    expect(screen.getByText(/Módulo 1, aula 2 de 3/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Aula anterior/ })).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/1`);
     expect(screen.getAllByRole("link", { name: /Próxima aula/ })[0]).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/3`);
     expect(screen.getByRole("link", { current: "page" })).toHaveTextContent("Você está aqui");
@@ -182,7 +182,7 @@ describe("página do curso", () => {
     renderizar(<Curso />, { rota: `/cursos/${CURSO.slug}`, caminho: "/cursos/:slug", sb });
     expect(await screen.findByRole("button", { name: /Introdução/ })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Continuar o curso/ })).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/2`);
-    fireEvent.click(screen.getByRole("button", { name: /Módulo 1 · Princípios de segurança/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Módulo 1: Princípios de segurança/ }));
     expect(await screen.findByRole("link", { name: /Risco, ameaça/ })).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/3`);
   });
 });
@@ -210,7 +210,7 @@ describe("canal com o YouTube e ordem das aulas", () => {
     expect(localizarAula(curso, 1)!.anterior).toBeNull();
     expect(localizarAula(curso, 4)).toBeNull();
     expect(rotuloModulo(0, "Introdução")).toBe("Introdução");
-    expect(rotuloModulo(2, "Redes")).toBe("Módulo 2 · Redes");
+    expect(rotuloModulo(2, "Redes")).toBe("Módulo 2: Redes");
   });
 });
 

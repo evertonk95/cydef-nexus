@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRight, Award, Check, ClipboardCheck, Hourglass, ListChecks, Lock } from "lucide-react";
+import { Award, Check, ClipboardCheck, Hourglass, ListChecks, Lock } from "lucide-react";
 import { caminhoAvaliacao, caminhoCertificado, caminhoQuestoes, mostraConclusao, quandoLibera, type ModuloSituacao, type Situacao } from "@/lib/avaliacao";
 import { Cartao } from "@/components/ui/Cartao";
 import { cn } from "@/lib/cn";
@@ -35,7 +35,7 @@ export function LinhaQuestoes({ slug, modulo, compacta = false }: { slug: string
         <span className="flex-1 font-semibold">Questões do módulo</span>
         <span
           className={cn(
-            "font-mono text-[11.5px] tracking-wide whitespace-nowrap uppercase",
+            "text-[13px] whitespace-nowrap",
             estado === "aprovado" ? "text-ok" : estado === "pendente" ? "text-orange-hi" : "text-dim",
           )}
         >
@@ -56,7 +56,7 @@ export function AvisoBloqueio({ pendente }: { pendente: ModuloSituacao | null })
   );
 }
 
-export function CartaoConclusao({ slug, s, indice = 1 }: { slug: string; s: Situacao; indice?: number }) {
+export function CartaoConclusao({ slug, s }: { slug: string; s: Situacao }) {
   if (!mostraConclusao(s)) return null;
   const f = s.final;
   const cert = s.certificado;
@@ -88,12 +88,12 @@ export function CartaoConclusao({ slug, s, indice = 1 }: { slug: string; s: Situ
         };
 
   return (
-    <Cartao interativo={false} indice={indice} rotulo="Conclusão do curso" className={liberado ? "border-ok/30" : undefined}>
+    <Cartao rotulo="Conclusão do curso" className={liberado ? "border-ok/30" : undefined}>
       <div className="mb-4 flex items-center gap-3.5">
         <span
           className={cn(
             "grid size-11 flex-none place-items-center rounded-xl border",
-            liberado ? "border-ok/30 bg-ok/10 text-ok" : "border-orange/25 bg-orange/10 text-orange",
+            liberado ? "border-ok/30 bg-ok/10 text-ok" : "border-line-hi text-muted",
           )}
         >
           {linha.icone}
@@ -105,10 +105,9 @@ export function CartaoConclusao({ slug, s, indice = 1 }: { slug: string; s: Situ
       </div>
       <Link
         to={linha.para}
-        className="group flex w-full items-center justify-center gap-2 rounded-xl border-[1.5px] border-orange bg-orange/5 px-4 py-3 text-[15px] font-semibold text-orange-hi transition-[background-color,box-shadow] duration-200 hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]"
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-orange px-4 text-[15px] font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi"
       >
         {linha.cta}
-        <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
       </Link>
     </Cartao>
   );

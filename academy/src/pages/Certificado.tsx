@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Award, BadgeCheck, Copy, Lock } from "lucide-react";
+import { Award, BadgeCheck, Copy, Lock } from "lucide-react";
 import { useCurso, usePainel, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
@@ -95,12 +95,12 @@ export default function Certificado() {
             erro={emissao.error instanceof ErroAvaliacao ? emissao.error.codigo : emissao.error ? "falha" : null}
           />
         ) : (
-          <Cartao interativo={false} className="text-center">
-            <Lock className="mx-auto mb-4 size-9 text-orange" aria-hidden="true" />
+          <Cartao className="text-center">
+            <Lock className="mx-auto mb-4 size-9 text-muted" aria-hidden="true" />
             <h1 className="m-0 mb-2 font-display text-2xl font-semibold">O certificado ainda não está liberado</h1>
             <p className="m-0 mb-6 text-muted">Ele é liberado quando você completa todos os requisitos do curso: as aulas, as questões dos módulos e a avaliação final.</p>
-            <Link to={caminhoAvaliacao(c.slug)} className={cn(link, "border border-line-hi hover:border-orange")}>
-              Ver o que falta <ArrowRight className="size-4" aria-hidden="true" />
+            <Link to={caminhoAvaliacao(c.slug)} className={cn(link, "border border-line-hi hover:border-muted")}>
+              Ver o que falta
             </Link>
           </Cartao>
         )}
@@ -143,8 +143,8 @@ function Emitir({
   return (
     <>
       <header className="mb-6">
-        <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-orange uppercase">Certificado liberado</p>
-        <h1 className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-bold tracking-tight">Parabéns, você concluiu o curso</h1>
+        <p className="m-0 mb-2 text-sm text-muted">Certificado liberado</p>
+        <h1 className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight">Parabéns, você concluiu o curso</h1>
         <p className="m-0 max-w-[68ch] leading-relaxed text-[#d6d6d6]">
           Confira como seu nome vai aparecer no certificado. Depois de emitido, o nome não muda: escreva completo, com acentos.
         </p>
@@ -184,8 +184,8 @@ function Emitir({
           </p>
         </div>
 
-        <figure className="m-0 rounded-2xl border border-orange/30 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(249,115,22,0.10),transparent_60%),var(--color-panel)] px-6 py-8 text-center">
-          <figcaption className="mb-3 font-mono text-[11.5px] tracking-[0.14em] text-muted uppercase">Prévia do nome</figcaption>
+        <figure className="m-0 rounded-2xl border border-line-hi bg-panel px-6 py-8 text-center">
+          <figcaption className="mb-3 text-sm text-muted">Prévia do nome</figcaption>
           <p className="m-0 font-display text-[clamp(24px,3.4vw,36px)] leading-tight font-semibold break-words text-ink" aria-live="polite">
             {limpo || "Seu nome"}
           </p>
@@ -235,10 +235,10 @@ function Emitido({ cert, novo }: { cert: TCertificado; novo: boolean }) {
   return (
     <>
       <header className="mb-6">
-        <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-ok uppercase">{novo ? "Certificado emitido agora" : "Certificado emitido"}</p>
-        <h1 className="m-0 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-bold tracking-tight">Seu certificado</h1>
+        <p className="m-0 mb-2 text-sm text-ok">{novo ? "Certificado emitido agora" : "Certificado emitido"}</p>
+        <h1 className="m-0 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight">Seu certificado</h1>
       </header>
-      <section aria-label="Dados do certificado" className="rounded-2xl border border-ok/30 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(74,222,128,0.08),transparent_60%),var(--color-panel)] p-6 sm:p-8">
+      <section aria-label="Dados do certificado" className="rounded-2xl border border-ok/30 bg-panel p-6 sm:p-8">
         <BadgeCheck className="mb-4 size-10 text-ok" aria-hidden="true" />
         <p className="m-0 font-display text-[clamp(24px,3.4vw,34px)] leading-tight font-semibold break-words">{cert.nome}</p>
         <p className="m-0 mt-2 text-[15.5px] text-[#d6d6d6]">
@@ -246,8 +246,8 @@ function Emitido({ cert, novo }: { cert: TCertificado; novo: boolean }) {
           {cert.carga_horaria_h > 0 ? `, com carga horária de ${cert.carga_horaria_h} horas,` : ""} em {dataPorExtenso(cert.concluido_em)}.
         </p>
         <dl className="m-0 mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-5">
-          <dt className="font-mono text-[11.5px] tracking-[0.14em] text-muted uppercase">Código de validação</dt>
-          <dd className="m-0 font-mono text-[15px] tracking-wider text-ink select-all">{cert.codigo}</dd>
+          <dt className="text-sm text-muted">Código de validação</dt>
+          <dd className="m-0 text-[15px] tracking-wider text-ink select-all">{cert.codigo}</dd>
           <dd className="m-0">
             <Botao variante="fantasma" onClick={() => void copiar()} className="px-3 py-1.5 text-[13.5px]">
               <Copy className="size-3.5" aria-hidden="true" /> Copiar

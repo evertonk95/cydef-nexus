@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { motion, useReducedMotion } from "motion/react";
 import { AlertTriangle, Clock, Loader2, Play, RotateCcw } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { buscarVideo, ErroAula, numeroAula } from "@/lib/aula";
 import { ESTADO, ouvirPlayer, urlEmbed, type LeituraPlayer } from "@/lib/youtube";
 import { duracao, relogio } from "@/lib/formato";
-import { cn } from "@/lib/cn";
 import type { AulaLista } from "@/lib/cursos";
 
 /** Intervalo mínimo entre gravações de posição enquanto o vídeo toca. */
@@ -30,7 +28,6 @@ export function Player({
   salvar: (posicao: number, concluida: boolean) => void;
 }) {
   const { sb, sessao } = usePortal();
-  const reduzir = useReducedMotion();
   // O endereço do player é fixado no clique em "Assistir". Ele não pode
   // depender da posição salva: cada gravação de progresso atualiza a aula na
   // página, e um src novo faria o navegador recarregar o vídeo a cada 15 s.
@@ -103,7 +100,7 @@ export function Player({
   const erro = video.error instanceof ErroAula ? video.error.codigo : video.isError ? "falha" : null;
 
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-line bg-[#09090a] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
+    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-line bg-panel">
       {src && video.data?.provedor === "youtube" ? (
         <iframe
           ref={iframe}
@@ -115,62 +112,44 @@ export function Player({
           className="absolute inset-0 size-full border-0"
         />
       ) : (
-        <div className="absolute inset-0">
-          <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(120%_90%_at_85%_10%,rgba(249,115,22,0.16),transparent_55%),radial-gradient(80%_70%_at_0%_100%,rgba(249,115,22,0.07),transparent_60%)]" />
-          <div aria-hidden="true" className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:radial-gradient(70%_70%_at_50%_50%,black,transparent)]" />
-          <svg aria-hidden="true" viewBox="0 0 800 450" preserveAspectRatio="none" className="absolute inset-0 size-full">
-            <motion.path
-              d="M 300 470 C 420 260, 560 120, 820 70"
-              fill="none"
-              stroke="rgba(249,115,22,0.55)"
-              strokeWidth="1.5"
-              initial={reduzir ? false : { pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.1, ease: [0.2, 0.8, 0.2, 1] }}
-            />
-          </svg>
-          <div className="relative flex h-full flex-col p-5 sm:p-8 lg:p-11">
-            <div className="mt-auto flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-black/40 px-2.5 py-1 font-mono text-xs text-muted">
-                <Clock className="size-3.5" aria-hidden="true" /> {duracao(aula.duracao_seg)}
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-2 sm:bottom-5 sm:left-5">
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-bg px-2.5 py-1 text-[13px] text-[#d4d4d4]">
+              <Clock className="size-3.5" aria-hidden="true" /> {duracao(aula.duracao_seg)}
+            </span>
+            {inicio > 0 ? (
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-bg px-2.5 py-1 text-[13px] text-[#d4d4d4]">
+                Continuar de {relogio(inicio)}
               </span>
-              {inicio > 0 ? (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-orange/30 bg-orange/10 px-2.5 py-1 font-mono text-xs text-orange-hi">
-                  Continuar de {relogio(inicio)}
-                </span>
-              ) : null}
-            </div>
+            ) : null}
           </div>
-          <div className="absolute inset-0 grid place-items-center">
-            {erro ? (
-              <div role="alert" className="mx-6 flex max-w-md items-start gap-3 rounded-xl border border-bad/30 bg-[#140707]/90 p-4 text-sm leading-relaxed">
-                <AlertTriangle className="mt-0.5 size-5 flex-none text-bad" aria-hidden="true" />
-                <div>
-                  <p className="m-0">{MENSAGEM[erro]}</p>
-                  {erro === "falha" && (
-                    <button type="button" onClick={() => void video.refetch()} className="mt-2 inline-flex items-center gap-1.5 font-semibold text-orange-hi hover:text-orange">
-                      <RotateCcw className="size-3.5" aria-hidden="true" /> Tentar de novo
-                    </button>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => video.data && setSrc(urlEmbed(video.data.ref, { inicio, origem: window.location.origin }))}
-                disabled={!video.data}
-                aria-label={video.data ? `Assistir à aula ${numeroAula(aula.numero)}: ${aula.titulo}` : "Preparando o vídeo"}
-                className="group/play relative grid size-[60px] place-items-center sm:size-[76px] rounded-full bg-[radial-gradient(circle_at_35%_30%,var(--color-orange-hi),var(--color-orange)_60%,#ea580c)] text-orange-ink shadow-[0_0_0_10px_rgba(249,115,22,0.12),0_18px_50px_-10px_rgba(249,115,22,0.8)] transition-transform duration-200 ease-[var(--ease-out-soft)] hover:scale-105 active:scale-95 disabled:cursor-wait sm:size-[92px]"
-              >
-                <span aria-hidden="true" className={cn("absolute inset-0 rounded-full border-2 border-orange/60", !reduzir && video.data && "animate-[pulso-anel_1.8s_ease-out_infinite]")} />
-                {video.data ? (
-                  <Play className="ml-1 size-6 fill-current sm:size-9" aria-hidden="true" />
-                ) : (
-                  <Loader2 className="size-7 animate-[girar_900ms_linear_infinite]" aria-hidden="true" />
+          {erro ? (
+            <div role="alert" className="mx-6 flex max-w-md items-start gap-3 rounded-xl border border-bad/30 bg-bg p-4 text-sm leading-relaxed">
+              <AlertTriangle className="mt-0.5 size-5 flex-none text-bad" aria-hidden="true" />
+              <div>
+                <p className="m-0">{MENSAGEM[erro]}</p>
+                {erro === "falha" && (
+                  <button type="button" onClick={() => void video.refetch()} className="mt-2 inline-flex items-center gap-1.5 font-semibold text-ink underline underline-offset-4">
+                    <RotateCcw className="size-3.5" aria-hidden="true" /> Tentar de novo
+                  </button>
                 )}
-              </button>
-            )}
-          </div>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => video.data && setSrc(urlEmbed(video.data.ref, { inicio, origem: window.location.origin }))}
+              disabled={!video.data}
+              aria-label={video.data ? `Assistir à aula ${numeroAula(aula.numero)}: ${aula.titulo}` : "Preparando o vídeo"}
+              className="grid size-16 place-items-center rounded-full bg-orange text-orange-ink transition-colors duration-150 hover:bg-orange-hi disabled:cursor-wait sm:size-20"
+            >
+              {video.data ? (
+                <Play className="ml-1 size-6 fill-current sm:size-7" aria-hidden="true" />
+              ) : (
+                <Loader2 className="size-7 animate-[girar_900ms_linear_infinite]" aria-hidden="true" />
+              )}
+            </button>
+          )}
         </div>
       )}
     </div>

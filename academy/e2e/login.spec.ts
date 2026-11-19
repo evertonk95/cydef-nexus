@@ -26,7 +26,7 @@ test("link do e-mail: o token sai da barra, só vira sessão no clique e abre o 
   expect((await estado(request)).verificacoes).toHaveLength(0);
 
   await page.getByRole("button", { name: "Entrar na Academy" }).click();
-  await expect(page.getByText("Olá, Everton")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /, Everton\.$/ })).toBeVisible();
   const e = await estado(request);
   expect(e.verificacoes).toEqual([expect.objectContaining({ token_hash: "linkdeteste-e2e-aaaaaa", type: "email" })]);
   expect(e.acessosRegistrados).toBeGreaterThanOrEqual(1);
