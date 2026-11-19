@@ -7,10 +7,19 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 ## O que existe nesta etapa
 
 - Login por link no e-mail, sem senha, pedido pela função `supabase/functions/academy-acesso`.
-- Painel do aluno: continuar de onde parou, formação, Boletim do SOC, competências e sequência de estudo.
+- Painel do aluno: saudação pela hora, ação principal para continuar na próxima aula e a Matriz da Formação (módulo por coluna, aula por bloco; o que ainda não saiu aparece como "A publicar").
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
+
+## Identidade do portal (fase 08, publicada em 19/11/2026)
+
+- Tokens da marca com papel fixo: o laranja `#f97316` só no nome Academy, na ação principal e no "você está aqui"; o verde só em concluído. Fora desses casos a tela é neutra.
+- Saíram o fundo de partículas, o texto decodificado, o contador animado, a JetBrains Mono, os rótulos em caixa alta, os brilhos, os degradês e as animações decorativas. Tipografia: Inter Variable no texto e Space Grotesk Variable nos títulos.
+- Painel com a Matriz da Formação: cada módulo vira uma coluna, cada aula um bloco, e o que ainda não foi publicado fica tracejado como "A publicar". O boletim, as competências e a sequência continuam existindo como dado, mas saíram da home.
+- Progresso honesto: curso com módulo ainda em produção não aparece como concluído, fica "Em dia, novas aulas em produção"; aula e módulo não publicados aparecem como "Em breve" e "A publicar".
+- Rótulo do módulo passa de "Módulo N · Título" para "Módulo N: Título".
+- Deploy: Cloudflare Pages, deployment `e391f20a` do merge `6c05fbb` (PR #225). Conferido em produção em `academy.cydef.com.br/entrar`: 200, "Academy" em laranja ao lado do logo, nenhum canvas de partículas e as duas fontes em `.woff2` respondendo 200.
 
 ## Como o login funciona
 
@@ -171,7 +180,7 @@ O build do e2e usa o `postcss.config.js` da raiz do repositório: rode `npm ci` 
 
 ## Regras de interface
 
-- Animação de entrada e de interação entre 120 e 240 ms; progresso anima por `transform`, nunca por largura.
+- Animação de entrada e de interação entre 120 e 240 ms, só nas transições que comunicam estado; progresso anima por `transform`, nunca por largura.
 - Esqueleto com a silhueta do conteúdo em todo bloco que depende do banco.
-- `prefers-reduced-motion` deixa tudo estático, inclusive o fundo de partículas, que também pausa quando a aba sai de foco.
-- Só aparece no portal o que existe: nada de "em breve".
+- `prefers-reduced-motion` deixa tudo estático. Não há mais fundo animado: a superfície é lisa.
+- O que ainda não foi publicado aparece marcado ("Em breve" na aula, "A publicar" no módulo) e não conta como concluído.
