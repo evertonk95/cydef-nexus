@@ -148,6 +148,14 @@ describe("sala de aula", () => {
     expect(screen.queryByRole("button", { name: /Assistir/ })).not.toBeInTheDocument();
   });
 
+  it("aula de módulo bloqueado explica o que falta, sem player", async () => {
+    const { sb } = sbAula({ videoErro: "modulo_bloqueado" });
+    abrir(2, sb);
+    expect(await screen.findByRole("alert")).toHaveTextContent("passar nas questões do módulo anterior");
+    expect(screen.queryByRole("button", { name: /Assistir/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Tentar de novo/ })).not.toBeInTheDocument();
+  });
+
   it("curso fora da conta do aluno não mostra o player", async () => {
     const { sb } = sbAula({ matriculado: false });
     abrir(1, sb);
