@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "wordpress-7-1-5-correcoes-seguranca",
+    "title": "WordPress 7.1.5 fixes 20 flaws, including privilege escalation and potential code execution",
+    "category": "Threat Intelligence",
+    "excerpt": "WordPress released version 7.1.5 with fixes for 20 core security issues, including an unauthenticated privilege escalation through Template Part block attributes that can lead to remote code execution, two SQL injections and a Multisite flaw that lets a site administrator take over the Super Admin account.",
+    "date": "November 19, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "8 min",
+    "image": "/assets/blog/wordpress-7-1-5-correcoes-seguranca-capa.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "chrome-158-correcoes-seguranca",
     "title": "Chrome 158 fixes 204 flaws and six critical ones with code execution risk",
     "category": "Threat Intelligence",
@@ -295,6 +306,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "wordpress-7-1-5-correcoes-seguranca",
+    "title": "WordPress 7.1.5 corrige 20 falhas, incluindo escalada de privilégios e possível execução de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O WordPress publicou a versão 7.1.5 com correções para 20 problemas de segurança no núcleo, entre eles uma escalada de privilégios sem autenticação via atributos do bloco Template Part que pode levar à execução remota de código, duas injeções SQL e uma falha de Multisite que permite a um administrador assumir a conta Super Admin.",
+    "date": "19 de Novembro, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "8 min",
+    "image": "/assets/blog/wordpress-7-1-5-correcoes-seguranca-capa.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "chrome-158-correcoes-seguranca",
     "title": "Chrome 158 corrige 204 falhas e seis críticas com risco de execução de código",
     "category": "Inteligência de Ameaças",
@@ -583,6 +605,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "wordpress-7-1-5-correcoes-seguranca",
+    "title": "WordPress 7.1.5 corrige 20 fallas, incluidas escalada de privilegios y posible ejecución de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "WordPress publicó la versión 7.1.5 con correcciones para 20 problemas de seguridad en el núcleo, entre ellos una escalada de privilegios sin autenticación mediante atributos del bloque Template Part que puede llevar a la ejecución remota de código, dos inyecciones SQL y una falla de Multisite que permite a un administrador de sitio asumir la cuenta Super Admin.",
+    "date": "19 de Noviembre, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "8 min",
+    "image": "/assets/blog/wordpress-7-1-5-correcoes-seguranca-capa.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "chrome-158-correcoes-seguranca",
     "title": "Chrome 158 corrige 204 fallas y seis críticas con riesgo de ejecución de código",
