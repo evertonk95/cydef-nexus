@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LogOut, Search, ShieldCheck } from "lucide-react";
+import { BookOpen, ChevronDown, LogOut, PencilRuler, Search, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
 import { iniciais } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import { urlAviso } from "@/lib/privacidade";
+import { useEquipe } from "@/lib/instrutor";
 
 const links = [
   { para: "/", rotulo: "Painel", fim: true },
@@ -16,6 +17,8 @@ const links = [
 export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
   const { sair, sessao, config } = usePortal();
   const painel = usePainel();
+  const equipe = useEquipe();
+  const itens = equipe.data ? [...links, { para: "/instrutor", rotulo: "Instrutor", fim: false }] : links;
   const nome = painel.data?.nome ?? sessao?.user.email ?? "";
   const [menu, setMenu] = useState(false);
   const caixa = useRef<HTMLDivElement>(null);
@@ -34,7 +37,7 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-4 px-5 sm:gap-8 sm:px-8">
         <Logo />
         <nav aria-label="Principal" className="hidden h-full flex-1 gap-6 md:flex">
-          {links.map(({ para, rotulo, fim }) => (
+          {itens.map(({ para, rotulo, fim }) => (
             <NavLink
               key={para}
               to={para}
@@ -83,6 +86,11 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
               <NavLink role="menuitem" to="/cursos" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <BookOpen className="size-4" aria-hidden="true" /> Meus cursos
               </NavLink>
+              {equipe.data && (
+                <NavLink role="menuitem" to="/instrutor" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
+                  <PencilRuler className="size-4" aria-hidden="true" /> Painel do instrutor
+                </NavLink>
+              )}
               <a role="menuitem" href={urlAviso(config.siteUrl)} target="_blank" rel="noopener" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
                 <ShieldCheck className="size-4" aria-hidden="true" /> Privacidade
               </a>

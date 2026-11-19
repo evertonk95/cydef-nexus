@@ -11,6 +11,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
+- Painel do instrutor em `/instrutor`, só para a equipe: cursos, módulos, aulas, vídeos, questões, regras do certificado, Boletim do SOC e equipe (fase 13).
 
 ## Identidade do portal (fase 08, publicada em 19/11/2026)
 
@@ -91,7 +92,7 @@ Aula não publicada aparece no catálogo como "em breve" e não abre a sala de a
 
 ### Questões, avaliação final e certificado (0013)
 
-Os requisitos são de cada curso, na tabela `cursos_requisitos`. O painel do instrutor vai editar essa tabela; até ele existir, mude por SQL. Os dois cursos gratuitos usam os mesmos requisitos:
+Os requisitos são de cada curso, na tabela `cursos_requisitos`, e se editam na aba Certificado do painel do instrutor (0015). Os dois cursos gratuitos usam os mesmos requisitos:
 
 | Campo | Valor nos gratuitos | O que faz |
 |---|---|---|
@@ -104,7 +105,7 @@ Os requisitos são de cada curso, na tabela `cursos_requisitos`. O painel do ins
 
 Módulo sem questões publicadas não bloqueia (a Introdução não tem). Questão só vai para o aluno publicada, com 2 a 8 alternativas e exatamente uma correta. Do banco da avaliação final (questões com `modulo_id` vazio) sai só a nota, nunca a correção.
 
-Cadastrar uma questão (módulo: informe o `modulo_id`; avaliação final: deixe `null`):
+Questões se cadastram pelo painel do instrutor. O SQL abaixo fica como referência (módulo: informe o `modulo_id`; avaliação final: deixe `null`):
 
 ```sql
 with q as (
@@ -138,7 +139,44 @@ update public.certificados set validacao_publica = false where codigo = 'CYD-...
 
 Na página do curso e na sala de aula, a linha "Questões do módulo" e o cadeado de módulo bloqueado só aparecem quando o módulo tem questões publicadas. O cartão da avaliação final só aparece quando ela existe para o aluno (liberada, em espera, em andamento ou aprovada) e o do certificado só quando ele está liberado ou emitido. Curso sem questões fica igual a antes. Se a consulta `academy_situacao_curso` falhar, a página do curso e a sala de aula seguem normais.
 
+## Painel do instrutor (0015)
+
+Em `academy.cydef.com.br/instrutor`, para quem é da equipe. Para os demais a rota responde 404 e o link "Instrutor" não aparece no topo. Toda leitura e escrita passa pelas funções `academy_adm_*`, que conferem o papel no banco; as tabelas `academy_equipe`, `academy_equipe_cursos` e `academy_auditoria` não têm grant para `anon` nem para `authenticated`.
+
+| Papel | Pode |
+|---|---|
+| admin | Tudo, em todos os cursos: criar curso, publicar curso, definir se é gratuito, Boletim do SOC e equipe. |
+| instrutor | Só nos cursos atribuídos: módulos, aulas, vídeos, publicação de aulas, questões, regras do certificado, título, descrição e nível do curso. |
+
+| Endereço | O que faz |
+|---|---|
+| `/instrutor` | Cursos com aulas e questões publicadas e aulas sem vídeo. O admin cria curso novo (nasce rascunho). |
+| `/instrutor/cursos/<curso>` | Abas Estrutura (módulos e aulas, ordem, renomear, criar), Questões, Certificado (`cursos_requisitos`) e Dados do curso. |
+| `/instrutor/cursos/<curso>/aulas/<id>` | Título, módulo, vídeo (cola o link do YouTube; o portal guarda só o código), duração em mm:ss, resumo e publicação. `nova?modulo=<id>` cria no fim do módulo. |
+| `/instrutor/cursos/<curso>/questoes/<id>` | Enunciado, 2 a 8 alternativas com uma correta, explicação, módulo ou avaliação final, publicação. |
+| `/instrutor/boletim` e `/instrutor/equipe` | Só admin. |
+
+Regras que o banco garante:
+
+- O número da aula (o da URL) é refeito a cada mudança de ordem, na ordem de módulos e aulas. Progresso e questões ficam presos ao id da aula, então mover aula não apaga nada do aluno.
+- Publicar aula exige vídeo. Aula publicada ou com progresso de aluno não pode ser excluída, só despublicada. Módulo só sai vazio. A Introdução (ordem 0) não muda de lugar.
+- Questão já respondida (módulo ou avaliação final) não pode ser excluída. As alternativas são atualizadas por posição, para manter as respostas gravadas.
+- A pessoa precisa ter entrado na Academy uma vez para ser adicionada à equipe. A Academy nunca fica sem admin.
+- Toda escrita grava em `academy_auditoria` quem fez, o quê e quando.
+
+Primeiro admin, depois de aplicar a 0015 (troque pelo e-mail com que o Everton entra no portal):
+
+```sql
+insert into public.academy_equipe (user_id, papel)
+select id, 'admin' from auth.users where lower(email) = lower('EMAIL_DO_EVERTON')
+on conflict (user_id) do update set papel = 'admin';
+```
+
+Daí em diante a equipe é gerida em `/instrutor/equipe`. Para conferir o que foi feito: `select * from public.academy_auditoria order by id desc limit 50;`
+
 ## Boletim do SOC
+
+Pelo painel do instrutor (admin). O SQL fica como referência:
 
 ```sql
 insert into public.boletim (tipo, titulo, link, publicado)
