@@ -49,7 +49,7 @@ e não para `{{ .ConfirmationURL }}`, que leva ao domínio `supabase.co`. Ordem 
 
 ## Publicar conteúdo
 
-A migração 0009 cria a estrutura dos dois cursos gratuitos com tudo **não publicado**. A 0011 acrescenta ao Cybersecurity Fundamentals o módulo **Introdução** (ordem 0) com a aula 01, "Boas-vindas ao curso", já ligada ao vídeo `AKtr_lmAB6Y`. As demais aulas andaram uma posição: o curso tem 17 aulas, e a antiga aula 01 (CID) passou a ser a aula 02. Os títulos dos vídeos no YouTube seguem essa numeração.
+A migração 0009 cria a estrutura dos dois cursos gratuitos com tudo **não publicado**. A 0011 acrescenta ao Cybersecurity Fundamentals o módulo **Introdução** (ordem 0) com a aula 01, "Boas-vindas ao curso", já ligada ao vídeo `AKtr_lmAB6Y`. As demais aulas andaram uma posição, e a antiga aula 01 (CID) passou a ser a aula 02. A 0014 abre o módulo 1 com a aula "O que é cibersegurança, afinal?" (aula 02, vídeo `iKAWeoCtbmA`) e liga a aula de CID, que passa a ser a aula 03, ao vídeo `J1AD8CV8AHM`. O curso tem 18 aulas. Os títulos dos vídeos no YouTube trazem módulo e aula ("Módulo 1 · Aula 01"); na URL do portal vale o número da aula no curso (`/aulas/2`, `/aulas/3`).
 
 ### Vincular o vídeo de uma aula
 
