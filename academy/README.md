@@ -10,6 +10,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Painel do aluno: continuar de onde parou, formação, Boletim do SOC, competências e sequência de estudo.
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
+- Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
 
 ## Como o login funciona
 
@@ -118,6 +119,16 @@ Certificado: o aluno confere o nome antes de emitir; depois de emitido, correç�
 update public.certificados set validacao_publica = false where codigo = 'CYD-....';
 ```
 
+#### Telas do aluno (06b)
+
+| Endereço | O que mostra |
+|---|---|
+| `/cursos/<curso>/modulos/<ordem>/questoes` | Sorteio do módulo, envio só com tudo respondido, nota e correção com a explicação de cada questão. "Responder de novo" faz um sorteio novo. |
+| `/cursos/<curso>/avaliacao` | O que falta para liberar, a espera entre tentativas, a prova (respostas guardadas no navegador até o envio, com confirmação antes de enviar) e só a nota no fim. |
+| `/cursos/<curso>/certificado` | Conferência do nome (vem do cadastro, editável, mesmas regras do banco), confirmação e emissão. Depois, os dados e o código de validação. |
+
+Na página do curso e na sala de aula, a linha "Questões do módulo" e o cadeado de módulo bloqueado só aparecem quando o módulo tem questões publicadas. O cartão da avaliação final só aparece quando ela existe para o aluno (liberada, em espera, em andamento ou aprovada) e o do certificado só quando ele está liberado ou emitido. Curso sem questões fica igual a antes. Se a consulta `academy_situacao_curso` falhar, a página do curso e a sala de aula seguem normais.
+
 ## Boletim do SOC
 
 ```sql
@@ -141,14 +152,14 @@ Para testar o login no ambiente local, `http://localhost:5180` precisa estar em 
 
 ### Testes de ponta a ponta
 
-`npm run e2e` sobe o build de produção (`vite preview`, porta 4180) e um Supabase falso (`e2e/supabase-falso.mjs`, porta 54399) e percorre o portal num navegador de verdade: pedido de link, link do e-mail com a tela de confirmação, link vencido, painel, sala de aula (o vídeo carrega uma vez, grava o progresso e conclui sem recarregar), navegação entre aulas e o celular sem rolagem lateral. Turnstile e YouTube são simulados nos testes; nada sai para a internet.
+`npm run e2e` sobe o build de produção (`vite preview`, porta 4180) e um Supabase falso (`e2e/supabase-falso.mjs`, porta 54399) e percorre o portal num navegador de verdade: pedido de link, link do e-mail com a tela de confirmação, link vencido, painel, sala de aula (o vídeo carrega uma vez, grava o progresso e conclui sem recarregar), navegação entre aulas, questões do módulo (erra, vê a explicação, refaz e passa), avaliação final aprovada e reprovada, emissão do certificado e o celular sem rolagem lateral. Turnstile e YouTube são simulados nos testes; nada sai para a internet.
 
 ```
 npx playwright install chromium   # uma vez
 npm run e2e
 ```
 
-Com um Chrome já instalado, dá para pular o download: `PW_CHROME=<caminho do chrome> npm run e2e`. O CI roda os mesmos testes no job do portal e guarda o relatório quando algo falha.
+O build do e2e usa o `postcss.config.js` da raiz do repositório: rode `npm ci` na raiz antes, num clone novo. Com um Chrome já instalado, dá para pular o download: `PW_CHROME=<caminho do chrome> npm run e2e`. O CI roda os mesmos testes no job do portal e guarda o relatório quando algo falha.
 
 ## Cloudflare Pages
 

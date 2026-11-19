@@ -6,6 +6,11 @@
  *   POST /__reset   volta ao estado inicial (cada teste começa limpo)
  *   GET  /__estado  o que o portal pediu ao "servidor", para as conferências
  *   GET  /__saude   usado pelo Playwright para saber que o servidor subiu
+ *   POST /__cenario aulas todas concluídas e/ou módulo aprovado, para os
+ *                   testes da avaliação final e do certificado
+ *
+ * O Módulo 1 tem questões (a primeira alternativa é sempre a certa) e a
+ * avaliação final tem um banco de 4 questões, com nota mínima de 75%.
  */
 import http from "node:http";
 
@@ -37,6 +42,32 @@ const CURSO = {
 };
 const AULAS = CURSO.modulos.flatMap((m) => m.aulas.map((a) => ({ ...a, modulo: m })));
 
+const id = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+const banco = (base, temas) =>
+  temas.map(([enunciado, alternativas], i) => ({
+    id: id(base + i * 10),
+    enunciado,
+    alternativas: alternativas.map((texto, j) => ({ id: id(base + i * 10 + j + 1), texto })),
+    explicacao: `A resposta certa é "${alternativas[0]}".`,
+  }));
+const QUESTOES_M1 = banco(100, [
+  ["Qual pilar da tríade CIA garante que só quem tem permissão lê a informação?", ["Confidencialidade", "Integridade", "Disponibilidade", "Autenticidade"]],
+  ["Uma falha que pode ser explorada é chamada de:", ["Vulnerabilidade", "Ameaça", "Impacto", "Risco residual"]],
+  ["Dar a cada conta só o acesso de que ela precisa é o princípio do:", ["Menor privilégio", "Defesa em profundidade", "Não repúdio", "Segregação de rede"]],
+]);
+const QUESTOES_FINAL = banco(500, [
+  ["Hash serve principalmente para verificar:", ["Integridade", "Confidencialidade", "Disponibilidade", "Velocidade"]],
+  ["Phishing é um ataque de:", ["Engenharia social", "Negação de serviço", "Força bruta", "Injeção de SQL"]],
+  ["MFA combina:", ["Fatores de autenticação diferentes", "Duas senhas iguais", "Dois navegadores", "Duas contas"]],
+  ["Backup offline protege melhor contra:", ["Ransomware", "Phishing", "Spam", "Shoulder surfing"]],
+]);
+const publica = (q) => ({ id: q.id, enunciado: q.enunciado, alternativas: q.alternativas });
+const corrigir = (qs, respostas) =>
+  respostas.map((r) => {
+    const q = qs.find((x) => x.id === r.questao);
+    return { questao: r.questao, escolhida: r.alternativa, correta: q?.alternativas[0].id === r.alternativa, alternativa_correta: q?.alternativas[0].id, explicacao: q?.explicacao };
+  });
+
 function novoEstado() {
   return {
     progresso: { a1: { posicao_seg: 122, concluida_em: "2026-11-18T10:00:00Z" } },
@@ -45,6 +76,39 @@ function novoEstado() {
     acessosRegistrados: 0,
     gravacoes: [],
     pedidosVideo: [],
+    moduloAprovado: false,
+    respostasModulo: [],
+    provaAberta: null,
+    provas: [],
+    esperaAte: null,
+    certificado: null,
+  };
+}
+
+function situacao() {
+  const feitas = AULAS.filter((a) => estado.progresso[a.id]?.concluida_em).length;
+  const aprovadoFinal = estado.provas.some((p) => p.aprovado);
+  const preOk = feitas === AULAS.length && estado.moduloAprovado;
+  const motivo = aprovadoFinal ? "aprovado" : !preOk ? "requisitos_pendentes" : estado.esperaAte && estado.esperaAte > Date.now() ? "aguarde" : "disponivel";
+  return {
+    requisitos: { exige_todas_aulas: true, exige_modulos: true, nota_minima_modulo: 70, nota_minima_final: 75, questoes_final: 4, espera_final_horas: 24, tentativas_final_max: null, carga_horaria_h: 6 },
+    aulas: { total: AULAS.length, concluidas: feitas },
+    modulos: CURSO.modulos.map((m) => ({
+      id: m.id, ordem: m.ordem, titulo: m.titulo, tem_questoes: m.id === "m1", aprovado: m.id === "m1" && estado.moduloAprovado, liberado: true,
+    })),
+    final: {
+      situacao: motivo,
+      prova_aberta: estado.provaAberta,
+      tentativas: estado.provas.length,
+      melhor_nota: estado.provas.length ? Math.max(...estado.provas.map((p) => p.nota)) : null,
+      proxima_em: motivo === "aguarde" ? new Date(estado.esperaAte).toISOString() : null,
+    },
+    certificado: {
+      elegivel: aprovadoFinal && preOk && !estado.certificado,
+      codigo: estado.certificado?.codigo ?? null,
+      nome: estado.certificado?.nome ?? null,
+      concluido_em: estado.certificado?.concluido_em ?? null,
+    },
   };
 }
 let estado = novoEstado();
@@ -100,6 +164,10 @@ http
           return enviar({ ok: true });
         case "/__estado":
           return enviar(estado);
+        case "/__cenario":
+          if (corpo.aulas_concluidas) for (const a of AULAS) estado.progresso[a.id] = { posicao_seg: a.duracao_seg, concluida_em: "2026-11-18T12:00:00Z" };
+          if (corpo.modulo_aprovado) estado.moduloAprovado = true;
+          return enviar({ ok: true });
         case "/functions/v1/academy-acesso":
           estado.pedidosAcesso.push(corpo);
           return enviar({ status: "enviado_se_inscrito" }, 202);
@@ -132,6 +200,39 @@ http
           };
           return enviar({ status: "ok", concluida: Boolean(estado.progresso[corpo.p_aula_id].concluida_em) });
         }
+        case "/rest/v1/rpc/academy_situacao_curso":
+          return enviar(situacao());
+        case "/rest/v1/rpc/academy_questoes_modulo":
+          if (corpo.p_modulo_id !== "m1") return enviar({ message: "sem_questoes" }, 400);
+          return enviar({ modulo_id: "m1", nota_minima: 70, aprovado: estado.moduloAprovado, questoes: QUESTOES_M1.map(publica) });
+        case "/rest/v1/rpc/academy_responder_modulo": {
+          estado.respostasModulo.push(corpo.p_respostas);
+          const correcao = corrigir(QUESTOES_M1, corpo.p_respostas ?? []);
+          const acertos = correcao.filter((c) => c.correta).length;
+          const nota = Math.round((acertos * 100) / QUESTOES_M1.length);
+          if (nota >= 70) estado.moduloAprovado = true;
+          return enviar({ acertos, total: QUESTOES_M1.length, nota, nota_minima: 70, aprovado: nota >= 70, correcao });
+        }
+        case "/rest/v1/rpc/academy_iniciar_final": {
+          const s = situacao();
+          if (!estado.provaAberta && s.final.situacao !== "disponivel") return enviar({ message: s.final.situacao }, 400);
+          estado.provaAberta ??= id(999);
+          return enviar({ prova_id: estado.provaAberta, iniciada_em: "2026-11-18T12:00:00Z", questoes: QUESTOES_FINAL.map(publica) });
+        }
+        case "/rest/v1/rpc/academy_enviar_final": {
+          if (corpo.p_prova_id !== estado.provaAberta) return enviar({ message: "prova_indisponivel" }, 400);
+          const acertos = corrigir(QUESTOES_FINAL, corpo.p_respostas ?? []).filter((c) => c.correta).length;
+          const nota = Math.round((acertos * 100) / QUESTOES_FINAL.length);
+          const aprovado = nota >= 75;
+          estado.provas.push({ nota, aprovado });
+          estado.provaAberta = null;
+          if (!aprovado) estado.esperaAte = Date.now() + 24 * 3600_000;
+          return enviar({ acertos, total: QUESTOES_FINAL.length, nota, nota_minima: 75, aprovado, proxima_em: aprovado ? null : new Date(estado.esperaAte).toISOString() });
+        }
+        case "/rest/v1/rpc/academy_emitir_certificado":
+          if (!situacao().certificado.elegivel && !estado.certificado) return enviar({ message: "nao_elegivel" }, 400);
+          estado.certificado ??= { codigo: "CYD-1A2B-3C4D-5E6F-7A8B", nome: corpo.p_nome, concluido_em: "2026-11-18" };
+          return enviar({ ...estado.certificado, curso_titulo: CURSO.titulo, carga_horaria_h: 6 });
         case "/rest/v1/cursos":
           return enviar(CURSO);
         case "/rest/v1/matriculas":
