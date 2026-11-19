@@ -26,6 +26,10 @@ const loaders: Record<string, Loader> = {
     import("./posts.chrome-158-correcoes-seguranca").then(
       (m) => m.chrome158CorrecoesSegurancaPost,
     ),
+  "pt:wordpress-7-1-5-correcoes-seguranca": () =>
+    import("./posts.wordpress-7-1-5-correcoes-seguranca").then(
+      (m) => m.wordpress715CorrecoesSegurancaPost,
+    ),
   "pt:wp2shell-wordpress-admin-web-shell": () =>
     import("./posts.wp2shell-wordpress").then((m) => m.wp2shellWordpressPost),
   "pt:apache-http-server-2-4-69-vulnerabilidades": () =>
@@ -78,6 +82,10 @@ const loaders: Record<string, Loader> = {
   "en:chrome-158-correcoes-seguranca": () =>
     import("./posts.chrome-158-correcoes-seguranca.en").then(
       (m) => m.chrome158CorrecoesSegurancaPostEn,
+    ),
+  "en:wordpress-7-1-5-correcoes-seguranca": () =>
+    import("./posts.wordpress-7-1-5-correcoes-seguranca.en").then(
+      (m) => m.wordpress715CorrecoesSegurancaPostEn,
     ),
   "en:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.en").then((m) => m.rathatAndroidTrojanPostEn),
@@ -134,6 +142,10 @@ const loaders: Record<string, Loader> = {
   "es:chrome-158-correcoes-seguranca": () =>
     import("./posts.chrome-158-correcoes-seguranca.es").then(
       (m) => m.chrome158CorrecoesSegurancaPostEs,
+    ),
+  "es:wordpress-7-1-5-correcoes-seguranca": () =>
+    import("./posts.wordpress-7-1-5-correcoes-seguranca.es").then(
+      (m) => m.wordpress715CorrecoesSegurancaPostEs,
     ),
   "es:rathat-trojan-bancario-android-controle-ia": () =>
     import("./posts.rathat-android-trojan.es").then((m) => m.rathatAndroidTrojanPostEs),
