@@ -3,7 +3,7 @@ import type { BlogPost } from "./posts";
 /**
  * Google Chrome 158 corrige 204 falhas, incluindo seis críticas (PT).
  * Base: Google Chrome Releases (17/11/2026) e análise do Cyber Security News.
- * Capa: public/assets/blog/chrome-158-correcoes-seguranca-thumb.webp
+ * Capa: public/assets/blog/chrome-158-correcoes-seguranca-capa.webp
  */
 export const chrome158CorrecoesSegurancaPost: BlogPost = {
   slug: "chrome-158-correcoes-seguranca",
@@ -15,7 +15,7 @@ export const chrome158CorrecoesSegurancaPost: BlogPost = {
   date: "19 de Novembro, 2026",
   dateISO: "2026-11-19",
   readTime: "7 min",
-  image: "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+  image: "/assets/blog/chrome-158-correcoes-seguranca-capa.webp",
   author: "Equipe CyDef",
   tags: [
     "Google Chrome",
