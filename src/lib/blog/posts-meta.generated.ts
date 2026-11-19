@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "chrome-158-correcoes-seguranca",
+    "title": "Chrome 158 fixes 204 flaws and six critical ones with code execution risk",
+    "category": "Threat Intelligence",
+    "excerpt": "Google released Chrome 158 with fixes for 204 vulnerabilities, including six critical memory flaws in WebView, garbage collection, WebAudio, GPU, ANGLE and Media. There is no confirmation of active exploitation or sandbox escape, but the update requires a restart and build verification across the fleet.",
+    "date": "November 19, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "7 min",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
     "title": "StingyBasilisk uses SMB and named pipes to spread malware across isolated Windows networks",
     "category": "Threat Intelligence",
@@ -284,6 +295,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "chrome-158-correcoes-seguranca",
+    "title": "Chrome 158 corrige 204 falhas e seis críticas com risco de execução de código",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O Google publicou o Chrome 158 com correções para 204 vulnerabilidades, entre elas seis falhas críticas de memória em WebView, coleta de lixo, WebAudio, GPU, ANGLE e Media. Não há confirmação de exploração ativa nem de quebra do sandbox, mas a atualização exige reinício e verificação da build em toda a frota.",
+    "date": "19 de Novembro, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "7 min",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
     "title": "StingyBasilisk usa SMB e pipes nomeados para espalhar malware em redes Windows isoladas",
     "category": "Inteligência de Ameaças",
@@ -561,6 +583,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "chrome-158-correcoes-seguranca",
+    "title": "Chrome 158 corrige 204 fallas y seis críticas con riesgo de ejecución de código",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Google publicó Chrome 158 con correcciones para 204 vulnerabilidades, entre ellas seis fallas críticas de memoria en WebView, recolección de basura, WebAudio, GPU, ANGLE y Media. No hay confirmación de explotación activa ni de escape del sandbox, pero la actualización exige reinicio y verificación de la build en toda la flota.",
+    "date": "19 de Noviembre, 2026",
+    "dateISO": "2026-11-19",
+    "readTime": "7 min",
+    "image": "/assets/blog/chrome-158-correcoes-seguranca-thumb.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "stingybasilisk-smb-pipes-nomeados-espionagem",
     "title": "StingyBasilisk usa SMB y pipes con nombre para propagar malware en redes Windows aisladas",
