@@ -16,6 +16,10 @@ export default defineConfig({
   build: {
     target: "es2022",
     sourcemap: false,
+    // Fonte nunca vira data: URL. A CSP do portal (public/_headers) libera só
+    // font-src 'self', e o subconjunto pequeno da JetBrains Mono embutido no
+    // CSS era bloqueado pelo navegador.
+    assetsInlineLimit: (arquivo) => (/\.(woff2?|ttf|otf)$/.test(arquivo) ? false : undefined),
     rollupOptions: {
       output: {
         manualChunks: {

@@ -16,6 +16,21 @@ export function percentual(parte: number, total: number): number {
   return Math.min(100, Math.max(0, Math.round((parte / total) * 100)));
 }
 
+/** "1 aula", "3 aulas", "0 aulas": concorda a palavra com a quantidade. */
+export function contagem(n: number, singular: string, plural: string): string {
+  return `${n} ${n === 1 ? singular : plural}`;
+}
+
+/** "1 de 1 aula", "2 de 5 aulas": a palavra concorda com o total. */
+export function fracao(parte: number, total: number, singular: string, plural: string): string {
+  return `${parte} de ${contagem(total, singular, plural)}`;
+}
+
+/** Texto em minúsculas e sem acento, para busca tolerante ("introducao" acha "Introdução"). */
+export function normalizar(texto: string): string {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
 export function primeiroNome(nome: string): string {
   return nome.trim().split(/\s+/)[0] ?? "";
 }

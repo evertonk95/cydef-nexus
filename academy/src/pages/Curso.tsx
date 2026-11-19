@@ -7,7 +7,7 @@ import { moduloPendente } from "@/lib/avaliacao";
 import { AvisoBloqueio, CartaoConclusao, LinhaQuestoes } from "@/components/avaliacao/Marcos";
 import { NIVEL } from "@/lib/cursos";
 import { aulaParaContinuar, caminhoAula, rotuloModulo } from "@/lib/aula";
-import { duracao, percentual } from "@/lib/formato";
+import { contagem, duracao, fracao, percentual } from "@/lib/formato";
 import { Cartao } from "@/components/ui/Cartao";
 import { Barra } from "@/components/ui/Barra";
 import { Esqueleto } from "@/components/ui/Esqueleto";
@@ -129,7 +129,7 @@ export default function Curso() {
               <div>
                 <p className="m-0 font-display text-lg font-semibold">Seu progresso</p>
                 <p className="m-0 font-mono text-[12.5px] text-muted">
-                  {feitas} de {aulas.length} aulas · {percentual(feitas, aulas.length)}%
+                  {fracao(feitas, aulas.length, "aula", "aulas")} · {percentual(feitas, aulas.length)}%
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function Curso() {
             )}
             <ul className="m-0 mt-5 flex list-none flex-col gap-2.5 p-0 text-sm text-muted">
               <li className="flex items-center gap-2.5"><Clock className="size-4 text-orange" aria-hidden="true" /> {duracao(total)} de vídeo</li>
-              <li className="flex items-center gap-2.5"><PlayCircle className="size-4 text-orange" aria-hidden="true" /> {aulas.length} aulas em {c.modulos.length} módulos</li>
+              <li className="flex items-center gap-2.5"><PlayCircle className="size-4 text-orange" aria-hidden="true" /> {contagem(aulas.length, "aula", "aulas")} em {contagem(c.modulos.length, "módulo", "módulos")}</li>
             </ul>
           </Cartao>
           {sit && <CartaoConclusao slug={c.slug} s={sit} />}

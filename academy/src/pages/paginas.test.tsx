@@ -26,9 +26,11 @@ describe("Painel do aluno", () => {
     expect(screen.getByRole("progressbar", { name: "Competência Triagem de alertas" })).toHaveAttribute("aria-valuenow", "60");
   });
 
-  it("boletim vazio explica o que vai aparecer, sem inventar notícia", async () => {
-    renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste(), boletim: [] }) });
-    expect(await screen.findByText(/aparecem aqui conforme forem publicados/)).toBeInTheDocument();
+  it("boletim e competências sem conteúdo ficam fora do painel", async () => {
+    renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste({ competencias: [] }), boletim: [] }) });
+    expect(await screen.findByText("Olá, Ana")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Boletim do SOC" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Suas competências" })).not.toBeInTheDocument();
     expect(screen.queryByText("AO VIVO")).not.toBeInTheDocument();
   });
 

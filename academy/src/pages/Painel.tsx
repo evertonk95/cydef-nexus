@@ -7,6 +7,7 @@ import { CartaoFormacao } from "@/components/painel/CartaoFormacao";
 import { CartaoBoletim } from "@/components/painel/CartaoBoletim";
 import { CartaoCompetencias } from "@/components/painel/CartaoCompetencias";
 import { CartaoSequencia } from "@/components/painel/CartaoSequencia";
+import { cn } from "@/lib/cn";
 import { SemCadastro, FalhaCarregamento } from "./Estados";
 
 export default function Painel() {
@@ -18,6 +19,11 @@ export default function Painel() {
   if (painel.isSuccess && painel.data === null) return <SemCadastro />;
 
   const p = painel.data;
+  // Boletim e Competências só entram quando têm o que mostrar. Para a grade não
+  // pular quando o boletim chega, o painel espera as duas consultas.
+  const pronto = p && !boletim.isPending;
+  const comBoletim = boletim.isError || (boletim.data?.length ?? 0) > 0;
+  const comCompetencias = (p?.competencias.length ?? 0) > 0;
   return (
     <>
       <section className="mt-1.5 mb-7 flex flex-col gap-2">
@@ -39,7 +45,7 @@ export default function Painel() {
         <p className="m-0 text-[16.5px] text-muted">Aprenda na prática, evolua suas habilidades e atue como um analista de SOC.</p>
       </section>
 
-      {!p ? (
+      {!pronto ? (
         <div aria-busy="true" aria-label="Carregando o painel" className="grid gap-5 lg:grid-cols-[1.15fr_1fr_1.1fr]">
           {[0, 1, 2].map((c) => (
             <div key={c} className="flex flex-col gap-5">
@@ -57,18 +63,20 @@ export default function Painel() {
           ))}
         </div>
       ) : (
-        <div className="grid items-start gap-5 md:grid-cols-2 lg:grid-cols-[1.15fr_1fr_1.1fr]">
+        <div className={cn("grid items-start gap-5 md:grid-cols-2", comBoletim ? "lg:grid-cols-[1.15fr_1fr_1.1fr]" : "lg:grid-cols-[1.15fr_1.1fr]")}>
           <div className="flex flex-col gap-5">
             <CartaoContinuar painel={p} />
             {p.formacoes.map((f, i) => (
               <CartaoFormacao key={f.slug} formacao={f} indice={3 + i} />
             ))}
           </div>
-          <div className="flex flex-col gap-5">
-            <CartaoBoletim itens={boletim.data ?? []} carregando={boletim.isPending} erro={boletim.isError} />
-          </div>
-          <div className="flex flex-col gap-5 md:col-span-2 lg:col-span-1">
-            <CartaoCompetencias competencias={p.competencias} />
+          {comBoletim && (
+            <div className="flex flex-col gap-5">
+              <CartaoBoletim itens={boletim.data ?? []} carregando={false} erro={boletim.isError} />
+            </div>
+          )}
+          <div className={cn("flex flex-col gap-5", comBoletim && "md:col-span-2 lg:col-span-1")}>
+            {comCompetencias && <CartaoCompetencias competencias={p.competencias} />}
             <CartaoSequencia dias={p.dias_estudo} hoje={p.hoje} />
           </div>
         </div>
