@@ -2,6 +2,7 @@
 import type { BlogPost } from "./posts";
 import { stingybasiliskSmbPipesPostEs } from "./posts.stingybasilisk-smb-pipes-nomeados-espionagem.es";
 import { firefox160CorrecoesSegurancaPostEs } from "./posts.firefox-160-correcoes-seguranca.es";
+import { chrome158CorrecoesSegurancaPostEs } from "./posts.chrome-158-correcoes-seguranca.es";
 import { wp2shellWordpressPostEs } from "./posts.wp2shell-wordpress.es";
 import { apacheHttpServer2469PostEs } from "./posts.apache-http-server-2-4-69.es";
 import { googleChromeUpdateFixesPostEs } from "./posts.google-chrome-update-fixes.es";
@@ -19,6 +20,7 @@ import { apacheHttp2RcePostEs } from "./posts.apache-http2-rce.es";
 import { noisytcpLinuxPostEs } from "./posts.noisytcp-linux.es";
 
 export const blogPostsEs: BlogPost[] = [
+  chrome158CorrecoesSegurancaPostEs,
   stingybasiliskSmbPipesPostEs,
   firefox160CorrecoesSegurancaPostEs,
   noisytcpLinuxPostEs,
