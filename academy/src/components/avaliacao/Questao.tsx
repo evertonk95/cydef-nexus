@@ -31,7 +31,7 @@ export function Questao({
   return (
     <fieldset
       className={cn(
-        "m-0 min-w-0 rounded-2xl border bg-[rgba(9,9,10,0.7)] p-5 sm:p-6",
+        "m-0 min-w-0 rounded-2xl border bg-panel p-5 sm:p-6",
         !correcao ? "border-line" : correcao.correta ? "border-ok/35" : "border-bad/35",
       )}
     >
@@ -39,14 +39,14 @@ export function Questao({
         Questão {indice} de {total}
       </legend>
       <div className="mb-4 flex items-start gap-3">
-        <span className="mt-0.5 flex-none font-mono text-[12.5px] text-orange" aria-hidden="true">
+        <span className="mt-0.5 flex-none text-[12.5px] text-muted" aria-hidden="true">
           {String(indice).padStart(2, "0")}/{String(total).padStart(2, "0")}
         </span>
         <p className="m-0 text-[16px] leading-relaxed font-semibold text-ink">{questao.enunciado}</p>
         {correcao && (
           <span
             className={cn(
-              "ml-auto inline-flex flex-none items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[11.5px] tracking-wide uppercase",
+              "ml-auto inline-flex flex-none items-center gap-1 rounded-full px-2.5 py-1 text-[13px]",
               correcao.correta ? "bg-ok/12 text-ok" : "bg-bad/12 text-bad",
             )}
           >
@@ -65,14 +65,14 @@ export function Questao({
               <label
                 className={cn(
                   "flex items-start gap-3 rounded-xl border px-3.5 py-3 text-[15px] leading-relaxed transition-colors duration-150",
-                  revisao || desabilitada ? "cursor-default" : "cursor-pointer hover:border-orange/50 hover:bg-orange/[0.04]",
+                  revisao || desabilitada ? "cursor-default" : "cursor-pointer hover:border-muted",
                   "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-orange",
                   certa
                     ? "border-ok/50 bg-ok/[0.07]"
                     : errada
                       ? "border-bad/50 bg-bad/[0.07]"
                       : marcada
-                        ? "border-orange bg-orange/[0.08]"
+                        ? "border-orange"
                         : "border-line",
                 )}
               >
@@ -88,7 +88,7 @@ export function Questao({
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "grid size-6 flex-none place-items-center rounded-full border-[1.5px] font-mono text-[11.5px]",
+                    "grid size-6 flex-none place-items-center rounded-full border-[1.5px] text-[11.5px]",
                     certa ? "border-ok bg-ok text-[#052e13]" : errada ? "border-bad bg-bad text-[#2b0505]" : marcada ? "border-orange bg-orange text-orange-ink" : "border-line-hi text-muted",
                   )}
                 >

@@ -2,25 +2,22 @@ import { useCallback } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check, CircleCheck, ClipboardCheck, Layers, ListChecks, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleCheck, ClipboardCheck, ListChecks, Lock } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { caminhoAvaliacao, caminhoQuestoes, moduloPendente, mostraConclusao } from "@/lib/avaliacao";
 import { usePortal } from "@/lib/portal";
-import { caminhoAula, localizarAula, numeroAula, registrarProgresso, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
-import { fracao, percentual } from "@/lib/formato";
+import { caminhoAula, localizarAula, numeroAula, proximoModuloEmProducao, registrarProgresso, resumoDoCurso, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
 import type { CursoDetalhe } from "@/lib/cursos";
 import { useAvisos } from "@/components/ui/avisos-ctx";
-import { Cartao } from "@/components/ui/Cartao";
 import { Barra } from "@/components/ui/Barra";
 import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { Player } from "@/components/aula/Player";
 import { ListaAulas } from "@/components/aula/ListaAulas";
-import { cn } from "@/lib/cn";
 import { FalhaCarregamento, NaoEncontrado } from "./Estados";
 
 const botaoNav =
-  "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[15px] font-semibold transition-[transform,background-color,border-color,box-shadow] duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-0.5";
+  "inline-flex h-11 items-center justify-center gap-2 rounded-[10px] border border-line-hi px-4 text-[15px] font-semibold text-ink transition-colors duration-150 hover:border-muted";
 
 export default function Aula() {
   const { slug = "", numero = "" } = useParams();
@@ -82,20 +79,18 @@ export default function Aula() {
 
   if (!c.matriculado) {
     return (
-      <Cartao interativo={false} rotulo="Curso fora da sua conta" className="mx-auto max-w-xl text-center">
+      <section aria-label="Curso fora da sua conta" className="painel-card mx-auto max-w-xl p-8 text-center">
         <h1 className="m-0 mb-2 font-display text-2xl font-semibold">Este curso ainda não está na sua conta</h1>
         <p className="m-0 mb-6 text-muted">Os cursos gratuitos entram na sua conta automaticamente quando você acessa o portal.</p>
-        <Link to="/cursos" className={cn(botaoNav, "border border-line-hi hover:border-orange")}>
+        <Link to="/cursos" className={botaoNav}>
           Ver meus cursos
         </Link>
-      </Cartao>
+      </section>
     );
   }
 
   const { aula, modulo, anterior, proxima, indice, total } = pos;
-  const aulas = c.modulos.flatMap((m) => m.aulas);
-  const feitas = aulas.filter((a) => a.concluida).length;
-  const pct = percentual(feitas, aulas.length);
+  const resumo = resumoDoCurso(c);
   const marcando = progresso.isPending && progresso.variables?.concluida === true;
 
   // Questões do módulo no caminho: a próxima aula de outro módulo só abre depois delas.
@@ -106,6 +101,7 @@ export default function Aula() {
   const proximaEmOutroModulo = proxima ? !modulo.aulas.some((a) => a.id === proxima.id) : false;
   const questoesAntes = msAtual && msAtual.tem_questoes && !msAtual.aprovado && !bloqueada && (!proxima || proximaEmOutroModulo) ? msAtual : null;
   const fimDoCurso = !proxima && !questoesAntes && mostraConclusao(sit);
+  const emBreve = proxima || questoesAntes || fimDoCurso ? null : proximoModuloEmProducao(c, modulo.id);
 
   const concluir = () => {
     mutate(
@@ -119,59 +115,59 @@ export default function Aula() {
 
   return (
     <>
-      <nav aria-label="Você está em" className="mb-5 flex flex-wrap items-center gap-2.5 text-sm text-muted">
+      <nav aria-label="Você está em" className="mb-6 flex flex-wrap items-center gap-2.5 text-sm text-muted">
         <Link to="/cursos" className="hover:text-ink">Meus cursos</Link>
-        <span aria-hidden="true" className="text-[#4a4a50]">/</span>
+        <span aria-hidden="true" className="text-[#4a4a4a]">/</span>
         <Link to={`/cursos/${c.slug}`} className="hover:text-ink">{c.titulo}</Link>
-        <span aria-hidden="true" className="text-[#4a4a50]">/</span>
+        <span aria-hidden="true" className="text-[#4a4a4a]">/</span>
         <span aria-current="page" className="text-ink">Aula {numeroAula(aula.numero)}</span>
       </nav>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="min-w-0">
+      <div className="flex flex-wrap items-start gap-8">
+        <div className="min-w-0 flex-[999_1_560px]">
           <motion.div
             key={aula.id}
-            initial={reduzir ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
+            initial={reduzir ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+            className="flex flex-col gap-7"
           >
             <Player key={aula.id} aula={aula} salvar={salvar} />
 
-            <div className="mt-6 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-              <header className="min-w-0">
-                <p className="m-0 mb-2 font-mono text-[12px] tracking-[0.14em] text-orange uppercase">
-                  {rotuloModuloCurto(modulo.ordem, modulo.titulo)} · Aula {numeroAula(aula.numero)} de {numeroAula(total)}
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+              <header className="flex min-w-0 flex-col gap-2.5">
+                <p className="m-0 text-sm text-muted">
+                  {rotuloModuloCurto(modulo.ordem, modulo.titulo)}, aula {indice} de {total}
                 </p>
-                <h1 className="m-0 font-display text-[clamp(26px,2.8vw,38px)] leading-tight font-bold tracking-tight text-balance">{aula.titulo}</h1>
+                <h1 className="m-0 font-display text-[clamp(28px,2.8vw,38px)] leading-tight font-semibold tracking-tight">{aula.titulo}</h1>
               </header>
-              <div className="flex flex-none gap-2.5">
-                {anterior ? (
-                  <Link to={caminhoAula(c.slug, anterior.numero)} className={cn(botaoNav, "border border-line-hi bg-transparent hover:border-orange hover:bg-orange/5")}>
-                    <ArrowLeft className="size-4" aria-hidden="true" /> Aula anterior
-                  </Link>
-                ) : null}
-                {questoesAntes ? (
-                  <Link to={caminhoQuestoes(c.slug, questoesAntes.ordem)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
-                    <ListChecks className="size-4" aria-hidden="true" /> Questões do módulo
-                  </Link>
-                ) : proxima ? (
-                  <Link to={caminhoAula(c.slug, proxima.numero)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
-                    Próxima aula <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                ) : fimDoCurso ? (
-                  <Link to={caminhoAvaliacao(c.slug)} className={cn(botaoNav, "border-[1.5px] border-orange bg-orange/5 text-orange-hi hover:bg-orange/15 hover:shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]")}>
-                    <ClipboardCheck className="size-4" aria-hidden="true" /> Avaliação final
-                  </Link>
-                ) : null}
-              </div>
+              {(anterior || proxima || questoesAntes || fimDoCurso) && (
+                <div className="flex flex-none gap-2.5">
+                  {anterior && (
+                    <Link to={caminhoAula(c.slug, anterior.numero)} className={botaoNav}>
+                      <ArrowLeft className="size-4" aria-hidden="true" /> Aula anterior
+                    </Link>
+                  )}
+                  {questoesAntes ? (
+                    <Link to={caminhoQuestoes(c.slug, questoesAntes.ordem)} className={botaoNav}>
+                      <ListChecks className="size-4" aria-hidden="true" /> Questões do módulo
+                    </Link>
+                  ) : proxima ? (
+                    <Link to={caminhoAula(c.slug, proxima.numero)} className={botaoNav}>
+                      Próxima aula <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  ) : fimDoCurso ? (
+                    <Link to={caminhoAvaliacao(c.slug)} className={botaoNav}>
+                      <ClipboardCheck className="size-4" aria-hidden="true" /> Avaliação final
+                    </Link>
+                  ) : null}
+                </div>
+              )}
             </div>
 
-            <div className="mt-5" aria-live="polite">
+            <div aria-live="polite">
               {bloqueada ? (
-                <Link
-                  to={pendente ? caminhoQuestoes(c.slug, pendente.ordem) : `/cursos/${c.slug}`}
-                  className={cn(botaoNav, "border border-line-hi bg-transparent hover:border-orange hover:bg-orange/5")}
-                >
+                <Link to={pendente ? caminhoQuestoes(c.slug, pendente.ordem) : `/cursos/${c.slug}`} className={botaoNav}>
                   <Lock className="size-4" aria-hidden="true" />
                   {pendente ? `Ir para as questões do ${rotuloModuloCurto(pendente.ordem, pendente.titulo)}` : "Voltar ao curso"}
                 </Link>
@@ -180,46 +176,45 @@ export default function Aula() {
                   <CircleCheck className="size-[18px]" aria-hidden="true" /> Aula concluída
                 </p>
               ) : (
-                <Botao variante="fantasma" onClick={concluir} disabled={marcando} className="px-4 py-2.5 text-[15px]">
+                <Botao variante="fantasma" onClick={concluir} disabled={marcando} className="h-11 px-4 text-[15px]">
                   <Check className="size-[18px]" aria-hidden="true" /> {marcando ? "Marcando..." : "Marcar como concluída"}
                 </Botao>
               )}
             </div>
 
+            {emBreve && (
+              <p className="m-0 rounded-[10px] border border-line px-[18px] py-4 text-[15px] text-[#d4d4d4]">
+                A próxima aula sai no {rotuloModulo(emBreve.ordem, emBreve.titulo)}. Ela aparece no seu painel assim que for publicada.
+              </p>
+            )}
+
             {aula.resumo && (
-              <section aria-labelledby="h-sobre" className="mt-8 max-w-[75ch] border-t border-line pt-6">
-                <h2 id="h-sobre" className="m-0 mb-3 font-display text-lg font-semibold">Sobre a aula</h2>
-                <p className="m-0 leading-relaxed text-[#d6d6d6]">{aula.resumo}</p>
+              <section aria-labelledby="h-sobre" className="max-w-[68ch] border-t border-line pt-7">
+                <h2 id="h-sobre" className="m-0 mb-2.5 font-display text-xl font-semibold">Sobre a aula</h2>
+                <p className="m-0 leading-relaxed text-[#d4d4d4]">{aula.resumo}</p>
               </section>
             )}
           </motion.div>
         </div>
 
-        <aside className="flex flex-col gap-4 lg:sticky lg:top-24" aria-label="Seu caminho no curso">
-          <Cartao interativo={false} indice={1}>
-            <div className="mb-4 flex items-center gap-3.5">
-              <span className="grid size-11 flex-none place-items-center rounded-xl border border-orange/25 bg-orange/10 text-orange">
-                <Layers className="size-[22px]" aria-hidden="true" />
-              </span>
-              <div className="min-w-0">
-                <p className="m-0 truncate font-display text-lg font-semibold">{c.titulo}</p>
-                <p className="m-0 font-mono text-[12.5px] text-muted">
-                  {fracao(feitas, aulas.length, "aula", "aulas")} · {pct}%
-                </p>
-              </div>
-            </div>
-            <Barra valor={pct} rotulo={`Progresso em ${c.titulo}`} />
-          </Cartao>
+        <aside className="flex min-w-0 flex-[1_1_320px] flex-col gap-4 lg:sticky lg:top-24" aria-label="Seu caminho no curso">
+          <div className="flex flex-col gap-3 pt-1 pb-2">
+            <h2 className="m-0 font-display text-xl font-semibold">{c.titulo}</h2>
+            <p className="m-0 text-sm text-muted">{resumo.texto}</p>
+            {resumo.emProducao === 0 && resumo.total > 0 && (
+              <Barra valor={resumo.percentual} rotulo={`Progresso em ${c.titulo}`} cor={resumo.feitas === resumo.total ? "verde" : "laranja"} />
+            )}
+          </div>
           <ListaAulas curso={c} atual={aula.id} moduloAtual={modulo.id} situacao={sit} />
           {proxima && !questoesAntes && (
             <Link
               to={caminhoAula(c.slug, proxima.numero)}
-              className="group flex items-center gap-3 rounded-2xl border border-line bg-[rgba(9,9,10,0.7)] px-4 py-3.5 text-sm transition-colors duration-150 hover:border-orange/40"
+              className="flex items-center gap-3 rounded-[14px] border border-line px-4 py-3.5 text-sm transition-colors duration-150 hover:border-line-hi"
             >
               <span className="min-w-0 flex-1">
-                <span className="font-semibold text-orange-hi">Próxima aula:</span> {proxima.titulo}
+                <span className="font-semibold">Próxima aula:</span> {proxima.titulo}
               </span>
-              <ArrowRight className="size-4 flex-none text-orange transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowRight className="size-4 flex-none text-muted" aria-hidden="true" />
             </Link>
           )}
           <p className="sr-only">

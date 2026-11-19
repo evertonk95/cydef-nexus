@@ -20,7 +20,7 @@ async function responder(page: Page, certas: boolean) {
 
 test("questões do módulo: erra, vê a explicação, refaz e libera", async ({ page, request }) => {
   await page.goto("/cursos/cybersecurity-fundamentals");
-  await page.getByRole("button", { name: /Módulo 1 · Princípios de segurança/ }).click();
+  await page.getByRole("button", { name: /Módulo 1: Princípios de segurança/ }).click();
   await page.getByRole("link", { name: /Questões do módulo/ }).click();
   await expect(page).toHaveURL(/\/modulos\/1\/questoes$/);
 
@@ -39,7 +39,7 @@ test("questões do módulo: erra, vê a explicação, refaz e libera", async ({ 
   expect((await estado(request)).respostasModulo).toHaveLength(2);
 
   await page.goto("/cursos/cybersecurity-fundamentals");
-  await page.getByRole("button", { name: /Módulo 1 · Princípios de segurança/ }).click();
+  await page.getByRole("button", { name: /Módulo 1: Princípios de segurança/ }).click();
   await expect(page.getByRole("link", { name: /Questões do módulo/ })).toContainText("Aprovado");
 });
 

@@ -3,11 +3,10 @@ import { Outlet } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePortal } from "@/lib/portal";
 import { registrarAcessoDaSessao } from "@/lib/sessao-acesso";
-import { FundoParticulas } from "@/components/fx/FundoParticulas";
 import { Topo } from "./Topo";
 import { PaletaComandos } from "./PaletaComandos";
 
-/** Moldura das páginas logadas: fundo, barra superior, busca com Ctrl+K. */
+/** Moldura das páginas logadas: barra superior e busca com Ctrl+K. */
 export function Moldura() {
   const [busca, setBusca] = useState(false);
   const { sb, sessao } = usePortal();
@@ -32,13 +31,12 @@ export function Moldura() {
   }, []);
   return (
     <>
-      <FundoParticulas />
-      <div className="relative z-10">
+      <div>
         <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-orange focus:px-4 focus:py-2 focus:text-orange-ink">
           Pular para o conteúdo
         </a>
         <Topo abrirBusca={() => setBusca(true)} />
-        <main id="conteudo" className="mx-auto max-w-[1380px] px-4 pt-7 pb-24 sm:px-6">
+        <main id="conteudo" className="mx-auto max-w-[1200px] px-5 pt-10 pb-24 sm:px-8">
           <Outlet />
         </main>
       </div>

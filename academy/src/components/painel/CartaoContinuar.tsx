@@ -1,55 +1,56 @@
 import { Link } from "react-router";
-import { BookOpenCheck, Play } from "lucide-react";
-import { Cartao, CabecalhoCartao } from "@/components/ui/Cartao";
-import { Barra } from "@/components/ui/Barra";
-import { Contador } from "@/components/ui/Contador";
-import { Capa } from "./Capa";
+import { Play } from "lucide-react";
 import { relogio } from "@/lib/formato";
-import { caminhoAula, rotuloModuloCurto } from "@/lib/aula";
+import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
 import type { Painel } from "@/lib/painel";
 
+/** A ação principal do painel: voltar para a aula onde o aluno parou. */
 export function CartaoContinuar({ painel }: { painel: Painel }) {
   const c = painel.continuar;
   if (!c) {
     const temCurso = painel.cursos.length > 0;
     return (
-      <Cartao indice={0} rotulo="Continue de onde parou">
-        <CabecalhoCartao id="h-continuar" titulo={temCurso ? "Tudo em dia" : "Seus cursos"} icone={<BookOpenCheck />} />
-        <p className="m-0 leading-relaxed text-muted">
+      <section aria-labelledby="h-continuar" className="painel-card flex flex-col gap-3 p-8">
+        <h2 id="h-continuar" className="m-0 font-display text-[26px] leading-tight font-semibold tracking-tight">
+          {temCurso ? "Tudo em dia" : "Seus cursos"}
+        </h2>
+        <p className="m-0 max-w-[60ch] leading-relaxed text-muted">
           {temCurso
             ? "Você concluiu todas as aulas publicadas dos seus cursos. Quando uma aula nova sair, ela aparece aqui."
             : "Os cursos da sua inscrição aparecem aqui assim que as primeiras aulas forem publicadas. Avisamos por e-mail."}
         </p>
-      </Cartao>
+      </section>
     );
   }
-  const numero = String(c.aula_numero).padStart(2, "0");
+  const assistido = c.duracao_seg > 0 ? Math.min(100, Math.round((c.posicao_seg / c.duracao_seg) * 100)) : 0;
+  const caminho = caminhoAula(c.curso_slug, c.aula_numero);
   return (
-    <Cartao indice={0} rotulo="Continue de onde parou">
-      <CabecalhoCartao id="h-continuar" titulo="Continue de onde parou" icone={<Play />} />
-      <Link to={caminhoAula(c.curso_slug, c.aula_numero)} className="group block rounded-xl" aria-label={`Abrir a aula ${numero}, ${c.aula_titulo}, do curso ${c.curso_titulo}`}>
-        <Capa curso={c.curso_titulo} rotuloTempo={c.posicao_seg > 0 ? relogio(c.posicao_seg) : relogio(c.duracao_seg)} />
-      </Link>
-      <p className="rotulo-mono mt-4 mb-1">
-        {c.curso_titulo} · {rotuloModuloCurto(c.modulo_ordem, c.modulo_titulo)}
+    <section aria-labelledby="h-continuar" className="painel-card flex flex-col gap-5 p-8">
+      <p className="m-0 text-sm text-muted">
+        {c.curso_titulo}, {rotuloModulo(c.modulo_ordem, c.modulo_titulo)}
       </p>
-      <h3 className="m-0 text-xl font-semibold tracking-tight">
-        Aula {numero}: {c.aula_titulo}
-      </h3>
-      <div className="my-4 flex items-center gap-3.5">
-        <Barra valor={c.progresso_curso} rotulo={`Progresso no curso ${c.curso_titulo}`} className="flex-1" />
-        <span className="min-w-10 text-right font-mono text-sm text-muted">
-          <Contador valor={c.progresso_curso} sufixo="%" />
-        </span>
+      <h2 id="h-continuar" className="m-0 max-w-[26ch] font-display text-[30px] leading-tight font-semibold tracking-tight">
+        Aula {numeroAula(c.aula_numero)}: {c.aula_titulo}
+      </h2>
+      {c.posicao_seg > 0 && (
+        <div className="flex max-w-[480px] flex-col gap-2">
+          <div role="progressbar" aria-label="Quanto você já assistiu desta aula" aria-valuemin={0} aria-valuemax={100} aria-valuenow={assistido} className="h-1 overflow-hidden rounded-full bg-line">
+            <span className="block h-full origin-left bg-orange" style={{ transform: `scaleX(${assistido / 100})` }} />
+          </div>
+          <p className="m-0 text-sm text-muted">
+            Você parou em {relogio(c.posicao_seg)} de {relogio(c.duracao_seg)}
+          </p>
+        </div>
+      )}
+      <div className="mt-1 flex flex-wrap items-center gap-5">
+        <Link to={caminho} className="inline-flex h-12 items-center gap-2.5 rounded-[10px] bg-orange px-6 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi">
+          <Play className="size-4 fill-current" aria-hidden="true" />
+          {c.posicao_seg > 0 ? "Continuar aula" : "Começar aula"}
+        </Link>
+        <Link to={`/cursos/${c.curso_slug}`} className="text-[15px] font-medium text-muted underline underline-offset-4 hover:text-ink">
+          Ver o curso
+        </Link>
       </div>
-      <Link
-        to={caminhoAula(c.curso_slug, c.aula_numero)}
-        className="group/cta relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-[linear-gradient(180deg,var(--color-orange-hi),var(--color-orange)_55%,#ea580c)] p-4 text-lg font-bold text-orange-ink transition-transform duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-0.5 active:translate-y-0 animate-[respirar_3.2s_ease-in-out_infinite]"
-      >
-        <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-2/5 -translate-x-[120%] bg-[linear-gradient(100deg,transparent,rgba(255,255,255,0.55),transparent)] group-hover/cta:animate-[reflexo_900ms_var(--ease-out-soft)]" />
-        <Play className="size-5" aria-hidden="true" />
-        Continuar
-      </Link>
-    </Cartao>
+    </section>
   );
 }

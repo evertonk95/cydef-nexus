@@ -1,86 +1,84 @@
-import { motion, useReducedMotion } from "motion/react";
-import { usePainel, useBoletim } from "@/lib/consultas";
-import { primeiroNome } from "@/lib/formato";
+import { usePainel, useBoletim, useCursosDetalhados } from "@/lib/consultas";
+import { primeiroNome, saudacao } from "@/lib/formato";
+import type { Painel as DadosPainel } from "@/lib/painel";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { CartaoContinuar } from "@/components/painel/CartaoContinuar";
-import { CartaoFormacao } from "@/components/painel/CartaoFormacao";
 import { CartaoBoletim } from "@/components/painel/CartaoBoletim";
 import { CartaoCompetencias } from "@/components/painel/CartaoCompetencias";
 import { CartaoSequencia } from "@/components/painel/CartaoSequencia";
-import { cn } from "@/lib/cn";
+import { MatrizFormacao } from "@/components/painel/MatrizFormacao";
 import { SemCadastro, FalhaCarregamento } from "./Estados";
+
+/** Onde o aluno está, em uma frase. Sem aula em andamento, nenhuma frase. */
+function ondeEsta(p: DadosPainel): string | null {
+  const c = p.continuar;
+  if (!c) return null;
+  const lugar = c.modulo_ordem === 0 ? `na ${c.modulo_titulo}` : `no Módulo ${c.modulo_ordem}`;
+  return `Você está ${lugar} de ${c.curso_titulo}.`;
+}
 
 export default function Painel() {
   const painel = usePainel();
   const boletim = useBoletim();
-  const reduzir = useReducedMotion();
+  const p = painel.data;
+  const detalhes = useCursosDetalhados((p?.cursos ?? []).map((c) => c.slug));
 
   if (painel.isError) return <FalhaCarregamento tentar={() => void painel.refetch()} />;
-  if (painel.isSuccess && painel.data === null) return <SemCadastro />;
+  if (painel.isSuccess && p === null) return <SemCadastro />;
 
-  const p = painel.data;
   // Boletim e Competências só entram quando têm o que mostrar. Para a grade não
   // pular quando o boletim chega, o painel espera as duas consultas.
-  const pronto = p && !boletim.isPending;
+  const pronto = p && !boletim.isPending ? p : null;
   const comBoletim = boletim.isError || (boletim.data?.length ?? 0) > 0;
   const comCompetencias = (p?.competencias.length ?? 0) > 0;
+  const frase = p ? ondeEsta(p) : null;
+  // A matriz some se nenhum curso trouxe módulos (por exemplo, falha ao carregar).
+  const comMatriz = (p?.cursos.length ?? 0) > 0 && (detalhes.carregando || detalhes.cursos.length > 0);
+
   return (
-    <>
-      <section className="mt-1.5 mb-7 flex flex-col gap-2">
-        <span className="rotulo-mono flex items-center gap-2.5 before:size-3.5 before:border-t-2 before:border-l-2 before:border-orange before:content-['']">
-          {p ? `Olá, ${primeiroNome(p.nome)}` : "Carregando seu painel"}
-        </span>
-        <motion.h1
-          initial={reduzir ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
-          className="m-0 flex flex-wrap items-center gap-[18px] font-display text-[clamp(30px,3.4vw,44px)] leading-tight font-bold tracking-tight"
-        >
-          Sua jornada na{" "}
-          <span className="bg-[linear-gradient(90deg,var(--color-orange),#fdba74,var(--color-orange))] bg-[length:200%_100%] bg-clip-text text-transparent animate-[brilho-texto_6s_linear_infinite]">
-            defesa cibernética
-          </span>
-          <span aria-hidden="true" className="relative inline-block h-[3px] w-16 overflow-hidden rounded bg-[linear-gradient(90deg,var(--color-orange),transparent)] after:absolute after:inset-0 after:-translate-x-full after:bg-[linear-gradient(90deg,transparent,#fff,transparent)] after:animate-[varrer_2.8s_var(--ease-out-soft)_infinite] after:content-['']" />
-        </motion.h1>
-        <p className="m-0 text-[16.5px] text-muted">Aprenda na prática, evolua suas habilidades e atue como um analista de SOC.</p>
+    <div className="flex flex-col gap-14">
+      <section aria-labelledby="h-ola" className="flex flex-col gap-1.5">
+        <h1 id="h-ola" className="m-0 font-display text-[clamp(30px,3.4vw,40px)] leading-tight font-semibold tracking-tight">
+          {p ? `${saudacao(new Date().getHours())}, ${primeiroNome(p.nome)}.` : "Carregando seu painel"}
+        </h1>
+        {frase && <p className="m-0 text-muted">{frase}</p>}
       </section>
 
       {!pronto ? (
-        <div aria-busy="true" aria-label="Carregando o painel" className="grid gap-5 lg:grid-cols-[1.15fr_1fr_1.1fr]">
-          {[0, 1, 2].map((c) => (
-            <div key={c} className="flex flex-col gap-5">
-              <div className="painel-card flex flex-col gap-4 p-[22px]">
-                <Esqueleto className="h-9 w-48" />
-                <Esqueleto className="aspect-[16/8.4] w-full rounded-xl" />
-                <Esqueleto className="h-5 w-3/4" />
-                <Esqueleto className="h-12 w-full rounded-xl" />
-              </div>
-              <div className="painel-card flex flex-col gap-3 p-[22px]">
-                <Esqueleto className="h-9 w-40" />
-                <Esqueleto className="h-24 w-full" />
-              </div>
-            </div>
-          ))}
+        <div aria-busy="true" aria-label="Carregando o painel" className="flex flex-wrap gap-6">
+          <div className="painel-card flex min-w-0 flex-[999_1_560px] flex-col gap-5 p-8">
+            <Esqueleto className="h-4 w-1/2" />
+            <Esqueleto className="h-9 w-3/4" />
+            <Esqueleto className="h-1 w-2/3" />
+            <Esqueleto className="h-12 w-44 rounded-[10px]" />
+          </div>
+          <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-4 rounded-2xl border border-line p-7">
+            <Esqueleto className="h-7 w-40" />
+            <Esqueleto className="h-24 w-full" />
+          </div>
         </div>
       ) : (
-        <div className={cn("grid items-start gap-5 md:grid-cols-2", comBoletim ? "lg:grid-cols-[1.15fr_1fr_1.1fr]" : "lg:grid-cols-[1.15fr_1.1fr]")}>
-          <div className="flex flex-col gap-5">
-            <CartaoContinuar painel={p} />
-            {p.formacoes.map((f, i) => (
-              <CartaoFormacao key={f.slug} formacao={f} indice={3 + i} />
-            ))}
-          </div>
-          {comBoletim && (
-            <div className="flex flex-col gap-5">
-              <CartaoBoletim itens={boletim.data ?? []} carregando={false} erro={boletim.isError} />
+        <>
+          <div className="flex flex-wrap items-start gap-6">
+            <div className="min-w-0 flex-[999_1_560px]">
+              <CartaoContinuar painel={pronto} />
             </div>
-          )}
-          <div className={cn("flex flex-col gap-5", comBoletim && "md:col-span-2 lg:col-span-1")}>
-            {comCompetencias && <CartaoCompetencias competencias={p.competencias} />}
-            <CartaoSequencia dias={p.dias_estudo} hoje={p.hoje} />
+            <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-6">
+              <CartaoSequencia dias={pronto.dias_estudo} hoje={pronto.hoje} />
+              {comCompetencias && <CartaoCompetencias competencias={pronto.competencias} />}
+              {comBoletim && <CartaoBoletim itens={boletim.data ?? []} erro={boletim.isError} />}
+            </div>
           </div>
-        </div>
+          {comMatriz && (
+            <MatrizFormacao
+              titulo={pronto.formacoes[0]?.titulo ?? "Seus cursos"}
+              cursos={detalhes.cursos}
+              carregando={detalhes.carregando}
+              atual={pronto.continuar ? { curso_slug: pronto.continuar.curso_slug, aula_numero: pronto.continuar.aula_numero } : null}
+            />
+          )}
+        </>
       )}
-    </>
+    </div>
   );
 }

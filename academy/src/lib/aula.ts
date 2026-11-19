@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AulaLista, CursoDetalhe, ModuloLista } from "./cursos";
+import { contagem } from "./formato";
 
 export interface Video {
   provedor: "youtube" | "bunny";
@@ -48,9 +49,9 @@ export async function registrarProgresso(
   return { concluida: Boolean((data as { concluida?: boolean } | null)?.concluida ?? concluida) };
 }
 
-/** "Introdução" para o módulo 0; "Módulo N · Título" para os demais. */
+/** "Introdução" para o módulo 0; "Módulo N: Título" para os demais. */
 export function rotuloModulo(ordem: number, titulo: string): string {
-  return ordem === 0 ? titulo : `Módulo ${ordem} · ${titulo}`;
+  return ordem === 0 ? titulo : `Módulo ${ordem}: ${titulo}`;
 }
 
 /** Rótulo curto para metadados: "Introdução" ou "Módulo N". */
@@ -95,4 +96,36 @@ export function localizarAula(curso: CursoDetalhe, numero: number): PosicaoNoCur
 export function aulaParaContinuar(curso: CursoDetalhe): AulaLista | null {
   const aulas = curso.modulos.flatMap((m) => m.aulas);
   return aulas.find((a) => !a.concluida) ?? aulas[0] ?? null;
+}
+
+export interface ResumoCurso {
+  feitas: number;
+  total: number;
+  percentual: number;
+  /** Módulos que ainda não têm aula publicada. */
+  emProducao: number;
+  /** Frase de progresso que não chama de concluído um curso pela metade. */
+  texto: string;
+}
+
+/** Progresso do curso contando só o que foi publicado, e dizendo o que falta publicar. */
+export function resumoDoCurso(curso: CursoDetalhe): ResumoCurso {
+  const aulas = curso.modulos.flatMap((m) => m.aulas);
+  const feitas = aulas.filter((a) => a.concluida).length;
+  const total = aulas.length;
+  const emProducao = curso.modulos.filter((m) => m.aulas.length === 0).length;
+  const percentual = total ? Math.round((feitas / total) * 100) : 0;
+  let texto: string;
+  if (total === 0) texto = "As aulas deste curso estão em produção.";
+  else {
+    texto = `Concluídas: ${feitas} de ${contagem(total, emProducao ? "aula publicada" : "aula", emProducao ? "aulas publicadas" : "aulas")}.`;
+    if (emProducao) texto += ` ${contagem(emProducao, "módulo está", "módulos estão")} em produção.`;
+  }
+  return { feitas, total, percentual, emProducao, texto };
+}
+
+/** Próximo módulo sem aula publicada depois do módulo atual, para avisar de onde vem a próxima aula. */
+export function proximoModuloEmProducao(curso: CursoDetalhe, moduloAtualId: string): ModuloLista | null {
+  const i = curso.modulos.findIndex((m) => m.id === moduloAtualId);
+  return curso.modulos.slice(i + 1).find((m) => m.aulas.length === 0) ?? null;
 }

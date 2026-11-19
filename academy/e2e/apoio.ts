@@ -67,5 +67,5 @@ export async function simularExternos(context: BrowserContext): Promise<string[]
 export async function entrar(page: Page) {
   await page.goto("/entrar/retorno?token_hash=linkdeteste-e2e-aaaaaa&type=email");
   await page.getByRole("button", { name: "Entrar na Academy" }).click();
-  await expect(page.getByText("Olá, Everton")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /, Everton\.$/ })).toBeVisible();
 }

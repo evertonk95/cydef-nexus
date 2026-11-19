@@ -25,6 +25,8 @@ export interface CursoDetalhe {
   descricao: string;
   nivel: "iniciante" | "intermediario" | "avancado";
   gratuito: boolean;
+  /** Posição no catálogo (ordem da trilha). */
+  ordem: number;
   matriculado: boolean;
   modulos: ModuloLista[];
 }
@@ -35,6 +37,7 @@ interface LinhaCurso {
   descricao: string;
   nivel: CursoDetalhe["nivel"];
   gratuito: boolean;
+  ordem?: number | null;
   modulos: { id: string; ordem: number; titulo: string; aulas: Omit<AulaLista, "concluida" | "posicao_seg">[] }[];
 }
 
@@ -42,7 +45,7 @@ export async function buscarCurso(sb: SupabaseClient, slug: string, userId: stri
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || slug.length > 60) return null;
   const { data, error } = await sb
     .from("cursos")
-    .select("slug, titulo, descricao, nivel, gratuito, modulos(id, ordem, titulo, aulas(id, ordem, numero, titulo, resumo, duracao_seg))")
+    .select("slug, titulo, descricao, nivel, gratuito, ordem, modulos(id, ordem, titulo, aulas(id, ordem, numero, titulo, resumo, duracao_seg))")
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw new Error("curso_indisponivel");
@@ -67,6 +70,7 @@ export async function buscarCurso(sb: SupabaseClient, slug: string, userId: stri
     descricao: curso.descricao,
     nivel: curso.nivel,
     gratuito: curso.gratuito,
+    ordem: curso.ordem ?? 0,
     matriculado: Boolean(mat),
     modulos: [...curso.modulos]
       .sort((a, b) => a.ordem - b.ordem)

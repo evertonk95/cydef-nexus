@@ -31,6 +31,13 @@ export function normalizar(texto: string): string {
   return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
+/** "Bom dia" das 5h às 11h59, "Boa tarde" até 17h59, "Boa noite" no resto, no horário do aluno. */
+export function saudacao(hora: number): string {
+  if (hora >= 5 && hora < 12) return "Bom dia";
+  if (hora >= 12 && hora < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
 export function primeiroNome(nome: string): string {
   return nome.trim().split(/\s+/)[0] ?? "";
 }

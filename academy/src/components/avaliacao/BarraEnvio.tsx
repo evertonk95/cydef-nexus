@@ -22,9 +22,9 @@ export function BarraEnvio({
   onClick?: () => void;
 }) {
   return (
-    <div className="sticky bottom-0 z-10 -mx-1 mt-6 border-t border-line bg-[rgba(5,5,5,0.92)] px-1 py-4 backdrop-blur">
+    <div className="sticky bottom-0 z-10 -mx-1 mt-6 border-t border-line bg-bg px-1 py-4">
       <div className="flex flex-wrap items-center gap-4">
-        <p className="m-0 font-mono text-[13px] text-muted" aria-live="polite">
+        <p className="m-0 text-[13px] text-muted" aria-live="polite">
           {total > 0 ? `${respondidas} de ${total} respondidas` : ""}
         </p>
         <Botao type={tipo} onClick={onClick} disabled={!pronto || enviando} className="ml-auto px-5 py-3 text-[15px]">

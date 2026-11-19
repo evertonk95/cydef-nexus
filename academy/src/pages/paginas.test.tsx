@@ -4,7 +4,8 @@ import userEvent from "@testing-library/user-event";
 import Painel from "./Painel";
 import MeusCursos from "./MeusCursos";
 import Entrar from "./Entrar";
-import { painelTeste, renderizar, sbFalso } from "@/test/utilidades";
+import { cursoDetalheTeste, painelTeste, renderizar, sbFalso } from "@/test/utilidades";
+import { saudacao } from "@/lib/formato";
 import { violacoesGraves } from "@/test/axe";
 
 vi.mock("@/components/Turnstile", () => ({
@@ -18,17 +19,36 @@ describe("Painel do aluno", () => {
   it("mostra o esqueleto e depois os dados reais do aluno", async () => {
     renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste() }) });
     expect(screen.getByLabelText("Carregando o painel")).toBeInTheDocument();
-    expect(await screen.findByText("Olá, Ana")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /, Ana\.$/ })).toBeInTheDocument();
+    expect(screen.getByText("Você está no Módulo 2 de Fundamentos para SOC.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Aula 05: O que é um SIEM na prática/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continuar" })).toHaveAttribute("href", "/cursos/fundamentos-para-soc/aulas/5");
-    expect(screen.getByRole("heading", { name: "Formação Analista SOC" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Continuar aula" })).toHaveAttribute("href", "/cursos/fundamentos-para-soc/aulas/5");
+    expect(screen.getByText("Você parou em 06:52 de 18:00")).toBeInTheDocument();
     expect(screen.getByText("3 dias seguidos")).toBeInTheDocument();
     expect(screen.getByRole("progressbar", { name: "Competência Triagem de alertas" })).toHaveAttribute("aria-valuenow", "60");
   });
 
+  it("saudação acompanha a hora do aluno", () => {
+    expect(saudacao(8)).toBe("Bom dia");
+    expect(saudacao(14)).toBe("Boa tarde");
+    expect(saudacao(21)).toBe("Boa noite");
+    expect(saudacao(2)).toBe("Boa noite");
+  });
+
+  it("matriz da formação mostra concluída, você está aqui e módulo a publicar", async () => {
+    const painel = painelTeste({ cursos: [{ slug: "fundamentos-para-soc", titulo: "Fundamentos para SOC", total: 2, concluidas: 1, ultimo_acesso: null }] });
+    const sb = sbFalso({ painel, cursos: { "fundamentos-para-soc": cursoDetalheTeste }, progresso: [{ aula_id: "a4", posicao_seg: 900, concluida_em: "2026-11-16T10:00:00Z" }] });
+    renderizar(<Painel />, { sb });
+    expect(await screen.findByRole("heading", { name: "Formação Analista SOC" })).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: "Aula 04: Papéis no SOC, concluída" })).toHaveAttribute("href", "/cursos/fundamentos-para-soc/aulas/4");
+    expect(screen.getByRole("link", { name: "Aula 05: O que é um SIEM na prática, você está aqui" })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByText("A publicar", { selector: "span" })).toBeInTheDocument();
+    expect(screen.getByText("1 de 2 aulas publicadas concluídas")).toBeInTheDocument();
+  });
+
   it("boletim e competências sem conteúdo ficam fora do painel", async () => {
     renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste({ competencias: [] }), boletim: [] }) });
-    expect(await screen.findByText("Olá, Ana")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /, Ana\.$/ })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Boletim do SOC" })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Suas competências" })).not.toBeInTheDocument();
     expect(screen.queryByText("AO VIVO")).not.toBeInTheDocument();
@@ -60,8 +80,8 @@ describe("Painel do aluno", () => {
   });
 
   it("não tem violação grave de acessibilidade", async () => {
-    const { container } = renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste() }) });
-    await screen.findByText("Olá, Ana");
+    const { container } = renderizar(<Painel />, { sb: sbFalso({ painel: painelTeste(), cursos: { "fundamentos-para-soc": cursoDetalheTeste } }) });
+    await screen.findByRole("link", { name: /Papéis no SOC/ });
     expect(await violacoesGraves(container)).toEqual([]);
   });
 });
@@ -70,10 +90,10 @@ describe("Meus cursos", () => {
   it("lista os cursos com status e progresso", async () => {
     renderizar(<MeusCursos />, { rota: "/cursos", caminho: "/cursos", sb: sbFalso({ painel: painelTeste() }) });
     const soc = (await screen.findByRole("heading", { name: "Fundamentos para SOC" })).closest("article")!;
-    expect(within(soc).getByText("EM ANDAMENTO")).toBeInTheDocument();
+    expect(within(soc).getByText("Em andamento")).toBeInTheDocument();
     expect(within(soc).getByRole("link", { name: /Continuar/ })).toHaveAttribute("href", "/cursos/fundamentos-para-soc");
     const cf = screen.getByRole("heading", { name: "Cybersecurity Fundamentals" }).closest("article")!;
-    expect(within(cf).getByText("CONCLUÍDO")).toBeInTheDocument();
+    expect(within(cf).getByText("Concluído")).toBeInTheDocument();
   });
 });
 
