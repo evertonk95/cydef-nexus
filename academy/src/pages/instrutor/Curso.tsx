@@ -27,12 +27,14 @@ import { FalhaCarregamento, NaoEncontrado } from "../Estados";
 import { AbaSobre } from "./Sobre";
 import { AbaMateriais } from "./Materiais";
 import { AbaVitrine } from "./Vitrine";
+import { AbaMissoes } from "./Missoes";
 
-type Aba = "estrutura" | "sobre" | "questoes" | "materiais" | "requisitos" | "vitrine" | "dados";
+type Aba = "estrutura" | "sobre" | "questoes" | "missoes" | "materiais" | "requisitos" | "vitrine" | "dados";
 const ABAS: { id: Aba; rotulo: string; admin?: boolean }[] = [
   { id: "estrutura", rotulo: "Estrutura" },
   { id: "sobre", rotulo: "Sobre o curso" },
   { id: "questoes", rotulo: "Questões" },
+  { id: "missoes", rotulo: "Missões" },
   { id: "materiais", rotulo: "Materiais" },
   { id: "requisitos", rotulo: "Certificado" },
   // Vitrine e venda (0020): decisão do admin.
@@ -100,6 +102,7 @@ export default function CursoInstrutor() {
         {aba === "estrutura" && <Estrutura curso={c} />}
         {aba === "sobre" && <AbaSobre curso={c} />}
         {aba === "questoes" && <Questoes curso={c} />}
+        {aba === "missoes" && <AbaMissoes curso={c} />}
         {aba === "materiais" && <AbaMateriais curso={c} />}
         {aba === "requisitos" && <FormRequisitos curso={c} />}
         {aba === "vitrine" && <AbaVitrine curso={c} />}

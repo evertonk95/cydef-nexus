@@ -314,8 +314,8 @@ function CartaoEmpresa({ e }: { e: MinhaEmpresa }) {
         <p className="m-0 font-medium">{e.empresa}</p>
         <p className="m-0 mt-1 text-sm leading-relaxed text-muted">
           {e.alvo === "Plataforma toda" ? "Todos os cursos pagos" : e.alvo} até {dia(e.fim)}. Desde que você aceitou o convite, a gestão da empresa vê as
-          aulas concluídas, a aprovação na avaliação final e os certificados dos cursos do contrato, além do seu último acesso. Ela não vê notas nem
-          respostas.
+          aulas concluídas, a aprovação na avaliação final e os certificados dos cursos do contrato, além do seu último acesso. Ela não vê notas, respostas nem
+          missões práticas.
         </p>
       </div>
       {confirmar ? (

@@ -211,6 +211,17 @@ Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`
 - **Aviso de Privacidade v2026.4:** inclui a compra pela Hotmart (item 2.5), as bases legais de execução de contrato e de exercício regular de direitos, a Hotmart como controladora do pagamento e a guarda dos registros de compra por até 5 anos depois do fim do acesso. A 0022 marca a v2026.4 como vigente e o portal passa a apontar para ela. O registro de quem se inscreveu antes continua com a versão que aceitou; a CyDef avisa essas pessoas por e-mail da mudança.
 - **Minha conta:** a exportação de dados inclui `acessos_pagos` (`academy_meus_acessos`), com o que foi comprado ou liberado e a validade. Sem a 0023 no banco, a exportação sai sem esse bloco.
 
+## Missões de SOC (fase 15, migrações 0026 e 0027)
+
+- **O que é:** um caso prático no fim de um curso. O aluno examina as evidências em abas (e-mail, cabeçalhos, tabela de logs, alerta do SIEM ou texto), fixa as linhas que provam o caso, responde a investigação e recebe a correção com a explicação de cada pergunta. Referência visual: `prototipo-missao-soc-animado-v1.html`, aprovado em 17/11/2026, no padrão da identidade da fase 08.
+- **Liberação:** cada missão pertence a um curso. Por padrão, abre quando o aluno conclui as aulas publicadas do curso; pode abrir já com a matrícula.
+- **Correção no banco:** o gabarito nunca sai antes do envio. O tempo é medido entre o início (`academy_iniciar_missao`) e o envio (`academy_enviar_missao`). A tentativa guarda a correção com o texto do momento, então editar a missão depois não muda o histórico. Aprovado com 80% ou mais; pode refazer, vale a melhor nota.
+- **Competências e selo:** a missão aprovada soma o peso nas competências marcadas, como uma aula concluída, e dá o selo da missão. O resultado mostra cada competência antes e depois.
+- **Portal:** `/missoes` (lista), `/missoes/:slug` (bloqueada, pronta, investigação, resultado), cartão "Próxima missão" no painel e link "Missões" no topo quando o aluno tem missão. As respostas e as evidências fixadas ficam no navegador enquanto a investigação está aberta, para sobreviver a um recarregamento.
+- **Painel do instrutor:** aba "Missões" no curso, para quem edita o curso. A missão inteira se edita em campos simples (cabeçalhos e linhas do alerta como "Campo: valor", tabela com colunas separadas por |, alternativas uma por linha com * nas certas), com publicação e exclusão (só sem tentativas).
+- **Primeira missão:** a MSN-001 (Triagem de phishing) do protótipo vem cadastrada no curso Fundamentos para SOC, sem publicar.
+- **Aviso de Privacidade v2026.6:** o item 2.4 cita o que a tentativa de missão guarda, e o item 2.6 deixa claro que a gestão da empresa não vê as missões.
+
 ## Academy para empresas e aviso de vencimento (fase 17, migrações 0024 e 0025)
 
 - **Sem preço público e sem Hotmart.** O contrato é negociado com a CyDef. Em Painel do instrutor, Empresas (só admin), a CyDef cadastra a empresa: tipo (consultoria ou plano para times), o que o contrato libera (plataforma toda, uma trilha ou um curso), o primeiro e o último dia de acesso, as vagas e o e-mail de quem vai cuidar da gestão. Prorrogar é editar o último dia. Encerrar antes da hora pede motivo e retira o acesso de todos.

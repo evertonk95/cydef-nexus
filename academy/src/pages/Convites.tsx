@@ -105,6 +105,7 @@ function CartaoConvite({ c }: { c: ConviteRecebido }) {
           <h3 className="m-0 mb-2 text-sm font-semibold">E não vai ver</h3>
           <ul className="m-0 flex list-disc flex-col gap-1.5 pl-5 text-sm leading-relaxed text-muted">
             <li>suas notas e respostas;</li>
+            <li>as missões práticas;</li>
             <li>cursos que não fazem parte do contrato, como os gratuitos;</li>
             <li>nada depois que você sair da empresa ou o contrato terminar.</li>
           </ul>

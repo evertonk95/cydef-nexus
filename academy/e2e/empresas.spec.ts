@@ -41,7 +41,7 @@ test("convite de empresa: aceite com o aviso, painel da gestão e novos convites
 
   // Minha conta mostra a empresa e o que a gestão vê.
   await page.goto("/conta");
-  await expect(page.getByRole("region", { name: "Empresas" })).toContainText("Ela não vê notas nem respostas.");
+  await expect(page.getByRole("region", { name: "Empresas" })).toContainText("Ela não vê notas, respostas nem missões práticas.");
 });
 
 test("admin cadastra a empresa e o convite da gestão sai", async ({ page, request }) => {

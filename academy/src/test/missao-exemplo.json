@@ -1,0 +1,280 @@
+{
+ "id": "m1",
+ "curso": "fundamentos-para-soc",
+ "codigo": "MSN-001",
+ "slug": "msn-001",
+ "titulo": "Triagem de phishing",
+ "severidade": "alta",
+ "mitre": "MITRE ATT&CK T1566.002 · Phishing com link",
+ "briefing": "Segunda-feira, 09:31. Uma colaboradora do financeiro reportou um e-mail de cobrança suspeito.",
+ "requisito": "aulas",
+ "selo": "Caçador de phishing",
+ "encerramento": "O caso real ainda pediria abrir um incidente.",
+ "evidencias": [
+  {
+   "id": "email",
+   "tipo": "email",
+   "titulo": "E-mail reportado",
+   "dica": "Passe o mouse sobre o botão para ver para onde ele leva. O nome exibido no remetente não prova de onde o e-mail veio.",
+   "conteudo": {
+    "de": "Financeiro Nortec <financeiro@nortec.example>",
+    "para": "ana.ribeiro@nortec.example",
+    "assunto": "Boleto em atraso: regularize hoje para evitar protesto",
+    "corpo": "Prezada colaboradora,\n\nIdentificamos um boleto em aberto vinculado ao seu centro de custo. Para evitar o protesto, acesse o documento e confirme seus dados ainda hoje.",
+    "link_texto": "Visualizar boleto",
+    "link_destino": "https://nortec-fin.example/boleto/8841",
+    "assinatura": "Equipe Financeira"
+   }
+  },
+  {
+   "id": "cabecalhos",
+   "tipo": "cabecalhos",
+   "titulo": "Cabeçalhos",
+   "dica": "",
+   "conteudo": {
+    "linhas": [
+     {
+      "campo": "Return-Path:",
+      "valor": "<bounce@mail.nortec-fin.example>",
+      "destaque": false
+     },
+     {
+      "campo": "Received:",
+      "valor": "from mail.nortec-fin.example ([203.0.113.45])",
+      "destaque": false
+     },
+     {
+      "campo": "",
+      "valor": "by mx1.nortec.example; Mon, 16 Nov 2026 09:02:17 -0300",
+      "destaque": false
+     },
+     {
+      "campo": "Authentication-Results:",
+      "valor": "mx1.nortec.example;",
+      "destaque": false
+     },
+     {
+      "campo": "",
+      "valor": "spf=fail (nortec.example does not designate 203.0.113.45)",
+      "destaque": true
+     },
+     {
+      "campo": "",
+      "valor": "dkim=none;",
+      "destaque": true
+     },
+     {
+      "campo": "",
+      "valor": "dmarc=fail header.from=nortec.example",
+      "destaque": true
+     },
+     {
+      "campo": "From:",
+      "valor": "\"Financeiro Nortec\" <financeiro@nortec.example>",
+      "destaque": false
+     },
+     {
+      "campo": "Reply-To:",
+      "valor": "pagamentos@nortec-fin.example",
+      "destaque": false
+     },
+     {
+      "campo": "Subject:",
+      "valor": "Boleto em atraso: regularize hoje para evitar protesto",
+      "destaque": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "proxy",
+   "tipo": "tabela",
+   "titulo": "Logs do proxy",
+   "dica": "A Ana reportou o e-mail às 09:29 e não clicou. Veja se mais alguém recebeu e acessou o link.",
+   "conteudo": {
+    "colunas": [
+     "Hora",
+     "Usuário",
+     "Origem",
+     "Método",
+     "URL",
+     "Ação"
+    ],
+    "linhas": [
+     [
+      "09:12:04",
+      "a.lima",
+      "10.0.4.21",
+      "GET",
+      "intranet.nortec.example/",
+      "ALLOWED"
+     ],
+     [
+      "09:14:37",
+      "m.souza",
+      "10.0.4.33",
+      "GET",
+      "nortec-fin.example/boleto/8841",
+      "ALLOWED"
+     ],
+     [
+      "09:15:02",
+      "m.souza",
+      "10.0.4.33",
+      "POST",
+      "nortec-fin.example/login.php",
+      "ALLOWED"
+     ],
+     [
+      "09:20:11",
+      "r.costa",
+      "10.0.4.40",
+      "GET",
+      "cdn.office.example/app.js",
+      "ALLOWED"
+     ],
+     [
+      "09:28:45",
+      "ana.ribeiro",
+      "10.0.4.18",
+      "GET",
+      "intranet.nortec.example/chamados",
+      "ALLOWED"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "wazuh",
+   "tipo": "alerta",
+   "titulo": "Alerta do Wazuh",
+   "dica": "Regra criada pelo time da Nortec. Domínios muito novos são comuns em campanhas de phishing.",
+   "conteudo": {
+    "titulo": "NÍVEL 10",
+    "subtitulo": "regra 100210 · personalizada",
+    "linhas": [
+     {
+      "campo": "descrição",
+      "valor": "Acesso a domínio registrado há menos de 7 dias"
+     },
+     {
+      "campo": "data",
+      "valor": "16/11/2026 09:14:37"
+     },
+     {
+      "campo": "agente",
+      "valor": "proxy-01"
+     },
+     {
+      "campo": "usuário",
+      "valor": "m.souza"
+     },
+     {
+      "campo": "destino",
+      "valor": "nortec-fin.example"
+     },
+     {
+      "campo": "idade do domínio",
+      "valor": "2 dias"
+     }
+    ]
+   }
+  }
+ ],
+ "perguntas": [
+  {
+   "id": "dominio",
+   "enunciado": "De qual domínio o e-mail veio de verdade?",
+   "dica": "Compare o remetente exibido com os cabeçalhos.",
+   "alternativas": [
+    "nortec.example",
+    "nortec-fin.example",
+    "office.example"
+   ],
+   "corretas": [
+    1
+   ],
+   "explicacao": "O From mostra nortec.example, mas o Return-Path, o servidor de origem e o Reply-To são de nortec-fin.example, um domínio parecido criado pelo atacante."
+  },
+  {
+   "id": "autenticacao",
+   "enunciado": "O que a autenticação do e-mail mostra?",
+   "dica": "Veja a linha Authentication-Results.",
+   "alternativas": [
+    "SPF, DKIM e DMARC passaram",
+    "SPF falhou, não há DKIM e o DMARC falhou",
+    "Só o DKIM falhou"
+   ],
+   "corretas": [
+    1
+   ],
+   "explicacao": "O SPF falhou porque o IP 203.0.113.45 não está autorizado para nortec.example, não existe assinatura DKIM e, por isso, o DMARC também falhou."
+  },
+  {
+   "id": "usuario",
+   "enunciado": "Quem acessou o link e enviou dados?",
+   "dica": "Fixe nos logs do proxy a linha que prova isso.",
+   "alternativas": [
+    "a.lima",
+    "m.souza",
+    "r.costa",
+    "Ninguém acessou"
+   ],
+   "corretas": [
+    1
+   ],
+   "explicacao": "m.souza abriu o boleto às 09:14:37 e fez um POST em login.php às 09:15:02. O POST indica que credenciais foram enviadas."
+  },
+  {
+   "id": "classificacao",
+   "enunciado": "Como você classifica o caso?",
+   "dica": "",
+   "alternativas": [
+    "Falso positivo",
+    "Verdadeiro positivo",
+    "Benigno, apenas spam"
+   ],
+   "corretas": [
+    1
+   ],
+   "explicacao": "É um verdadeiro positivo: phishing real, com acesso confirmado e provável roubo de credenciais."
+  },
+  {
+   "id": "acoes",
+   "enunciado": "Quais ações você toma agora?",
+   "dica": "Marque todas as que se aplicam.",
+   "alternativas": [
+    "Bloquear nortec-fin.example no proxy e no e-mail",
+    "Redefinir a senha do m.souza e encerrar as sessões dele",
+    "Remover o e-mail das caixas de quem o recebeu",
+    "Desligar o servidor de e-mail",
+    "Encerrar o caso, porque a Ana não clicou"
+   ],
+   "corretas": [
+    0,
+    1,
+    2
+   ],
+   "explicacao": "Bloquear o domínio, conter a conta comprometida e remover o e-mail são as ações imediatas. Desligar o servidor de e-mail interrompe a empresa inteira sem necessidade."
+  }
+ ],
+ "competencias": [
+  {
+   "slug": "triagem-alertas",
+   "peso": 3
+  },
+  {
+   "slug": "analise-logs",
+   "peso": 2
+  },
+  {
+   "slug": "mitre-attack",
+   "peso": 1
+  }
+ ],
+ "ordem": 1,
+ "publicado": false,
+ "atualizado_em": "2026-11-20T12:00:00Z",
+ "tentativas": 0,
+ "aprovados": 0
+}

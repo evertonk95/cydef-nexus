@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, Building2, ChevronDown, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
+import { BookOpen, Building2, ChevronDown, Crosshair, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 import { urlAviso } from "@/lib/privacidade";
 import { useEquipe } from "@/lib/instrutor";
 import { useMinhasEmpresas } from "@/lib/empresas";
+import { useMissoes } from "@/lib/missoes";
 
 const links = [
   { para: "/", rotulo: "Painel", fim: true },
@@ -22,8 +23,11 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
   const equipe = useEquipe();
   const minhas = useMinhasEmpresas();
   const gestao = (minhas.data?.empresas ?? []).some((e) => e.gestor);
+  const missoes = useMissoes();
+  const comMissoes = (missoes.data?.length ?? 0) > 0;
   const itens = [
     ...links,
+    ...(comMissoes ? [{ para: "/missoes", rotulo: "Missões", fim: false }] : []),
     ...(gestao ? [{ para: "/empresa", rotulo: "Minha empresa", fim: false }] : []),
     ...(equipe.data ? [{ para: "/instrutor", rotulo: "Instrutor", fim: false }] : []),
   ];
@@ -97,6 +101,11 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
               <NavLink role="menuitem" to="/catalogo" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <LibraryBig className="size-4" aria-hidden="true" /> Catálogo
               </NavLink>
+              {comMissoes && (
+                <NavLink role="menuitem" to="/missoes" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
+                  <Crosshair className="size-4" aria-hidden="true" /> Missões
+                </NavLink>
+              )}
               {gestao && (
                 <NavLink role="menuitem" to="/empresa" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                   <Building2 className="size-4" aria-hidden="true" /> Minha empresa

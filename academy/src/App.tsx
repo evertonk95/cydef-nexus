@@ -31,6 +31,8 @@ const TrilhasInstrutor = lazy(() => import("@/pages/instrutor/Trilhas"));
 const VendasInstrutor = lazy(() => import("@/pages/instrutor/Vendas"));
 const EmpresasInstrutor = lazy(() => import("@/pages/instrutor/Empresas"));
 const Convites = lazy(() => import("@/pages/Convites"));
+const Missoes = lazy(() => import("@/pages/Missoes"));
+const Missao = lazy(() => import("@/pages/Missao"));
 const Empresa = lazy(() => import("@/pages/Empresa"));
 const MinhasEmpresasGestao = lazy(() => import("@/pages/Empresa").then((m) => ({ default: m.MinhasEmpresasGestao })));
 const Catalogo = lazy(() => import("@/pages/Catalogo"));
@@ -58,6 +60,8 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                       <Route path="cursos" element={<MeusCursos />} />
                       <Route path="conta" element={<Conta />} />
                       <Route path="convites" element={<Convites />} />
+                      <Route path="missoes" element={<Missoes />} />
+                      <Route path="missoes/:slug" element={<Missao />} />
                       <Route path="empresa" element={<MinhasEmpresasGestao />} />
                       <Route path="empresa/:id" element={<Empresa />} />
                       <Route path="catalogo" element={<Catalogo />} />

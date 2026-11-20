@@ -7,6 +7,7 @@ import { CartaoBoletim } from "@/components/painel/CartaoBoletim";
 import { CartaoCompetencias } from "@/components/painel/CartaoCompetencias";
 import { CartaoSequencia } from "@/components/painel/CartaoSequencia";
 import { MatrizFormacao } from "@/components/painel/MatrizFormacao";
+import { CartaoMissao } from "@/components/painel/CartaoMissao";
 import { SemCadastro, FalhaCarregamento } from "./Estados";
 
 /** Onde o aluno está, em uma frase. Sem aula em andamento, nenhuma frase. */
@@ -60,8 +61,9 @@ export default function Painel() {
       ) : (
         <>
           <div className="flex flex-wrap items-start gap-6">
-            <div className="min-w-0 flex-[999_1_560px]">
+            <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
               <CartaoContinuar painel={pronto} />
+              {pronto.missao && <CartaoMissao missao={pronto.missao} />}
             </div>
             <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-6">
               <CartaoSequencia dias={pronto.dias_estudo} hoje={pronto.hoje} />
