@@ -9,8 +9,8 @@
  *   2. JSON com até 2 KB e e-mail válido.
  *   3. Cloudflare Turnstile verificado no servidor (hostname + action).
  *   4. Limite de tentativas por IP e por e-mail (chaves com HMAC, nunca em claro).
- *   5. Elegibilidade no banco: aluno existente ou pré-inscrição ativa com
- *      consentimento. Quem não é elegível recebe a MESMA resposta 202, no mesmo
+ *   5. Elegibilidade no banco: aluno existente, pré-inscrição ativa com
+ *      consentimento ou acesso pago ativo no e-mail (compra na Hotmart, 0021). Quem não é elegível recebe a MESMA resposta 202, no mesmo
  *      tempo mínimo, para não revelar quem é aluno.
  *   6. Cria o usuário de login (se faltar), o registro de aluno e envia o
  *      link de uso único. Com o Resend ligado, o e-mail sai com o modelo da
@@ -43,6 +43,8 @@ export interface Elegibilidade {
   user_id?: string | null;
   aluno?: boolean;
   lead_id?: string | null;
+  /** 0021: comprou pela Hotmart (ou recebeu acesso) sem pré-inscrição. */
+  comprador?: boolean;
   nome?: string;
 }
 
@@ -51,7 +53,7 @@ export interface Servidor {
   limite(chave: string, limite: number, janelaSeg: number): Promise<boolean>;
   elegibilidade(email: string): Promise<Elegibilidade>;
   criarUsuario(email: string, nome: string): Promise<{ ok: true; userId: string } | { ok: false; jaExiste: boolean }>;
-  provisionarAluno(userId: string, leadId: string, nome: string): Promise<void>;
+  provisionarAluno(userId: string, leadId: string | null, nome: string): Promise<void>;
   gerarLink(email: string, redirect: string): Promise<string>;
   enviarPeloSupabase(email: string, redirect: string): Promise<void>;
 }
@@ -167,8 +169,9 @@ export function createAcessoHandler(deps: AcessoDeps) {
         if (!userId) throw new Error("usuario_nao_criado");
       }
       if (!el.aluno) {
-        if (!el.lead_id) throw new Error("sem_lead");
-        await deps.servidor.provisionarAluno(userId, el.lead_id, el.nome ?? "");
+        // Sem pré-inscrição, só quem tem acesso pago ativo (0021) vira aluno.
+        if (!el.lead_id && !el.comprador) throw new Error("sem_lead");
+        await deps.servidor.provisionarAluno(userId, el.lead_id ?? null, el.nome ?? "");
       }
       const retorno = `${deps.academyUrl.replace(/\/+$/, "")}/entrar/retorno`;
       if (deps.carteiro) {

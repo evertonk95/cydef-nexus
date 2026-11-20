@@ -201,3 +201,36 @@ describe("ligação com o Supabase", () => {
     expect(JSON.parse(String((init as RequestInit).body))).toEqual({ email: "a@b.com", create_user: false });
   });
 });
+
+describe("comprador da Hotmart sem pré-inscrição (fase 16)", () => {
+  it("vira aluno sem lead e recebe o link", async () => {
+    const sv = servidor({
+      elegibilidade: vi.fn().mockResolvedValue({ elegivel: true, user_id: null, aluno: false, lead_id: null, comprador: true, nome: "Bia" }),
+    });
+    const { d } = deps({ servidor: sv });
+    const res = await createAcessoHandler(d)(
+      new Request("https://x/functions/v1/academy-acesso", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: ORIGEM },
+        body: JSON.stringify(valido),
+      }),
+    );
+    expect(res.status).toBe(202);
+    expect(sv.provisionarAluno).toHaveBeenCalledWith("user-1", null, "Bia");
+    expect(sv.enviarPeloSupabase).toHaveBeenCalled();
+  });
+
+  it("sem lead e sem compra continua sem link", async () => {
+    const sv = servidor({ elegibilidade: vi.fn().mockResolvedValue({ elegivel: true, user_id: null, aluno: false, lead_id: null, nome: "" }) });
+    const { d, logs } = deps({ servidor: sv });
+    await createAcessoHandler(d)(
+      new Request("https://x/functions/v1/academy-acesso", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: ORIGEM },
+        body: JSON.stringify(valido),
+      }),
+    );
+    expect(sv.provisionarAluno).not.toHaveBeenCalled();
+    expect(logs).toContainEqual(expect.objectContaining({ event: "acesso_entrega_falhou", razao: "sem_lead" }));
+  });
+});

@@ -230,6 +230,12 @@ const MENSAGENS: Record<string, string> = {
   venda_incompleta: "Para colocar à venda, informe o link de checkout e o preço.",
   trilha_inexistente: "Trilha não encontrada.",
   curso_fora_da_trilha: "Esse curso não está nessa trilha.",
+  email_invalido: "Confira o e-mail.",
+  escopo_invalido: "Escolha o que o acesso cobre.",
+  dias_invalidos: "A validade precisa ficar entre 1 e 3.660 dias.",
+  concessao_inexistente: "Acesso não encontrado ou já encerrado.",
+  mesmo_email: "O acesso já está nesse e-mail.",
+  trilha_vazia: "Essa trilha ainda não tem curso pago.",
 };
 
 export class ErroPainel extends Error {
