@@ -116,6 +116,10 @@ function novoEstado() {
     }],
     produtos: [{ hotmart_produto_id: 3003, nome: "Academy completa por 12 meses", escopo: "plataforma", trilha: null, trilha_titulo: null, duracao_dias: 365, ativo: true, vendas: 0,
       situacao: "a_venda", checkout_url: "https://pay.hotmart.com/P1234567Q", preco_centavos: 99700, preco_observacao: "ou em até 12x no cartão", preco_conferido_em: "2026-11-20T12:00:00Z" }],
+    // Fase 17: empresas. Começa vazio; /__cenario { empresa: "convite" } cria o convite do aluno.
+    empresas: [],
+    membros: [],
+    enviosConvite: [],
     trilhas: [
       { slug: "soc", titulo: "SOC", descricao: "Para quem quer trabalhar em um Centro de Operações de Segurança.", publicado: true, formacao: null },
       { slug: "blue-team", titulo: "Blue Team", descricao: "Defesa em profundidade.", publicado: true, formacao: null },
@@ -306,6 +310,47 @@ function painel() {
   };
 }
 
+// Fase 17: empresas --------------------------------------------------------------
+
+function membroNovo(empresaId, email, gestor) {
+  return { id: `m${Math.random().toString(16).slice(2, 10)}`, empresa_id: empresaId, email, gestor, situacao: "convidado", nome: null,
+    convidado_em: "2026-11-20T12:00:00Z", convite_enviado_em: null, aceito_em: null, ultimo_acesso: null, cursos: [] };
+}
+
+const usadas = (e) => estado.membros.filter((m) => m.empresa_id === e.id && ["convidado", "ativo"].includes(m.situacao)).length;
+
+function empresaJson(e) {
+  const ms = estado.membros.filter((m) => m.empresa_id === e.id);
+  return {
+    ...e, alvo: e.escopo === "plataforma" ? "Plataforma toda" : e.escopo === "trilha" ? "Trilha SOC" : PAGO.titulo,
+    usadas: usadas(e), ativos: ms.filter((m) => m.situacao === "ativo").length, convites: ms.filter((m) => m.situacao === "convidado").length,
+    gestoras: ms.filter((m) => m.gestor && ["convidado", "ativo"].includes(m.situacao)).map((m) => m.email),
+    situacao: e.encerrada_em ? "encerrada" : "vigente",
+  };
+}
+
+function painelEmpresa(e) {
+  return { empresa: empresaJson(e), membros: estado.membros.filter((m) => m.empresa_id === e.id && ["convidado", "ativo"].includes(m.situacao)) };
+}
+
+function minhasEmpresas() {
+  const minhas = estado.membros.filter((m) => m.email === USUARIO.email);
+  const e = (m) => estado.empresas.find((x) => x.id === m.empresa_id);
+  return {
+    convites: minhas.filter((m) => m.situacao === "convidado").map((m) => ({ id: m.id, empresa: e(m).nome, gestor: m.gestor, alvo: empresaJson(e(m)).alvo, inicio: e(m).inicio, fim: e(m).fim, convidado_em: m.convidado_em })),
+    empresas: minhas.filter((m) => m.situacao === "ativo").map((m) => ({ id: m.empresa_id, membro: m.id, empresa: e(m).nome, gestor: m.gestor, alvo: empresaJson(e(m)).alvo,
+      inicio: e(m).inicio, fim: e(m).fim, situacao: "vigente", aceito_em: m.aceito_em, aviso_versao: m.aviso_versao })),
+  };
+}
+
+function criarEmpresaComConvite() {
+  estado.empresas.push({ id: "e1", nome: "Banco Exemplo", tipo: "consultoria", escopo: "plataforma", curso: null, trilha: null, inicio: "2026-11-20", fim: "2027-11-19",
+    vagas: 5, observacao: "", encerrada_em: null, motivo: null, criado_em: "2026-11-20T12:00:00Z" });
+  estado.membros.push({ ...membroNovo("e1", USUARIO.email, true), id: "m-eu", convite_enviado_em: "2026-11-20T12:00:00Z" });
+  estado.membros.push({ ...membroNovo("e1", "ana@banco.com", false), id: "m-ana", situacao: "ativo", nome: "Ana Analista", aceito_em: "2026-11-20T12:30:00Z",
+    ultimo_acesso: "2026-11-20T14:00:00Z", cursos: [{ slug: PAGO.slug, titulo: PAGO.titulo, total: 24, concluidas: 9, aprovado: false, certificado_em: null }] });
+}
+
 function sessao() {
   const agora = Math.floor(Date.now() / 1000);
   return { access_token: "sessao-e2e", token_type: "bearer", expires_in: 3600, expires_at: agora + 3600, refresh_token: "renovacao-e2e", user: USUARIO };
@@ -346,7 +391,77 @@ http
           if (corpo.modulo_aprovado) estado.moduloAprovado = true;
           if (corpo.equipe) estado.equipe = corpo.equipe;
           if (corpo.pessoa) estado.pessoa = corpo.pessoa;
+          if (corpo.empresa === "convite") criarEmpresaComConvite();
           return enviar({ ok: true });
+        case "/functions/v1/academy-empresa": {
+          const pend = estado.membros.filter((m) => m.empresa_id === corpo.empresa_id && m.situacao === "convidado" && !m.convite_enviado_em);
+          for (const m of pend) m.convite_enviado_em = "2026-11-20T12:00:00Z";
+          estado.enviosConvite.push({ empresa_id: corpo.empresa_id, emails: pend.map((m) => m.email) });
+          return enviar({ enviados: pend.length, falhas: 0, pendentes: 0, email: "ligado" });
+        }
+        case "/rest/v1/rpc/academy_minhas_empresas":
+          return enviar(minhasEmpresas());
+        case "/rest/v1/rpc/academy_aceitar_convite":
+        case "/rest/v1/rpc/academy_recusar_convite": {
+          const m = estado.membros.find((x) => x.id === corpo.p_membro && x.email === USUARIO.email && x.situacao === "convidado");
+          if (!m) return enviar({ message: "convite_inexistente" }, 400);
+          if (u.pathname.endsWith("aceitar_convite")) Object.assign(m, { situacao: "ativo", nome: estado.nomeAluno, aceito_em: "2026-11-20T13:00:00Z", ultimo_acesso: "2026-11-20T13:00:00Z", aviso_versao: "v2026.5" });
+          else m.situacao = "recusado";
+          return enviar(minhasEmpresas());
+        }
+        case "/rest/v1/rpc/academy_sair_empresa": {
+          const m = estado.membros.find((x) => x.id === corpo.p_membro && x.email === USUARIO.email && x.situacao === "ativo");
+          if (!m) return enviar({ message: "membro_inexistente" }, 400);
+          m.situacao = "saiu";
+          return enviar(minhasEmpresas());
+        }
+        case "/rest/v1/rpc/academy_empresa_painel": {
+          const e = estado.empresas.find((x) => x.id === corpo.p_empresa);
+          if (!e) return enviar({ message: "empresa_inexistente" }, 400);
+          return enviar(painelEmpresa(e));
+        }
+        case "/rest/v1/rpc/academy_empresa_convidar": {
+          const e = estado.empresas.find((x) => x.id === corpo.p_empresa);
+          const emails = [...new Set((corpo.p_emails ?? []).map((x) => String(x).trim().toLowerCase()))];
+          const ja = emails.filter((x) => estado.membros.some((m) => m.empresa_id === e.id && m.email === x && ["convidado", "ativo"].includes(m.situacao)));
+          const novos = emails.filter((x) => !ja.includes(x));
+          if (usadas(e) + novos.length > e.vagas) return enviar({ message: "sem_vagas" }, 400);
+          for (const x of novos) estado.membros.push(membroNovo(e.id, x, Boolean(corpo.p_gestor)));
+          estado.escritasAdm.push({ fn: "academy_empresa_convidar", p_dados: corpo });
+          return enviar({ convidados: novos.length, ja_na_empresa: ja });
+        }
+        case "/rest/v1/rpc/academy_empresa_cancelar_convite":
+        case "/rest/v1/rpc/academy_empresa_remover":
+        case "/rest/v1/rpc/academy_empresa_definir_gestor":
+        case "/rest/v1/rpc/academy_empresa_reenviar_convite": {
+          const m = estado.membros.find((x) => x.id === corpo.p_membro);
+          if (!m) return enviar({ message: "membro_inexistente" }, 400);
+          if (u.pathname.endsWith("cancelar_convite")) m.situacao = "cancelado";
+          if (u.pathname.endsWith("remover")) m.situacao = "removido";
+          if (u.pathname.endsWith("definir_gestor")) m.gestor = Boolean(corpo.p_gestor);
+          if (u.pathname.endsWith("reenviar_convite")) m.convite_enviado_em = null;
+          return enviar(painelEmpresa(estado.empresas.find((x) => x.id === m.empresa_id)));
+        }
+        case "/rest/v1/rpc/academy_adm_empresas":
+          return enviar(estado.empresas.map(empresaJson));
+        case "/rest/v1/rpc/academy_adm_salvar_empresa": {
+          const d = corpo.p_dados ?? {};
+          estado.escritasAdm.push({ fn: "academy_adm_salvar_empresa", p_dados: d });
+          let e = estado.empresas.find((x) => x.id === d.id);
+          const campos = { nome: d.nome, tipo: d.tipo, escopo: d.escopo, curso: d.curso ?? null, trilha: d.trilha ?? null, inicio: d.inicio, fim: d.fim, vagas: Number(d.vagas), observacao: d.observacao ?? "" };
+          if (e) Object.assign(e, campos);
+          else {
+            e = { id: `e${estado.empresas.length + 1}`, ...campos, encerrada_em: null, motivo: null, criado_em: "2026-11-20T12:00:00Z" };
+            estado.empresas.push(e);
+            estado.membros.push(membroNovo(e.id, String(d.gestor_email).trim().toLowerCase(), true));
+          }
+          return enviar(empresaJson(e));
+        }
+        case "/rest/v1/rpc/academy_adm_encerrar_empresa": {
+          const e = estado.empresas.find((x) => x.id === corpo.p_id);
+          Object.assign(e, { encerrada_em: "2026-11-20T15:00:00Z", motivo: corpo.p_motivo });
+          return enviar(empresaJson(e));
+        }
         case "/functions/v1/academy-acesso":
           estado.pedidosAcesso.push(corpo);
           return enviar({ status: "enviado_se_inscrito" }, 202);

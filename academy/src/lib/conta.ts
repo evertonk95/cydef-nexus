@@ -38,13 +38,18 @@ export const atualizarNome = (sb: SupabaseClient, nome: string) => chamar<{ nome
 export const meusCertificados = (sb: SupabaseClient) => chamar<MeuCertificado[]>(sb, "academy_meus_certificados");
 export const definirValidacao = (sb: SupabaseClient, codigo: string, ativa: boolean) =>
   chamar<MeuCertificado[]>(sb, "academy_validacao_publica", { p_codigo: codigo, p_ativa: ativa });
-/** Cópia dos dados. Desde a 0023 inclui os acessos pagos (compras e liberações). */
+/** Cópia dos dados. Desde a 0023 inclui os acessos pagos (compras e liberações); desde a 0024, as empresas e convites. */
 export async function meusDados(sb: SupabaseClient): Promise<Record<string, unknown>> {
   const dados = await chamar<Record<string, unknown>>(sb, "academy_meus_dados");
   try {
     dados.acessos_pagos = await chamar<unknown[]>(sb, "academy_meus_acessos");
   } catch {
     // Banco antes da 0023: a cópia sai sem os acessos pagos.
+  }
+  try {
+    dados.empresas = await chamar<unknown>(sb, "academy_minhas_empresas");
+  } catch {
+    // Banco antes da 0024: a cópia sai sem as empresas.
   }
   return dados;
 }

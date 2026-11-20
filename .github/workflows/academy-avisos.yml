@@ -1,0 +1,50 @@
+# ============================================================================
+# Academy: rotina diária de acessos e avisos de vencimento (fase 17)
+#
+# Uma vez por dia chama a Edge Function academy-avisos, que:
+#   * recalcula os acessos que começaram ou venceram (contrato de empresa que
+#     começa numa data futura, plano de 12 meses que terminou);
+#   * envia os e-mails de vencimento: plano anual 30 e 7 dias antes,
+#     membro de empresa 7 dias antes, gestora 30 dias antes do fim do contrato.
+#
+# Segredo: ACADEMY_CRON_TOKEN (Settings, Secrets and variables, Actions), o
+# mesmo valor cadastrado nos secrets da função no Supabase. Quem cadastra é o
+# Everton. Enquanto o segredo não existir, o workflow só registra um aviso e
+# termina sem erro.
+#
+# Sem checkout de código e sem dependências: só um curl com o token no header.
+# ============================================================================
+
+name: Academy, avisos de vencimento
+
+on:
+  schedule:
+    - cron: "41 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: academy-avisos
+  cancel-in-progress: false
+
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chamar a função academy-avisos
+        env:
+          ACADEMY_CRON_TOKEN: ${{ secrets.ACADEMY_CRON_TOKEN }}
+          URL: "https://fawtpustzzzplzivsdwq.supabase.co/functions/v1/academy-avisos"
+        run: |
+          if [ -z "$ACADEMY_CRON_TOKEN" ]; then
+            echo "::notice::ACADEMY_CRON_TOKEN ainda não foi cadastrado; nada a fazer."
+            exit 0
+          fi
+          status=$(curl -sS -o resposta.json -w "%{http_code}" --max-time 60 -X POST "$URL" \
+            -H "x-academy-cron: $ACADEMY_CRON_TOKEN")
+          echo "HTTP $status"
+          cat resposta.json; echo
+          test "$status" = "200"

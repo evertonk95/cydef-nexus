@@ -29,6 +29,10 @@ const PerfilInstrutor = lazy(() => import("@/pages/instrutor/Perfil"));
 const AprovacoesInstrutor = lazy(() => import("@/pages/instrutor/Aprovacoes"));
 const TrilhasInstrutor = lazy(() => import("@/pages/instrutor/Trilhas"));
 const VendasInstrutor = lazy(() => import("@/pages/instrutor/Vendas"));
+const EmpresasInstrutor = lazy(() => import("@/pages/instrutor/Empresas"));
+const Convites = lazy(() => import("@/pages/Convites"));
+const Empresa = lazy(() => import("@/pages/Empresa"));
+const MinhasEmpresasGestao = lazy(() => import("@/pages/Empresa").then((m) => ({ default: m.MinhasEmpresasGestao })));
 const Catalogo = lazy(() => import("@/pages/Catalogo"));
 const CursoCatalogo = lazy(() => import("@/pages/CursoCatalogo"));
 const ValidarCertificado = lazy(() => import("@/pages/ValidarCertificado"));
@@ -53,6 +57,9 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                       <Route index element={<Painel />} />
                       <Route path="cursos" element={<MeusCursos />} />
                       <Route path="conta" element={<Conta />} />
+                      <Route path="convites" element={<Convites />} />
+                      <Route path="empresa" element={<MinhasEmpresasGestao />} />
+                      <Route path="empresa/:id" element={<Empresa />} />
                       <Route path="catalogo" element={<Catalogo />} />
                       <Route path="catalogo/:slug" element={<CursoCatalogo />} />
                       <Route path="cursos/:slug" element={<Curso />} />
@@ -71,6 +78,7 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                         <Route path="aprovacoes" element={<AprovacoesInstrutor />} />
                         <Route path="trilhas" element={<TrilhasInstrutor />} />
                         <Route path="vendas" element={<VendasInstrutor />} />
+                        <Route path="empresas" element={<EmpresasInstrutor />} />
                       </Route>
                       <Route path="*" element={<NaoEncontrado />} />
                     </Route>

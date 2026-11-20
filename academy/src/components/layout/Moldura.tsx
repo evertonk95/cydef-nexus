@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
+import { Building2 } from "lucide-react";
+import { useMinhasEmpresas } from "@/lib/empresas";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePortal } from "@/lib/portal";
 import { registrarAcessoDaSessao } from "@/lib/sessao-acesso";
@@ -37,10 +39,30 @@ export function Moldura() {
         </a>
         <Topo abrirBusca={() => setBusca(true)} />
         <main id="conteudo" className="mx-auto max-w-[1200px] px-5 pt-10 pb-24 sm:px-8">
+          <AvisoConvite />
           <Outlet />
         </main>
       </div>
       <PaletaComandos aberta={busca} fechar={fechar} />
     </>
+  );
+}
+
+/** Convite de empresa pendente: chama para a página de convites, fora dela. */
+function AvisoConvite() {
+  const minhas = useMinhasEmpresas();
+  const { pathname } = useLocation();
+  const convites = minhas.data?.convites ?? [];
+  if (convites.length === 0 || pathname === "/convites") return null;
+  const texto =
+    convites.length === 1 ? `A ${convites[0]!.empresa} convidou você para a Academy.` : `Você tem ${convites.length} convites de empresas para a Academy.`;
+  return (
+    <div role="status" className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-orange/40 bg-orange/10 px-5 py-4">
+      <Building2 className="size-5 shrink-0 text-orange-hi" aria-hidden="true" />
+      <p className="m-0 flex-1 text-[15px]">{texto}</p>
+      <Link to="/convites" className="font-semibold text-orange-hi underline-offset-4 hover:underline">
+        Ver convite
+      </Link>
+    </div>
   );
 }

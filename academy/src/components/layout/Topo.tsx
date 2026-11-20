@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
+import { BookOpen, Building2, ChevronDown, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -8,6 +8,7 @@ import { iniciais } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import { urlAviso } from "@/lib/privacidade";
 import { useEquipe } from "@/lib/instrutor";
+import { useMinhasEmpresas } from "@/lib/empresas";
 
 const links = [
   { para: "/", rotulo: "Painel", fim: true },
@@ -19,7 +20,13 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
   const { sair, sessao, config } = usePortal();
   const painel = usePainel();
   const equipe = useEquipe();
-  const itens = equipe.data ? [...links, { para: "/instrutor", rotulo: "Instrutor", fim: false }] : links;
+  const minhas = useMinhasEmpresas();
+  const gestao = (minhas.data?.empresas ?? []).some((e) => e.gestor);
+  const itens = [
+    ...links,
+    ...(gestao ? [{ para: "/empresa", rotulo: "Minha empresa", fim: false }] : []),
+    ...(equipe.data ? [{ para: "/instrutor", rotulo: "Instrutor", fim: false }] : []),
+  ];
   const nome = painel.data?.nome ?? sessao?.user.email ?? "";
   const [menu, setMenu] = useState(false);
   const caixa = useRef<HTMLDivElement>(null);
@@ -90,6 +97,11 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
               <NavLink role="menuitem" to="/catalogo" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <LibraryBig className="size-4" aria-hidden="true" /> Catálogo
               </NavLink>
+              {gestao && (
+                <NavLink role="menuitem" to="/empresa" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
+                  <Building2 className="size-4" aria-hidden="true" /> Minha empresa
+                </NavLink>
+              )}
               {equipe.data && (
                 <NavLink role="menuitem" to="/instrutor" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                   <PencilRuler className="size-4" aria-hidden="true" /> Painel do instrutor
