@@ -204,6 +204,13 @@ Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`
 - **Vencimento dos 12 meses:** na hora do login e, todo dia às 06:23 UTC, pelo pg_cron (`academy-expirar-concessoes`), quando a extensão está ligada.
 - **Painel, página Vendas (só admin):** busca por e-mail ou transação, transferência de uma compra para o e-mail da conta, liberação manual (cortesia, parceria, conferência), encerramento com motivo, produtos de trilha e de plataforma e os últimos avisos da Hotmart. Tudo vai para `academy_auditoria`.
 
+## Ofertas de trilha e de plataforma e aviso v2026.4 (fase 16b, migrações 0022 e 0023)
+
+- **Trilha completa e plataforma toda nas vitrines:** o produto cadastrado em Vendas, Produtos ganha a parte **Vitrine** (fora das vitrines ou à venda, link de checkout, preço, observação e "Conferi o preço"). À venda exige produto ativo, checkout da Hotmart e preço, com as mesmas regras do curso individual.
+- **Onde aparece:** `academy_catalogo_publico` passa a devolver `ofertas`. No site, a plataforma toda fica acima das trilhas em `/pt/academy` e acima dos filtros em `/academy/catalogo`; a trilha completa aparece no bloco da trilha e quando o catálogo é filtrado por ela. No portal, `/catalogo` mostra as duas, e o Comprar leva o e-mail da conta e `sck=portal`. Oferta de trilha só aparece com a trilha publicada e com cursos na vitrine.
+- **Aviso de Privacidade v2026.4:** inclui a compra pela Hotmart (item 2.5), as bases legais de execução de contrato e de exercício regular de direitos, a Hotmart como controladora do pagamento e a guarda dos registros de compra por até 5 anos depois do fim do acesso. A 0022 marca a v2026.4 como vigente e o portal passa a apontar para ela. O registro de quem se inscreveu antes continua com a versão que aceitou; a CyDef avisa essas pessoas por e-mail da mudança.
+- **Minha conta:** a exportação de dados inclui `acessos_pagos` (`academy_meus_acessos`), com o que foi comprado ou liberado e a validade. Sem a 0023 no banco, a exportação sai sem esse bloco.
+
 ## Minha conta (fase 12, migração 0018)
 
 Em `/conta`, pelo menu da conta. Coloca ao alcance do aluno o que o Aviso de Privacidade da Academy (v2026.3) já promete, sem regra nova:

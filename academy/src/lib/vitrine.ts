@@ -61,9 +61,23 @@ export interface CursoCatalogo {
   atualizado_em: string;
 }
 
+/** Trilha completa ou plataforma toda à venda (0023). */
+export interface OfertaCatalogo {
+  tipo: "trilha" | "plataforma";
+  nome: string;
+  trilha: string | null;
+  duracao_dias: number | null;
+  cursos: number;
+  preco_centavos: number;
+  preco_observacao: string;
+  checkout_url: string;
+}
+
 export interface Catalogo {
   trilhas: { slug: string; titulo: string; descricao: string; cursos: string[] }[];
   cursos: CursoCatalogo[];
+  /** Ausente em banco antes da 0023. */
+  ofertas?: OfertaCatalogo[];
 }
 
 export const SITUACOES: { valor: SituacaoVitrine; rotulo: string; ajuda: string }[] = [

@@ -114,7 +114,8 @@ function novoEstado() {
       alvo: "SOC Analyst: Formação Completa", inicio: "2026-11-19T15:00:00Z", fim: null, transacao: "HP1234567890", produto: 1001,
       revogada_em: null, motivo: null, conta: false, situacao: "ativa", criado_em: "2026-11-19T15:00:00Z",
     }],
-    produtos: [{ hotmart_produto_id: 3003, nome: "Academy completa por 12 meses", escopo: "plataforma", trilha: null, trilha_titulo: null, duracao_dias: 365, ativo: true, vendas: 0 }],
+    produtos: [{ hotmart_produto_id: 3003, nome: "Academy completa por 12 meses", escopo: "plataforma", trilha: null, trilha_titulo: null, duracao_dias: 365, ativo: true, vendas: 0,
+      situacao: "a_venda", checkout_url: "https://pay.hotmart.com/P1234567Q", preco_centavos: 99700, preco_observacao: "ou em até 12x no cartão", preco_conferido_em: "2026-11-20T12:00:00Z" }],
     trilhas: [
       { slug: "soc", titulo: "SOC", descricao: "Para quem quer trabalhar em um Centro de Operações de Segurança.", publicado: true, formacao: null },
       { slug: "blue-team", titulo: "Blue Team", descricao: "Defesa em profundidade.", publicado: true, formacao: null },
@@ -158,7 +159,11 @@ function trilhasAdm() {
 
 function catalogoPublico() {
   const v = estado.vitrine;
-  if (v.situacao === "oculto") return { trilhas: [], cursos: [] };
+  const ofertas = estado.produtos.filter((p) => p.situacao === "a_venda" && p.ativo).map((p) => ({
+    tipo: p.escopo, nome: p.nome, trilha: p.trilha, duracao_dias: p.duracao_dias, cursos: 1,
+    preco_centavos: p.preco_centavos, preco_observacao: p.preco_observacao, checkout_url: p.checkout_url,
+  }));
+  if (v.situacao === "oculto") return { trilhas: [], cursos: [], ofertas };
   const venda = v.situacao === "a_venda";
   return {
     trilhas: estado.trilhas.filter((t) => t.publicado && v.trilhas.includes(t.slug)).map((t) => ({ slug: t.slug, titulo: t.titulo, descricao: t.descricao, cursos: [PAGO.slug] })),
@@ -169,6 +174,7 @@ function catalogoPublico() {
       instrutores: [{ nome: "Everton Nascimento", cargo: "Wazuh Ambassador", bio: "Especialista em SOC e SIEM.", linkedin: null, site: null, papel: "instrutor" }],
       atualizado_em: "2026-11-19T12:00:00Z",
     }],
+    ofertas,
   };
 }
 
@@ -499,7 +505,9 @@ http
             const d = corpo.p_dados ?? {};
             estado.produtos = estado.produtos.filter((p) => String(p.hotmart_produto_id) !== String(d.hotmart_produto_id));
             estado.produtos.push({ hotmart_produto_id: Number(d.hotmart_produto_id), nome: d.nome, escopo: d.escopo, trilha: d.trilha,
-              trilha_titulo: estado.trilhas.find((t) => t.slug === d.trilha)?.titulo ?? null, duracao_dias: d.duracao_dias, ativo: d.ativo !== false, vendas: 0 });
+              trilha_titulo: estado.trilhas.find((t) => t.slug === d.trilha)?.titulo ?? null, duracao_dias: d.duracao_dias, ativo: d.ativo !== false, vendas: 0,
+              situacao: d.situacao ?? "oculto", checkout_url: d.checkout_url || null, preco_centavos: d.preco_centavos ?? null,
+              preco_observacao: d.preco_observacao ?? "", preco_conferido_em: d.preco_centavos != null ? "2026-11-20T12:00:00Z" : null });
           }
           return enviar({
             produtos: estado.produtos,

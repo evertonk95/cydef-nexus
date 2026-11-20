@@ -116,6 +116,7 @@ const ESPERADO: Record<string, { anon: boolean; autenticado: boolean; servico: b
   academy_adm_revogar_concessao: { anon: false, autenticado: true, servico: true },
   academy_adm_produtos: { anon: false, autenticado: true, servico: true },
   academy_adm_salvar_produto: { anon: false, autenticado: true, servico: true },
+  academy_meus_acessos: { anon: false, autenticado: true, servico: true },
   academy_emitir_certificado: { anon: false, autenticado: true, servico: true },
   academy_enviar_final: { anon: false, autenticado: true, servico: true },
   academy_iniciar_final: { anon: false, autenticado: true, servico: true },

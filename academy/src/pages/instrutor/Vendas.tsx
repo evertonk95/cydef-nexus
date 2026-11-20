@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { Plus, Search } from "lucide-react";
 import { chamar, useAcao, useCursosAdm, useEu } from "@/lib/instrutor";
-import { useTrilhasAdm } from "@/lib/vitrine";
+import { checkoutValido, escreverPreco, formatarPreco, lerPreco, useTrilhasAdm } from "@/lib/vitrine";
 import { ORIGEM, RESULTADO_EVENTO, useConcessoes, useProdutos, validade, type Concessao, type Escopo, type ProdutoHotmart } from "@/lib/vendas";
 import { dataCurta } from "@/lib/formato";
 import { cn } from "@/lib/cn";
@@ -322,6 +322,9 @@ function ProdutosHotmart() {
                     <p className="m-0 font-medium">
                       {p.nome}
                       {!p.ativo && <span className="ml-2 text-[13px] font-normal text-dim">inativo</span>}
+                      <span className={cn("ml-3 text-[13px] font-normal", p.situacao === "a_venda" ? "text-ok" : "text-dim")}>
+                        {p.situacao === "a_venda" && p.preco_centavos != null ? `À venda, ${formatarPreco(p.preco_centavos)}` : "Fora das vitrines"}
+                      </span>
                     </p>
                     <p className="m-0 text-[13px] text-muted">
                       Produto {p.hotmart_produto_id}, {p.escopo === "trilha" ? `trilha ${p.trilha_titulo ?? p.trilha}` : "plataforma toda"},{" "}
@@ -380,7 +383,13 @@ function FormProduto({ produto, fechar }: { produto: ProdutoHotmart | null; fech
     escopo: produto?.escopo ?? ("plataforma" as "trilha" | "plataforma"),
     trilha: produto?.trilha ?? "",
     ativo: produto?.ativo ?? true,
+    situacao: produto?.situacao ?? ("oculto" as "oculto" | "a_venda"),
+    checkout: produto?.checkout_url ?? "",
+    preco: escreverPreco(produto?.preco_centavos ?? null),
+    obs: produto?.preco_observacao ?? "",
+    conferir: false,
   });
+  const [erroLocal, setErroLocal] = useState<string | null>(null);
   const salvar = useAcao(
     (sb, dados: Record<string, unknown>) => chamar(sb, "academy_adm_salvar_produto", { p_dados: dados }),
     () => {
@@ -390,7 +399,16 @@ function FormProduto({ produto, fechar }: { produto: ProdutoHotmart | null; fech
   );
   const enviar = (e: FormEvent) => {
     e.preventDefault();
+    setErroLocal(null);
+    const centavos = f.preco.trim() ? lerPreco(f.preco) : null;
+    if (f.preco.trim() && centavos == null) return setErroLocal("Escreva o preço como 997,00.");
+    if (f.checkout.trim() && !checkoutValido(f.checkout)) return setErroLocal("Cole o link de checkout da Hotmart, que começa com https://pay.hotmart.com/.");
     salvar.mutate({
+      situacao: f.situacao,
+      checkout_url: f.checkout.trim(),
+      preco_centavos: centavos,
+      preco_observacao: f.obs.trim(),
+      conferir_preco: f.conferir,
       hotmart_produto_id: f.hotmart_produto_id.trim(),
       nome: f.nome,
       escopo: f.escopo,
@@ -434,7 +452,27 @@ function FormProduto({ produto, fechar }: { produto: ProdutoHotmart | null; fech
         <p className="m-0 text-[13px] text-muted">Quem compra a trilha leva os cursos que ela tem no dia da compra. Curso que entrar depois não entra.</p>
       )}
       {produto && <Marcador rotulo="Produto ativo" ajuda="Inativo, a venda desse código não libera nada." checked={f.ativo} onChange={(e) => setF({ ...f, ativo: e.target.checked })} />}
-      <ErroFormulario erro={salvar.error} />
+      <fieldset className="m-0 flex flex-col gap-5 border-0 p-0">
+        <legend className="mb-1 p-0 text-sm font-medium text-ink">Vitrine</legend>
+        <Selecao
+          rotulo="Onde aparece"
+          value={f.situacao}
+          onChange={(e) => setF({ ...f, situacao: e.target.value as "oculto" | "a_venda" })}
+          ajuda="À venda, aparece no site e no catálogo do portal com o preço e o botão Comprar."
+        >
+          <option value="oculto">Fora das vitrines</option>
+          <option value="a_venda">À venda</option>
+        </Selecao>
+        <Campo rotulo="Link de checkout" value={f.checkout} onChange={(e) => setF({ ...f, checkout: e.target.value })} placeholder="https://pay.hotmart.com/…" inputMode="url" spellCheck={false} />
+        <div className="grid gap-5 sm:grid-cols-[minmax(0,12rem)_1fr]">
+          <Campo rotulo="Preço (R$)" value={f.preco} onChange={(e) => setF({ ...f, preco: e.target.value })} inputMode="decimal" placeholder="997,00" />
+          <Campo rotulo="Observação" value={f.obs} onChange={(e) => setF({ ...f, obs: e.target.value })} limite={80} placeholder="ou em até 12x no cartão" />
+        </div>
+        {produto?.preco_centavos != null && (
+          <Marcador rotulo="Conferi agora que o preço na Hotmart é este" checked={f.conferir} onChange={(e) => setF({ ...f, conferir: e.target.checked })} />
+        )}
+      </fieldset>
+      <ErroFormulario erro={erroLocal ? new Error(erroLocal) : salvar.error} />
       <div className="flex gap-3">
         <Botao type="submit" className="h-11 px-5" disabled={salvar.isPending}>
           {salvar.isPending ? "Salvando…" : "Salvar produto"}

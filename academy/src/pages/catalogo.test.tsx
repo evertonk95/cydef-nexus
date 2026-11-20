@@ -316,3 +316,35 @@ describe("trilhas no painel", () => {
     expect(await violacoesGraves(container)).toEqual([]);
   });
 });
+
+describe("ofertas no catálogo do portal (fase 16b)", () => {
+  it("plataforma toda no topo e a trilha completa ao filtrar, com o e-mail da conta", async () => {
+    const comOfertas = {
+      ...catalogo,
+      ofertas: [
+        { tipo: "plataforma" as const, nome: "Academy", trilha: null, duracao_dias: 365, cursos: 3, preco_centavos: 99700, preco_observacao: "ou 12x", checkout_url: "https://pay.hotmart.com/P1234567Q" },
+        { tipo: "trilha" as const, nome: "Trilha SOC", trilha: "soc", duracao_dias: null, cursos: 2, preco_centavos: 69700, preco_observacao: "", checkout_url: "https://pay.hotmart.com/T7654321R" },
+      ],
+    };
+    renderizar(<Catalogo />, { rota: "/catalogo", caminho: "/catalogo", sb: sbFalso({ painel: painelTeste(), rpcs: { academy_catalogo_publico: comOfertas } }) });
+    const plataforma = await screen.findByRole("region", { name: "Acesso a toda a Academy" });
+    expect(within(plataforma).getByText("Todos os 3 cursos pagos, e os que forem lançados no período, por 12 meses.")).toBeInTheDocument();
+    const u = new URL(within(plataforma).getByRole("link", { name: /^Comprar/ }).getAttribute("href")!);
+    expect(u.searchParams.get("sck")).toBe("portal");
+    expect(u.searchParams.get("email")).toBe("ana@empresa.com.br");
+    expect(screen.queryByRole("region", { name: "Trilha SOC completa" })).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "SOC" }));
+    expect(screen.getByRole("region", { name: "Trilha SOC completa" })).toBeInTheDocument();
+  });
+});
+
+describe("oferta com um curso só", () => {
+  it("usa o singular", async () => {
+    const umCurso = {
+      ...catalogo,
+      ofertas: [{ tipo: "plataforma" as const, nome: "Academy", trilha: null, duracao_dias: 365, cursos: 1, preco_centavos: 49700, preco_observacao: "", checkout_url: "https://pay.hotmart.com/P1234567Q" }],
+    };
+    renderizar(<Catalogo />, { rota: "/catalogo", caminho: "/catalogo", sb: sbFalso({ painel: painelTeste(), rpcs: { academy_catalogo_publico: umCurso } }) });
+    expect(await screen.findByText("O curso pago de hoje, e os que forem lançados no período, por 12 meses.")).toBeInTheDocument();
+  });
+});

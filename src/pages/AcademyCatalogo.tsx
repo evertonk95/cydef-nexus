@@ -8,7 +8,8 @@ import { CursoCard } from "@/components/academy/CursoCard";
 import { focusRing } from "@/components/academy/ctaStyles";
 import { L } from "@/lib/lang";
 import { LANDING_PATH } from "@/lib/config";
-import { catalogoAcademy, NIVEL_KEY, type Nivel } from "@/lib/academy/catalogo";
+import { catalogoAcademy, NIVEL_KEY, ofertaDaTrilha, ofertaPlataforma, type Nivel } from "@/lib/academy/catalogo";
+import { OfertaPlataforma, OfertaTrilha } from "@/components/academy/Ofertas";
 
 const NIVEIS: Nivel[] = ["iniciante", "intermediario", "avancado"];
 
@@ -34,6 +35,8 @@ const AcademyCatalogo = () => {
     .flatMap((s) => cursos.filter((c) => c.slug === s))
     .filter((c) => !nivel || c.nivel === nivel);
   const niveisPresentes = NIVEIS.filter((n) => cursos.some((c) => c.nivel === n));
+  const plataforma = ofertaPlataforma();
+  const ofertaTrilha = selecionada ? ofertaDaTrilha(selecionada.slug) : undefined;
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -53,6 +56,11 @@ const AcademyCatalogo = () => {
 
         <section aria-label={t("academyCatalog.h1")} className="pb-24 md:pb-32 px-2 sm:px-6">
           <div className="container mx-auto max-w-7xl">
+            {plataforma ? (
+              <div className="mb-10">
+                <OfertaPlataforma oferta={plataforma} />
+              </div>
+            ) : null}
             <div className="flex flex-col gap-4 mb-10">
               {trilhas.length > 0 ? (
                 <div role="group" aria-label={t("academyCatalog.filterTrail")} className="flex flex-wrap gap-2">
@@ -79,6 +87,7 @@ const AcademyCatalogo = () => {
                 </div>
               ) : null}
               {selecionada?.descricao ? <p className="text-neutral-400 max-w-3xl">{selecionada.descricao}</p> : null}
+              {selecionada && ofertaTrilha ? <OfertaTrilha oferta={ofertaTrilha} titulo={selecionada.titulo} /> : null}
             </div>
 
             {lista.length === 0 ? (

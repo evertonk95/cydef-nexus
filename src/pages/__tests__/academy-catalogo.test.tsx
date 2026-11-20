@@ -76,6 +76,10 @@ vi.mock("@/lib/academy/catalogo-snapshot.json", () => ({
         atualizado_em: "2026-11-19T12:00:00+00:00",
       },
     ],
+    ofertas: [
+      { tipo: "plataforma", nome: "Academy completa", trilha: null, duracao_dias: 365, cursos: 3, preco_centavos: 99700, preco_observacao: "ou 12x", checkout_url: "https://pay.hotmart.com/P1234567Q" },
+      { tipo: "trilha", nome: "Trilha SOC", trilha: "soc", duracao_dias: null, cursos: 2, preco_centavos: 69700, preco_observacao: "", checkout_url: "https://pay.hotmart.com/T7654321R" },
+    ],
   },
 }));
 
@@ -215,5 +219,30 @@ describe("página da Academy por trilhas", () => {
     const blocos = screen.getAllByRole("heading", { level: 3 }).filter((h) => h.id.startsWith("trilha-"));
     expect(blocos.map((h) => h.textContent)).toEqual(["SOC", "Certificações"]);
     expect(screen.getByRole("link", { name: /Ver catálogo completo/ })).toHaveAttribute("href", "/pt/academy/catalogo");
+  });
+});
+
+describe("ofertas de trilha e de plataforma (fase 16b)", () => {
+  it("a página da Academy mostra a plataforma toda e o Comprar da trilha, com origem site", () => {
+    naRota("/pt/academy", "/pt/academy", <Academy />);
+    const plataforma = screen.getByRole("region", { name: "Acesso a toda a Academy" });
+    expect(within(plataforma).getByText("Todos os 3 cursos pagos, e os que forem lançados no período, por 12 meses.")).toBeInTheDocument();
+    expect(within(plataforma).getByText(/R\$\s?997,00/)).toBeInTheDocument();
+    const comprar = within(plataforma).getByRole("link", { name: /^Comprar/ });
+    expect(new URL(comprar.getAttribute("href")!).searchParams.get("sck")).toBe("site");
+
+    const trilha = screen.getByRole("link", { name: "Comprar a trilha SOC (abre em nova aba)" });
+    const u = new URL(trilha.getAttribute("href")!);
+    expect(u.pathname).toBe("/T7654321R");
+    expect(u.searchParams.get("sck")).toBe("site");
+    expect(screen.queryByRole("link", { name: /Comprar a trilha Certificações/ })).toBeNull();
+  });
+
+  it("no catálogo, a oferta da trilha aparece ao filtrar por ela", () => {
+    naRota("/pt/academy/catalogo", "/pt/academy/catalogo", <AcademyCatalogo />);
+    expect(screen.getByRole("region", { name: "Acesso a toda a Academy" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Comprar a trilha SOC/ })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "SOC" }));
+    expect(screen.getByRole("link", { name: /Comprar a trilha SOC/ })).toBeInTheDocument();
   });
 });
