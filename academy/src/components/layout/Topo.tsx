@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LogOut, PencilRuler, Search, ShieldCheck } from "lucide-react";
+import { BookOpen, ChevronDown, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -91,6 +91,9 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
                   <PencilRuler className="size-4" aria-hidden="true" /> Painel do instrutor
                 </NavLink>
               )}
+              <NavLink role="menuitem" to="/conta" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
+                <UserRound className="size-4" aria-hidden="true" /> Minha conta
+              </NavLink>
               <a role="menuitem" href={urlAviso(config.siteUrl)} target="_blank" rel="noopener" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
                 <ShieldCheck className="size-4" aria-hidden="true" /> Privacidade
               </a>
