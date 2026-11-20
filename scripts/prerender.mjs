@@ -6,6 +6,15 @@
 // Cada rota renderiza num PROCESSO FILHO (scripts/prerender-worker.mjs):
 // isolamento total — crash/timer de uma rota não derruba o build; timers do
 // React (scheduler/polling) morrem com o processo.
+//
+// Watchdog e paralelismo configuráveis por ambiente (20/11/2026). Em máquina
+// mais lenta que o runner do CI, rotas pesadas passavam dos 20 s fixos e o
+// build local reprovava em massa (115 de 156 com "exit null"), mesmo com o CI
+// verde. Os padrões são os mesmos de antes, então o CI não muda:
+//   PRERENDER_TIMEOUT_MS   tempo máximo por rota, em ms (padrão 20000; 1000 a 600000)
+//   PRERENDER_CONCURRENCY  rotas renderizadas ao mesmo tempo (padrão 4; 1 a 16)
+// Exemplo no Windows (PowerShell):
+//   $env:PRERENDER_TIMEOUT_MS = "90000"; npm run build
 import { readFileSync, writeFileSync, mkdtempSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
@@ -13,12 +22,22 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadPrivateRoutes } from "./lib/load-private-routes.mjs";
+import { inteiroDoAmbiente } from "./lib/prerender-config.mjs";
 
 const require = createRequire(import.meta.url);
 const esbuild = require("esbuild");
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const WORKER = path.join(ROOT, "scripts/prerender-worker.mjs");
-const CONCURRENCY = 4;
+
+let TIMEOUT_MS;
+let CONCURRENCY;
+try {
+  TIMEOUT_MS = inteiroDoAmbiente("PRERENDER_TIMEOUT_MS", 20000, 1000, 600000);
+  CONCURRENCY = inteiroDoAmbiente("PRERENDER_CONCURRENCY", 4, 1, 16);
+} catch (e) {
+  console.error(`prerender: ${e.message}`);
+  process.exit(1);
+}
 
 // 1. Bundle CJS do app (rotas lazy incluidas; CJS nao divide chunk)
 const viteEnv = Object.fromEntries(
@@ -80,6 +99,7 @@ const routes = [...sitemapRoutes, ...privateRoutes];
 console.log(
   `prerender: ${routes.length} rotas (${sitemapRoutes.length} do sitemap + ${privateRoutes.length} utilitarias fora do sitemap)`,
 );
+console.log(`prerender: até ${TIMEOUT_MS / 1000} s por rota, ${CONCURRENCY} por vez`);
 
 // 3. Workers em lotes
 const bundleTmp = path.join(mkdtempSync(path.join(tmpdir(), "cydef-prerender-")), "app.cjs");
@@ -94,14 +114,16 @@ function renderRoute(route) {
     );
     let out = "";
     let err = "";
+    let esgotou = false;
     child.stdout.on("data", (d) => (out += d));
     child.stderr.on("data", (d) => (err += d));
     const timer = setTimeout(() => {
+      esgotou = true;
       child.kill("SIGKILL");
-    }, 20000);
+    }, TIMEOUT_MS);
     child.on("close", (code) => {
       clearTimeout(timer);
-      resolve({ route, code, out, err });
+      resolve({ route, code, out, err, esgotou });
     });
   });
 }
@@ -161,7 +183,11 @@ const failed = [];
 for (let i = 0; i < routes.length; i += CONCURRENCY) {
   const batch = routes.slice(i, i + CONCURRENCY);
   const results = await Promise.all(batch.map(renderRoute));
-  for (const { route, code, out, err } of results) {
+  for (const { route, code, out, err, esgotou } of results) {
+    if (esgotou) {
+      failed.push(`${route} (tempo esgotado: ${TIMEOUT_MS / 1000} s; em máquina lenta, aumente PRERENDER_TIMEOUT_MS)`);
+      continue;
+    }
     if (code === 0 && out) {
       try {
         const parsed = JSON.parse(out);
