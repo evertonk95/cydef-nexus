@@ -16,7 +16,19 @@ export interface ModuloLista {
   id: string;
   ordem: number;
   titulo: string;
+  /** Ementa do módulo (0016). Vazio quando não cadastrada. */
+  resumo: string;
   aulas: AulaLista[];
+}
+
+export interface InstrutorCurso {
+  id: string;
+  nome: string;
+  cargo: string;
+  bio: string;
+  linkedin: string | null;
+  site: string | null;
+  papel: "instrutor" | "convidado";
 }
 
 export interface CursoDetalhe {
@@ -28,6 +40,11 @@ export interface CursoDetalhe {
   /** Posição no catálogo (ordem da trilha). */
   ordem: number;
   matriculado: boolean;
+  /** Sobre o curso (0016). Vazios quando não cadastrados. */
+  objetivos: string[];
+  publico: string;
+  pre_requisitos: string;
+  instrutores: InstrutorCurso[];
   modulos: ModuloLista[];
 }
 
@@ -38,16 +55,25 @@ interface LinhaCurso {
   nivel: CursoDetalhe["nivel"];
   gratuito: boolean;
   ordem?: number | null;
-  modulos: { id: string; ordem: number; titulo: string; aulas: Omit<AulaLista, "concluida" | "posicao_seg">[] }[];
+  objetivos?: string[] | null;
+  publico?: string | null;
+  pre_requisitos?: string | null;
+  cursos_instrutores?: { papel: InstrutorCurso["papel"]; ordem: number; instrutores: Omit<InstrutorCurso, "papel"> | null }[] | null;
+  modulos: { id: string; ordem: number; titulo: string; resumo?: string | null; aulas: Omit<AulaLista, "concluida" | "posicao_seg">[] }[];
 }
+
+const AULAS = "aulas(id, ordem, numero, titulo, resumo, duracao_seg)";
+const SELECAO =
+  "slug, titulo, descricao, nivel, gratuito, ordem, objetivos, publico, pre_requisitos, " +
+  "cursos_instrutores(papel, ordem, instrutores(id, nome, cargo, bio, linkedin, site)), " +
+  `modulos(id, ordem, titulo, resumo, ${AULAS})`;
+/** Consulta de antes da 0016: o portal segue de pé se subir antes da migração. */
+const SELECAO_ANTIGA = `slug, titulo, descricao, nivel, gratuito, ordem, modulos(id, ordem, titulo, ${AULAS})`;
 
 export async function buscarCurso(sb: SupabaseClient, slug: string, userId: string): Promise<CursoDetalhe | null> {
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || slug.length > 60) return null;
-  const { data, error } = await sb
-    .from("cursos")
-    .select("slug, titulo, descricao, nivel, gratuito, ordem, modulos(id, ordem, titulo, aulas(id, ordem, numero, titulo, resumo, duracao_seg))")
-    .eq("slug", slug)
-    .maybeSingle();
+  let { data, error } = await sb.from("cursos").select(SELECAO).eq("slug", slug).maybeSingle();
+  if (error) ({ data, error } = await sb.from("cursos").select(SELECAO_ANTIGA).eq("slug", slug).maybeSingle());
   if (error) throw new Error("curso_indisponivel");
   if (!data) return null;
   const curso = data as unknown as LinhaCurso;
@@ -72,12 +98,19 @@ export async function buscarCurso(sb: SupabaseClient, slug: string, userId: stri
     gratuito: curso.gratuito,
     ordem: curso.ordem ?? 0,
     matriculado: Boolean(mat),
+    objetivos: curso.objetivos ?? [],
+    publico: curso.publico ?? "",
+    pre_requisitos: curso.pre_requisitos ?? "",
+    instrutores: [...(curso.cursos_instrutores ?? [])]
+      .sort((a, b) => a.ordem - b.ordem)
+      .flatMap((v) => (v.instrutores ? [{ ...v.instrutores, papel: v.papel }] : [])),
     modulos: [...curso.modulos]
       .sort((a, b) => a.ordem - b.ordem)
       .map((m) => ({
         id: m.id,
         ordem: m.ordem,
         titulo: m.titulo,
+        resumo: m.resumo ?? "",
         aulas: [...m.aulas]
           .sort((a, b) => a.ordem - b.ordem)
           .map((a) => ({

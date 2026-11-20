@@ -47,3 +47,13 @@ test("admin cria uma aula com link do YouTube, publica e reordena", async ({ pag
   });
   expect(e.escritasAdm[1]).toMatchObject({ fn: "academy_adm_mover_aula", p_direcao: -1 });
 });
+
+test("aluno vê na página do curso o que vai aprender, a ementa e quem ensina", async ({ page }) => {
+  await entrar(page);
+  await page.goto("/cursos/cybersecurity-fundamentals");
+  await expect(page.getByRole("region", { name: "O que você vai aprender" }).getByRole("listitem")).toHaveCount(3);
+  await expect(page.getByText("Tríade CID, risco e as defesas que sustentam o resto do curso.")).toBeVisible();
+  const quem = page.getByRole("region", { name: "Quem ensina neste curso" });
+  await expect(quem.getByRole("listitem").first()).toContainText("Everton Nascimento");
+  await expect(quem.getByRole("listitem").nth(1)).toContainText("Convidado");
+});

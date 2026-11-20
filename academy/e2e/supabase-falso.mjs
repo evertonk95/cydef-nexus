@@ -34,10 +34,18 @@ const CURSO = {
   descricao: "A base que todo profissional de tecnologia precisa.",
   nivel: "iniciante",
   gratuito: true,
+  objetivos: ["Explicar a tríade CID com exemplos do dia a dia", "Diferenciar risco, ameaça e vulnerabilidade", "Aplicar menor privilégio e defesa em profundidade"],
+  publico: "Quem está começando em tecnologia ou quer migrar para segurança.",
+  pre_requisitos: "Nenhum. Saber usar o computador no dia a dia basta.",
+  cursos_instrutores: [
+    { papel: "instrutor", ordem: 1, instrutores: { id: "i1", nome: "Everton Nascimento", cargo: "Fundador da CyDef", bio: "Especialista em SOC, SIEM e resposta a incidentes.", linkedin: "https://www.linkedin.com/in/exemplo", site: null } },
+    { papel: "convidado", ordem: 2, instrutores: { id: "i2", nome: "Matheus", cargo: "Analista de SOC", bio: "", linkedin: null, site: null } },
+  ],
   modulos: MODULOS.map(([titulo, aulas], i) => ({
     id: `m${i}`,
     ordem: i,
     titulo,
+    resumo: i === 1 ? "Tríade CID, risco e as defesas que sustentam o resto do curso." : "",
     aulas: aulas.map(([t, resumo, duracao], j) => ({ id: `a${++n}`, ordem: j + 1, numero: n, titulo: t, resumo, duracao_seg: duracao })),
   })),
 };
@@ -87,7 +95,7 @@ function novoEstado() {
     adm: {
       publicado: true,
       modulos: CURSO.modulos.map((m) => ({
-        id: m.id, ordem: m.ordem, titulo: m.titulo, questoes: m.id === "m1" ? 3 : 0, questoes_publicadas: m.id === "m1" ? 3 : 0,
+        id: m.id, ordem: m.ordem, titulo: m.titulo, resumo: m.resumo, questoes: m.id === "m1" ? 3 : 0, questoes_publicadas: m.id === "m1" ? 3 : 0,
         aulas: m.aulas.map((a) => ({ ...a, modulo_id: m.id, video_provedor: "youtube", video_ref: VIDEO.ref, publicado: true, atualizado_em: "2026-11-18T10:00:00Z", alunos_com_progresso: 1 })),
       })),
     },
@@ -108,6 +116,7 @@ function cursoAdm() {
     requisitos: { exige_todas_aulas: true, exige_modulos: true, nota_minima_modulo: 70, questoes_modulo: 5, nota_minima_final: 75, questoes_final: 4,
       espera_final_horas: 24, tentativas_final_max: null, carga_horaria_h: 6, certificado_ativo: true },
     questoes_final: QUESTOES_FINAL.length, questoes_final_publicadas: QUESTOES_FINAL.length,
+    objetivos: CURSO.objetivos, publico: CURSO.publico, pre_requisitos: CURSO.pre_requisitos,
     modulos: estado.adm.modulos,
     _resumo: { aulas: todas.length, aulas_publicadas: todas.filter((a) => a.publicado).length, aulas_sem_video: todas.filter((a) => !a.video_ref).length },
   };
@@ -276,6 +285,14 @@ http
             { user_id: USUARIO.id, email: USUARIO.email, nome: "Everton Nascimento", papel: "admin", eu: true, cursos: [] },
             { user_id: "u2", email: "matheus@exemplo.com", nome: "Matheus", papel: "instrutor", eu: false, cursos: [CURSO.slug] },
           ]);
+        case "/rest/v1/rpc/academy_adm_instrutores": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const p = (v) => ({ ...v.instrutores, da_equipe: v.papel === "instrutor", eu: v.instrutores.id === "i1" });
+          return enviar({ do_curso: CURSO.cursos_instrutores.map((v) => ({ papel: v.papel, ordem: v.ordem, instrutor: p(v) })), disponiveis: [] });
+        }
+        case "/rest/v1/rpc/academy_adm_meu_perfil":
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          return enviar({ ...CURSO.cursos_instrutores[0].instrutores, da_equipe: true, eu: true });
         case "/rest/v1/rpc/academy_adm_cursos":
         case "/rest/v1/rpc/academy_adm_curso":
         case "/rest/v1/rpc/academy_adm_questoes":

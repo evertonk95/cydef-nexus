@@ -54,6 +54,8 @@ export interface ModuloAdm {
   id: string;
   ordem: number;
   titulo: string;
+  /** Ementa do módulo (0016). */
+  resumo?: string;
   questoes: number;
   questoes_publicadas: number;
   aulas: AulaAdm[];
@@ -82,9 +84,39 @@ export interface CursoAdm {
   ordem: number;
   eh_admin: boolean;
   requisitos: Requisitos | null;
+  /** Sobre o curso (0016). */
+  objetivos?: string[];
+  publico?: string;
+  pre_requisitos?: string;
+  instrutores?: VinculoInstrutor[];
   questoes_final: number;
   questoes_final_publicadas: number;
   modulos: ModuloAdm[];
+}
+
+export interface PerfilInstrutor {
+  id: string | null;
+  nome: string;
+  cargo: string;
+  bio: string;
+  linkedin: string | null;
+  site: string | null;
+  /** Tem conta na equipe (edita o próprio perfil). Falso: convidado. */
+  da_equipe: boolean;
+  eu: boolean;
+}
+
+export type PapelNoCurso = "instrutor" | "convidado";
+
+export interface VinculoInstrutor {
+  papel: PapelNoCurso;
+  ordem: number;
+  instrutor: PerfilInstrutor & { id: string };
+}
+
+export interface InstrutoresDoCurso {
+  do_curso: VinculoInstrutor[];
+  disponiveis: (PerfilInstrutor & { id: string })[];
 }
 
 export interface AlternativaAdm {
@@ -160,6 +192,14 @@ const MENSAGENS: Record<string, string> = {
   cursos_invalidos: "Escolha ao menos um curso para o instrutor.",
   ultimo_admin: "A Academy precisa de pelo menos um admin.",
   invalid_payload: "Algum campo veio em formato inválido.",
+  objetivos_invalidos: "Use até 10 objetivos, com até 200 caracteres cada.",
+  publico_invalido: "O texto de público passa de 600 caracteres.",
+  pre_requisitos_invalidos: "Os pré-requisitos passam de 600 caracteres.",
+  nome_invalido: "O nome precisa ter entre 2 e 80 caracteres.",
+  cargo_invalido: "O cargo passa de 120 caracteres.",
+  bio_invalida: "A bio passa de 1.200 caracteres.",
+  linkedin_invalido: "O LinkedIn precisa ser um link https://www.linkedin.com/…",
+  instrutor_inexistente: "Instrutor não encontrado.",
 };
 
 export class ErroPainel extends Error {
@@ -302,6 +342,24 @@ export function useQuestoesAdm(slug: string) {
     queryKey: ["adm", "questoes", slug],
     queryFn: () => chamar<QuestaoAdm[]>(sb, "academy_adm_questoes", { p_curso: slug }),
     enabled: Boolean(slug),
+  });
+}
+
+export function useInstrutoresAdm(slug: string) {
+  const { sb } = usePortal();
+  return useQuery({
+    queryKey: ["adm", "instrutores", slug],
+    queryFn: () => chamar<InstrutoresDoCurso>(sb, "academy_adm_instrutores", { p_curso: slug }),
+    enabled: Boolean(slug),
+  });
+}
+
+export function useMeuPerfil() {
+  const { sb, sessao } = usePortal();
+  return useQuery({
+    queryKey: ["adm", "perfil", sessao?.user.id],
+    queryFn: () => chamar<PerfilInstrutor>(sb, "academy_adm_meu_perfil"),
+    enabled: Boolean(sessao),
   });
 }
 

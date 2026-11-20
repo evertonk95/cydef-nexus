@@ -12,6 +12,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
 - Painel do instrutor em `/instrutor`, só para a equipe: cursos, módulos, aulas, vídeos, questões, regras do certificado, Boletim do SOC e equipe (fase 13).
+- Sobre o curso na página de cada curso: objetivos, para quem é, pré-requisitos, ementa por módulo e quem ensina, editados no painel (fase 13b).
 
 ## Identidade do portal (fase 08, publicada em 19/11/2026)
 
@@ -172,7 +173,21 @@ select id, 'admin' from auth.users where lower(email) = lower('EMAIL_DO_EVERTON'
 on conflict (user_id) do update set papel = 'admin';
 ```
 
-Daí em diante a equipe é gerida em `/instrutor/equipe`. Para conferir o que foi feito: `select * from public.academy_auditoria order by id desc limit 50;`
+Daí em diante a equipe é gerida em `/instrutor/equipe`.
+
+### Sobre o curso e quem ensina (0016)
+
+| Onde | O que faz |
+|---|---|
+| Aba **Sobre o curso** | Objetivos ("O que você vai aprender", até 10 de até 200 caracteres), "Para quem é" e "Pré-requisitos" (até 600). Também a lista **Quem ensina**: ordem, papel (Instrutor ou Convidado), acrescentar perfil existente e convidar alguém de fora da equipe. |
+| Estrutura, editar módulo | Título e **ementa do módulo** (até 400 caracteres). A ementa aparece na página do curso, inclusive em módulo "Em breve". |
+| `/instrutor/perfil` | **Meu perfil**: nome público, cargo, mini bio, LinkedIn e site de quem é da equipe. Sem foto por enquanto: o portal mostra as iniciais. |
+
+Na página do curso, o aluno vê os blocos "O que você vai aprender", "Para quem é", "Pré-requisitos" e "Quem ensina" embaixo dos módulos. Bloco vazio não aparece, então curso sem nada cadastrado fica igual a antes.
+
+Regras: convidado (perfil sem conta) aparece no curso sem acesso ao painel; para editar o curso a pessoa precisa estar na Equipe. Perfil de alguém da equipe só a própria pessoa ou o admin edita; convidado, o admin ou quem edita um curso em que ele aparece. O aluno lê só nome, cargo, bio e links, e só de quem está em curso publicado. Toda escrita vai para `academy_auditoria`.
+
+A 0016 depende da 0015. O portal funciona antes e depois dela: sem a 0016, a página do curso usa a consulta antiga e o painel salva só o título do módulo. Para conferir o que foi feito: `select * from public.academy_auditoria order by id desc limit 50;`
 
 ## Boletim do SOC
 

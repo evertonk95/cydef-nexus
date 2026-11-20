@@ -25,6 +25,7 @@ export default function AreaInstrutor() {
     { para: "/instrutor", rotulo: "Cursos", fim: false, admin: false },
     { para: "/instrutor/boletim", rotulo: "Boletim do SOC", fim: true, admin: true },
     { para: "/instrutor/equipe", rotulo: "Equipe", fim: true, admin: true },
+    { para: "/instrutor/perfil", rotulo: "Meu perfil", fim: true, admin: false },
   ].filter((a) => !a.admin || eu.data!.papel === "admin");
 
   return (
@@ -33,27 +34,25 @@ export default function AreaInstrutor() {
         <p className="m-0 pb-3 text-sm text-muted">
           Painel do instrutor{eu.data.papel === "admin" ? ", acesso de admin" : ""}
         </p>
-        {abas.length > 1 && (
-          <nav aria-label="Painel do instrutor" className="flex gap-6">
-            {abas.map((a) => (
-              <NavLink
-                key={a.para}
-                to={a.para}
-                end={a.fim}
-                className={({ isActive }) => {
-                  // "Cursos" fica ativo em /instrutor e em /instrutor/cursos/*.
-                  const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(boletim|equipe)/.test(pathname) : isActive;
-                  return cn(
-                    "-mb-px border-b-2 pb-3 text-[15px] font-medium transition-colors duration-150",
-                    ativo ? "border-orange text-ink" : "border-transparent text-muted hover:text-ink",
-                  );
-                }}
-              >
-                {a.rotulo}
-              </NavLink>
-            ))}
-          </nav>
-        )}
+        <nav aria-label="Painel do instrutor" className="flex gap-6">
+          {abas.map((a) => (
+            <NavLink
+              key={a.para}
+              to={a.para}
+              end={a.fim}
+              className={({ isActive }) => {
+                // "Cursos" fica ativo em /instrutor e em /instrutor/cursos/*.
+                const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(boletim|equipe|perfil)/.test(pathname) : isActive;
+                return cn(
+                  "-mb-px border-b-2 pb-3 text-[15px] font-medium transition-colors duration-150",
+                  ativo ? "border-orange text-ink" : "border-transparent text-muted hover:text-ink",
+                );
+              }}
+            >
+              {a.rotulo}
+            </NavLink>
+          ))}
+        </nav>
       </div>
       <Outlet context={eu.data} />
     </>

@@ -11,6 +11,7 @@ import { contagem, duracao } from "@/lib/formato";
 import { Barra } from "@/components/ui/Barra";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { cn } from "@/lib/cn";
+import { SobreCurso } from "@/components/curso/SobreCurso";
 import { FalhaCarregamento, NaoEncontrado } from "./Estados";
 
 export default function Curso() {
@@ -63,9 +64,12 @@ export default function Curso() {
               const borda = i > 0 && "border-t border-line";
               if (m.aulas.length === 0) {
                 return (
-                  <li key={m.id} className={cn("flex items-center gap-3 px-4 py-3.5 text-[15px] font-medium", borda)}>
-                    <h2 className="m-0 flex-1 text-[15px] font-medium text-muted">{rotuloModulo(m.ordem, m.titulo)}</h2>
-                    <span className="text-[13px] whitespace-nowrap text-dim">Em breve</span>
+                  <li key={m.id} className={cn("px-4 py-3.5", borda)}>
+                    <div className="flex items-center gap-3 text-[15px] font-medium">
+                      <h2 className="m-0 flex-1 text-[15px] font-medium text-muted">{rotuloModulo(m.ordem, m.titulo)}</h2>
+                      <span className="text-[13px] whitespace-nowrap text-dim">Em breve</span>
+                    </div>
+                    {m.resumo && <p className="m-0 mt-1.5 max-w-[68ch] text-sm leading-relaxed text-dim">{m.resumo}</p>}
                   </li>
                 );
               }
@@ -102,6 +106,7 @@ export default function Curso() {
                         exit={{ opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] } }}
                         className="m-0 list-none p-0 pb-2"
                       >
+                        {m.resumo && <li className="mx-2 px-3 pb-2 text-sm leading-relaxed text-muted">{m.resumo}</li>}
                         {bloqueado && <AvisoBloqueio pendente={pendente} />}
                         {m.aulas.map((a) => (
                           <li key={a.id}>
@@ -126,6 +131,7 @@ export default function Curso() {
               );
             })}
           </ol>
+          <SobreCurso curso={c} />
         </div>
         <aside className="flex min-w-0 flex-[1_1_320px] flex-col gap-4 lg:sticky lg:top-24">
           <section aria-labelledby="h-progresso" className="painel-card flex flex-col gap-4 p-6">

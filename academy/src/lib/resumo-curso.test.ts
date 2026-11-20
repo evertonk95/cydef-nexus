@@ -4,8 +4,10 @@ import type { CursoDetalhe } from "./cursos";
 
 const aula = (id: string, numero: number, concluida: boolean) => ({ id, ordem: numero, numero, titulo: `Aula ${numero}`, resumo: "", duracao_seg: 120, concluida, posicao_seg: 0 });
 
-const curso = (modulos: CursoDetalhe["modulos"]): CursoDetalhe => ({
-  slug: "c", titulo: "Curso", descricao: "", nivel: "iniciante", gratuito: true, ordem: 1, matriculado: true, modulos,
+const curso = (modulos: Omit<CursoDetalhe["modulos"][number], "resumo">[]): CursoDetalhe => ({
+  slug: "c", titulo: "Curso", descricao: "", nivel: "iniciante", gratuito: true, ordem: 1, matriculado: true,
+  objetivos: [], publico: "", pre_requisitos: "", instrutores: [],
+  modulos: modulos.map((m) => ({ ...m, resumo: "" })),
 });
 
 describe("progresso honesto do curso", () => {
