@@ -7,8 +7,8 @@
  * 40 horas e "sob consulta".
  */
 import { describe, expect, it } from "vitest";
-import { courseDataEn, courseDataEs, courseDataPt } from "@/lib/courses";
-import { academyCatalog } from "@/lib/academy/catalog";
+import { catalogoAcademy } from "@/lib/academy/catalogo";
+import { cursosMeta } from "@/lib/academy/catalogo-meta";
 import { legacyCoursePaths, legacyPageSlugs } from "@/lib/routes";
 import { COURSES } from "@/pages/AcademyLanding/data";
 import { COURSES_EN } from "@/pages/AcademyLanding/data.en";
@@ -22,8 +22,8 @@ const GRATUITOS = ["fundamentos-para-soc", "cybersecurity-fundamentals"];
 describe("cursos gratuitos fora da lista de cursos pagos", () => {
   it("nenhum curso gratuito aparece no catálogo pago nem tem página de curso pago", () => {
     for (const slug of GRATUITOS) {
-      expect(academyCatalog.some((c) => c.slug === slug)).toBe(false);
-      for (const dados of [courseDataPt, courseDataEn, courseDataEs]) expect(dados[slug]).toBeUndefined();
+      expect(catalogoAcademy.cursos.some((c) => c.slug === slug)).toBe(false);
+      expect(cursosMeta.some((c) => c.slug === slug)).toBe(false);
     }
   });
 

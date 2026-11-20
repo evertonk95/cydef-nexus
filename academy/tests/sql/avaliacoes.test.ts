@@ -94,7 +94,9 @@ beforeEach(async () => {
 
 describe("requisitos por curso (0013)", () => {
   it("os dois cursos gratuitos entram com os mesmos requisitos decididos", async () => {
-    const r = await db.query(`select * from public.cursos_requisitos order by curso_slug`);
+    const r = await db.query(
+      `select * from public.cursos_requisitos where curso_slug in ('cybersecurity-fundamentals', 'fundamentos-para-soc') order by curso_slug`,
+    );
     expect(r.rows).toHaveLength(2);
     const carga = (r.rows as Record<string, unknown>[]).map((x) => [x.curso_slug, x.carga_horaria_h === null ? null : Number(x.carga_horaria_h)]);
     expect(carga).toEqual([

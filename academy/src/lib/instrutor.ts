@@ -219,6 +219,17 @@ const MENSAGENS: Record<string, string> = {
   material_inexistente: "Material não encontrado ou já revisado.",
   mesma_pessoa: "Quem enviou o arquivo não pode aprovar. Outra pessoa precisa revisar.",
   motivo_obrigatorio: "Escreva o motivo da recusa (pelo menos 5 caracteres).",
+  situacao_invalida: "Escolha onde o curso aparece.",
+  checkout_invalido: "Cole o link de checkout da Hotmart, que começa com https://pay.hotmart.com/.",
+  produto_invalido: "O código do produto na Hotmart tem só números.",
+  produto_em_uso: "Esse produto da Hotmart já está ligado a outro curso.",
+  preco_invalido: "Informe o preço em reais, entre R$ 1,00 e R$ 100.000,00.",
+  observacao_invalida: "A observação do preço passa de 80 caracteres.",
+  curso_gratuito: "Curso gratuito não entra na vitrine paga. Ele aparece na seção de cursos gratuitos do site.",
+  curso_nao_publicado: "Publique o curso antes de colocar à venda.",
+  venda_incompleta: "Para colocar à venda, informe o link de checkout e o preço.",
+  trilha_inexistente: "Trilha não encontrada.",
+  curso_fora_da_trilha: "Esse curso não está nessa trilha.",
 };
 
 export class ErroPainel extends Error {

@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import Academy from "@/pages/Academy";
-import { academyCatalog } from "@/lib/academy/catalog";
+import { trilhasComCursos } from "@/lib/academy/catalogo";
 import { COURSES_EN } from "@/pages/AcademyLanding/data.en";
 import i18n from "@/i18n";
 
@@ -34,29 +34,22 @@ describe("home da CyDef Academy", () => {
     expect(free?.querySelectorAll("article")).toHaveLength(COURSES_EN.length);
   });
 
-  it("lista todo o catalogo com estado honesto e so linka curso com pagina publicada", () => {
+  it("mostra um bloco por trilha com os cursos do catálogo, cada um com link para a página dele em pt", () => {
     const { container } = renderAcademy();
     const section = container.querySelector("#cursos");
-    expect(section?.querySelectorAll("article")).toHaveLength(academyCatalog.length);
-    const links = Array.from(section?.querySelectorAll("a") ?? []).map((a) => a.getAttribute("href"));
-    const available = academyCatalog.filter((c) => c.available);
-    expect(links).toHaveLength(available.length);
-    for (const course of available) {
-      expect(links.some((href) => href?.endsWith(`/${course.slug}`))).toBe(true);
+    const trilhas = trilhasComCursos();
+    expect(trilhas.length).toBeGreaterThan(0);
+    const blocos = Array.from(section?.querySelectorAll("h3[id^=\"trilha-\"]") ?? []).map((h) => h.textContent);
+    expect(blocos).toEqual(trilhas.map((t) => t.titulo));
+    for (const t of trilhas) {
+      const bloco = section?.querySelector(`[aria-labelledby="trilha-${t.slug}"]`);
+      expect(bloco?.querySelectorAll("article")).toHaveLength(t.cursosDaTrilha.length);
+      for (const c of t.cursosDaTrilha) expect(bloco?.querySelector(`a[href="/pt/cursos/${c.slug}"]`)).not.toBeNull();
     }
+    expect(section?.querySelector('a[href="/en/academy/catalogo"]')?.textContent).toContain(en("academyCatalog.seeAll"));
   });
 
-  it("monta a trilha na ordem iniciante, intermediario, avancado", () => {
-    const { container } = renderAcademy();
-    const steps = Array.from(container.querySelectorAll("#trilha li h3")).map((h) => h.textContent);
-    expect(steps).toEqual([
-      en("academy.courses.fundamentals"),
-      en("academy.courses.soc"),
-      en("academy.courses.blue"),
-    ]);
-  });
-
-  it("nao exibe pessoas, depoimentos, precos nem claims sem base", () => {
+  it("nao exibe pessoas, depoimentos, preco de curso fora de venda nem claims sem base", () => {
     const { container } = renderAcademy();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/official|oficial|recognized|reconhecid|best.?seller|\$\s?\d|R\$/i);

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { BookOpen, Layers, LayoutGrid, LogOut, PlayCircle, Search } from "lucide-react";
+import { BookOpen, Layers, LayoutGrid, LibraryBig, LogOut, PlayCircle, Search } from "lucide-react";
 import { useCursosDetalhados, usePainel } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
@@ -56,6 +56,7 @@ function Conteudo({ fechar }: { fechar: () => void }) {
     }
     l.push({ id: "painel", grupo: "Páginas", titulo: "Meu painel", icone: LayoutGrid, acao: ir("/") });
     l.push({ id: "cursos", grupo: "Páginas", titulo: "Meus cursos", icone: BookOpen, acao: ir("/cursos") });
+    l.push({ id: "catalogo", grupo: "Páginas", titulo: "Catálogo de cursos", icone: LibraryBig, acao: ir("/catalogo") });
     l.push({ id: "sair", grupo: "Conta", titulo: "Sair", icone: LogOut, acao: () => { fechar(); void sair(); } });
     return l;
   }, [painel.data, detalhes, navegar, fechar, sair]);

@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "soc-analyst",
+    "titulo": "SOC Analyst: Formação Completa",
+    "descricao": "Formação completa para atuar como Analista SOC Nível 1 e 2, com foco em detecção, análise e resposta a incidentes de segurança em ambientes corporativos.",
+    "nivel": "intermediario",
+    "situacao": "em_breve",
+    "carga_horaria_h": 80
+  },
+  {
+    "slug": "blue-team-advanced",
+    "titulo": "Blue Team Advanced",
+    "descricao": "Curso avançado para profissionais experientes que buscam aprofundar conhecimentos em defesa cibernética, threat hunting, análise forense e estratégias de Blue Team.",
+    "nivel": "avancado",
+    "situacao": "em_breve",
+    "carga_horaria_h": 60
+  },
+  {
+    "slug": "sc-900-prep",
+    "titulo": "Preparatório SC-900",
+    "descricao": "Preparação completa para o exame Microsoft Security, Compliance, and Identity Fundamentals.",
+    "nivel": "iniciante",
+    "situacao": "em_breve",
+    "carga_horaria_h": 30
+  },
+  {
+    "slug": "security-plus-prep",
+    "titulo": "Preparatório Security+",
+    "descricao": "Preparação completa para a certificação CompTIA Security+, com exercícios práticos e simulados.",
+    "nivel": "intermediario",
+    "situacao": "em_breve",
+    "carga_horaria_h": 50
+  },
+  {
+    "slug": "malware-analysis",
+    "titulo": "Análise de Malware para SOC",
+    "descricao": "Introdução à análise de malware com foco em contexto SOC, identificação de comportamentos e IOCs.",
+    "nivel": "intermediario",
+    "situacao": "em_breve",
+    "carga_horaria_h": 40
+  },
+  {
+    "slug": "incident-investigation",
+    "titulo": "Investigação de Incidentes (MITRE ATT&CK)",
+    "descricao": "Investigação profunda de incidentes utilizando o framework MITRE ATT&CK para detecção e resposta.",
+    "nivel": "avancado",
+    "situacao": "em_breve",
+    "carga_horaria_h": 45
+  }
+]

@@ -1,0 +1,58 @@
+# ============================================================================
+# Catálogo da Academy — publica o site quando o catálogo muda (fase 14)
+#
+# As páginas de curso do site (cydef.com.br) são geradas no build a partir do
+# catálogo do banco (função pública academy_catalogo_publico, 0020). Quando o
+# admin muda um curso, um preço ou uma trilha no painel, o portal mostra na
+# hora; o site precisa de um build novo.
+#
+# De hora em hora este workflow compara a versão do catálogo no banco com a
+# publicada em https://www.cydef.com.br/catalogo-academy.json. Se mudou, pede
+# o deploy (deploy.yml, workflow_dispatch). Se não mudou, não faz nada.
+#
+# Sem segredos: a chave do Supabase aqui é a anon, pública por design (a mesma
+# do deploy.yml); a função só devolve colunas de vitrine. O token é o
+# GITHUB_TOKEN do próprio workflow, só com permissão de disparar workflow.
+# Actions pinadas por SHA completo (HEL-L07).
+# ============================================================================
+
+name: Catálogo da Academy — publicar quando mudar
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalogo-academy
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: scripts
+      - name: Setup Node (22 LTS)
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Comparar o catálogo do banco com o publicado
+        id: catalogo
+        run: node scripts/catalogo-academy-mudou.mjs
+        env:
+          VITE_SUPABASE_URL: "https://fawtpustzzzplzivsdwq.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhd3RwdXN0enp6cGx6aXZzZHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1ODU4OTYsImV4cCI6MjEwMzE2MTg5Nn0.fI2aNNVCD4NX_cXojAHp6u6uiryUYnueDQ6-IEAF_qs"
+      - name: Pedir o deploy do site
+        if: steps.catalogo.outputs.mudou == 'true'
+        run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}

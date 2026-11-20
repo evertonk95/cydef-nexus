@@ -17,6 +17,7 @@ import { postMetaBySlug } from "@/lib/blog/posts";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 import { pageKeyForSlug, type PageKey } from "@/lib/routes";
 import { SITE_ORIGIN } from "@/lib/site";
+import { cursoMeta } from "@/lib/academy/catalogo-meta";
 
 /** Imagem de compartilhamento padrão do site (public/assets/cydef-og.png). */
 export const DEFAULT_OG_IMAGE = "/assets/cydef-og.png";
@@ -42,8 +43,8 @@ export interface OgMeta {
  *
  *  Área de cursos não entra: `courses` é prefixo de conteúdo
  *  (`/<lang>/cursos/<courseId>`), não página (etapa 82, ver routes.ts). As
- *  páginas de detalhe de curso seguem com o card do site (og por curso é
- *  follow-up anotado). */
+ *  páginas de detalhe de curso usam título e descrição do próprio curso
+ *  (catálogo do banco, fase 14), em `ogForBase`. */
 const PAGE_OG: Record<PageKey, OgKeys> = {
   about: { title: ["about.h1a", "about.h1b"], description: ["about.lead"] },
   consulting: { title: ["consulting.h1a", "consulting.h1b"], description: ["consulting.lead"] },
@@ -68,6 +69,8 @@ export const PAGE_OG_IMAGE: Partial<Record<PageKey, (lang: Lang) => string>> = {
 const BASE_OG: Record<string, OgKeys> = {
   // Landing de captura da Academy: o hero vem do i18n `landing` (sections.tsx).
   "/academy/gratuito": { title: ["landing.h1a", "landing.h1b"], description: ["landing.lead"] },
+  // Catálogo completo da Academy (fase 14).
+  "/academy/catalogo": { title: ["academyCatalog.h1"], description: ["academyCatalog.lead"] },
 };
 
 /** og por slug de artefato do Labs. Chave de i18n do catálogo (`labs.fwName` /
@@ -125,6 +128,11 @@ export const ogForBase = (
     const keys = LABS_OG[labsSlug];
     if (keys) return { ...resolveKeys(keys, t), image: DEFAULT_OG_IMAGE };
   }
+
+  // Página de curso da Academy (fase 14): título e descrição do próprio curso.
+  const cursoSlug = base.match(/^\/(?:cursos|courses)\/([^/]+)$/)?.[1];
+  const curso = cursoSlug ? cursoMeta(cursoSlug) : undefined;
+  if (curso) return { title: curso.titulo, description: curso.descricao, image: DEFAULT_OG_IMAGE };
 
   const pageKey = pageKeyForSlug(lang, base.split("/")[1] ?? "");
   const keys = BASE_OG[base] ?? (pageKey ? PAGE_OG[pageKey] : undefined);

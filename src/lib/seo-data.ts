@@ -88,25 +88,58 @@ export const courseLd = ({
   description,
   lang,
   courseId,
+  price,
+  hours,
+  teachers = [],
 }: {
   name: string;
   description: string;
   lang: Lang;
   courseId: string;
-}) => ({
-  "@context": "https://schema.org",
-  "@type": "Course",
-  name,
-  description,
-  inLanguage: htmlLang(lang),
-  url: `${SITE_ORIGIN}/${lang}/${areaSlugFor("courses", lang)}/${courseId}`,
-  provider: {
-    "@type": "Organization",
-    "@id": `${SITE_ORIGIN}/#org`,
-    name: "CyDef",
-    url: SITE_ORIGIN,
-  },
-});
+  /** Preço em centavos de real, só quando o curso está à venda (fase 14). */
+  price?: number;
+  /** Carga horária em horas. */
+  hours?: number;
+  teachers?: string[];
+}) => {
+  const url = `${SITE_ORIGIN}/${lang}/${areaSlugFor("courses", lang)}/${courseId}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name,
+    description,
+    inLanguage: htmlLang(lang),
+    url,
+    provider: {
+      "@type": "Organization",
+      "@id": `${SITE_ORIGIN}/#org`,
+      name: "CyDef",
+      url: SITE_ORIGIN,
+    },
+    ...(price != null
+      ? {
+          offers: {
+            "@type": "Offer",
+            category: "Paid",
+            price: (price / 100).toFixed(2),
+            priceCurrency: "BRL",
+            availability: "https://schema.org/InStock",
+            url,
+          },
+        }
+      : {}),
+    ...(hours != null || teachers.length > 0
+      ? {
+          hasCourseInstance: {
+            "@type": "CourseInstance",
+            courseMode: "Online",
+            ...(hours != null ? { courseWorkload: `PT${Math.round(Number(hours) * 60)}M` } : {}),
+            ...(teachers.length > 0 ? { instructor: teachers.map((n) => ({ "@type": "Person", name: n })) } : {}),
+          },
+        }
+      : {}),
+  };
+};
 
 /** Serviços da CyDef Consulting (página de Consultoria). Um `Service` por
  *  serviço, com a CyDef como provedora. Sem offers (preço sob consulta), sem

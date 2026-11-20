@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/gen-sitemap.mjs",
+    "prebuild": "node scripts/gen-catalogo-academy.mjs && node scripts/gen-sitemap.mjs",
     "build": "vite build",
     "postbuild": "node scripts/postbuild.mjs && node scripts/prerender.mjs",
     "build:dev": "vite build --mode development",

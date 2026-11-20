@@ -48,5 +48,30 @@ export async function loadLegacyRoutes() {
       });
     }
   }
+  // Cursos da Academy (fase 14): são em português, a página fica só em
+  // /pt/cursos/<slug>. Em en/es o endereço (que já esteve no sitemap) vira
+  // página de redirecionamento para a versão em pt.
+  const meta = await esbuild.build({
+    entryPoints: [path.join(ROOT, "src/lib/academy/catalogo-meta.ts")],
+    bundle: true,
+    write: false,
+    format: "cjs",
+    platform: "node",
+    alias: { "@": path.join(ROOT, "src") },
+    logLevel: "silent",
+  });
+  const tmpMeta = path.join(mkdtempSync(path.join(tmpdir(), "cydef-catalogo-")), "meta.cjs");
+  writeFileSync(tmpMeta, meta.outputFiles[0].text, "utf8");
+  const { cursosMeta, IDIOMA_DOS_CURSOS } = await import(pathToFileURL(tmpMeta).href);
+  for (const lang of Object.keys(legacyPageSlugs)) {
+    if (lang === IDIOMA_DOS_CURSOS) continue;
+    for (const { slug } of cursosMeta) {
+      if (legacyCoursePaths[slug]) continue;
+      out.push({
+        from: withTrailingSlash(`/${lang}/${contentAreaSlugs.courses[lang]}/${slug}`),
+        to: withTrailingSlash(`/${IDIOMA_DOS_CURSOS}/${contentAreaSlugs.courses[IDIOMA_DOS_CURSOS]}/${slug}`),
+      });
+    }
+  }
   return out;
 }

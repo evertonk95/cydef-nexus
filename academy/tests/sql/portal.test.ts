@@ -29,7 +29,17 @@ async function aulasDe(curso: string): Promise<{ id: string; numero: number }[]>
 describe("migrações", () => {
   it("rodam em ordem num banco novo e criam o catálogo inicial sem publicar nada", async () => {
     const cursos = await db.query<{ slug: string; publicado: boolean }>(`select slug, publicado from public.cursos order by ordem`);
-    expect(cursos.rows.map((c) => c.slug)).toEqual(["cybersecurity-fundamentals", "fundamentos-para-soc"]);
+    // Os dois gratuitos (0009) e os seis que o site anunciava em código (0020).
+    expect(cursos.rows.map((c) => c.slug)).toEqual([
+      "cybersecurity-fundamentals",
+      "fundamentos-para-soc",
+      "soc-analyst",
+      "blue-team-advanced",
+      "sc-900-prep",
+      "security-plus-prep",
+      "malware-analysis",
+      "incident-investigation",
+    ]);
     expect(cursos.rows.every((c) => !c.publicado)).toBe(true);
     expect((await aulasDe("cybersecurity-fundamentals")).length).toBe(18);
     expect((await aulasDe("fundamentos-para-soc")).length).toBe(12);
@@ -51,7 +61,7 @@ describe("catálogo e leitura pública", () => {
 
   it("depois de publicado, anon lê o catálogo mas não a referência do vídeo", async () => {
     await publicarCatalogo(db);
-    expect((await como(db, "anon", `select slug from public.cursos`)).length).toBe(2);
+    expect((await como(db, "anon", `select slug from public.cursos`)).length).toBe(8);
     expect((await como(db, "anon", `select id, titulo from public.aulas`)).length).toBe(30);
     expect(await erroDe(como(db, "anon", `select video_ref from public.aulas`))).toMatch(/permission denied/);
     expect(await erroDe(como(db, "authenticated", `select video_ref from public.aulas`, [], uuid()))).toMatch(/permission denied/);

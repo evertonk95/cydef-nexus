@@ -106,6 +106,62 @@ function novoEstado() {
     pessoa: 1,
     materiais: [],
     arquivos: {},
+    // Fase 14: vitrine do curso pago de exemplo e trilhas.
+    vitrine: { situacao: "em_breve", checkout_url: null, hotmart_produto_id: null, preco_centavos: null, preco_observacao: "", preco_conferido_em: null, trilhas: ["soc"] },
+    trilhas: [
+      { slug: "soc", titulo: "SOC", descricao: "Para quem quer trabalhar em um Centro de Operações de Segurança.", publicado: true, formacao: null },
+      { slug: "blue-team", titulo: "Blue Team", descricao: "Defesa em profundidade.", publicado: true, formacao: null },
+      { slug: "red-team", titulo: "Red Team", descricao: "Do lado de quem ataca, com autorização.", publicado: true, formacao: null },
+    ],
+  };
+}
+
+/** Curso pago de exemplo (fase 14): o que o site anunciava, agora no banco. */
+const PAGO = {
+  slug: "soc-analyst",
+  titulo: "SOC Analyst: Formação Completa",
+  descricao: "Formação completa para atuar como Analista SOC Nível 1 e 2, com foco em detecção, análise e resposta a incidentes.",
+  nivel: "intermediario",
+  objetivos: ["Dominar análise de logs e correlação de eventos", "Operar SIEM e ferramentas de detecção", "Investigar e responder a incidentes"],
+  publico: "Profissionais que desejam atuar em SOC.",
+  pre_requisitos: "Conhecimentos em redes e sistemas operacionais.",
+  modulos: [
+    { ordem: 1, titulo: "Introdução ao SOC", resumo: "Estrutura e processos de um SOC; papéis e responsabilidades; métricas.", aulas: [] },
+    { ordem: 2, titulo: "Análise de Logs", resumo: "Logs de sistemas operacionais, rede e aplicações; correlação de eventos.", aulas: [] },
+  ],
+};
+const CHECKOUT = /^https:\/\/(pay|checkout)\.hotmart\.com\/[A-Za-z0-9]{4,40}(\?[A-Za-z0-9=&._-]{1,200})?$/;
+
+function vitrineAdm() {
+  const v = estado.vitrine;
+  return {
+    curso: PAGO.slug, situacao: v.situacao, situacao_efetiva: v.situacao, checkout_url: v.checkout_url, hotmart_produto_id: v.hotmart_produto_id,
+    preco_centavos: v.preco_centavos, preco_observacao: v.preco_observacao, preco_conferido_em: v.preco_conferido_em, atualizado_em: `2026-11-19T1${estado.escritasAdm.length % 10}:00:00Z`,
+    trilhas: estado.trilhas.map((t) => ({ slug: t.slug, titulo: t.titulo, publicado: t.publicado, no_curso: v.trilhas.includes(t.slug) })),
+    pendencias: ["sem_instrutor"],
+  };
+}
+
+function trilhasAdm() {
+  return estado.trilhas.map((t, i) => ({
+    ...t, ordem: i + 1,
+    cursos: estado.vitrine.trilhas.includes(t.slug) ? [{ slug: PAGO.slug, titulo: PAGO.titulo, ordem: 1, situacao: estado.vitrine.situacao }] : [],
+  }));
+}
+
+function catalogoPublico() {
+  const v = estado.vitrine;
+  if (v.situacao === "oculto") return { trilhas: [], cursos: [] };
+  const venda = v.situacao === "a_venda";
+  return {
+    trilhas: estado.trilhas.filter((t) => t.publicado && v.trilhas.includes(t.slug)).map((t) => ({ slug: t.slug, titulo: t.titulo, descricao: t.descricao, cursos: [PAGO.slug] })),
+    cursos: [{
+      ...PAGO, situacao: v.situacao, carga_horaria_h: 80,
+      preco_centavos: venda ? v.preco_centavos : null, preco_observacao: venda ? v.preco_observacao : "", checkout_url: venda ? v.checkout_url : null,
+      trilhas: v.trilhas,
+      instrutores: [{ nome: "Everton Nascimento", cargo: "Wazuh Ambassador", bio: "Especialista em SOC e SIEM.", linkedin: null, site: null, papel: "instrutor" }],
+      atualizado_em: "2026-11-19T12:00:00Z",
+    }],
   };
 }
 
@@ -399,6 +455,47 @@ http
         case "/rest/v1/rpc/academy_adm_meu_perfil":
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
           return enviar({ ...CURSO.cursos_instrutores[0].instrutores, da_equipe: true, eu: true });
+        case "/rest/v1/rpc/academy_catalogo_publico":
+          return enviar(catalogoPublico());
+        case "/rest/v1/rpc/academy_adm_vitrine":
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          return enviar(vitrineAdm());
+        case "/rest/v1/rpc/academy_adm_salvar_vitrine": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const d = corpo.p_dados ?? {};
+          estado.escritasAdm.push({ fn: "academy_adm_salvar_vitrine", ...corpo });
+          const url = d.checkout_url || null;
+          if (url && !CHECKOUT.test(url)) return enviar({ message: "checkout_invalido" }, 400);
+          if (d.situacao === "a_venda" && (!url || d.preco_centavos == null)) return enviar({ message: "venda_incompleta" }, 400);
+          Object.assign(estado.vitrine, {
+            situacao: d.situacao, checkout_url: url, hotmart_produto_id: d.hotmart_produto_id ? Number(d.hotmart_produto_id) : null,
+            preco_centavos: d.preco_centavos ?? null, preco_observacao: d.preco_observacao ?? "", trilhas: d.trilhas ?? estado.vitrine.trilhas,
+            preco_conferido_em: d.preco_centavos != null ? "2026-11-19T12:00:00Z" : null,
+          });
+          return enviar(vitrineAdm());
+        }
+        case "/rest/v1/rpc/academy_adm_trilhas":
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          return enviar(trilhasAdm());
+        case "/rest/v1/rpc/academy_adm_mover_trilha": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const i = estado.trilhas.findIndex((t) => t.slug === corpo.p_slug);
+          const j = i + corpo.p_direcao;
+          if (i < 0 || j < 0 || j >= estado.trilhas.length) return enviar({ message: "limite" }, 400);
+          [estado.trilhas[i], estado.trilhas[j]] = [estado.trilhas[j], estado.trilhas[i]];
+          return enviar(trilhasAdm());
+        }
+        case "/rest/v1/rpc/academy_adm_salvar_trilha": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const d = corpo.p_dados ?? {};
+          if (!corpo.p_slug) {
+            if (estado.trilhas.some((t) => t.slug === d.slug)) return enviar({ message: "slug_em_uso" }, 400);
+            estado.trilhas.push({ slug: d.slug, titulo: d.titulo, descricao: d.descricao ?? "", publicado: Boolean(d.publicado), formacao: null });
+          } else {
+            Object.assign(estado.trilhas.find((t) => t.slug === corpo.p_slug), d);
+          }
+          return enviar(trilhasAdm());
+        }
         case "/rest/v1/rpc/academy_adm_cursos":
         case "/rest/v1/rpc/academy_adm_curso":
         case "/rest/v1/rpc/academy_adm_questoes":
@@ -409,8 +506,15 @@ http
           if (fn === "academy_adm_cursos") {
             const c = cursoAdm();
             return enviar([{ slug: c.slug, titulo: c.titulo, nivel: c.nivel, gratuito: true, publicado: c.publicado, ordem: 1, modulos: c.modulos.length,
-              ...c._resumo, questoes: 7, questoes_publicadas: 7 }]);
+              ...c._resumo, questoes: 7, questoes_publicadas: 7 },
+              { slug: PAGO.slug, titulo: PAGO.titulo, nivel: PAGO.nivel, gratuito: false, publicado: true, ordem: 2, modulos: PAGO.modulos.length,
+                aulas: 0, aulas_publicadas: 0, aulas_sem_video: 0, questoes: 0, questoes_publicadas: 0 }]);
           }
+          if (fn === "academy_adm_curso" && corpo.p_slug === PAGO.slug)
+            return enviar({ slug: PAGO.slug, titulo: PAGO.titulo, descricao: PAGO.descricao, nivel: PAGO.nivel, gratuito: false, publicado: true, ordem: 2,
+              eh_admin: estado.equipe === "admin", requisitos: null, questoes_final: 0, questoes_final_publicadas: 0,
+              objetivos: PAGO.objetivos, publico: PAGO.publico, pre_requisitos: PAGO.pre_requisitos,
+              modulos: PAGO.modulos.map((m) => ({ id: `p${m.ordem}`, ordem: m.ordem, titulo: m.titulo, resumo: m.resumo, questoes: 0, questoes_publicadas: 0, aulas: [] })) });
           if (fn === "academy_adm_curso") return corpo.p_slug === CURSO.slug ? enviar(cursoAdm()) : enviar({ message: "curso_inexistente" }, 400);
           if (fn === "academy_adm_questoes") return enviar([]);
           estado.escritasAdm.push({ fn, ...corpo });

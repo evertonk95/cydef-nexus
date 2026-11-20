@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import Index from "@/pages/Index";
 import i18n, { type Lang } from "@/i18n";
 import { countPostsForLang } from "@/lib/blog/posts";
-import { coursesByLang } from "@/lib/courses";
+import { cursosMeta } from "@/lib/academy/catalogo-meta";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
 
 const valorDe = (container: HTMLElement, key: string): string | null =>
@@ -29,7 +29,7 @@ describe("metricas da home", () => {
     expect(valorDe(container, "statArticles")).toBe(String(countPostsForLang(lang)));
     expect(valorDe(container, "statLangs")).toBe(String(["en", "pt", "es"].length));
     expect(valorDe(container, "statCourses")).toBe(
-      String(Object.keys(coursesByLang[lang]).length),
+      String(cursosMeta.length),
     );
     expect(valorDe(container, "statLabs")).toBe(String(labsArtifactsMeta.length));
   });

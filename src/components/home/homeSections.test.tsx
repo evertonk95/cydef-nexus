@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { AcademySection, LabsSection, PostsSection } from "@/components/home/HomeSections";
 import i18n from "@/i18n";
 import type { BlogPostMeta } from "@/lib/blog/posts";
-import type { AcademyCourseCard } from "@/lib/academy/catalog";
+import type { CursoMeta } from "@/lib/academy/catalogo-meta";
 
 const en = (key: string) => String(i18n.getFixedT("en")(key));
 
@@ -29,12 +29,13 @@ const post = (slug: string): BlogPostMeta =>
     author: "CyDef Team",
   }) as BlogPostMeta;
 
-const curso: AcademyCourseCard = {
-  id: "fundamentals",
-  slug: "cybersecurity-fundamentals",
-  levelKey: "beginner",
-  duration: "40h",
-  available: true,
+const curso: CursoMeta = {
+  slug: "soc-analyst",
+  titulo: "SOC Analyst: Formação Completa",
+  descricao: "Formação para analista SOC.",
+  nivel: "intermediario",
+  situacao: "em_breve",
+  carga_horaria_h: 80,
 };
 
 describe("secoes da home", () => {
@@ -56,11 +57,12 @@ describe("secoes da home", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("renderiza o curso com nivel e titulo do i18n", () => {
+  it("renderiza o curso do catálogo com nível, carga horária e link para a página dele em pt", () => {
     const { container } = render(withRouter(<AcademySection courses={[curso]} />));
-    expect(container.textContent).toContain(en(`academy.courses.${curso.id}`));
-    expect(container.textContent).toContain(en(`academy.level.${curso.levelKey}`));
-    expect(container.textContent).toContain(curso.duration);
+    expect(container.textContent).toContain(curso.titulo);
+    expect(container.textContent).toContain(en("academy.level.intermediate"));
+    expect(container.textContent).toContain("80h");
+    expect(container.querySelector('a[href="/pt/cursos/soc-analyst"]')).not.toBeNull();
   });
 
   it("nao renderiza a secao do Labs sem artefato publicado", () => {

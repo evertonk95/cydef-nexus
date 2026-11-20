@@ -16,6 +16,7 @@ const AcademyPrivacy = lazy(() => import("./pages/AcademyPrivacy"));
 const AcademyStatusConfirmation = lazy(() => import("./pages/AcademyStatusConfirmation"));
 const AcademyThankYou = lazy(() => import("./pages/AcademyThankYou"));
 const AcademyLogin = lazy(() => import("./pages/AcademyLogin"));
+const AcademyCatalogo = lazy(() => import("./pages/AcademyCatalogo"));
 const PageRouter = lazy(() =>
   import("./lib/SeoRouter").then((m) => ({ default: m.PageRouter })),
 );
@@ -106,6 +107,8 @@ const App = () => (
               <Route path=":area/:courseId" element={<CourseArea />} />
               {/* CyDef Academy — landing de captura (fase protótipo/validação, S-02..S-06) */}
               <Route path="academy/gratuito" element={<AcademyLanding />} />
+              {/* Catálogo completo da Academy (fase 14): todos os cursos da vitrine */}
+              <Route path="academy/catalogo" element={<AcademyCatalogo />} />
               <Route path="academy/privacidade/:versao" element={<AcademyPrivacy />} />
               <Route path="academy/status-confirmacao" element={<AcademyStatusConfirmation />} />
               <Route path="academy/obrigado" element={<AcademyThankYou />} />

@@ -7,8 +7,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LANGS } from "@/i18n";
 import { L, currentLang } from "@/lib/lang";
-import { coursesByLang } from "@/lib/courses";
-import { availableAcademyCourses } from "@/lib/academy/catalog";
+import { cursosMeta } from "@/lib/academy/catalogo-meta";
 import { labsArtifactsMeta } from "@/lib/labs/artifacts";
 import { ConsultingSection, PostsSection, AcademySection, LabsSection, PrinciplesSection } from "@/components/home/HomeSections";
 import { countPostsForLang, postsForLangMeta } from "@/lib/blog/posts";
@@ -21,7 +20,7 @@ const Index = () => {
   const metricas = [
     { key: "statArticles", valor: countPostsForLang(lang) },
     { key: "statLangs", valor: LANGS.length },
-    { key: "statCourses", valor: Object.keys(coursesByLang[lang]).length },
+    { key: "statCourses", valor: cursosMeta.length },
     { key: "statLabs", valor: labsArtifactsMeta.length },
   ];
 
@@ -29,7 +28,10 @@ const Index = () => {
   const ultimosArtigos = [...postsForLangMeta(lang)]
     .sort((a, b) => b.dateISO.localeCompare(a.dateISO))
     .slice(0, 3);
-  const cursosDisponiveis = availableAcademyCourses;
+  // Até três cursos do catálogo (fase 14): os à venda primeiro, na ordem do painel.
+  const cursosDisponiveis = [...cursosMeta]
+    .sort((a, b) => Number(b.situacao === "a_venda") - Number(a.situacao === "a_venda"))
+    .slice(0, 3);
   const labsDisponivel = labsArtifactsMeta.length > 0;
 
   const pilares = [

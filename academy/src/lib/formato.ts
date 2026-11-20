@@ -48,3 +48,10 @@ export function iniciais(nome: string): string {
   const b = partes.length > 1 ? (partes[partes.length - 1]?.[0] ?? "") : "";
   return (a + b).toUpperCase() || "?";
 }
+
+const DATA_CURTA = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "America/Sao_Paulo" });
+
+/** "19/11/2026", no horário de Brasília. */
+export function dataCurta(iso: string): string {
+  return DATA_CURTA.format(new Date(iso));
+}
