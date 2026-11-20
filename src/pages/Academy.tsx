@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ofertaDaTrilha, ofertaPlataforma, trilhasComCursos } from "@/lib/academy/catalogo";
 import { OfertaPlataforma, OfertaTrilha } from "@/components/academy/Ofertas";
+import { AcademyEmpresas } from "@/components/academy/Empresas";
 import { CursoCard } from "@/components/academy/CursoCard";
 import { COURSES } from "@/pages/AcademyLanding/data";
 import { COURSES_EN } from "@/pages/AcademyLanding/data.en";
@@ -224,6 +225,9 @@ const Academy = () => {
             </div>
           </div>
         </section>
+
+        {/* Para empresas (fase 17): sem preço público, fale com a gente */}
+        <AcademyEmpresas />
 
         {/* Como trabalhamos: mesmas quatro regras da home (mesma fonte de texto) */}
         {principles.length > 0 ? (

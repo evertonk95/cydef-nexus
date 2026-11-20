@@ -83,6 +83,8 @@ export function sbFalso(
       string,
       ((args: Record<string, unknown>) => { data?: unknown; error?: { message: string } }) | object | string | number | boolean | null
     >;
+    /** Edge Functions chamadas com functions.invoke; recebem o corpo. */
+    funcoes?: Record<string, (corpo: unknown) => { data?: unknown; error?: { message: string } }>;
   } = {},
 ): SupabaseClient {
   const cadeia = (tabela: string) => {
@@ -119,6 +121,14 @@ export function sbFalso(
     },
     from: (tabela: string) => cadeia(tabela),
     auth: { signOut: () => Promise.resolve({ error: null }) },
+    functions: {
+      invoke: (nome: string, o: { body?: unknown } = {}) => {
+        const f = opts.funcoes?.[nome];
+        if (!f) return Promise.resolve({ data: null, error: { message: "função ausente" } });
+        const { data = null, error = null } = f(o.body);
+        return Promise.resolve({ data, error });
+      },
+    },
   } as unknown as SupabaseClient;
 }
 

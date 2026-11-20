@@ -10,7 +10,8 @@
  *   3. Cloudflare Turnstile verificado no servidor (hostname + action).
  *   4. Limite de tentativas por IP e por e-mail (chaves com HMAC, nunca em claro).
  *   5. Elegibilidade no banco: aluno existente, pré-inscrição ativa com
- *      consentimento ou acesso pago ativo no e-mail (compra na Hotmart, 0021). Quem não é elegível recebe a MESMA resposta 202, no mesmo
+ *      consentimento, acesso pago ativo no e-mail (compra na Hotmart, 0021)
+ *      ou convite de empresa (0024). Quem não é elegível recebe a MESMA resposta 202, no mesmo
  *      tempo mínimo, para não revelar quem é aluno.
  *   6. Cria o usuário de login (se faltar), o registro de aluno e envia o
  *      link de uso único. Com o Resend ligado, o e-mail sai com o modelo da
@@ -45,6 +46,8 @@ export interface Elegibilidade {
   lead_id?: string | null;
   /** 0021: comprou pela Hotmart (ou recebeu acesso) sem pré-inscrição. */
   comprador?: boolean;
+  /** 0024: convidado por uma empresa, ainda sem pré-inscrição. */
+  convidado?: boolean;
   nome?: string;
 }
 
@@ -170,7 +173,7 @@ export function createAcessoHandler(deps: AcessoDeps) {
       }
       if (!el.aluno) {
         // Sem pré-inscrição, só quem tem acesso pago ativo (0021) vira aluno.
-        if (!el.lead_id && !el.comprador) throw new Error("sem_lead");
+        if (!el.lead_id && !el.comprador && !el.convidado) throw new Error("sem_lead");
         await deps.servidor.provisionarAluno(userId, el.lead_id ?? null, el.nome ?? "");
       }
       const retorno = `${deps.academyUrl.replace(/\/+$/, "")}/entrar/retorno`;

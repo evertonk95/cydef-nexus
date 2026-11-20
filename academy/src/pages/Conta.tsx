@@ -17,6 +17,8 @@ import {
   type ErroConta,
   type MeuCertificado,
 } from "@/lib/conta";
+import { chamar as chamarPainel, useAcao } from "@/lib/instrutor";
+import { dia, useMinhasEmpresas, type MinhaEmpresa } from "@/lib/empresas";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
@@ -39,6 +41,7 @@ export default function Conta() {
         <Bloco id="h-certificados" titulo="Certificados">
           <Certificados />
         </Bloco>
+        <Empresas />
         <Bloco id="h-acesso" titulo="Acesso">
           <Acesso />
         </Bloco>
@@ -278,6 +281,61 @@ function Privacidade() {
         </a>
         .
       </p>
+    </div>
+  );
+}
+
+/** Empresas pelas quais a pessoa tem acesso (fase 17). Só aparece para quem tem. */
+function Empresas() {
+  const minhas = useMinhasEmpresas();
+  const empresas = minhas.data?.empresas ?? [];
+  if (empresas.length === 0) return null;
+  return (
+    <Bloco id="h-empresas" titulo="Empresas">
+      <div className="flex flex-col gap-4">
+        {empresas.map((e) => (
+          <CartaoEmpresa key={e.membro} e={e} />
+        ))}
+      </div>
+    </Bloco>
+  );
+}
+
+function CartaoEmpresa({ e }: { e: MinhaEmpresa }) {
+  const aviso = useAvisos();
+  const [confirmar, setConfirmar] = useState(false);
+  const sair = useAcao(
+    (sb: Parameters<typeof chamarPainel>[0]) => chamarPainel(sb, "academy_sair_empresa", { p_membro: e.membro }),
+    () => aviso({ titulo: `Você saiu da ${e.empresa}`, texto: "A gestão dela deixa de ver o seu progresso.", tipo: "ok" }),
+  );
+  return (
+    <div className="painel-card flex flex-col gap-4 p-6">
+      <div>
+        <p className="m-0 font-medium">{e.empresa}</p>
+        <p className="m-0 mt-1 text-sm leading-relaxed text-muted">
+          {e.alvo === "Plataforma toda" ? "Todos os cursos pagos" : e.alvo} até {dia(e.fim)}. Desde que você aceitou o convite, a gestão da empresa vê as
+          aulas concluídas, a aprovação na avaliação final e os certificados dos cursos do contrato, além do seu último acesso. Ela não vê notas nem
+          respostas.
+        </p>
+      </div>
+      {confirmar ? (
+        <div className="flex flex-wrap items-center gap-3">
+          <Botao onClick={() => sair.mutate(null)} disabled={sair.isPending} className="h-11 px-5">
+            {sair.isPending ? "Saindo…" : "Sair da empresa agora"}
+          </Botao>
+          <Botao variante="contorno" className="h-11 px-5" onClick={() => setConfirmar(false)}>
+            Cancelar
+          </Botao>
+          <p className="m-0 basis-full text-sm text-muted">Você perde o acesso aos cursos do contrato. Conta, progresso e certificados continuam seus.</p>
+        </div>
+      ) : (
+        <div>
+          <Botao variante="contorno" className="h-11 px-5" onClick={() => setConfirmar(true)}>
+            Sair da empresa
+          </Botao>
+        </div>
+      )}
+      <ErroFormulario erro={sair.error} />
     </div>
   );
 }

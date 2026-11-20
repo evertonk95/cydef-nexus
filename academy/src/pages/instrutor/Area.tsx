@@ -26,6 +26,7 @@ export default function AreaInstrutor() {
     { para: "/instrutor/aprovacoes", rotulo: "Aprovações", fim: true, admin: false, aprovador: true },
     { para: "/instrutor/trilhas", rotulo: "Trilhas", fim: true, admin: true },
     { para: "/instrutor/vendas", rotulo: "Vendas", fim: true, admin: true },
+    { para: "/instrutor/empresas", rotulo: "Empresas", fim: true, admin: true },
     { para: "/instrutor/boletim", rotulo: "Boletim do SOC", fim: true, admin: true },
     { para: "/instrutor/equipe", rotulo: "Equipe", fim: true, admin: true },
     { para: "/instrutor/perfil", rotulo: "Meu perfil", fim: true, admin: false },
@@ -37,7 +38,7 @@ export default function AreaInstrutor() {
         <p className="m-0 pb-3 text-sm text-muted">
           Painel do instrutor{eu.data.papel === "admin" ? ", acesso de admin" : ""}
         </p>
-        <nav aria-label="Painel do instrutor" className="flex gap-6">
+        <nav aria-label="Painel do instrutor" className="-mb-px flex max-w-full gap-6 overflow-x-auto">
           {abas.map((a) => (
             <NavLink
               key={a.para}
@@ -45,9 +46,9 @@ export default function AreaInstrutor() {
               end={a.fim}
               className={({ isActive }) => {
                 // "Cursos" fica ativo em /instrutor e em /instrutor/cursos/*.
-                const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(trilhas|vendas|boletim|equipe|perfil|aprovacoes)/.test(pathname) : isActive;
+                const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(trilhas|vendas|empresas|boletim|equipe|perfil|aprovacoes)/.test(pathname) : isActive;
                 return cn(
-                  "-mb-px border-b-2 pb-3 text-[15px] font-medium transition-colors duration-150",
+                  "whitespace-nowrap border-b-2 pb-3 text-[15px] font-medium transition-colors duration-150",
                   ativo ? "border-orange text-ink" : "border-transparent text-muted hover:text-ink",
                 );
               }}

@@ -236,6 +236,20 @@ const MENSAGENS: Record<string, string> = {
   concessao_inexistente: "Acesso não encontrado ou já encerrado.",
   mesmo_email: "O acesso já está nesse e-mail.",
   trilha_vazia: "Essa trilha ainda não tem curso pago.",
+  periodo_invalido: "Confira as datas: o fim não pode ser antes do início nem já ter passado.",
+  vagas_invalidas: "O número de vagas precisa ficar entre 1 e 5.000.",
+  vagas_insuficientes: "Há mais pessoas e convites do que essa quantidade de vagas.",
+  empresa_inexistente: "Empresa não encontrada.",
+  contrato_encerrado: "O contrato dessa empresa terminou.",
+  sem_vagas: "Não há vagas para todos esses convites. Cancele convites pendentes ou peça mais vagas à CyDef.",
+  convites_demais: "Convide até 50 pessoas por vez.",
+  convite_inexistente: "Convite não encontrado ou já respondido.",
+  membro_inexistente: "Pessoa não encontrada nessa empresa.",
+  ultima_gestora: "A empresa precisa de pelo menos uma pessoa na gestão.",
+  reenvios_esgotados: "Esse convite já foi reenviado 5 vezes.",
+  aguarde_reenvio: "O convite acabou de ser enviado. Espere 10 minutos para reenviar.",
+  no_aviso_vigente: "Não foi possível registrar o aceite agora. Tente de novo em alguns minutos.",
+  sem_cadastro: "Este login não tem cadastro de aluno.",
 };
 
 export class ErroPainel extends Error {
