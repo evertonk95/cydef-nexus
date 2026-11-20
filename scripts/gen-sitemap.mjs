@@ -47,12 +47,12 @@ async function load(entry) {
 const [
   { pageSlugs, contentAreaSlugs, withTrailingSlash },
   { postsMetaByLang },
-  { courseDataPt },
+  { cursosMeta, IDIOMA_DOS_CURSOS },
   { labsSlugsForLang },
 ] = await Promise.all([
   load("src/lib/routes.ts"),
   load("src/lib/blog/posts.ts"),
-  load("src/lib/courses.ts"),
+  load("src/lib/academy/catalogo-meta.ts"),
   load("src/lib/labs/artifacts.ts"),
 ]);
 
@@ -85,12 +85,18 @@ for (const lang of LANGS) {
   for (const slug of labsSlugsForLang(lang)) {
     add(`/${lang}/${pageSlugs.labs[lang]}/${slug}`);
   }
-  for (const courseId of Object.keys(courseDataPt)) {
-    // Área de cursos: o slug localizado é prefixo de conteúdo
-    // (`contentAreaSlugs`), não página — a URL publicada é a de detalhe.
-    add(`/${lang}/${contentAreaSlugs.courses[lang]}/${courseId}`);
+  // Cursos da Academy (fase 14): vêm do catálogo do banco
+  // (src/lib/academy/catalogo-meta.json, gravado no prebuild). São em
+  // português: só a URL em pt é página; en/es redirecionam para ela
+  // (scripts/lib/load-legacy-routes.mjs). A área sozinha (`contentAreaSlugs`)
+  // é prefixo de conteúdo, não página.
+  if (lang === IDIOMA_DOS_CURSOS) {
+    for (const curso of cursosMeta) {
+      add(`/${lang}/${contentAreaSlugs.courses[lang]}/${curso.slug}`);
+    }
   }
   add(`/${lang}/academy/gratuito`);
+  add(`/${lang}/academy/catalogo`);
   // Fora do sitemap, de propósito (etapa 58): as rotas utilitárias/privadas da
   // Academy (entrar, obrigado, status-confirmacao e o aviso de privacidade de
   // TODA versão publicada) servem `noindex, nofollow` e não são conteúdo de

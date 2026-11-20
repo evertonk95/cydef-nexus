@@ -13,7 +13,7 @@ import {
 } from "@/lib/routes";
 import { PAGE_COMPONENTS } from "@/lib/page-components";
 import { LANDING_PATH } from "@/lib/config";
-import { coursesByLang } from "@/lib/courses";
+import { cursosMeta } from "@/lib/academy/catalogo-meta";
 import { labsSlugsForLang } from "@/lib/labs/artifacts";
 import { postsMetaByLang } from "@/lib/blog/posts";
 import { SITE_ORIGIN } from "@/lib/site";
@@ -55,6 +55,9 @@ const destinationOf = (
   if (clean === `/${lang}${LANDING_PATH}`) {
     return { kind: "content", route: "academy landing" };
   }
+  if (clean === `/${lang}/academy/catalogo`) {
+    return { kind: "content", route: "academy catalogo" };
+  }
 
   const [first, second] = rest;
   if (rest.length === 1) {
@@ -77,8 +80,9 @@ const destinationOf = (
     ) {
       return { kind: "content", route: `labs ${lang}` };
     }
-    // Área de conteúdo: só é destino com um id conhecido naquele idioma.
-    if (areaKeyForSlug(lang, first) === "courses" && coursesByLang[lang][second]) {
+    // Área de conteúdo: só é destino com um curso do catálogo, e só em pt
+    // (os cursos são em português; en/es redirecionam, fase 14).
+    if (lang === "pt" && areaKeyForSlug(lang, first) === "courses" && cursosMeta.some((c) => c.slug === second)) {
       return { kind: "content", route: `courses ${lang}` };
     }
   }
@@ -128,14 +132,18 @@ describe("sitemap — toda URL tem página de verdade (sem soft-404)", () => {
     }
   });
 
-  it("publica exatamente as URLs de curso do catálogo, nos 3 idiomas", () => {
-    const esperadas = LANGS.flatMap((lang) =>
-      Object.keys(coursesByLang[lang]).map((courseId) => courseUrl(lang, courseId)),
-    );
+  it("publica exatamente as URLs de curso do catálogo, só em português", () => {
+    const esperadas = cursosMeta.map((c) => courseUrl("pt", c.slug));
     const publicadas = locs.filter((loc) => {
       const destino = destinationOf(loc);
       return destino?.kind === "content" && destino.route.startsWith("courses");
     });
     expect([...publicadas].sort()).toEqual([...esperadas].sort());
+  });
+
+  it("publica o catálogo completo da Academy nos 3 idiomas", () => {
+    for (const lang of LANGS) {
+      expect(locs).toContain(`${SITE_ORIGIN}${withTrailingSlash(`/${lang}/academy/catalogo`)}`);
+    }
   });
 });

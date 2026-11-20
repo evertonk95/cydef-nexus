@@ -505,3 +505,32 @@ describe("HeadSeo · descrição por rota", () => {
     expect(descriptions[0].getAttribute("content")).toBe(post?.excerpt);
   });
 });
+
+/**
+ * Fase 14: os cursos da Academy vêm do catálogo do banco e são em português.
+ * A página do curso só existe em pt: canônica e hreflang apontam só para ela,
+ * e o card de compartilhamento usa o título e a descrição do próprio curso.
+ */
+describe("HeadSeo · página de curso da Academy", () => {
+  beforeAll(async () => {
+    await ensureLang("pt");
+    await i18n.changeLanguage("pt");
+  });
+
+  it("só a versão em português tem alternate, e o x-default aponta para ela", () => {
+    renderAt("/pt/cursos/soc-analyst/");
+    const alt = [...document.head.querySelectorAll('link[rel="alternate"]')].map((l) => [l.getAttribute("hreflang"), l.getAttribute("href")]);
+    expect(alt).toEqual([
+      ["pt", "https://www.cydef.com.br/pt/cursos/soc-analyst/"],
+      ["x-default", "https://www.cydef.com.br/pt/cursos/soc-analyst/"],
+    ]);
+  });
+
+  it("og e descrição saem do curso", () => {
+    const og = ogForBase("/cursos/soc-analyst", "pt", (k) => i18n.getFixedT("pt")(k), htmlTitles.pt);
+    expect(og.title).toBe("SOC Analyst: Formação Completa");
+    expect(og.description).toMatch(/^Formação completa para atuar como Analista SOC/);
+    const catalogo = ogForBase("/academy/catalogo", "pt", (k) => i18n.getFixedT("pt")(k), htmlTitles.pt);
+    expect(catalogo.title).toBe("Catálogo de cursos");
+  });
+});

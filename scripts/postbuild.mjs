@@ -28,6 +28,7 @@ import { fileURLToPath } from "url";
 import { loadPrivateRoutes } from "./lib/load-private-routes.mjs";
 import { loadDefaultLang } from "./lib/load-default-lang.mjs";
 import { loadLegacyRoutes } from "./lib/load-legacy-routes.mjs";
+import { versaoCatalogo } from "./lib/catalogo-academy.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(ROOT, "dist");
@@ -122,6 +123,12 @@ if (rootTags.length !== 1 || rootTags[0] !== rootCanonical || fallbackTags.lengt
   );
   process.exit(1);
 }
+
+// Versão do catálogo da Academy publicada (fase 14). A verificação de hora em
+// hora (.github/workflows/catalogo-academy.yml) compara com a do banco e só
+// pede um deploy quando muda. Só a versão: o catálogo em si já está nas páginas.
+const catalogo = JSON.parse(readFileSync(join(ROOT, "src/lib/academy/catalogo-snapshot.json"), "utf8"));
+writeFileSync(join(DIST, "catalogo-academy.json"), `${JSON.stringify({ versao: versaoCatalogo(catalogo) })}\n`);
 
 console.log(
   `postbuild: 404.html ok · ${count} rotas do sitemap + ${privateCount} rotas utilitárias com index.html físico (HTTP 200 no Pages) · ${legacyRoutes.length} redirecionamentos de slug antigo · raiz com canônica ${origin}/${DEFAULT_LANG}/`,

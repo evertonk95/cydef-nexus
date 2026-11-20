@@ -27,6 +27,9 @@ const BoletimInstrutor = lazy(() => import("@/pages/instrutor/Boletim"));
 const EquipeInstrutor = lazy(() => import("@/pages/instrutor/Equipe"));
 const PerfilInstrutor = lazy(() => import("@/pages/instrutor/Perfil"));
 const AprovacoesInstrutor = lazy(() => import("@/pages/instrutor/Aprovacoes"));
+const TrilhasInstrutor = lazy(() => import("@/pages/instrutor/Trilhas"));
+const Catalogo = lazy(() => import("@/pages/Catalogo"));
+const CursoCatalogo = lazy(() => import("@/pages/CursoCatalogo"));
 const ValidarCertificado = lazy(() => import("@/pages/ValidarCertificado"));
 const Entrar = lazy(() => import("@/pages/Entrar"));
 const Retorno = lazy(() => import("@/pages/Retorno"));
@@ -49,6 +52,8 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                       <Route index element={<Painel />} />
                       <Route path="cursos" element={<MeusCursos />} />
                       <Route path="conta" element={<Conta />} />
+                      <Route path="catalogo" element={<Catalogo />} />
+                      <Route path="catalogo/:slug" element={<CursoCatalogo />} />
                       <Route path="cursos/:slug" element={<Curso />} />
                       <Route path="cursos/:slug/aulas/:numero" element={<Aula />} />
                       <Route path="cursos/:slug/modulos/:ordem/questoes" element={<QuestoesModulo />} />
@@ -63,6 +68,7 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                         <Route path="equipe" element={<EquipeInstrutor />} />
                         <Route path="perfil" element={<PerfilInstrutor />} />
                         <Route path="aprovacoes" element={<AprovacoesInstrutor />} />
+                        <Route path="trilhas" element={<TrilhasInstrutor />} />
                       </Route>
                       <Route path="*" element={<NaoEncontrado />} />
                     </Route>

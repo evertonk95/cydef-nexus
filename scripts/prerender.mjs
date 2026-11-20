@@ -126,6 +126,7 @@ const ACADEMY_CHUNKS = {
   "status-confirmacao": "AcademyStatusConfirmation",
   obrigado: "AcademyThankYou",
   entrar: "AcademyLogin",
+  catalogo: "AcademyCatalogo",
 };
 
 /** Chunk da rota: mesma divisão declarada em src/App.tsx. */

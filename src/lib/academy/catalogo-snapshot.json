@@ -1,0 +1,229 @@
+{
+  "trilhas": [
+    {
+      "slug": "soc",
+      "titulo": "SOC",
+      "descricao": "Para quem quer trabalhar em um Centro de Operações de Segurança: triagem de alertas, SIEM, investigação e resposta.",
+      "cursos": [
+        "soc-analyst",
+        "malware-analysis",
+        "incident-investigation"
+      ]
+    },
+    {
+      "slug": "blue-team",
+      "titulo": "Blue Team",
+      "descricao": "Defesa em profundidade: threat hunting, forense digital, EDR e arquitetura de detecção.",
+      "cursos": [
+        "blue-team-advanced",
+        "incident-investigation"
+      ]
+    },
+    {
+      "slug": "certificacoes",
+      "titulo": "Certificações",
+      "descricao": "Preparatórios para os exames de certificação mais pedidos pelo mercado.",
+      "cursos": [
+        "sc-900-prep",
+        "security-plus-prep"
+      ]
+    }
+  ],
+  "cursos": [
+    {
+      "slug": "soc-analyst",
+      "titulo": "SOC Analyst: Formação Completa",
+      "descricao": "Formação completa para atuar como Analista SOC Nível 1 e 2, com foco em detecção, análise e resposta a incidentes de segurança em ambientes corporativos.",
+      "nivel": "intermediario",
+      "objetivos": [
+        "Dominar análise de logs e correlação de eventos",
+        "Operar SIEM e ferramentas de detecção",
+        "Investigar e responder a incidentes de segurança",
+        "Aplicar o framework MITRE ATT&CK na prática",
+        "Criar e executar playbooks de resposta"
+      ],
+      "publico": "Profissionais que desejam atuar em SOC, analistas de suporte buscando especialização, profissionais de TI migrando para segurança.",
+      "pre_requisitos": "Conhecimentos em redes, sistemas operacionais e fundamentos de segurança. Recomendado ter concluído o Cybersecurity Fundamentals (gratuito) ou ter experiência equivalente.",
+      "situacao": "em_breve",
+      "carga_horaria_h": 80,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "soc"
+      ],
+      "modulos": [
+        {
+          "ordem": 1,
+          "titulo": "Introdução ao SOC",
+          "resumo": "Estrutura e Processos de um SOC; Papéis e Responsabilidades; Métricas e KPIs; Integração com outras áreas.",
+          "aulas": []
+        },
+        {
+          "ordem": 2,
+          "titulo": "Análise de Logs",
+          "resumo": "Logs de Sistemas Operacionais; Logs de Rede e Firewall; Logs de Aplicações; Correlação de Eventos.",
+          "aulas": []
+        },
+        {
+          "ordem": 3,
+          "titulo": "SIEM e Ferramentas de Detecção",
+          "resumo": "Operação de SIEM; Criação de Regras de Detecção; Dashboards e Alertas; Integração de Fontes de Dados.",
+          "aulas": []
+        },
+        {
+          "ordem": 4,
+          "titulo": "Detecção e Análise de Ameaças",
+          "resumo": "Identificação de Indicadores de Compromisso (IOCs); Análise de Malware em Contexto SOC; Threat Intelligence; Técnicas de Evasão.",
+          "aulas": []
+        },
+        {
+          "ordem": 5,
+          "titulo": "Resposta a Incidentes",
+          "resumo": "Fases da Resposta a Incidentes; Triagem e Priorização; Containment e Erradicação; Recovery e Lições Aprendidas.",
+          "aulas": []
+        },
+        {
+          "ordem": 6,
+          "titulo": "MITRE ATT&CK",
+          "resumo": "Framework MITRE ATT&CK; Mapeamento de Táticas e Técnicas; Detecção Baseada em ATT&CK; Casos Práticos.",
+          "aulas": []
+        }
+      ],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    },
+    {
+      "slug": "blue-team-advanced",
+      "titulo": "Blue Team Advanced",
+      "descricao": "Curso avançado para profissionais experientes que buscam aprofundar conhecimentos em defesa cibernética, threat hunting, análise forense e estratégias de Blue Team.",
+      "nivel": "avancado",
+      "objetivos": [
+        "Realizar threat hunting proativo",
+        "Conduzir análises forenses avançadas",
+        "Implementar defesa em profundidade",
+        "Operar EDR em nível avançado",
+        "Desenvolver estratégias de detecção customizadas"
+      ],
+      "publico": "Analistas SOC experientes, profissionais de Blue Team, especialistas em segurança que desejam evoluir para posições sênior.",
+      "pre_requisitos": "Experiência sólida em SOC ou segurança defensiva. Recomendado ter concluído SOC Analyst ou experiência equivalente de 1+ ano.",
+      "situacao": "em_breve",
+      "carga_horaria_h": 60,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "blue-team"
+      ],
+      "modulos": [
+        {
+          "ordem": 1,
+          "titulo": "Threat Hunting Avançado",
+          "resumo": "Metodologias de Hunting; Hipóteses e Investigações; Hunting em Rede; Hunting em Endpoints.",
+          "aulas": []
+        },
+        {
+          "ordem": 2,
+          "titulo": "Análise Forense Digital",
+          "resumo": "Aquisição e Preservação de Evidências; Análise de Memória; Análise de Disco; Timeline Analysis.",
+          "aulas": []
+        },
+        {
+          "ordem": 3,
+          "titulo": "EDR Avançado",
+          "resumo": "Detecção Comportamental; Response Automatizado; Análise de Telemetria; Tuning e Otimização.",
+          "aulas": []
+        },
+        {
+          "ordem": 4,
+          "titulo": "Defesa em Profundidade",
+          "resumo": "Arquitetura de Defesa em Camadas; Segmentação Avançada; Microsegmentação; Zero Trust.",
+          "aulas": []
+        }
+      ],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    },
+    {
+      "slug": "sc-900-prep",
+      "titulo": "Preparatório SC-900",
+      "descricao": "Preparação completa para o exame Microsoft Security, Compliance, and Identity Fundamentals.",
+      "nivel": "iniciante",
+      "objetivos": [],
+      "publico": "",
+      "pre_requisitos": "",
+      "situacao": "em_breve",
+      "carga_horaria_h": 30,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "certificacoes"
+      ],
+      "modulos": [],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    },
+    {
+      "slug": "security-plus-prep",
+      "titulo": "Preparatório Security+",
+      "descricao": "Preparação completa para a certificação CompTIA Security+, com exercícios práticos e simulados.",
+      "nivel": "intermediario",
+      "objetivos": [],
+      "publico": "",
+      "pre_requisitos": "",
+      "situacao": "em_breve",
+      "carga_horaria_h": 50,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "certificacoes"
+      ],
+      "modulos": [],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    },
+    {
+      "slug": "malware-analysis",
+      "titulo": "Análise de Malware para SOC",
+      "descricao": "Introdução à análise de malware com foco em contexto SOC, identificação de comportamentos e IOCs.",
+      "nivel": "intermediario",
+      "objetivos": [],
+      "publico": "",
+      "pre_requisitos": "",
+      "situacao": "em_breve",
+      "carga_horaria_h": 40,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "soc"
+      ],
+      "modulos": [],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    },
+    {
+      "slug": "incident-investigation",
+      "titulo": "Investigação de Incidentes (MITRE ATT&CK)",
+      "descricao": "Investigação profunda de incidentes utilizando o framework MITRE ATT&CK para detecção e resposta.",
+      "nivel": "avancado",
+      "objetivos": [],
+      "publico": "",
+      "pre_requisitos": "",
+      "situacao": "em_breve",
+      "carga_horaria_h": 45,
+      "preco_centavos": null,
+      "preco_observacao": "",
+      "checkout_url": null,
+      "trilhas": [
+        "soc",
+        "blue-team"
+      ],
+      "modulos": [],
+      "instrutores": [],
+      "atualizado_em": "2026-11-19T12:00:00+00:00"
+    }
+  ]
+}

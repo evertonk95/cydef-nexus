@@ -168,6 +168,24 @@ Regra do Everton: só quem é da equipe do curso envia arquivo, e todo arquivo p
 - **Depois de aprovado:** título, descrição e módulo mudam sem nova aprovação (o arquivo não muda). Para trocar o arquivo, envie um novo e tire o antigo do ar.
 - Toda etapa vai para `academy_auditoria` (registrado, enviado, aprovado ou recusado, salvo, arquivado).
 
+## Catálogo, trilhas e venda pela Hotmart (fase 14, migração 0020)
+
+A venda é da Hotmart: pagamento, parcelamento, reembolso e nota ficam lá. A Academy só mostra o curso e leva ao checkout. O mesmo catálogo aparece em três lugares, todos lidos da função pública `academy_catalogo_publico`:
+
+| Vitrine | Onde | O que muda |
+|---|---|---|
+| Site principal | `cydef.com.br/pt/academy` (blocos por trilha), `/academy/catalogo` (todos os cursos, com filtro por trilha e nível) e `/pt/cursos/<slug>` (página do curso) | É o que vai para o Google. O Comprar leva `sck=site`. |
+| Portal | `/catalogo` e `/catalogo/<slug>`, para quem está logado | Curso que a pessoa já tem vira "Continuar". O Comprar abre a Hotmart com o e-mail da conta preenchido e `sck=portal`. |
+| Hotmart | Página do produto, com área de membros externa apontando para o portal | Venda direta; a origem aparece separada no relatório da Hotmart. |
+
+- **Quem edita:** só admin. Aba **Vitrine** do curso (situação, trilhas, link de checkout, código do produto, preço exibido) e página **Trilhas** do painel (criar, publicar, ordenar trilhas e os cursos dentro delas).
+- **Situação:** fora das vitrines, em breve (ementa e Avise-me, sem preço) ou à venda (preço e Comprar). À venda exige curso publicado, link de checkout e preço; se o curso for despublicado depois, a vitrine volta sozinha para "em breve". Curso gratuito não entra na vitrine paga.
+- **Checkout:** só `https://pay.hotmart.com/...` ou `https://checkout.hotmart.com/...`, conferido no navegador, no banco e no build do site.
+- **Preço:** é só o que se exibe. O painel guarda quando ele foi conferido na Hotmart e avisa depois de 30 dias.
+- **Código do produto:** um produto da Hotmart serve a um curso só. É por ele que o webhook da fase 16 vai liberar o acesso.
+- **Site:** o build lê o catálogo do banco (`scripts/gen-catalogo-academy.mjs`) e grava `src/lib/academy/catalogo-snapshot.json`. De hora em hora, `.github/workflows/catalogo-academy.yml` compara a versão do banco com a publicada em `/catalogo-academy.json` e dispara o deploy quando muda. Os cursos são em português: a página do curso existe só em `/pt/`; em inglês e espanhol o endereço redireciona.
+- Toda escrita vai para `academy_auditoria` (`vitrine_salva`, `trilha_criada`, `trilha_salva`, `trilha_movida`, `curso_movido_na_trilha`).
+
 ## Minha conta (fase 12, migração 0018)
 
 Em `/conta`, pelo menu da conta. Coloca ao alcance do aluno o que o Aviso de Privacidade da Academy (v2026.3) já promete, sem regra nova:

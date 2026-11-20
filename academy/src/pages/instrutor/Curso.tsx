@@ -26,22 +26,26 @@ import { AreaTexto, Campo, ErroFormulario, Marcador, Selecao, Situacao } from "@
 import { FalhaCarregamento, NaoEncontrado } from "../Estados";
 import { AbaSobre } from "./Sobre";
 import { AbaMateriais } from "./Materiais";
+import { AbaVitrine } from "./Vitrine";
 
-type Aba = "estrutura" | "sobre" | "questoes" | "materiais" | "requisitos" | "dados";
-const ABAS: { id: Aba; rotulo: string }[] = [
+type Aba = "estrutura" | "sobre" | "questoes" | "materiais" | "requisitos" | "vitrine" | "dados";
+const ABAS: { id: Aba; rotulo: string; admin?: boolean }[] = [
   { id: "estrutura", rotulo: "Estrutura" },
   { id: "sobre", rotulo: "Sobre o curso" },
   { id: "questoes", rotulo: "Questões" },
   { id: "materiais", rotulo: "Materiais" },
   { id: "requisitos", rotulo: "Certificado" },
+  // Vitrine e venda (0020): decisão do admin.
+  { id: "vitrine", rotulo: "Vitrine", admin: true },
   { id: "dados", rotulo: "Dados do curso" },
 ];
 
 export default function CursoInstrutor() {
   const { slug = "" } = useParams();
   const [busca, setBusca] = useSearchParams();
-  const aba = (ABAS.find((a) => a.id === busca.get("aba"))?.id ?? "estrutura") as Aba;
   const curso = useCursoAdm(slug);
+  const abas = ABAS.filter((a) => !a.admin || curso.data?.eh_admin);
+  const aba = (abas.find((a) => a.id === busca.get("aba"))?.id ?? "estrutura") as Aba;
 
   if (curso.isError) {
     if (semAcesso(curso.error)) return <NaoEncontrado />;
@@ -73,7 +77,7 @@ export default function CursoInstrutor() {
       </div>
 
       <div role="tablist" aria-label="Seções do curso" className="mb-8 flex gap-1 overflow-x-auto rounded-xl border border-line bg-panel p-1">
-        {ABAS.map((a) => (
+        {abas.map((a) => (
           <button
             key={a.id}
             role="tab"
@@ -98,6 +102,7 @@ export default function CursoInstrutor() {
         {aba === "questoes" && <Questoes curso={c} />}
         {aba === "materiais" && <AbaMateriais curso={c} />}
         {aba === "requisitos" && <FormRequisitos curso={c} />}
+        {aba === "vitrine" && <AbaVitrine curso={c} />}
         {aba === "dados" && <FormDados curso={c} />}
       </div>
     </>

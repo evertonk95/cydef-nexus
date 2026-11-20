@@ -6,7 +6,8 @@ import { StudentAreaPreview } from "@/components/academy/StudentAreaPreview";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { academyCatalog, type AcademyCourseCard } from "@/lib/academy/catalog";
+import { trilhasComCursos } from "@/lib/academy/catalogo";
+import { CursoCard } from "@/components/academy/CursoCard";
 import { COURSES } from "@/pages/AcademyLanding/data";
 import { COURSES_EN } from "@/pages/AcademyLanding/data.en";
 import { COURSES_ES } from "@/pages/AcademyLanding/data.es";
@@ -18,8 +19,9 @@ import { ArrowRight, Clock, CreditCard, MailCheck, ShieldCheck } from "lucide-re
 
 /**
  * Home da CyDef Academy (redesenho de 09/11/2026).
- * Regras: so dado real (cursos gratuitos vem da landing, catalogo de catalog.ts),
- * estados honestos, sem pessoas, depoimentos ou precos.
+ * Regras: so dado real (cursos gratuitos vem da landing; trilhas e cursos pagos
+ * vem do catalogo do banco, fase 14), estados honestos, sem depoimentos. Preco
+ * so aparece quando o curso esta a venda na Hotmart.
  */
 
 interface FreeCourse {
@@ -30,10 +32,6 @@ interface FreeCourse {
   duration: string;
   topics: readonly string[];
 }
-
-/** Etapas da trilha: ids reais do catalogo, na ordem de progressao. */
-/** Progressão: Cybersecurity Fundamentals (gratuito), SOC Analyst e Blue Team. */
-const TRAIL_IDS = ["fundamentals", "soc", "blue"] as const;
 
 const SectionHeader = ({ id, title, lead, aside }: { id: string; title: string; lead: string; aside?: ReactNode }) => (
   <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
@@ -96,39 +94,6 @@ const FreeCourseCard = ({ course, open }: { course: FreeCourse; open: boolean })
   );
 };
 
-const CatalogCard = ({ course }: { course: AcademyCourseCard }) => {
-  const { t } = useTranslation();
-  return (
-    <article className="group bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/40 transition-colors duration-200 flex flex-col h-full">
-      <div className="mb-5">
-        <span className={badgeOrange}>{t(`academy.level.${course.levelKey}`)}</span>
-      </div>
-      <h3 className="text-xl font-bold text-white mb-3 leading-tight">{t(`academy.courses.${course.id}`)}</h3>
-      <p className="text-neutral-400 text-sm leading-relaxed mb-6 flex-grow">{t(`academy.descs.${course.id}`)}</p>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/5 pt-4 mb-5">
-        <span className="inline-flex items-center gap-1.5 text-neutral-400 text-sm">
-          <Clock className="w-4 h-4" aria-hidden="true" />
-          {course.duration}
-        </span>
-        <span className={badgeNeutral}>{t("academy.prep")}</span>
-      </div>
-      {course.available ? (
-        <Link
-          to={L(`/cursos/${course.slug}`)}
-          className={`mt-auto inline-flex items-center gap-2 text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors duration-200 rounded ${focusRing}`}
-        >
-          {t("academy.details")}
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" aria-hidden="true" />
-        </Link>
-      ) : (
-        <span className="mt-auto text-sm font-medium text-neutral-500" aria-disabled="true">
-          {t("academy.prepCta")}
-        </span>
-      )}
-    </article>
-  );
-};
-
 const Academy = () => {
   useScrollReveal();
   const { t } = useTranslation();
@@ -140,8 +105,8 @@ const Academy = () => {
   const trustIcons = [CreditCard, MailCheck, ShieldCheck];
   const principlesRaw = t("home.principles", { returnObjects: true }) as { title: string; desc: string }[] | string;
   const principles = Array.isArray(principlesRaw) ? principlesRaw : [];
-  // A trilha começa pelo curso gratuito de entrada, que não está no catálogo pago.
-  const trail = TRAIL_IDS.map((id) => ({ id }));
+  // Trilhas com curso na vitrine, na ordem do painel (catálogo do banco, 0020).
+  const trilhas = trilhasComCursos();
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -213,40 +178,41 @@ const Academy = () => {
           </div>
         </section>
 
-        {/* Proximos cursos */}
+        {/* Trilhas (fase 14): um bloco por trilha, com os cursos do catálogo */}
         <section id="cursos" aria-labelledby="academy-cursos" className="py-24 md:py-32 px-2 sm:px-6 bg-white/[0.02] border-y border-white/5">
-          <div className="container mx-auto max-w-7xl animate-on-scroll">
-            <SectionHeader id="academy-cursos" title={t("academy.coursesTitle")} lead={t("academy.coursesLead")} />
-            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
-              {academyCatalog.map((course) => (
-                <CatalogCard key={course.id} course={course} />
+          <div className="container mx-auto max-w-7xl">
+            <SectionHeader
+              id="academy-cursos"
+              title={t("academyCatalog.trailsTitle")}
+              lead={t("academyCatalog.trailsLead")}
+              aside={
+                <Link
+                  to={L("/academy/catalogo")}
+                  className={`inline-flex shrink-0 items-center gap-2 px-5 py-3 rounded-full border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500 transition-colors duration-200 font-medium text-sm ${focusRing}`}
+                >
+                  {t("academyCatalog.seeAll")}
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              }
+            />
+            <div className="flex flex-col gap-16">
+              {trilhas.map((trilha) => (
+                <section key={trilha.slug} aria-labelledby={`trilha-${trilha.slug}`} className="animate-on-scroll">
+                  <div className="mb-6 max-w-3xl">
+                    <h3 id={`trilha-${trilha.slug}`} className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
+                      {trilha.titulo}
+                    </h3>
+                    {trilha.descricao ? <p className="text-neutral-400 leading-relaxed">{trilha.descricao}</p> : null}
+                  </div>
+                  <ul className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 list-none p-0 m-0">
+                    {trilha.cursosDaTrilha.map((curso) => (
+                      <li key={curso.slug}>
+                        <CursoCard curso={curso} headingLevel={3} />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Trilha de progressao */}
-        <section id="trilha" aria-labelledby="academy-trilha" className="py-24 md:py-32 px-6">
-          <div className="container mx-auto max-w-7xl animate-on-scroll">
-            <SectionHeader id="academy-trilha" title={t("academy.trailTitle")} lead={t("academy.trailLead")} />
-            <div className="relative">
-              <div
-                aria-hidden="true"
-                className="hidden md:block absolute top-6 left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-orange-500/20 via-orange-500/70 to-orange-500/20"
-              />
-              <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
-                {trail.map((course, i) => (
-                  <li key={course.id} className="relative flex gap-5 md:flex-col md:items-center md:text-center">
-                    <span className="relative z-10 shrink-0 w-12 h-12 rounded-full border border-orange-500/60 bg-[#050505] flex items-center justify-center text-orange-400 font-semibold shadow-[0_0_20px_rgba(249,115,22,0.25)]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div className="flex flex-col gap-3 md:items-center">
-                      <h3 className="text-xl font-bold text-white leading-tight">{t(`academy.courses.${course.id}`)}</h3>
-                      <p className="text-sm text-neutral-400 leading-relaxed max-w-xs">{t(`academy.descs.${course.id}`)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
             </div>
           </div>
         </section>

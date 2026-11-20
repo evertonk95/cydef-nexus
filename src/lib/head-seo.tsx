@@ -8,6 +8,7 @@ import { SITE_ORIGIN } from "@/lib/site";
 import { postMetaBySlug } from "@/lib/blog/posts";
 import { hasLabsArtifactFor } from "@/lib/labs/artifacts";
 import { isPrivateAcademyPath } from "@/lib/private-routes";
+import { cursoMeta, IDIOMA_DOS_CURSOS } from "@/lib/academy/catalogo-meta";
 
 /** Slug universal de conteúdo, se a base for rota de artigo (/blog/<slug>). */
 const blogSlugFromBase = (base: string): string | undefined => {
@@ -31,6 +32,9 @@ const hasContentFor = (base: string, lang: Lang): boolean => {
   if (blogSlug) return !!postMetaBySlug(blogSlug, lang);
   const labsSlug = labsSlugFromBase(base);
   if (labsSlug) return hasLabsArtifactFor(labsSlug, lang);
+  // Curso da Academy (fase 14): é em português, só a URL em pt tem a página.
+  const cursoSlug = base.match(/^\/(?:cursos|courses)\/([^/]+)$/)?.[1];
+  if (cursoSlug && cursoMeta(cursoSlug)) return lang === IDIOMA_DOS_CURSOS;
   return true;
 };
 

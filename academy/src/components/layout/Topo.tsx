@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, ChevronDown, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
+import { BookOpen, ChevronDown, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -12,6 +12,7 @@ import { useEquipe } from "@/lib/instrutor";
 const links = [
   { para: "/", rotulo: "Painel", fim: true },
   { para: "/cursos", rotulo: "Meus cursos", fim: false },
+  { para: "/catalogo", rotulo: "Catálogo", fim: false },
 ];
 
 export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
@@ -85,6 +86,9 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
               <div className="my-1 h-px bg-line" />
               <NavLink role="menuitem" to="/cursos" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
                 <BookOpen className="size-4" aria-hidden="true" /> Meus cursos
+              </NavLink>
+              <NavLink role="menuitem" to="/catalogo" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">
+                <LibraryBig className="size-4" aria-hidden="true" /> Catálogo
               </NavLink>
               {equipe.data && (
                 <NavLink role="menuitem" to="/instrutor" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5 md:hidden">

@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { L } from "@/lib/lang";
 import type { BlogPostMeta } from "@/lib/blog/posts";
-import type { AcademyCourseCard } from "@/lib/academy/catalog";
+import type { CursoMeta } from "@/lib/academy/catalogo-meta";
+import { NIVEL_KEY } from "@/lib/academy/nivel-chave";
+import { caminhoCurso } from "@/lib/academy/caminhos";
 import { CONSULTING_ICONS, CONSULTING_KEYS } from "@/lib/consulting";
 
 /**
@@ -124,7 +126,7 @@ export const PostsSection = ({ posts }: { posts: BlogPostMeta[] }) => {
   );
 };
 
-export const AcademySection = ({ courses }: { courses: AcademyCourseCard[] }) => {
+export const AcademySection = ({ courses }: { courses: CursoMeta[] }) => {
   const { t } = useTranslation();
   if (courses.length === 0) return null;
 
@@ -140,18 +142,20 @@ export const AcademySection = ({ courses }: { courses: AcademyCourseCard[] }) =>
       <div className="grid md:grid-cols-3 gap-6 px-6 md:px-10">
         {courses.map((curso) => (
           <Link
-            key={curso.id}
-            to={L("/academy")}
+            key={curso.slug}
+            to={caminhoCurso(curso.slug)}
             className="group bg-neutral-900 border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 transition-colors duration-200 flex flex-col gap-3"
           >
             <div className="flex items-center justify-between gap-3">
               <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-orange-500/10 border border-orange-500/30 text-orange-400">
-                {t(`academy.level.${curso.levelKey}`)}
+                {t(`academy.level.${NIVEL_KEY[curso.nivel]}`)}
               </span>
-              <span className="text-xs font-medium text-neutral-500">{curso.duration}</span>
+              {curso.carga_horaria_h != null ? (
+                <span className="text-xs font-medium text-neutral-500">{Number(curso.carga_horaria_h)}h</span>
+              ) : null}
             </div>
             <h3 className="text-lg font-semibold text-white leading-snug group-hover:text-orange-400 transition-colors duration-200">
-              {t(`academy.courses.${curso.id}`)}
+              {curso.titulo}
             </h3>
           </Link>
         ))}
