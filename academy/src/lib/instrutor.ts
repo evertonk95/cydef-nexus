@@ -16,6 +16,8 @@ export type Papel = "admin" | "instrutor";
 export interface Eu {
   papel: Papel;
   cursos: string[];
+  /** 0019: admin ou instrutor marcado como aprovador de material. */
+  aprova_materiais?: boolean;
 }
 
 export type Nivel = "iniciante" | "intermediario" | "avancado";
@@ -150,6 +152,7 @@ export interface AvisoAdm {
 }
 
 export interface MembroEquipe {
+  aprova_materiais?: boolean;
   user_id: string;
   email: string;
   nome: string | null;
@@ -202,6 +205,20 @@ const MENSAGENS: Record<string, string> = {
   bio_invalida: "A bio passa de 1.200 caracteres.",
   linkedin_invalido: "O LinkedIn precisa ser um link https://www.linkedin.com/…",
   instrutor_inexistente: "Instrutor não encontrado.",
+  tipo_nao_permitido: "Tipo de arquivo não aceito. Use PDF, Word, Excel, PowerPoint, CSV, Markdown, texto ou ZIP.",
+  arquivo_grande: "Arquivo grande demais: até 25 MB para documentos e 50 MB para ZIP.",
+  arquivo_vazio: "O arquivo está vazio.",
+  conteudo_divergente: "O conteúdo do arquivo não corresponde à extensão. Confira se o arquivo não foi renomeado.",
+  macro: "Arquivo do Office com macro não é aceito. Salve sem macro (.docx, .xlsx ou .pptx) e envie de novo.",
+  texto_invalido: "Arquivo de texto precisa estar em UTF-8, sem conteúdo binário.",
+  nome_arquivo_invalido: "O nome do arquivo precisa ter entre 3 e 160 caracteres.",
+  arquivo_ausente: "O arquivo não chegou ao armazenamento. Envie de novo.",
+  arquivo_divergente: "O arquivo gravado não bate com o enviado. Envie de novo.",
+  falha_envio: "Não foi possível enviar o arquivo. Confira a conexão e tente de novo.",
+  falha_download: "Não foi possível baixar o arquivo agora.",
+  material_inexistente: "Material não encontrado ou já revisado.",
+  mesma_pessoa: "Quem enviou o arquivo não pode aprovar. Outra pessoa precisa revisar.",
+  motivo_obrigatorio: "Escreva o motivo da recusa (pelo menos 5 caracteres).",
 };
 
 export class ErroPainel extends Error {
@@ -363,6 +380,20 @@ export function useMeuPerfil() {
     queryFn: () => chamar<PerfilInstrutor>(sb, "academy_adm_meu_perfil"),
     enabled: Boolean(sessao),
   });
+}
+
+export function useMateriaisAdm(slug: string) {
+  const { sb } = usePortal();
+  return useQuery({
+    queryKey: ["adm", "materiais", slug],
+    queryFn: () => chamar<import("./materiais").MaterialAdm[]>(sb, "academy_adm_materiais", { p_curso: slug }),
+    enabled: Boolean(slug),
+  });
+}
+
+export function useAprovacoes() {
+  const { sb } = usePortal();
+  return useQuery({ queryKey: ["adm", "aprovacoes"], queryFn: () => chamar<import("./materiais").MaterialAdm[]>(sb, "academy_adm_aprovacoes") });
 }
 
 export function useBoletimAdm() {

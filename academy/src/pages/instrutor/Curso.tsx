@@ -25,12 +25,14 @@ import { Esqueleto } from "@/components/ui/Esqueleto";
 import { AreaTexto, Campo, ErroFormulario, Marcador, Selecao, Situacao } from "@/components/instrutor/Campos";
 import { FalhaCarregamento, NaoEncontrado } from "../Estados";
 import { AbaSobre } from "./Sobre";
+import { AbaMateriais } from "./Materiais";
 
-type Aba = "estrutura" | "sobre" | "questoes" | "requisitos" | "dados";
+type Aba = "estrutura" | "sobre" | "questoes" | "materiais" | "requisitos" | "dados";
 const ABAS: { id: Aba; rotulo: string }[] = [
   { id: "estrutura", rotulo: "Estrutura" },
   { id: "sobre", rotulo: "Sobre o curso" },
   { id: "questoes", rotulo: "Questões" },
+  { id: "materiais", rotulo: "Materiais" },
   { id: "requisitos", rotulo: "Certificado" },
   { id: "dados", rotulo: "Dados do curso" },
 ];
@@ -94,6 +96,7 @@ export default function CursoInstrutor() {
         {aba === "estrutura" && <Estrutura curso={c} />}
         {aba === "sobre" && <AbaSobre curso={c} />}
         {aba === "questoes" && <Questoes curso={c} />}
+        {aba === "materiais" && <AbaMateriais curso={c} />}
         {aba === "requisitos" && <FormRequisitos curso={c} />}
         {aba === "dados" && <FormDados curso={c} />}
       </div>
