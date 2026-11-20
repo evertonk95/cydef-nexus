@@ -108,6 +108,13 @@ function novoEstado() {
     arquivos: {},
     // Fase 14: vitrine do curso pago de exemplo e trilhas.
     vitrine: { situacao: "em_breve", checkout_url: null, hotmart_produto_id: null, preco_centavos: null, preco_observacao: "", preco_conferido_em: null, trilhas: ["soc"] },
+    // Fase 16: acessos pagos e produtos da Hotmart.
+    concessoes: [{
+      id: "c1", email: "pessoal@exemplo.com", nome: "Bia Compradora", origem: "hotmart", escopo: "curso", curso: "soc-analyst", trilha: null, cursos: [],
+      alvo: "SOC Analyst: Formação Completa", inicio: "2026-11-19T15:00:00Z", fim: null, transacao: "HP1234567890", produto: 1001,
+      revogada_em: null, motivo: null, conta: false, situacao: "ativa", criado_em: "2026-11-19T15:00:00Z",
+    }],
+    produtos: [{ hotmart_produto_id: 3003, nome: "Academy completa por 12 meses", escopo: "plataforma", trilha: null, trilha_titulo: null, duracao_dias: 365, ativo: true, vendas: 0 }],
     trilhas: [
       { slug: "soc", titulo: "SOC", descricao: "Para quem quer trabalhar em um Centro de Operações de Segurança.", publicado: true, formacao: null },
       { slug: "blue-team", titulo: "Blue Team", descricao: "Defesa em profundidade.", publicado: true, formacao: null },
@@ -455,6 +462,51 @@ http
         case "/rest/v1/rpc/academy_adm_meu_perfil":
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
           return enviar({ ...CURSO.cursos_instrutores[0].instrutores, da_equipe: true, eu: true });
+        case "/rest/v1/rpc/academy_adm_concessoes": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const b = String(corpo.p_busca ?? "").toLowerCase();
+          return enviar(estado.concessoes.filter((c) => !b || c.email.includes(b) || c.transacao?.toLowerCase() === b));
+        }
+        case "/rest/v1/rpc/academy_adm_conceder": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const d = corpo.p_dados ?? {};
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email ?? "")) return enviar({ message: "email_invalido" }, 400);
+          const c = { id: `c${estado.concessoes.length + 1}`, email: d.email.toLowerCase(), nome: d.nome ?? "", origem: "manual", escopo: d.escopo,
+            curso: d.curso, trilha: d.trilha, cursos: [], alvo: d.escopo === "plataforma" ? "Plataforma toda" : d.escopo === "trilha" ? "Trilha SOC" : PAGO.titulo,
+            inicio: "2026-11-20T12:00:00Z", fim: d.dias ? "2027-11-20T12:00:00Z" : null, transacao: null, produto: null, revogada_em: null, motivo: null,
+            conta: false, situacao: "ativa", criado_em: "2026-11-20T12:00:00Z" };
+          estado.concessoes.unshift(c);
+          estado.escritasAdm.push({ fn: "academy_adm_conceder", ...corpo });
+          return enviar(c);
+        }
+        case "/rest/v1/rpc/academy_adm_transferir_concessao": {
+          const c = estado.concessoes.find((x) => x.id === corpo.p_id);
+          if (!c) return enviar({ message: "concessao_inexistente" }, 400);
+          c.email = String(corpo.p_email).trim().toLowerCase();
+          estado.escritasAdm.push({ fn: "academy_adm_transferir_concessao", ...corpo });
+          return enviar(c);
+        }
+        case "/rest/v1/rpc/academy_adm_revogar_concessao": {
+          const c = estado.concessoes.find((x) => x.id === corpo.p_id);
+          if (String(corpo.p_motivo ?? "").trim().length < 5) return enviar({ message: "motivo_obrigatorio" }, 400);
+          Object.assign(c, { situacao: "encerrada", revogada_em: "2026-11-20T12:00:00Z", motivo: corpo.p_motivo });
+          return enviar(c);
+        }
+        case "/rest/v1/rpc/academy_adm_produtos":
+        case "/rest/v1/rpc/academy_adm_salvar_produto": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          if (u.pathname.endsWith("salvar_produto")) {
+            const d = corpo.p_dados ?? {};
+            estado.produtos = estado.produtos.filter((p) => String(p.hotmart_produto_id) !== String(d.hotmart_produto_id));
+            estado.produtos.push({ hotmart_produto_id: Number(d.hotmart_produto_id), nome: d.nome, escopo: d.escopo, trilha: d.trilha,
+              trilha_titulo: estado.trilhas.find((t) => t.slug === d.trilha)?.titulo ?? null, duracao_dias: d.duracao_dias, ativo: d.ativo !== false, vendas: 0 });
+          }
+          return enviar({
+            produtos: estado.produtos,
+            cursos: estado.vitrine.hotmart_produto_id ? [{ hotmart_produto_id: estado.vitrine.hotmart_produto_id, curso: PAGO.slug, titulo: PAGO.titulo, vendas: 1 }] : [],
+            eventos: [{ evento: "PURCHASE_APPROVED", resultado: "liberado", produto: 1001, transacao: "HP1234567890", recebido_em: "2026-11-19T15:00:00Z" }],
+          });
+        }
         case "/rest/v1/rpc/academy_catalogo_publico":
           return enviar(catalogoPublico());
         case "/rest/v1/rpc/academy_adm_vitrine":

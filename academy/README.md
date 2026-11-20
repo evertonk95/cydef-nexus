@@ -186,6 +186,24 @@ A venda é da Hotmart: pagamento, parcelamento, reembolso e nota ficam lá. A Ac
 - **Site:** o build lê o catálogo do banco (`scripts/gen-catalogo-academy.mjs`) e grava `src/lib/academy/catalogo-snapshot.json`. De hora em hora, `.github/workflows/catalogo-academy.yml` compara a versão do banco com a publicada em `/catalogo-academy.json` e dispara o deploy quando muda. Os cursos são em português: a página do curso existe só em `/pt/`; em inglês e espanhol o endereço redireciona.
 - Toda escrita vai para `academy_auditoria` (`vitrine_salva`, `trilha_criada`, `trilha_salva`, `trilha_movida`, `curso_movido_na_trilha`).
 
+## Acesso pago e webhook da Hotmart (fase 16, migração 0021)
+
+Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`, `manual` ou, na fase de empresas, `empresa`), escopo (um curso, uma trilha ou a plataforma toda) e validade. A tabela `matriculas` continua sendo o que o portal lê: `academy__sincronizar` recalcula as matrículas pagas do aluno a partir das concessões ativas, sem tocar nas de curso gratuito e sem apagar progresso ou certificado.
+
+| Produto na Hotmart | Onde se cadastra | O que libera |
+|---|---|---|
+| Curso individual | Aba Vitrine do curso (código do produto) | O curso, vitalício |
+| Trilha completa | Painel, Vendas, Produtos | Os cursos pagos que a trilha tem no dia da compra, vitalício |
+| Plataforma toda | Painel, Vendas, Produtos | Todos os cursos pagos, por 365 dias |
+
+- **Webhook:** `supabase/functions/academy-hotmart` (publicada com `--no-verify-jwt`; quem chama é a Hotmart). Confere o header `X-HOTMART-HOTTOK` contra o secret `HOTMART_HOTTOK` em tempo constante, lê só transação, produto, e-mail, nome, situação e data, e chama `academy_hotmart_processar` (só service_role).
+- **Eventos:** `PURCHASE_APPROVED` e `PURCHASE_COMPLETE` liberam; `PURCHASE_REFUNDED`, `PURCHASE_CHARGEBACK`, `PURCHASE_PROTEST` e `PURCHASE_CANCELED` encerram. O resto fica só registrado. Cada aviso é gravado uma vez (`academy_hotmart_eventos`); reembolso que chega antes da aprovação impede a liberação.
+- **Respostas:** 200 para tudo que foi gravado (inclusive repetido ou de produto que não é da Academy), 401 com token errado, 500 se o banco falhar (a Hotmart reenvia).
+- **E-mails da CyDef** (com o Resend ligado): acesso liberado e acesso encerrado. Sem link de login no e-mail: a pessoa pede o link na tela de entrada, com o e-mail da compra.
+- **Quem compra sem pré-inscrição** pode pedir o link de acesso: a concessão ativa conta como elegibilidade, e o aluno é criado sem lead (`academy-acesso` e `academy_provisionar_aluno`).
+- **Vencimento dos 12 meses:** na hora do login e, todo dia às 06:23 UTC, pelo pg_cron (`academy-expirar-concessoes`), quando a extensão está ligada.
+- **Painel, página Vendas (só admin):** busca por e-mail ou transação, transferência de uma compra para o e-mail da conta, liberação manual (cortesia, parceria, conferência), encerramento com motivo, produtos de trilha e de plataforma e os últimos avisos da Hotmart. Tudo vai para `academy_auditoria`.
+
 ## Minha conta (fase 12, migração 0018)
 
 Em `/conta`, pelo menu da conta. Coloca ao alcance do aluno o que o Aviso de Privacidade da Academy (v2026.3) já promete, sem regra nova:
