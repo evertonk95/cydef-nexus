@@ -24,10 +24,12 @@ import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { AreaTexto, Campo, ErroFormulario, Marcador, Selecao, Situacao } from "@/components/instrutor/Campos";
 import { FalhaCarregamento, NaoEncontrado } from "../Estados";
+import { AbaSobre } from "./Sobre";
 
-type Aba = "estrutura" | "questoes" | "requisitos" | "dados";
+type Aba = "estrutura" | "sobre" | "questoes" | "requisitos" | "dados";
 const ABAS: { id: Aba; rotulo: string }[] = [
   { id: "estrutura", rotulo: "Estrutura" },
+  { id: "sobre", rotulo: "Sobre o curso" },
   { id: "questoes", rotulo: "Questões" },
   { id: "requisitos", rotulo: "Certificado" },
   { id: "dados", rotulo: "Dados do curso" },
@@ -90,6 +92,7 @@ export default function CursoInstrutor() {
 
       <div role="tabpanel" id={`painel-${aba}`} aria-labelledby={`aba-${aba}`}>
         {aba === "estrutura" && <Estrutura curso={c} />}
+        {aba === "sobre" && <AbaSobre curso={c} />}
         {aba === "questoes" && <Questoes curso={c} />}
         {aba === "requisitos" && <FormRequisitos curso={c} />}
         {aba === "dados" && <FormDados curso={c} />}
@@ -182,8 +185,13 @@ function Modulo({
 }) {
   const [editando, setEditando] = useState(false);
   const [titulo, setTitulo] = useState(m.titulo);
+  const [resumo, setResumo] = useState(m.resumo ?? "");
+  // Com a 0016, título e resumo saem juntos; sem ela, só o título.
   const renomear = useAcao(
-    (sb, t: string) => chamar<CursoAdm>(sb, "academy_adm_salvar_modulo", { p_curso: curso.slug, p_id: m.id, p_titulo: t }),
+    (sb, d: { titulo: string; resumo: string }) =>
+      m.resumo === undefined
+        ? chamar<CursoAdm>(sb, "academy_adm_salvar_modulo", { p_curso: curso.slug, p_id: m.id, p_titulo: d.titulo })
+        : chamar<CursoAdm>(sb, "academy_adm_editar_modulo", { p_id: m.id, p_dados: d }),
     () => setEditando(false),
   );
   const excluir = useAcao((sb, id: string) => chamar<CursoAdm>(sb, "academy_adm_excluir_modulo", { p_id: id }));
@@ -192,25 +200,33 @@ function Modulo({
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
-    renomear.mutate(titulo);
+    renomear.mutate({ titulo, resumo });
   };
 
   return (
     <section aria-labelledby={idTitulo} className="painel-card overflow-hidden">
       <div className="flex flex-wrap items-center gap-3 border-b border-line px-5 py-4">
         {editando ? (
-          <form onSubmit={enviar} className="flex flex-1 flex-wrap items-end gap-3">
-            <div className="min-w-60 flex-1">
-              <Campo rotulo="Título do módulo" value={titulo} onChange={(e) => setTitulo(e.target.value)} limite={120} required minLength={2} autoFocus />
-            </div>
-            <Botao type="submit" className="h-11 px-4" disabled={renomear.isPending}>
-              Salvar
-            </Botao>
-            <Botao variante="contorno" className="h-11 px-4" onClick={() => { setEditando(false); setTitulo(m.titulo); }}>
-              Cancelar
-            </Botao>
-            <div className="basis-full">
-              <ErroFormulario erro={renomear.error} />
+          <form onSubmit={enviar} className="flex flex-1 flex-col gap-4">
+            <Campo rotulo="Título do módulo" value={titulo} onChange={(e) => setTitulo(e.target.value)} limite={120} required minLength={2} autoFocus />
+            {m.resumo !== undefined && (
+              <AreaTexto
+                rotulo="Ementa do módulo"
+                value={resumo}
+                onChange={(e) => setResumo(e.target.value)}
+                limite={400}
+                className="min-h-20"
+                ajuda="O que o aluno aprende neste módulo. Aparece na página do curso, mesmo antes das aulas saírem."
+              />
+            )}
+            <ErroFormulario erro={renomear.error} />
+            <div className="flex gap-3">
+              <Botao type="submit" className="h-11 px-4" disabled={renomear.isPending}>
+                Salvar módulo
+              </Botao>
+              <Botao variante="contorno" className="h-11 px-4" onClick={() => { setEditando(false); setTitulo(m.titulo); setResumo(m.resumo ?? ""); }}>
+                Cancelar
+              </Botao>
             </div>
           </form>
         ) : (
@@ -221,7 +237,9 @@ function Modulo({
               </h2>
               <p className="m-0 mt-0.5 text-[13px] text-muted">
                 {contagem(m.aulas.length, "aula", "aulas")}, {contagem(m.questoes, "questão", "questões")}
+                {m.resumo === "" && <span className="text-warn">, sem ementa</span>}
               </p>
+              {m.resumo && <p className="m-0 mt-1.5 max-w-[68ch] text-sm leading-relaxed text-muted">{m.resumo}</p>}
             </div>
             <div className="flex items-center gap-1">
               {m.ordem > 0 && (
@@ -234,7 +252,7 @@ function Modulo({
                   </BotaoIcone>
                 </>
               )}
-              <BotaoIcone rotulo={`Renomear ${rotuloModulo(m.ordem, m.titulo)}`} onClick={() => setEditando(true)}>
+              <BotaoIcone rotulo={`Editar ${rotuloModulo(m.ordem, m.titulo)}`} onClick={() => setEditando(true)}>
                 <Pencil className="size-4" aria-hidden="true" />
               </BotaoIcone>
               {vazio && <BotaoExcluir rotulo={`Excluir ${rotuloModulo(m.ordem, m.titulo)}`} aoConfirmar={() => excluir.mutate(m.id)} ocupado={excluir.isPending} />}
