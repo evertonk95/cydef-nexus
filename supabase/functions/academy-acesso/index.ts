@@ -25,45 +25,40 @@
 
 import { getEnv, json, ipDoRequest, novoRequestId } from "../_shared/edge.ts";
 import { verificadorTurnstile, type Verificador } from "./turnstile.ts";
-import { montarEmailAcesso, type EmailAcesso } from "./email.ts";
+import {
+  carteiroResend,
+  chaveLimiteEmail,
+  entregarLink,
+  hmac,
+  LIMITE_POR_EMAIL,
+  REMETENTE_PADRAO,
+  servidorSupabase,
+  VALIDADE_LINK_MIN,
+  type Carteiro,
+  type Servidor,
+} from "../_shared/academy-link.ts";
+
+export {
+  carteiroResend,
+  hmac,
+  linkDoPortal,
+  servidorSupabase,
+  type Carteiro,
+  type Elegibilidade,
+  type Servidor,
+} from "../_shared/academy-link.ts";
 
 export const LIMITES_ACESSO = {
   corpoMaxBytes: 2048,
   emailMax: 254,
   porIp: { limite: 10, janelaSeg: 900 },
-  porEmail: { limite: 3, janelaSeg: 900 },
+  porEmail: LIMITE_POR_EMAIL,
   respostaMinimaMs: 900,
-  validadeLinkMin: 60,
+  validadeLinkMin: VALIDADE_LINK_MIN,
 } as const;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const REQUEST_ID = /^[A-Za-z0-9-]{8,64}$/;
-
-export interface Elegibilidade {
-  elegivel: boolean;
-  user_id?: string | null;
-  aluno?: boolean;
-  lead_id?: string | null;
-  /** 0021: comprou pela Hotmart (ou recebeu acesso) sem pré-inscrição. */
-  comprador?: boolean;
-  /** 0024: convidado por uma empresa, ainda sem pré-inscrição. */
-  convidado?: boolean;
-  nome?: string;
-}
-
-/** Operações do servidor de login (Supabase com service_role). */
-export interface Servidor {
-  limite(chave: string, limite: number, janelaSeg: number): Promise<boolean>;
-  elegibilidade(email: string): Promise<Elegibilidade>;
-  criarUsuario(email: string, nome: string): Promise<{ ok: true; userId: string } | { ok: false; jaExiste: boolean }>;
-  provisionarAluno(userId: string, leadId: string | null, nome: string): Promise<void>;
-  gerarLink(email: string, redirect: string): Promise<string>;
-  enviarPeloSupabase(email: string, redirect: string): Promise<void>;
-}
-
-export interface Carteiro {
-  enviar(mail: EmailAcesso): Promise<boolean>;
-}
 
 export interface AcessoDeps {
   servidor: Servidor;
@@ -89,12 +84,6 @@ function cors(origem: string): Record<string, string> {
     "Access-Control-Max-Age": "600",
     Vary: "Origin",
   };
-}
-
-export async function hmac(pepper: string, valor: string): Promise<string> {
-  const chave = await crypto.subtle.importKey("raw", new TextEncoder().encode(pepper), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const assinatura = await crypto.subtle.sign("HMAC", chave, new TextEncoder().encode(valor));
-  return Array.from(new Uint8Array(assinatura)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export function createAcessoHandler(deps: AcessoDeps) {
@@ -158,38 +147,6 @@ export function createAcessoHandler(deps: AcessoDeps) {
     if (!REQUEST_ID.test(requestId)) return json({ erro: "payload_invalido" }, 400, h);
 
 
-    async function entregarLink(email: string, inicial: Elegibilidade, evento: string) {
-      let el = inicial;
-      let userId = el.user_id ?? null;
-      if (!userId) {
-        const criado = await deps.servidor.criarUsuario(email, el.nome ?? "");
-        if ("userId" in criado) {
-          userId = criado.userId;
-        } else if ("jaExiste" in criado && criado.jaExiste) {
-          el = await deps.servidor.elegibilidade(email);
-          userId = el.user_id ?? null;
-        }
-        if (!userId) throw new Error("usuario_nao_criado");
-      }
-      if (!el.aluno) {
-        // Sem pré-inscrição, só quem tem acesso pago ativo (0021) vira aluno.
-        if (!el.lead_id && !el.comprador && !el.convidado) throw new Error("sem_lead");
-        await deps.servidor.provisionarAluno(userId, el.lead_id ?? null, el.nome ?? "");
-      }
-      const retorno = `${deps.academyUrl.replace(/\/+$/, "")}/entrar/retorno`;
-      if (deps.carteiro) {
-        const link = await deps.servidor.gerarLink(email, retorno);
-        const enviado = await deps.carteiro.enviar(
-          montarEmailAcesso({ to: email, nome: el.nome ?? "", link, validadeMin: LIMITES_ACESSO.validadeLinkMin }),
-        );
-        if (!enviado) throw new Error("resend_falhou");
-        log({ event: "acesso_link_enviado", evento, via: "resend" });
-      } else {
-        await deps.servidor.enviarPeloSupabase(email, retorno);
-        log({ event: "acesso_link_enviado", evento, via: "supabase" });
-      }
-    }
-
     const ip = ipDoRequest(req);
     const humano = await deps.turnstile.verificar({ token, ip, idempotencyKey: requestId });
     if (!humano.ok) {
@@ -200,11 +157,11 @@ export function createAcessoHandler(deps: AcessoDeps) {
     try {
       const [chaveIp, chaveEmail] = await Promise.all([
         hmac(deps.pepper, `ip:${ip}`),
-        hmac(deps.pepper, `email:${email}`),
+        chaveLimiteEmail(deps.pepper, email),
       ]);
       const [ipOk, emailOk] = await Promise.all([
         deps.servidor.limite(`ip:${chaveIp}`, LIMITES_ACESSO.porIp.limite, LIMITES_ACESSO.porIp.janelaSeg),
-        deps.servidor.limite(`em:${chaveEmail}`, LIMITES_ACESSO.porEmail.limite, LIMITES_ACESSO.porEmail.janelaSeg),
+        deps.servidor.limite(chaveEmail, LIMITES_ACESSO.porEmail.limite, LIMITES_ACESSO.porEmail.janelaSeg),
       ]);
       if (!ipOk || !emailOk) {
         log({ event: "acesso_limite", evento, por: !ipOk ? "ip" : "email" });
@@ -219,7 +176,7 @@ export function createAcessoHandler(deps: AcessoDeps) {
       // Daqui em diante o e-mail é elegível: qualquer falha também responde
       // de forma neutra, para o resultado não revelar quem é aluno.
       try {
-        await entregarLink(email, el, evento);
+        await entregarLink({ servidor: deps.servidor, carteiro: deps.carteiro, academyUrl: deps.academyUrl, log }, email, el, evento);
       } catch (err) {
         log({ event: "acesso_entrega_falhou", evento, razao: err instanceof Error ? err.message.slice(0, 60) : "desconhecido" });
       }
@@ -228,85 +185,6 @@ export function createAcessoHandler(deps: AcessoDeps) {
       log({ event: "acesso_erro", evento, razao: err instanceof Error ? err.message.slice(0, 60) : "desconhecido" });
       return json({ erro: "servico_indisponivel" }, 503, h);
     }
-  };
-}
-
-/**
- * Link do e-mail: aponta para o próprio portal (mesmo domínio do remetente), e
- * o portal troca o token por sessão só quando o aluno clica em "Entrar".
- */
-export function linkDoPortal(retorno: string, tokenHash: string): string {
-  return `${retorno}?token_hash=${encodeURIComponent(tokenHash)}&type=email`;
-}
-
-// ---------------------------------------------------------------------------
-// Ligação com o Supabase em produção
-// ---------------------------------------------------------------------------
-
-export function servidorSupabase(url: string, serviceKey: string, fetchImpl: typeof fetch = fetch): Servidor {
-  const cabecalhos = { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, "Content-Type": "application/json" };
-  const chamar = async (caminho: string, corpo: unknown, metodo = "POST"): Promise<Response> => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 10_000);
-    try {
-      return await fetchImpl(`${url}${caminho}`, { method: metodo, headers: cabecalhos, body: JSON.stringify(corpo), signal: controller.signal });
-    } finally {
-      clearTimeout(timer);
-    }
-  };
-  const rpc = async <T>(nome: string, args: Record<string, unknown>): Promise<T> => {
-    const res = await chamar(`/rest/v1/rpc/${nome}`, args);
-    if (!res.ok) throw new Error(`rpc_${nome}_${res.status}`);
-    return (await res.json()) as T;
-  };
-  return {
-    limite: (chave, limite, janelaSeg) => rpc<boolean>("academy_rate_limit", { p_chave: chave, p_limite: limite, p_janela_seg: janelaSeg }),
-    elegibilidade: (email) => rpc<Elegibilidade>("academy_elegibilidade", { p_email: email }),
-    async provisionarAluno(userId, leadId, nome) {
-      await rpc("academy_provisionar_aluno", { p_user_id: userId, p_lead_id: leadId, p_nome: nome });
-    },
-    async criarUsuario(email, nome) {
-      const res = await chamar("/auth/v1/admin/users", { email, email_confirm: true, user_metadata: { nome: nome.slice(0, 80) } });
-      if (res.ok) {
-        const d = (await res.json()) as { id?: string };
-        return d.id ? { ok: true, userId: d.id } : { ok: false, jaExiste: false };
-      }
-      return { ok: false, jaExiste: res.status === 422 || res.status === 409 };
-    },
-    async gerarLink(email, redirect) {
-      const res = await chamar("/auth/v1/admin/generate_link", { type: "magiclink", email, redirect_to: redirect });
-      if (!res.ok) throw new Error(`gerar_link_${res.status}`);
-      const d = (await res.json()) as { hashed_token?: string; properties?: { hashed_token?: string } };
-      const hash = d.properties?.hashed_token ?? d.hashed_token;
-      if (!hash || !/^[A-Za-z0-9_-]{16,256}$/.test(hash)) throw new Error("gerar_link_resposta");
-      return linkDoPortal(redirect, hash);
-    },
-    async enviarPeloSupabase(email, redirect) {
-      const res = await chamar(`/auth/v1/otp?redirect_to=${encodeURIComponent(redirect)}`, { email, create_user: false });
-      if (!res.ok) throw new Error(`otp_${res.status}`);
-    },
-  };
-}
-
-export function carteiroResend(apiKey: string, from: string, fetchImpl: typeof fetch = fetch): Carteiro {
-  return {
-    async enviar(mail) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 10_000);
-      try {
-        const res = await fetchImpl("https://api.resend.com/emails", {
-          method: "POST",
-          signal: controller.signal,
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, html: mail.html, text: mail.text }),
-        });
-        return res.ok;
-      } catch {
-        return false;
-      } finally {
-        clearTimeout(timer);
-      }
-    },
   };
 }
 
@@ -328,7 +206,7 @@ export default async function handler(req: Request): Promise<Response> {
   return createAcessoHandler({
     servidor: servidorSupabase(getEnv("SUPABASE_URL") ?? "", getEnv("SUPABASE_SERVICE_ROLE_KEY") ?? ""),
     turnstile: verificadorTurnstile({ secret: getEnv("TURNSTILE_SECRET_KEY") ?? "", hostnamesPermitidos: hostnames }),
-    carteiro: emailLigado ? carteiroResend(apiKey, getEnv("ACADEMY_EMAIL_FROM") ?? "CyDef Academy <academy@mail.cydef.com.br>") : undefined,
+    carteiro: emailLigado ? carteiroResend(apiKey, getEnv("ACADEMY_EMAIL_FROM") ?? REMETENTE_PADRAO) : undefined,
     origens,
     academyUrl: getEnv("ACADEMY_URL") ?? "https://academy.cydef.com.br",
     pepper: getEnv("ACADEMY_HASH_PEPPER"),
