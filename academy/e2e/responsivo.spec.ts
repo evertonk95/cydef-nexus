@@ -13,9 +13,11 @@ for (const [nome, caminho] of [
   ["painel", "/"],
   ["curso", "/cursos/cybersecurity-fundamentals"],
   ["aula", "/cursos/cybersecurity-fundamentals/aulas/2"],
+  ["minha conta", "/conta"],
+  ["validação do certificado", "/certificado/CYD-0000-0000-0000-0000"],
 ] as const) {
   test(`celular sem rolagem lateral: ${nome}`, async ({ page }) => {
-    if (caminho !== "/entrar") await entrar(page);
+    if (caminho !== "/entrar" && !caminho.startsWith("/certificado")) await entrar(page);
     await page.goto(caminho);
     await page.waitForLoadState("networkidle");
     const [largura, tela] = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);

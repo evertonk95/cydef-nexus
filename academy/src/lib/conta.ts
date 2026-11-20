@@ -1,0 +1,74 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+/**
+ * Minha conta (banco na 0018). Tudo do próprio aluno: o banco confere quem
+ * chama (auth.uid()) em cada função.
+ */
+
+export interface MeuCertificado {
+  codigo: string;
+  curso_slug: string;
+  curso_titulo: string;
+  nome: string;
+  carga_horaria_h: number;
+  concluido_em: string;
+  validacao_publica: boolean;
+}
+
+const MENSAGENS: Record<string, string> = {
+  nome_invalido: "O nome precisa ter entre 2 e 80 caracteres.",
+  sem_cadastro: "Este login não tem cadastro de aluno.",
+  certificado_inexistente: "Certificado não encontrado na sua conta.",
+  nao_autenticado: "Sua sessão expirou. Entre de novo.",
+};
+
+export class ErroConta extends Error {
+  constructor(readonly codigo: string) {
+    super(MENSAGENS[codigo] ?? "Não foi possível salvar. Tente de novo.");
+  }
+}
+
+async function chamar<T>(sb: SupabaseClient, fn: string, args?: Record<string, unknown>): Promise<T> {
+  const { data, error } = await sb.rpc(fn, args);
+  if (error) throw new ErroConta(Object.keys(MENSAGENS).find((c) => error.message?.includes(c)) ?? "falha");
+  return data as T;
+}
+
+export const atualizarNome = (sb: SupabaseClient, nome: string) => chamar<{ nome: string }>(sb, "academy_atualizar_nome", { p_nome: nome });
+export const meusCertificados = (sb: SupabaseClient) => chamar<MeuCertificado[]>(sb, "academy_meus_certificados");
+export const definirValidacao = (sb: SupabaseClient, codigo: string, ativa: boolean) =>
+  chamar<MeuCertificado[]>(sb, "academy_validacao_publica", { p_codigo: codigo, p_ativa: ativa });
+export const meusDados = (sb: SupabaseClient) => chamar<Record<string, unknown>>(sb, "academy_meus_dados");
+
+/** Nome do arquivo da cópia dos dados: meus-dados-cydef-academy-2026-11-19.json */
+export function arquivoDados(agora = new Date()): string {
+  const d = new Date(agora.getTime() - agora.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+  return `meus-dados-cydef-academy-${d}.json`;
+}
+
+/** E-mail pronto para o pedido de exclusão, no canal e assunto do Aviso (item 11). */
+export function emailExclusao(email: string): string {
+  const assunto = "LGPD: Solicitação de titular";
+  const corpo = [
+    "Olá, equipe CyDef.",
+    "",
+    "Peço a eliminação da minha conta na CyDef Academy e dos dados associados a ela.",
+    "",
+    `E-mail da conta: ${email}`,
+    "",
+    "Estou ciente de que a eliminação encerra o acesso aos cursos e ao histórico de estudo e desativa a validação dos certificados emitidos.",
+  ].join("\n");
+  return `mailto:contato@cydef.com.br?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+}
+
+/** Baixa um conteúdo como arquivo, sem sair da página. */
+export function baixarArquivo(conteudo: BlobPart, nome: string, tipo: string) {
+  const url = URL.createObjectURL(new Blob([conteudo], { type: tipo }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = nome;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+}

@@ -11,6 +11,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
+- Minha conta em `/conta`: nome, certificados com a validação pública ligada ou desligada, sair de todos os dispositivos, cópia dos dados e pedido de exclusão (fase 12).
 - Certificado em PDF (modelos Clássico claro e Técnico), botão do LinkedIn e validação pública em `/certificado/CODIGO` (fase 10).
 - Painel do instrutor em `/instrutor`, só para a equipe: cursos, módulos, aulas, vídeos, questões, regras do certificado, Boletim do SOC e equipe (fase 13).
 - Sobre o curso na página de cada curso: objetivos, para quem é, pré-requisitos, ementa por módulo e quem ensina, editados no painel (fase 13b).
@@ -135,7 +136,7 @@ Certificado: o aluno confere o nome antes de emitir; depois de emitido, correç�
 - **LinkedIn:** o botão "Adicionar ao LinkedIn" abre o formulário de certificação do LinkedIn já preenchido com curso, CyDef Academy, mês e ano, código e o link de validação.
 - **Validação:** `academy.cydef.com.br/certificado/CODIGO`, sem login, e `/certificado` com um campo para digitar o código (aceita minúsculas e sem hífen). Mostra só nome, curso, carga horária e data, como diz o Aviso de Privacidade (v2026.3, item 4). Código inexistente e validação desativada recebem a mesma resposta.
 
-A pedido do aluno (Aviso de Privacidade, item 4), desative a validação pública:
+O próprio aluno liga e desliga a validação pública de cada certificado em Minha conta (fase 12). Se o pedido chegar por e-mail, desative assim:
 
 ```sql
 update public.certificados set validacao_publica = false where codigo = 'CYD-....';
@@ -150,6 +151,19 @@ update public.certificados set validacao_publica = false where codigo = 'CYD-...
 | `/cursos/<curso>/certificado` | Conferência do nome (vem do cadastro, editável, mesmas regras do banco), confirmação e emissão. Depois, os dados e o código de validação. |
 
 Na página do curso e na sala de aula, a linha "Questões do módulo" e o cadeado de módulo bloqueado só aparecem quando o módulo tem questões publicadas. O cartão da avaliação final só aparece quando ela existe para o aluno (liberada, em espera, em andamento ou aprovada) e o do certificado só quando ele está liberado ou emitido. Curso sem questões fica igual a antes. Se a consulta `academy_situacao_curso` falhar, a página do curso e a sala de aula seguem normais.
+
+## Minha conta (fase 12, migração 0018)
+
+Em `/conta`, pelo menu da conta. Coloca ao alcance do aluno o que o Aviso de Privacidade da Academy (v2026.3) já promete, sem regra nova:
+
+| Bloco | O que faz | Função |
+|---|---|---|
+| Seus dados | Corrige o nome (2 a 80 caracteres). Certificado já emitido não muda. O e-mail é o login e só muda pelo contato@cydef.com.br. | `academy_atualizar_nome` |
+| Certificados | Lista os certificados e liga ou desliga a validação pública de cada um (item 4 do aviso). | `academy_meus_certificados`, `academy_validacao_publica` |
+| Acesso | Sair de todos os dispositivos (encerra a sessão em todos os navegadores). | Supabase Auth, `signOut({ scope: "global" })` |
+| Privacidade | Baixa uma cópia dos dados em JSON: conta, pré-inscrição e consentimento, matrículas, progresso, questões e avaliações com as respostas em texto (sem a correção) e certificados. O pedido de exclusão abre um e-mail para contato@cydef.com.br com o assunto "LGPD: Solicitação de titular" (item 11; resposta em até 15 dias). | `academy_meus_dados` |
+
+Tudo só do próprio aluno: cada função confere `auth.uid()`.
 
 ## Painel do instrutor (0015)
 

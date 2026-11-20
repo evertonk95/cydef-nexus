@@ -100,6 +100,8 @@ function novoEstado() {
       })),
     },
     escritasAdm: [],
+    nomeAluno: "Everton Nascimento",
+    validacaoPublica: true,
   };
 }
 
@@ -154,7 +156,7 @@ function painel() {
   const feitas = AULAS.filter((a) => estado.progresso[a.id]?.concluida_em).length;
   const prox = AULAS.find((a) => !estado.progresso[a.id]?.concluida_em) ?? AULAS[AULAS.length - 1];
   return {
-    nome: "Everton Nascimento",
+    nome: estado.nomeAluno,
     continuar: {
       curso_slug: CURSO.slug, curso_titulo: CURSO.titulo, modulo_ordem: prox.modulo.ordem, modulo_titulo: prox.modulo.titulo,
       aula_id: prox.id, aula_numero: prox.numero, aula_titulo: prox.titulo, duracao_seg: prox.duracao_seg,
@@ -331,10 +333,23 @@ http
           renumerar();
           return enviar(aula);
         }
+        case "/rest/v1/rpc/academy_atualizar_nome": {
+          const n = String(corpo.p_nome ?? "").trim().replace(/\s+/g, " ");
+          if (n.length < 2 || n.length > 80) return enviar({ message: "nome_invalido" }, 400);
+          estado.nomeAluno = n;
+          return enviar({ nome: n });
+        }
+        case "/rest/v1/rpc/academy_meus_certificados":
+        case "/rest/v1/rpc/academy_validacao_publica": {
+          if (u.pathname.endsWith("validacao_publica") && estado.certificado) estado.validacaoPublica = Boolean(corpo.p_ativa);
+          return enviar(estado.certificado ? [{ ...estado.certificado, curso_slug: CURSO.slug, curso_titulo: CURSO.titulo, carga_horaria_h: 6, validacao_publica: estado.validacaoPublica }] : []);
+        }
+        case "/rest/v1/rpc/academy_meus_dados":
+          return enviar({ gerado_em: "2026-11-19T12:00:00Z", conta: { nome: estado.nomeAluno, email: USUARIO.email }, matriculas: [{ curso: CURSO.titulo }], certificados: [] });
         case "/rest/v1/rpc/academy_meu_certificado":
           return enviar(estado.certificado ? { ...estado.certificado, curso_titulo: CURSO.titulo, carga_horaria_h: 6, modelo: "claro", conteudo: ["Princípios de segurança"] } : null);
         case "/rest/v1/rpc/academy_validar_certificado":
-          if (!estado.certificado || String(corpo.p_codigo ?? "").toUpperCase() !== estado.certificado.codigo) return enviar(null);
+          if (!estado.certificado || !estado.validacaoPublica || String(corpo.p_codigo ?? "").toUpperCase() !== estado.certificado.codigo) return enviar(null);
           return enviar({ codigo: estado.certificado.codigo, nome: estado.certificado.nome, curso: CURSO.titulo, carga_horaria_h: 6, concluido_em: estado.certificado.concluido_em });
         case "/rest/v1/cursos":
           return enviar(CURSO);
