@@ -1,11 +1,13 @@
 # ============================================================================
-# Academy: rotina diária de acessos e avisos de vencimento (fase 17)
+# Academy: rotina diária de acessos e avisos por e-mail (fases 17 e 18)
 #
 # Uma vez por dia chama a Edge Function academy-avisos, que:
 #   * recalcula os acessos que começaram ou venceram (contrato de empresa que
 #     começa numa data futura, plano de 12 meses que terminou);
 #   * envia os e-mails de vencimento: plano anual 30 e 7 dias antes,
 #     membro de empresa 7 dias antes, gestora 30 dias antes do fim do contrato.
+#   * fase 18: envia o e-mail de certificado emitido e o de aula nova (só
+#     para quem ligou o aviso em Minha conta, com teto diário).
 #
 # Segredo: ACADEMY_CRON_TOKEN (Settings, Secrets and variables, Actions), o
 # mesmo valor cadastrado nos secrets da função no Supabase. Quem cadastra é o
@@ -15,7 +17,7 @@
 # Sem checkout de código e sem dependências: só um curl com o token no header.
 # ============================================================================
 
-name: Academy, avisos de vencimento
+name: Academy, avisos diários
 
 on:
   schedule:

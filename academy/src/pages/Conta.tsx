@@ -10,12 +10,15 @@ import {
   arquivoDados,
   atualizarNome,
   baixarArquivo,
+  definirAvisoAulaNova,
   definirValidacao,
   emailExclusao,
+  meusAvisos,
   meusCertificados,
   meusDados,
   type ErroConta,
   type MeuCertificado,
+  type MeusAvisos,
 } from "@/lib/conta";
 import { chamar as chamarPainel, useAcao } from "@/lib/instrutor";
 import { dia, useMinhasEmpresas, type MinhaEmpresa } from "@/lib/empresas";
@@ -41,6 +44,7 @@ export default function Conta() {
         <Bloco id="h-certificados" titulo="Certificados">
           <Certificados />
         </Bloco>
+        <AvisosEmail />
         <Empresas />
         <Bloco id="h-acesso" titulo="Acesso">
           <Acesso />
@@ -171,6 +175,54 @@ function Certificados() {
       </ul>
       <ErroFormulario erro={alternar.error} />
     </>
+  );
+}
+
+/**
+ * Avisos por e-mail (fase 18). Certificado emitido chega sempre; aula nova só
+ * para quem ligar. Antes da 0028 no banco, o bloco não aparece.
+ */
+function AvisosEmail() {
+  const { sb, sessao } = usePortal();
+  const qc = useQueryClient();
+  const chave = ["meus-avisos", sessao?.user.id];
+  const atual = useQuery({ queryKey: chave, queryFn: () => meusAvisos(sb), enabled: Boolean(sessao), retry: false });
+  const alternar = useMutation<MeusAvisos, ErroConta, boolean>({
+    mutationFn: (ligado) => definirAvisoAulaNova(sb, ligado),
+    onSuccess: (dados) => qc.setQueryData(chave, dados),
+  });
+
+  if (atual.isError || (atual.data && typeof atual.data.aula_nova !== "boolean")) return null;
+  return (
+    <Bloco id="h-avisos" titulo="Avisos por e-mail">
+      {!atual.data ? (
+        <Esqueleto className="h-24 w-full" />
+      ) : (
+        <div className="painel-card flex flex-col gap-4 p-6">
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={atual.data.aula_nova}
+              disabled={alternar.isPending}
+              onChange={(e) => alternar.mutate(e.target.checked)}
+              className="mt-0.5 size-[18px] shrink-0 accent-ink"
+            />
+            <span>
+              <span className="block text-[15px] font-medium">Avisar quando sair aula nova</span>
+              <span className="block text-[13px] leading-snug text-muted">
+                {atual.data.aula_nova
+                  ? `Ligado${atual.data.aula_nova_desde ? ` desde ${dataPorExtenso(atual.data.aula_nova_desde)}` : ""}. Um e-mail por curso, uma vez por dia, quando sair aula nova nos cursos em que você está matriculado.`
+                  : "Desligado. Ligue para receber um e-mail por curso, uma vez por dia, quando sair aula nova nos cursos em que você está matriculado."}
+              </span>
+            </span>
+          </label>
+          <p className="m-0 border-t border-line pt-4 text-sm leading-relaxed text-muted">
+            O e-mail de certificado emitido chega sempre, com o código de validação e o link para baixar o PDF.
+          </p>
+          <ErroFormulario erro={alternar.error} />
+        </div>
+      )}
+    </Bloco>
   );
 }
 

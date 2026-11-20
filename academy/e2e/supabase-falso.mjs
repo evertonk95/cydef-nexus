@@ -826,6 +826,14 @@ http
           if (u.pathname.endsWith("validacao_publica") && estado.certificado) estado.validacaoPublica = Boolean(corpo.p_ativa);
           return enviar(estado.certificado ? [{ ...estado.certificado, curso_slug: CURSO.slug, curso_titulo: CURSO.titulo, carga_horaria_h: 6, validacao_publica: estado.validacaoPublica }] : []);
         }
+        case "/rest/v1/rpc/academy_meus_avisos":
+        case "/rest/v1/rpc/academy_definir_aviso_aula_nova": {
+          if (u.pathname.endsWith("definir_aviso_aula_nova")) {
+            if (typeof corpo.p_ligado !== "boolean") return enviar({ message: "invalid_payload" }, 400);
+            estado.avisoAulaNovaDesde = corpo.p_ligado ? (estado.avisoAulaNovaDesde ?? "2026-11-20T17:00:00Z") : null;
+          }
+          return enviar({ aula_nova: estado.avisoAulaNovaDesde != null, aula_nova_desde: estado.avisoAulaNovaDesde ?? null });
+        }
         case "/rest/v1/rpc/academy_meus_dados":
           return enviar({ gerado_em: "2026-11-19T12:00:00Z", conta: { nome: estado.nomeAluno, email: USUARIO.email }, matriculas: [{ curso: CURSO.titulo }], certificados: [] });
         case "/rest/v1/rpc/academy_meu_certificado":
