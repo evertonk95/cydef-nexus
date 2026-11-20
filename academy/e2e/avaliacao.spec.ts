@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { cenario, entrar, estado, resetar, simularExternos } from "./apoio";
 
@@ -63,6 +64,24 @@ test("avaliação final e emissão do certificado", async ({ page, request }) =>
   await page.getByRole("button", { name: /Emitir certificado/ }).click();
   await expect(page.getByText("CYD-1A2B-3C4D-5E6F-7A8B")).toBeVisible();
   expect((await estado(request)).certificado?.nome).toBe("Everton Igor Lima do Nascimento");
+
+  // PDF gerado no navegador, com as fontes servidas pelo próprio portal.
+  const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: /Baixar PDF/ }).click()]);
+  expect(download.suggestedFilename()).toBe("certificado-cybersecurity-fundamentals-CYD-1A2B-3C4D-5E6F-7A8B.pdf");
+  const caminho = await download.path();
+  const bytes = readFileSync(caminho!);
+  expect(bytes.subarray(0, 5).toString()).toBe("%PDF-");
+  expect(bytes.byteLength).toBeGreaterThan(50_000);
+
+  // Validação pública, sem login.
+  await page.context().clearCookies();
+  await page.evaluate(() => window.localStorage.clear());
+  await page.goto("/certificado/cyd-1a2b-3c4d-5e6f-7a8b");
+  await expect(page.getByText("Certificado válido")).toBeVisible();
+  await expect(page.getByText("Everton Igor Lima do Nascimento")).toBeVisible();
+  await page.goto("/certificado/CYD-0000-0000-0000-0000");
+  await expect(page.getByRole("heading", { name: "Não encontramos este certificado" })).toBeVisible();
+  await entrar(page);
 
   await page.goto("/cursos/cybersecurity-fundamentals");
   await expect(page.getByRole("link", { name: /Ver certificado/ })).toBeVisible();

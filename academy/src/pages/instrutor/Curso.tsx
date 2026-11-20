@@ -440,6 +440,7 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
     espera_final_horas: String(r.espera_final_horas),
     tentativas_final_max: r.tentativas_final_max === null ? "" : String(r.tentativas_final_max),
     carga_horaria_h: r.carga_horaria_h === null ? "" : String(r.carga_horaria_h).replace(".", ","),
+    modelo_certificado: r.modelo_certificado ?? "",
   }));
   const salvar = useAcao(
     (sb, dados: Record<string, unknown>) => chamar<CursoAdm>(sb, "academy_adm_salvar_requisitos", { p_curso: curso.slug, p_dados: dados }),
@@ -464,6 +465,7 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
       espera_final_horas: inteiro(f.espera_final_horas),
       tentativas_final_max: inteiro(f.tentativas_final_max),
       carga_horaria_h: inteiro(f.carga_horaria_h.replace(",", ".")),
+      ...(r.modelo_certificado !== undefined ? { modelo_certificado: f.modelo_certificado } : {}),
     });
   };
 
@@ -504,6 +506,18 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
           onChange={(e) => setF((x) => ({ ...x, carga_horaria_h: e.target.value }))}
           ajuda="Entre 0,5 e 999. Em branco, o curso ainda não emite certificado."
         />
+        {r.modelo_certificado !== undefined && (
+          <Selecao
+            rotulo="Modelo do certificado"
+            value={f.modelo_certificado}
+            onChange={(e) => setF((x) => ({ ...x, modelo_certificado: e.target.value }))}
+            ajuda="Vale para os próximos certificados. Os já emitidos ficam como estão."
+          >
+            <option value="">Automático ({curso.gratuito ? "gratuito: Clássico claro" : "pago: Técnico"})</option>
+            <option value="claro">Clássico claro</option>
+            <option value="tecnico">Técnico, com os módulos do curso</option>
+          </Selecao>
+        )}
       </fieldset>
 
       <ErroFormulario erro={salvar.error} />

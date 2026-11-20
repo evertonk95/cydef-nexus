@@ -238,6 +238,27 @@ describe("estrutura do curso", () => {
     expect(screen.getByText("Já respondida")).toBeInTheDocument();
   });
 
+  it("aba Certificado escolhe o modelo e volta ao automático", async () => {
+    let args: Record<string, unknown> | undefined;
+    const c = cursoAdm();
+    c.requisitos = { ...c.requisitos!, modelo_certificado: null };
+    abrir(`/instrutor/cursos/${SLUG}?aba=requisitos`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: c,
+      academy_adm_salvar_requisitos: (a) => {
+        args = a;
+        return { data: c };
+      },
+    });
+    const modelo = await screen.findByLabelText("Modelo do certificado");
+    expect(modelo).toHaveValue("");
+    expect(screen.getByRole("option", { name: "Automático (gratuito: Clássico claro)" })).toBeInTheDocument();
+    await userEvent.selectOptions(modelo, "tecnico");
+    await userEvent.click(screen.getByRole("button", { name: "Salvar regras" }));
+    await waitFor(() => expect(args).toBeDefined());
+    expect(args).toMatchObject({ p_curso: SLUG, p_dados: { modelo_certificado: "tecnico", carga_horaria_h: 8 } });
+  });
+
   it("instrutor não vê publicar curso nem gratuito", async () => {
     abrir(`/instrutor/cursos/${SLUG}?aba=dados`, { academy_adm_eu: { papel: "instrutor", cursos: [SLUG] }, academy_adm_curso: { ...cursoAdm(), eh_admin: false } });
     expect(await screen.findByLabelText("Título")).toHaveValue("Fundamentos para SOC");

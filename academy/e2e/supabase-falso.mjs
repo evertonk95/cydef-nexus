@@ -331,6 +331,11 @@ http
           renumerar();
           return enviar(aula);
         }
+        case "/rest/v1/rpc/academy_meu_certificado":
+          return enviar(estado.certificado ? { ...estado.certificado, curso_titulo: CURSO.titulo, carga_horaria_h: 6, modelo: "claro", conteudo: ["Princípios de segurança"] } : null);
+        case "/rest/v1/rpc/academy_validar_certificado":
+          if (!estado.certificado || String(corpo.p_codigo ?? "").toUpperCase() !== estado.certificado.codigo) return enviar(null);
+          return enviar({ codigo: estado.certificado.codigo, nome: estado.certificado.nome, curso: CURSO.titulo, carga_horaria_h: 6, concluido_em: estado.certificado.concluido_em });
         case "/rest/v1/cursos":
           return enviar(CURSO);
         case "/rest/v1/matriculas":

@@ -72,6 +72,8 @@ export interface Requisitos {
   tentativas_final_max: number | null;
   carga_horaria_h: number | null;
   certificado_ativo: boolean;
+  /** 0017. Vazio: automático (gratuito usa claro, pago usa tecnico). */
+  modelo_certificado?: "claro" | "tecnico" | null;
 }
 
 export interface CursoAdm {

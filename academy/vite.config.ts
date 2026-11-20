@@ -20,11 +20,15 @@ export default defineConfig({
     // font-src 'self', e o subconjunto pequeno da JetBrains Mono embutido no
     // CSS era bloqueado pelo navegador.
     assetsInlineLimit: (arquivo) => (/\.(woff2?|ttf|otf)$/.test(arquivo) ? false : undefined),
+    // O único bloco acima de 500 kB é o gerador do certificado em PDF
+    // (pdf-lib e fontkit), baixado só quando o aluno clica em "Baixar PDF".
+    chunkSizeWarningLimit: 1300,
     rollupOptions: {
       output: {
         manualChunks: {
           supabase: ["@supabase/supabase-js"],
           motion: ["motion"],
+          pdf: ["pdf-lib", "@pdf-lib/fontkit", "qrcode-generator"],
         },
       },
     },

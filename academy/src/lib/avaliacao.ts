@@ -295,6 +295,83 @@ export async function emitirCertificado(sb: SupabaseClient, curso: string, nome:
   return { codigo: d.codigo, nome: d.nome, curso_titulo: d.curso_titulo, carga_horaria_h: d.carga_horaria_h, concluido_em: d.concluido_em };
 }
 
+export interface CertificadoCompleto extends Certificado {
+  modelo: "claro" | "tecnico" | "noturno";
+  conteudo: string[];
+}
+
+/** Dados do próprio certificado para gerar o PDF (0017). Null se ainda não emitido. */
+export async function buscarMeuCertificado(sb: SupabaseClient, curso: string): Promise<CertificadoCompleto | null> {
+  const d = await chamar(sb, "academy_meu_certificado", { p_curso: curso });
+  if (d === null) return null;
+  if (
+    !ehObj(d) ||
+    !ehTexto(d.codigo) ||
+    !CODIGO_CERT.test(d.codigo) ||
+    !ehTexto(d.nome) ||
+    !ehTexto(d.curso_titulo) ||
+    !ehNum(d.carga_horaria_h) ||
+    !ehTexto(d.concluido_em) ||
+    (d.modelo !== "claro" && d.modelo !== "tecnico" && d.modelo !== "noturno") ||
+    !Array.isArray(d.conteudo)
+  ) {
+    falha();
+  }
+  return {
+    codigo: d.codigo,
+    nome: d.nome,
+    curso_titulo: d.curso_titulo,
+    carga_horaria_h: d.carga_horaria_h,
+    concluido_em: d.concluido_em,
+    modelo: d.modelo,
+    conteudo: d.conteudo.filter(ehTexto),
+  };
+}
+
+export interface CertificadoPublico {
+  codigo: string;
+  nome: string;
+  curso: string;
+  carga_horaria_h: number;
+  concluido_em: string;
+}
+
+/**
+ * Aceita o código como o recrutador digitar: minúsculas, espaços, sem hífen.
+ * Devolve null quando não dá para ser um código.
+ */
+export function normalizarCodigo(texto: string): string | null {
+  const limpo = texto.toUpperCase().replace(/[^0-9A-Z]/g, "");
+  const hex = limpo.startsWith("CYD") ? limpo.slice(3) : limpo;
+  if (!/^[0-9A-F]{16}$/.test(hex)) return null;
+  return `CYD-${hex.slice(0, 4)}-${hex.slice(4, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}`;
+}
+
+/** Validação pública (0013): só código, nome, curso, carga horária e data. Null se não existir. */
+export async function validarCertificado(sb: SupabaseClient, codigo: string): Promise<CertificadoPublico | null> {
+  const d = await chamar(sb, "academy_validar_certificado", { p_codigo: codigo });
+  if (d === null) return null;
+  if (!ehObj(d) || !ehTexto(d.codigo) || !ehTexto(d.nome) || !ehTexto(d.curso) || !ehNum(d.carga_horaria_h) || !ehTexto(d.concluido_em)) falha();
+  return { codigo: d.codigo, nome: d.nome, curso: d.curso, carga_horaria_h: d.carga_horaria_h, concluido_em: d.concluido_em };
+}
+
+/** Link "Adicionar ao perfil" do LinkedIn, já preenchido com o certificado. */
+export function linkLinkedin(c: Pick<Certificado, "codigo" | "curso_titulo" | "concluido_em">, origem: string): string {
+  const m = /^(\d{4})-(\d{2})/.exec(c.concluido_em);
+  const p = new URLSearchParams({
+    startTask: "CERTIFICATION_NAME",
+    name: c.curso_titulo,
+    organizationName: "CyDef Academy",
+    certUrl: `${origem.replace(/\/$/, "")}/certificado/${c.codigo}`,
+    certId: c.codigo,
+  });
+  if (m) {
+    p.set("issueYear", m[1]!);
+    p.set("issueMonth", String(Number(m[2])));
+  }
+  return `https://www.linkedin.com/profile/add?${p.toString()}`;
+}
+
 /** Mesmas regras do banco (academy_emitir_certificado): letras, espaço, ponto, hífen e apóstrofo. */
 export function normalizarNome(nome: string): string {
   return nome.trim().replace(/\s+/g, " ");
