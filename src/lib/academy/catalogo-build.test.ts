@@ -77,3 +77,15 @@ describe("ordem do deploy", () => {
     expect((outro as Error & { funcaoAusente?: boolean }).funcaoAusente).toBe(false);
   });
 });
+
+describe("ofertas no build (fase 16b)", () => {
+  it("aceita oferta válida e recusa checkout fora da Hotmart ou trilha fora do catálogo", () => {
+    const ok = { ...copia(), ofertas: [{ tipo: "plataforma", nome: "Academy", trilha: null, duracao_dias: 365, cursos: 6, preco_centavos: 99700, preco_observacao: "", checkout_url: "https://pay.hotmart.com/P1234567Q" }] };
+    expect(() => validarCatalogo(ok)).not.toThrow();
+    const ruim = structuredClone(ok);
+    ruim.ofertas[0].checkout_url = "https://evil.com/x";
+    expect(() => validarCatalogo(ruim)).toThrow(/checkout da oferta/);
+    const trilha = { ...copia(), ofertas: [{ ...ok.ofertas[0], tipo: "trilha", trilha: "nao-existe" }] };
+    expect(() => validarCatalogo(trilha)).toThrow(/fora do catálogo/);
+  });
+});

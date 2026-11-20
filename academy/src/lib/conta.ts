@@ -38,7 +38,16 @@ export const atualizarNome = (sb: SupabaseClient, nome: string) => chamar<{ nome
 export const meusCertificados = (sb: SupabaseClient) => chamar<MeuCertificado[]>(sb, "academy_meus_certificados");
 export const definirValidacao = (sb: SupabaseClient, codigo: string, ativa: boolean) =>
   chamar<MeuCertificado[]>(sb, "academy_validacao_publica", { p_codigo: codigo, p_ativa: ativa });
-export const meusDados = (sb: SupabaseClient) => chamar<Record<string, unknown>>(sb, "academy_meus_dados");
+/** Cópia dos dados. Desde a 0023 inclui os acessos pagos (compras e liberações). */
+export async function meusDados(sb: SupabaseClient): Promise<Record<string, unknown>> {
+  const dados = await chamar<Record<string, unknown>>(sb, "academy_meus_dados");
+  try {
+    dados.acessos_pagos = await chamar<unknown[]>(sb, "academy_meus_acessos");
+  } catch {
+    // Banco antes da 0023: a cópia sai sem os acessos pagos.
+  }
+  return dados;
+}
 
 /** Nome do arquivo da cópia dos dados: meus-dados-cydef-academy-2026-11-19.json */
 export function arquivoDados(agora = new Date()): string {

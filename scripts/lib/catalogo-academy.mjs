@@ -65,6 +65,12 @@ export function validarCatalogo(c) {
     if (typeof t.slug !== "string" || !SLUG.test(t.slug)) falha(`trilha ${t.slug}`);
     for (const s of t.cursos ?? []) if (!slugs.has(s)) falha(`trilha ${t.slug} cita curso fora do catálogo: ${s}`);
   }
+  for (const o of c.ofertas ?? []) {
+    if (!["trilha", "plataforma"].includes(o.tipo)) falha(`oferta ${o.nome}`);
+    if (typeof o.checkout_url !== "string" || !CHECKOUT.test(o.checkout_url)) falha(`checkout da oferta ${o.nome}`);
+    if (!Number.isInteger(o.preco_centavos) || o.preco_centavos < 100) falha(`preço da oferta ${o.nome}`);
+    if (o.tipo === "trilha" && !c.trilhas.some((t) => t.slug === o.trilha)) falha(`oferta de trilha fora do catálogo: ${o.trilha}`);
+  }
   return c;
 }
 

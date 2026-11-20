@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { usePainel } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import { NIVEL } from "@/lib/cursos";
-import { cargaHoraria, formatarPreco, linkCompra, useCatalogo, type CursoCatalogo } from "@/lib/vitrine";
+import { cargaHoraria, formatarPreco, linkCompra, useCatalogo, type CursoCatalogo, type OfertaCatalogo } from "@/lib/vitrine";
 import { cn } from "@/lib/cn";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { FalhaCarregamento } from "./Estados";
@@ -37,6 +37,10 @@ export default function Catalogo() {
         for aprovado.
       </p>
 
+      {dados?.ofertas?.filter((o) => o.tipo === "plataforma").map((o) => (
+        <Oferta key="plataforma" oferta={o} titulo="Acesso a toda a Academy" />
+      ))}
+
       {dados && dados.trilhas.length > 0 && (
         <div role="group" aria-label="Filtrar por trilha" className="mb-8 flex flex-wrap gap-2">
           {[{ slug: null, titulo: "Todas" }, ...dados.trilhas].map((t) => (
@@ -57,6 +61,10 @@ export default function Catalogo() {
       )}
 
       {selecionada?.descricao && <p className="m-0 -mt-3 mb-6 max-w-2xl text-sm text-muted">{selecionada.descricao}</p>}
+      {selecionada &&
+        dados?.ofertas
+          ?.filter((o) => o.tipo === "trilha" && o.trilha === selecionada.slug)
+          .map((o) => <Oferta key={o.nome} oferta={o} titulo={`Trilha ${selecionada.titulo} completa`} />)}
 
       {!dados ? (
         <div aria-busy="true" aria-label="Carregando o catálogo" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -141,5 +149,40 @@ export function AcaoCurso({ curso, meu, detalhe }: { curso: CursoCatalogo; meu: 
     <Link to={`/catalogo/${curso.slug}`} className={cn(botao, "border border-line-hi hover:border-muted")}>
       Ver ementa
     </Link>
+  );
+}
+
+/** Plataforma toda ou trilha completa à venda: Comprar com o e-mail da conta. */
+function Oferta({ oferta, titulo }: { oferta: OfertaCatalogo; titulo: string }) {
+  const { sessao } = usePortal();
+  const link = linkCompra(oferta.checkout_url, "portal", sessao?.user.email);
+  if (!link) return null;
+  const periodo = oferta.duracao_dias === 365 ? "por 12 meses" : oferta.duracao_dias ? `por ${oferta.duracao_dias} dias` : "sem prazo para acabar";
+  const corpo =
+    oferta.tipo === "plataforma"
+      ? `${oferta.cursos === 1 ? "O curso pago de hoje" : `Todos os ${oferta.cursos} cursos pagos`}, e os que forem lançados no período, ${periodo}.`
+      : `${oferta.cursos === 1 ? "O curso da trilha" : `Os ${oferta.cursos} cursos da trilha`}, ${periodo}.`;
+  return (
+    <section aria-label={titulo} className="painel-card mb-8 flex flex-col gap-4 p-6 md:flex-row md:items-center">
+      <div className="min-w-0 flex-1">
+        <h2 className="m-0 mb-1 font-display text-xl font-semibold">{titulo}</h2>
+        <p className="m-0 text-sm leading-relaxed text-muted">{corpo}</p>
+      </div>
+      <div className="flex flex-col items-start gap-3 md:items-end">
+        <p className="m-0 md:text-right">
+          <span className="block font-display text-2xl font-semibold text-ink">{formatarPreco(oferta.preco_centavos)}</span>
+          {oferta.preco_observacao && <span className="block text-[13px] text-muted">{oferta.preco_observacao}</span>}
+        </p>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener"
+          className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-orange px-4 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi"
+        >
+          Comprar <ExternalLink className="size-4" aria-hidden="true" />
+          <span className="sr-only">(abre em nova aba)</span>
+        </a>
+      </div>
+    </section>
   );
 }

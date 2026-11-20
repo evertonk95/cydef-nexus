@@ -118,6 +118,7 @@ describe("vendas e acessos no painel", () => {
     painel({ academy_adm_salvar_produto: salvar });
     expect(await screen.findByText("Academy completa por 12 meses")).toBeInTheDocument();
     expect(screen.getByText("Produto 3003, plataforma toda, 365 dias")).toBeInTheDocument();
+    expect(screen.getByText("Fora das vitrines")).toBeInTheDocument();
     expect(screen.getByText("Produto 1001, curso individual, vitalício")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Abrir vitrine" })).toHaveAttribute("href", "/instrutor/cursos/soc-analyst?aba=vitrine");
     expect(screen.getByText("Acesso liberado")).toBeInTheDocument();
@@ -131,8 +132,43 @@ describe("vendas e acessos no painel", () => {
     await userEvent.click(within(form).getByRole("button", { name: "Salvar produto" }));
     await waitFor(() =>
       expect(salvar).toHaveBeenCalledWith({
-        p_dados: { hotmart_produto_id: "4004", nome: "Trilha SOC completa", escopo: "trilha", trilha: "soc", duracao_dias: null, ativo: true },
+        p_dados: {
+          situacao: "oculto",
+          checkout_url: "",
+          preco_centavos: null,
+          preco_observacao: "",
+          conferir_preco: false,
+          hotmart_produto_id: "4004",
+          nome: "Trilha SOC completa",
+          escopo: "trilha",
+          trilha: "soc",
+          duracao_dias: null,
+          ativo: true,
+        },
       }),
     );
+  });
+});
+
+describe("oferta à venda (fase 16b)", () => {
+  it("põe a plataforma à venda com checkout e preço", async () => {
+    const salvar = vi.fn<(args: Record<string, unknown>) => { data: Produtos }>(() => ({ data: produtos }));
+    painel({ academy_adm_salvar_produto: salvar });
+    const linha = (await screen.findByText("Academy completa por 12 meses")).closest("li")!;
+    await userEvent.click(within(linha).getByRole("button", { name: "Editar" }));
+    const form = screen.getByRole("form", { name: "Editar Academy completa por 12 meses" });
+    await userEvent.selectOptions(within(form).getByLabelText("Onde aparece"), "a_venda");
+    await userEvent.type(within(form).getByLabelText("Link de checkout"), "https://go.hotmart.com/P1234567Q");
+    await userEvent.type(within(form).getByLabelText("Preço (R$)"), "997,00");
+    await userEvent.click(within(form).getByRole("button", { name: "Salvar produto" }));
+    expect(await within(form).findByRole("alert")).toHaveTextContent("https://pay.hotmart.com/");
+    const link = within(form).getByLabelText("Link de checkout");
+    await userEvent.clear(link);
+    await userEvent.type(link, "https://pay.hotmart.com/P1234567Q");
+    await userEvent.click(within(form).getByRole("button", { name: "Salvar produto" }));
+    await waitFor(() => expect(salvar).toHaveBeenCalled());
+    expect(salvar.mock.calls[0]![0]).toMatchObject({
+      p_dados: { situacao: "a_venda", checkout_url: "https://pay.hotmart.com/P1234567Q", preco_centavos: 99700, hotmart_produto_id: "3003", duracao_dias: 365 },
+    });
   });
 });

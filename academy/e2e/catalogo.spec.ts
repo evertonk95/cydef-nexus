@@ -41,6 +41,12 @@ test("admin coloca o curso à venda e o catálogo do portal mostra o Comprar com
   expect(u.searchParams.get("email")).toBe("aluno@exemplo.com");
   await expect(comprar).toHaveAttribute("target", "_blank");
 
+  // A plataforma toda à venda aparece no topo, com o e-mail da conta (fase 16b).
+  const plataforma = page.getByRole("region", { name: "Acesso a toda a Academy" });
+  const up = new URL((await plataforma.getByRole("link", { name: /^Comprar/ }).getAttribute("href"))!);
+  expect(up.searchParams.get("sck")).toBe("portal");
+  expect(up.searchParams.get("email")).toBe("aluno@exemplo.com");
+
   // Filtro por trilha e página do curso.
   await page.getByRole("button", { name: "Blue Team" }).click();
   await expect(page.getByText("Defesa em profundidade.")).toBeVisible();

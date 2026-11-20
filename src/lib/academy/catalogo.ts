@@ -67,9 +67,23 @@ export interface TrilhaCatalogo {
   cursos: string[];
 }
 
+/** Trilha completa ou plataforma toda à venda (0023). */
+export interface OfertaCatalogo {
+  tipo: "trilha" | "plataforma";
+  nome: string;
+  trilha: string | null;
+  duracao_dias: number | null;
+  cursos: number;
+  preco_centavos: number;
+  preco_observacao: string;
+  checkout_url: string;
+}
+
 export interface Catalogo {
   trilhas: TrilhaCatalogo[];
   cursos: CursoCatalogo[];
+  /** Ausente em banco antes da 0023. */
+  ofertas?: OfertaCatalogo[];
 }
 
 export const catalogoAcademy = snapshot as Catalogo;
@@ -88,9 +102,13 @@ export const trilhasComCursos = (c: Catalogo = catalogoAcademy) => {
 
 const CHECKOUT = /^https:\/\/(pay|checkout)\.hotmart\.com\/[A-Za-z0-9]{4,40}(\?[A-Za-z0-9=&._-]{1,200})?$/;
 
+export const ofertaPlataforma = (c: Catalogo = catalogoAcademy) => (c.ofertas ?? []).find((o) => o.tipo === "plataforma");
+export const ofertaDaTrilha = (slug: string, c: Catalogo = catalogoAcademy) =>
+  (c.ofertas ?? []).find((o) => o.tipo === "trilha" && o.trilha === slug);
+
 /** Link do Comprar no site: checkout da Hotmart com a origem marcada (`sck=site`). */
-export const linkCompraSite = (curso: Pick<CursoCatalogo, "situacao" | "checkout_url">): string | null => {
-  if (curso.situacao !== "a_venda" || !curso.checkout_url || !CHECKOUT.test(curso.checkout_url)) return null;
+export const linkCompraSite = (curso: { situacao?: string; checkout_url: string | null }): string | null => {
+  if ((curso.situacao ?? "a_venda") !== "a_venda" || !curso.checkout_url || !CHECKOUT.test(curso.checkout_url)) return null;
   const u = new URL(curso.checkout_url);
   u.searchParams.set("sck", "site");
   return u.toString();

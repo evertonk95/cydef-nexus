@@ -337,6 +337,18 @@ export const en = {
     freeNote: "Just getting started? The Academy has two free entry courses.",
     freeLink: "See the free courses",
   },
+  academyOffer: {
+    platformTitle: "Access to the whole Academy",
+    platformBody: "All {{n}} paid courses, plus the ones released during the period, {{periodo}}.",
+    platformBodyOne: "The paid course available today, plus the ones released during the period, {{periodo}}.",
+    year: "for 12 months",
+    days: "for {{n}} days",
+    lifetime: "with no end date",
+    trailBody: "Full track, with all {{n}} courses:",
+    trailBodyOne: "Full track, with the course it has today:",
+    trailBuy: "Buy",
+    trailBuyLabel: "Buy the {{trilha}} track (opens in a new tab)",
+  },
   academyCourse: {
     buy: "Buy",
     newTab: "(opens in a new tab)",

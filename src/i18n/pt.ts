@@ -337,6 +337,18 @@ export const pt: Dict = {
     freeNote: "Está começando agora? A Academy tem dois cursos de entrada gratuitos.",
     freeLink: "Ver os cursos gratuitos",
   },
+  academyOffer: {
+    platformTitle: "Acesso a toda a Academy",
+    platformBody: "Todos os {{n}} cursos pagos, e os que forem lançados no período, {{periodo}}.",
+    platformBodyOne: "O curso pago de hoje, e os que forem lançados no período, {{periodo}}.",
+    year: "por 12 meses",
+    days: "por {{n}} dias",
+    lifetime: "sem prazo para acabar",
+    trailBody: "Trilha completa, com os {{n}} cursos:",
+    trailBodyOne: "Trilha completa, com o curso que ela tem hoje:",
+    trailBuy: "Comprar",
+    trailBuyLabel: "Comprar a trilha {{trilha}} (abre em nova aba)",
+  },
   academyCourse: {
     buy: "Comprar",
     newTab: "(abre em nova aba)",

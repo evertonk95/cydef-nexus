@@ -6,7 +6,8 @@ import { StudentAreaPreview } from "@/components/academy/StudentAreaPreview";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { trilhasComCursos } from "@/lib/academy/catalogo";
+import { ofertaDaTrilha, ofertaPlataforma, trilhasComCursos } from "@/lib/academy/catalogo";
+import { OfertaPlataforma, OfertaTrilha } from "@/components/academy/Ofertas";
 import { CursoCard } from "@/components/academy/CursoCard";
 import { COURSES } from "@/pages/AcademyLanding/data";
 import { COURSES_EN } from "@/pages/AcademyLanding/data.en";
@@ -107,6 +108,7 @@ const Academy = () => {
   const principles = Array.isArray(principlesRaw) ? principlesRaw : [];
   // Trilhas com curso na vitrine, na ordem do painel (catálogo do banco, 0020).
   const trilhas = trilhasComCursos();
+  const plataforma = ofertaPlataforma();
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased overflow-x-hidden selection:bg-orange-500/30">
@@ -195,6 +197,11 @@ const Academy = () => {
                 </Link>
               }
             />
+            {plataforma ? (
+              <div className="mb-16">
+                <OfertaPlataforma oferta={plataforma} />
+              </div>
+            ) : null}
             <div className="flex flex-col gap-16">
               {trilhas.map((trilha) => (
                 <section key={trilha.slug} aria-labelledby={`trilha-${trilha.slug}`} className="animate-on-scroll">
@@ -203,6 +210,7 @@ const Academy = () => {
                       {trilha.titulo}
                     </h3>
                     {trilha.descricao ? <p className="text-neutral-400 leading-relaxed">{trilha.descricao}</p> : null}
+                    {ofertaDaTrilha(trilha.slug) ? <OfertaTrilha oferta={ofertaDaTrilha(trilha.slug)!} titulo={trilha.titulo} /> : null}
                   </div>
                   <ul className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 list-none p-0 m-0">
                     {trilha.cursosDaTrilha.map((curso) => (

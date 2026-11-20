@@ -42,6 +42,12 @@ export interface ProdutoHotmart {
   duracao_dias: number | null;
   ativo: boolean;
   vendas: number;
+  /** 0023: vitrine da oferta. */
+  situacao?: "oculto" | "a_venda";
+  checkout_url?: string | null;
+  preco_centavos?: number | null;
+  preco_observacao?: string;
+  preco_conferido_em?: string | null;
 }
 
 export interface Produtos {

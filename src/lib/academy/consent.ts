@@ -18,7 +18,8 @@ export interface AvisoPrivacidade {
  * O conteúdo publicado de uma versão NUNCA é sobrescrito — nova versão = nova
  * entrada com versão nova (a anterior permanece como histórico).
  *
- * Versão vigente: v2026.3 (17/11/2026), texto de produção que cobre a
+ * Versão vigente: v2026.4 (20/11/2026), que acrescenta à v2026.3 a compra
+ * pela Hotmart e o acesso pago (fase 16). v2026.3 (17/11/2026) cobria a
  * pré-inscrição e o portal do aluno (conta, progresso, questões, avaliações e
  * certificado). v2026.1 e v2026.2 (rascunhos) permanecem como histórico:
  * registros de consentimento referenciam o hash da versão aceita. Nunca
@@ -249,6 +250,112 @@ contato@cydef.com.br
 Cada versão deste aviso tem endereço próprio e não é alterada depois de publicada. Quando houver mudança relevante, publicamos uma nova versão e avisamos por e-mail quem tem conta na Academy.
 
 Última atualização: 17 de novembro de 2026 (v2026.3)`,
+  },
+  "v2026.4": {
+    urlEstavel: "/academy/privacidade/v2026.4",
+    publicadoEm: "2026-11-20T00:00:00Z",
+    texto: `# Aviso de Privacidade: CyDef Academy
+
+Este aviso explica como a CyDef trata os seus dados pessoais na CyDef Academy, na pré-inscrição pelo site (www.cydef.com.br/academy), no portal do aluno (academy.cydef.com.br) e na compra de cursos pela Hotmart. Ele complementa a Política de Privacidade do site (www.cydef.com.br/privacidade).
+
+## 1. Quem é o controlador
+
+A CyDef (www.cydef.com.br) é a controladora dos dados pessoais tratados na CyDef Academy, nos termos da Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018). O contato do encarregado está no item 12.
+
+## 2. Quais dados tratamos
+
+2.1. Pré-inscrição: Nome completo, e-mail e perfil declarado (iniciante, em transição para SOC, profissional ativo, estudante ou outro), além do registro do seu consentimento: aceite, data e hora, versão deste aviso, código de verificação do texto aceito e declaração de idade.
+
+2.2. Conta de aluno: Identificador interno, nome, e-mail, data de criação da conta e data do último acesso. O acesso ao portal é feito por um link enviado ao seu e-mail, sem senha. Se você comprou um curso sem ter feito a pré-inscrição, a conta é criada com o nome e o e-mail informados na compra.
+
+2.3. Estudo e progresso: Cursos em que você está matriculado, aulas iniciadas e concluídas, o ponto em que você parou em cada vídeo e os dias em que estudou.
+
+2.4. Questões, avaliações e certificado: Respostas e notas das questões de cada módulo e da avaliação final. Quando você conclui um curso com a nota mínima exigida, emitimos um certificado com seu nome, o curso, a carga horária, a data de conclusão e um código de validação.
+
+2.5. Compra e acesso pago: Quando você compra um curso, uma trilha ou o acesso à plataforma pela Hotmart, ela nos informa o número da transação, o produto comprado, seu nome, seu e-mail, a situação da compra (aprovada, reembolsada, contestada ou cancelada) e a data. Com isso, registramos o acesso liberado: o que ele cobre, desde quando e até quando vale. Também registramos os acessos liberados diretamente pela CyDef, como cortesias e parcerias, com o motivo da liberação. Não recebemos dados de pagamento, como cartão, boleto, Pix, CPF ou endereço: eles ficam com a Hotmart.
+
+2.6. Segurança: Para evitar abuso, como tentativas automatizadas e envio em massa de links, usamos uma verificação antirrobô e limites de tentativas. O endereço IP e o e-mail usados nesse controle são convertidos em um código irreversível, gerado com chave secreta, e não ficam guardados em texto. Os provedores de infraestrutura mantêm registros técnicos de acesso.
+
+Não tratamos CPF, dados de pagamento nem dados pessoais sensíveis (art. 5º, II, da LGPD) na CyDef Academy. Se um curso futuro exigir outros dados, este aviso ganhará uma nova versão antes disso.
+
+## 3. Para que usamos e com qual base legal
+
+• Processar a pré-inscrição e enviar o e-mail de confirmação: consentimento (art. 7º, I), manifestado no aceite não pré-marcado da pré-inscrição.
+• Criar e manter sua conta, enviar o link de acesso, registrar seu progresso, corrigir questões e avaliações e emitir o certificado: execução de contrato ou de procedimentos preliminares, a seu pedido (art. 7º, V).
+• Liberar o acesso comprado, mantê-lo pelo período contratado, encerrá-lo em caso de reembolso, contestação ou cancelamento e avisar você por e-mail quando o acesso for liberado ou encerrado: execução de contrato (art. 7º, V).
+• Guardar o registro das compras e dos acessos depois que eles terminam, para responder a pedidos de reembolso e contestações: exercício regular de direitos (art. 7º, VI).
+• Permitir que outras pessoas confirmem a autenticidade do seu certificado, quando você compartilhar o código de validação: execução de contrato (art. 7º, V).
+• Proteger o portal contra fraude, abuso e ataques: legítimo interesse (art. 7º, IX).
+• Guardar os registros de acesso à aplicação pelo prazo legal: cumprimento de obrigação legal (art. 7º, II, e art. 15 do Marco Civil da Internet).
+
+Não enviamos e-mails de divulgação sem o seu consentimento específico e não usamos seus dados para finalidades incompatíveis com as descritas acima.
+
+## 4. Certificado e validação pública
+
+O certificado traz um código de validação. Quem tiver esse código pode confirmar, em uma página pública da CyDef, que o certificado é autêntico. A página mostra apenas o seu nome, o curso, a carga horária e a data de conclusão, e só pode ser consultada com o código. Você pode pedir a desativação da validação pública pelo canal do item 11.
+
+## 5. Com quem compartilhamos
+
+Não vendemos seus dados e não os compartilhamos para marketing de terceiros.
+
+A compra dos cursos pagos é feita na Hotmart. Ela trata os dados de pagamento, parcelamento, nota fiscal e reembolso como controladora, conforme a política de privacidade dela, e nos repassa apenas os dados do item 2.5. Recibos, cobranças e reembolsos são enviados e resolvidos pela Hotmart.
+
+Para operar a Academy, usamos provedores que tratam dados em nosso nome (operadores), com obrigações contratuais de segurança e confidencialidade:
+
+• Supabase: banco de dados, autenticação e funções do servidor;
+• Cloudflare: hospedagem do portal, DNS, proteção de rede e verificação antirrobô (Turnstile);
+• Resend: envio dos e-mails da Academy, como o link de acesso;
+• GitHub: hospedagem do site institucional;
+• Provedores de vídeo, como o YouTube em modo de privacidade aprimorada, para exibir as aulas. Ao assistir, o provedor pode coletar dados técnicos do seu navegador, conforme a política dele.
+
+Também podemos compartilhar dados com autoridades públicas quando a lei ou uma ordem judicial exigir.
+
+## 6. Transferência internacional
+
+Alguns desses provedores processam ou armazenam dados fora do Brasil. Nesses casos, a transferência é feita nas hipóteses do art. 33 da LGPD, com garantias de proteção compatíveis com a lei brasileira.
+
+## 7. Armazenamento no navegador
+
+O portal guarda a sua sessão no armazenamento local do navegador, para que você não precise pedir um link novo a cada visita. Ao sair da conta pelo botão Sair, a sessão é apagada do navegador. Não usamos cookies de publicidade nem rastreamento entre sites.
+
+## 8. Retenção: por quanto tempo guardamos
+
+• Pré-inscrição sem conta criada: até 12 meses após o último contato, ou até você pedir a exclusão;
+• Conta, progresso, questões e avaliações: enquanto a conta estiver ativa. Contas sem acesso por 24 meses são eliminadas ou anonimizadas, com aviso prévio por e-mail, exceto enquanto houver acesso pago em vigor;
+• Registro de compras e de acessos pagos: enquanto o acesso estiver em vigor e por até 5 anos depois que ele terminar, para responder a pedidos de reembolso e contestações;
+• Avisos de compra recebidos da Hotmart: 5 anos, pelo mesmo motivo;
+• Certificado e código de validação: mantidos para que o certificado continue verificável, até que você peça a remoção;
+• Registro de consentimento: enquanto existir o dado associado e pelo prazo necessário para comprovar a regularidade do tratamento;
+• Registros de acesso à aplicação: 6 meses (art. 15 do Marco Civil da Internet);
+• Controle antirrobô e limites de tentativas: apenas pelo tempo necessário a esse controle.
+
+Ao fim de cada prazo, os dados são eliminados ou anonimizados, salvo obrigação legal de guarda.
+
+## 9. Segurança
+
+Adotamos privacidade desde a concepção: acesso por link de uso único, válido por 60 minutos e sem senha; isolamento dos dados no banco, para que cada aluno acesse apenas os próprios dados; conexões criptografadas (HTTPS); segredos guardados apenas nos provedores; e registros técnicos sem dados pessoais em texto aberto sempre que possível.
+
+## 10. Idade mínima
+
+A CyDef Academy é destinada a maiores de 16 anos.
+
+## 11. Seus direitos (arts. 18 a 22 da LGPD)
+
+Você pode pedir, a qualquer momento: confirmação da existência de tratamento; acesso aos dados; correção de dados incompletos, inexatos ou desatualizados; anonimização, bloqueio ou eliminação de dados desnecessários ou excessivos; portabilidade; eliminação dos dados tratados com base no consentimento; informação sobre com quem compartilhamos; e revogação do consentimento.
+
+Envie o pedido para contato@cydef.com.br com o assunto "LGPD: Solicitação de titular". Respondemos em até 15 dias. Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).
+
+A eliminação da conta encerra o acesso aos cursos, inclusive os comprados, e ao histórico de estudo, e desativa a validação dos certificados emitidos. Pedidos de reembolso são feitos na Hotmart, nos prazos dela.
+
+## 12. Encarregado pelo tratamento de dados
+
+contato@cydef.com.br
+
+## 13. Mudanças neste aviso
+
+Cada versão deste aviso tem endereço próprio e não é alterada depois de publicada. Quando houver mudança relevante, publicamos uma nova versão e avisamos por e-mail quem tem conta na Academy.
+
+Última atualização: 20 de novembro de 2026 (v2026.4)`,
   },
 };
 
