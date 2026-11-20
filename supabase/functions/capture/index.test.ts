@@ -2,10 +2,12 @@ import { describe, expect, it, vi } from "vitest";
 import {
   comCors,
   createCaptureHandler,
+  criarEnvioAcesso,
   origensPermitidas,
   type CaptureStorage,
   type EmailServico,
 } from "./index.ts";
+import type { Carteiro, Servidor } from "../_shared/academy-link.ts";
 
 /**
  * Testes da Capture API (S-03..S-05) com dependências injetadas.
@@ -34,7 +36,7 @@ function baseDeps() {
     reenviarToken: vi.fn().mockResolvedValue({ ok: true, status: "accepted", leadId: "uuid-1", email: "a@b.com", nome: "Ana" }),
   };
   const email: EmailServico = {
-    enviarConfirmacao: vi.fn().mockResolvedValue({ enviado: true }),
+    enviarAcesso: vi.fn().mockResolvedValue({ enviado: true }),
   };
   return {
     storage,
@@ -43,7 +45,6 @@ function baseDeps() {
     agora: () => 1_700_000_000_000,
     log: (e: Record<string, unknown>) => logs.push(e),
     novoRequestId: () => "req-teste-1",
-    apiBaseUrl: () => "https://api.cydef.com.br",
     emailHabilitado: () => true,
     logs,
   };
@@ -142,6 +143,27 @@ describe("POST /api/capture — matriz de segurança", () => {
     expect(corpo).toEqual({ status: "pending_confirmation", mensagem: expect.any(String) });
   });
 
+  it("duplicado também recebe o link de acesso (quem refaz a pré-inscrição não fica sem e-mail)", async () => {
+    const storage: CaptureStorage = {
+      ...baseDeps().storage,
+      captureLead: vi.fn().mockResolvedValue({ ok: true, status: "accepted_duplicate" }),
+    };
+    const deps = makeDeps({ storage });
+    await createCaptureHandler(deps)(makeRequest(payloadValido));
+    expect(deps.email.enviarAcesso).toHaveBeenCalledTimes(1);
+    const arg = (deps.email.enviarAcesso as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(arg.to).toBe("maria@exemplo.com");
+  });
+
+  it("falha no envio do link não muda a resposta (202 genérico)", async () => {
+    const deps = makeDeps({
+      email: { enviarAcesso: vi.fn().mockRejectedValue(new Error("x")) },
+    });
+    const res = await createCaptureHandler(deps)(makeRequest(payloadValido));
+    expect(res.status).toBe(202);
+    expect(deps.logs.some((l) => l.event === "email_nao_enviado")).toBe(true);
+  });
+
   it("rate limit (RPC rate_limited) → 429", async () => {
     const storage: CaptureStorage = {
       ...baseDeps().storage,
@@ -185,15 +207,14 @@ describe("POST /api/capture — matriz de segurança", () => {
   it("e-mail só é enviado com flag habilitada (default off — fail secure)", async () => {
     const deps = makeDeps({ emailHabilitado: () => false });
     await createCaptureHandler(deps)(makeRequest(payloadValido));
-    expect(deps.email.enviarConfirmacao).not.toHaveBeenCalled();
+    expect(deps.email.enviarAcesso).not.toHaveBeenCalled();
   });
 
-  it("e-mail enviado usa nome sanitizado (L01)", async () => {
+  it("nome repassado ao envio sem quebra de linha (L01; o HTML é escapado no modelo)", async () => {
     const deps = makeDeps();
-    await createCaptureHandler(deps)(makeRequest({ ...payloadValido, nome: "<b>Maria</b>\r\n" }));
-    const arg = (deps.email.enviarConfirmacao as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(arg.nome).toContain("&lt;b&gt;");
-    expect(arg.nome).not.toContain("\r");
+    await createCaptureHandler(deps)(makeRequest({ ...payloadValido, nome: "Maria\r\nBcc: x" }));
+    const arg = (deps.email.enviarAcesso as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(arg.nome).not.toMatch(/[\r\n]/);
   });
 
   it("resend: 202 uniforme e reenvia e-mail para lead existente", async () => {
@@ -205,7 +226,8 @@ describe("POST /api/capture — matriz de segurança", () => {
     expect(deps.storage.reenviarToken).toHaveBeenCalledTimes(1);
     const args = (deps.storage.reenviarToken as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(args.tokenHash).toMatch(/^[0-9a-f]{64}$/);
-    expect(deps.email.enviarConfirmacao).toHaveBeenCalledTimes(1);
+    expect(deps.email.enviarAcesso).toHaveBeenCalledTimes(1);
+    expect((deps.email.enviarAcesso as ReturnType<typeof vi.fn>).mock.calls[0][0].to).toBe("a@b.com");
   });
 
   it("método não-POST → 405", async () => {
@@ -281,5 +303,84 @@ describe("CORS do formulario do site (origem cruzada)", () => {
     expect(origens).toContain("https://www.cydef.com.br");
     expect(origens).toContain("https://preview.cydef.pages.dev");
     expect(origens).toHaveLength(3);
+  });
+});
+
+describe("envio do link de acesso pela pré-inscrição (mesmo fluxo do Entrar)", () => {
+  const PEPPER = "p".repeat(40);
+  const URL_PORTAL = "https://academy.cydef.com.br";
+
+  function servidor(over: Partial<Servidor> = {}): Servidor {
+    return {
+      limite: vi.fn().mockResolvedValue(true),
+      elegibilidade: vi.fn().mockResolvedValue({ elegivel: true, user_id: null, aluno: false, lead_id: "lead-1", nome: "Maria Silva" }),
+      criarUsuario: vi.fn().mockResolvedValue({ ok: true, userId: "user-1" }),
+      provisionarAluno: vi.fn().mockResolvedValue(undefined),
+      gerarLink: vi.fn().mockResolvedValue(`${URL_PORTAL}/entrar/retorno?token_hash=abc0123456789abcdef&type=email`),
+      enviarPeloSupabase: vi.fn().mockResolvedValue(undefined),
+      ...over,
+    };
+  }
+
+  it("cria o usuário, provisiona o aluno e envia o link de boas-vindas pelo Resend", async () => {
+    const sv = servidor();
+    const carteiro: Carteiro = { enviar: vi.fn().mockResolvedValue(true) };
+    const envio = criarEnvioAcesso({ servidor: sv, carteiro, academyUrl: URL_PORTAL, pepper: PEPPER });
+    const r = await envio.enviarAcesso({ to: "Maria@Exemplo.com", nome: "Maria", requestId: "req-1" });
+    expect(r.enviado).toBe(true);
+    expect(sv.elegibilidade).toHaveBeenCalledWith("maria@exemplo.com");
+    expect(sv.criarUsuario).toHaveBeenCalledWith("maria@exemplo.com", "Maria Silva");
+    expect(sv.provisionarAluno).toHaveBeenCalledWith("user-1", "lead-1", "Maria Silva");
+    expect(sv.gerarLink).toHaveBeenCalledWith("maria@exemplo.com", `${URL_PORTAL}/entrar/retorno`);
+    const mail = (carteiro.enviar as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(mail.subject).toContain("Bem-vindo");
+    expect(mail.html).toContain("token_hash=abc0123456789abcdef");
+    expect(mail.text).toContain("academy.cydef.com.br/entrar");
+  });
+
+  it("sem Resend ligado, o Supabase envia o link (como no Entrar)", async () => {
+    const sv = servidor();
+    const envio = criarEnvioAcesso({ servidor: sv, academyUrl: URL_PORTAL, pepper: PEPPER });
+    const r = await envio.enviarAcesso({ to: "maria@exemplo.com", nome: "Maria", requestId: "req-1" });
+    expect(r.enviado).toBe(true);
+    expect(sv.enviarPeloSupabase).toHaveBeenCalledWith("maria@exemplo.com", `${URL_PORTAL}/entrar/retorno`);
+  });
+
+  it("usa a mesma chave de limite por e-mail do Entrar (3 a cada 15 min)", async () => {
+    const sv = servidor({ limite: vi.fn().mockResolvedValue(false) });
+    const envio = criarEnvioAcesso({ servidor: sv, academyUrl: URL_PORTAL, pepper: PEPPER });
+    const r = await envio.enviarAcesso({ to: "maria@exemplo.com", nome: "Maria", requestId: "req-1" });
+    expect(r.enviado).toBe(false);
+    const [chave, limite, janela] = (sv.limite as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(chave).toMatch(/^em:[0-9a-f]{64}$/);
+    expect([limite, janela]).toEqual([3, 900]);
+    expect(sv.elegibilidade).not.toHaveBeenCalled();
+  });
+
+  it("e-mail não elegível (lead descartado) não recebe nada", async () => {
+    const sv = servidor({ elegibilidade: vi.fn().mockResolvedValue({ elegivel: false }) });
+    const envio = criarEnvioAcesso({ servidor: sv, academyUrl: URL_PORTAL, pepper: PEPPER });
+    const r = await envio.enviarAcesso({ to: "maria@exemplo.com", nome: "Maria", requestId: "req-1" });
+    expect(r.enviado).toBe(false);
+    expect(sv.criarUsuario).not.toHaveBeenCalled();
+  });
+
+  it("configuração incompleta (sem pepper) falha fechado, sem chamar o banco", async () => {
+    const sv = servidor();
+    const envio = criarEnvioAcesso({ servidor: sv, academyUrl: URL_PORTAL, pepper: undefined });
+    const r = await envio.enviarAcesso({ to: "maria@exemplo.com", nome: "Maria", requestId: "req-1" });
+    expect(r.enviado).toBe(false);
+    expect(sv.limite).not.toHaveBeenCalled();
+  });
+
+  it("logs não trazem e-mail, nome nem link", async () => {
+    const logs: Record<string, unknown>[] = [];
+    const carteiro: Carteiro = { enviar: vi.fn().mockResolvedValue(true) };
+    const envio = criarEnvioAcesso({ servidor: servidor(), carteiro, academyUrl: URL_PORTAL, pepper: PEPPER, log: (e) => logs.push(e) });
+    await envio.enviarAcesso({ to: "maria@exemplo.com", nome: "Maria", requestId: "req-1" });
+    const t = JSON.stringify(logs);
+    expect(t).not.toContain("maria@exemplo.com");
+    expect(t).not.toContain("Maria");
+    expect(t).not.toContain("token_hash");
   });
 });

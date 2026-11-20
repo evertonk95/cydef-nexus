@@ -16,6 +16,9 @@ regexes = [
   # Token sintético dos testes do link de acesso (retorno.test.tsx e
   # academy-acesso/index.test.ts): sequência hexadecimal óbvia, não é segredo
   '''a1b2c3d4e5f6a7b8c9d0e1f2''',
+  # Token sintético do link de acesso em capture/index.test.ts (correção do
+  # e-mail da pré-inscrição): sequência hexadecimal inventada, não é segredo
+  '''abc0123456789abcdef''',
 ]
 # Chave ANON (pública) do Supabase — por design vai no bundle do SPA (VITE_SUPABASE_ANON_KEY),
 # documentado no .env.example. Não é segredo; a proteção real é RLS deny-by-default + RPC (HEL-M03).

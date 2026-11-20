@@ -14,6 +14,13 @@
  * token 256 bits (hash SHA-256 persistido); e-mail com nome sanitizado (L01);
  * logs SEM nome/e-mail/token/URL (M02).
  *
+ * E-mail: desde a correção de 20/11/2026, a pré-inscrição envia o MESMO link
+ * de acesso ao portal que academy.cydef.com.br/entrar envia (usuário criado se
+ * faltar, aluno provisionado, link de uso único de 60 minutos). Quem já tinha
+ * pré-inscrição e preenche de novo também recebe o link. O link antigo de
+ * confirmação (48 h) dependia da função `confirmacao`, que exige JWT no
+ * gateway e voltava 401 para quem clicava no e-mail.
+ *
  * Dependências injetáveis (testes): storage (RPCs), email, hashIp, agora, log.
  */
 
@@ -25,12 +32,13 @@ import {
 } from "../../../src/lib/academy/validate.ts";
 import { gerarToken, hashToken, TOKEN_TTL_MS } from "../../../src/lib/academy/token.ts";
 import {
-  sanitizarNome,
-  montarEmailConfirmacao,
-  resendTransport,
-  devTransport,
-  type EmailTransport,
-} from "../../../src/lib/academy/email.ts";
+  carteiroResend,
+  chaveLimiteEmail,
+  entregarLink,
+  LIMITE_POR_EMAIL,
+  REMETENTE_PADRAO,
+  servidorSupabase,
+} from "../_shared/academy-link.ts";
 import {
   getEnv,
   json,
@@ -66,8 +74,13 @@ export interface CaptureStorage {
   }): Promise<RpcResultado>;
 }
 
+/**
+ * Envio do link de acesso ao portal (mesmo fluxo de academy.cydef.com.br/entrar).
+ * `enviado: false` cobre limite por e-mail, e-mail não elegível e falha de envio:
+ * a resposta ao navegador é a mesma 202 em todos os casos (M05).
+ */
 export interface EmailServico {
-  enviarConfirmacao(input: { to: string; nome: string; link: string }): Promise<{ enviado: boolean }>;
+  enviarAcesso(input: { to: string; nome: string; requestId: string }): Promise<{ enviado: boolean }>;
 }
 
 export interface CaptureDeps {
@@ -77,7 +90,6 @@ export interface CaptureDeps {
   agora?: () => number;
   log?: (evento: Record<string, unknown>) => void;
   novoRequestId?: () => string;
-  apiBaseUrl?: () => string;
   emailHabilitado?: () => boolean;
 }
 
@@ -149,11 +161,10 @@ export function createCaptureHandler(deps: CaptureDeps) {
         log({ event: "reenvio_erro_storage", request_id: requestId, razao: res.razao });
         return json({ erro: "servico_indisponivel" }, 503);
       }
-      if (res.status === "accepted" && res.email && res.nome) {
-        await enviarConfirmacao(deps, {
+      if (res.status === "accepted" && res.email) {
+        await enviarAcesso(deps, {
           to: res.email,
-          nome: res.nome,
-          token,
+          nome: res.nome ?? "",
           requestId,
           log,
           emailHabilitado,
@@ -175,6 +186,8 @@ export function createCaptureHandler(deps: CaptureDeps) {
     }
 
     // Token de confirmação: gerado aqui (256 bits), persistido como hash (M02/M05).
+    // As RPCs ainda exigem o hash; o e-mail agora leva o link de acesso ao
+    // portal, e o primeiro acesso marca o lead como confirmado (0008).
     const token = await gerarToken();
     const tokenHash = await hashToken(token);
     const expira = new Date(agora() + TOKEN_TTL_MS).toISOString();
@@ -206,10 +219,11 @@ export function createCaptureHandler(deps: CaptureDeps) {
       return json({ erro: "servico_indisponivel" }, 503); // fail closed (L04)
     }
 
-    await enviarConfirmacao(deps, {
+    // Novo ou duplicado: os dois recebem o link de acesso. Quem já tinha
+    // pré-inscrição e preenche de novo é exatamente quem não achou o e-mail.
+    await enviarAcesso(deps, {
       to: v.data.email,
       nome: v.data.nome,
-      token,
       requestId,
       log,
       emailHabilitado,
@@ -221,34 +235,31 @@ export function createCaptureHandler(deps: CaptureDeps) {
   };
 }
 
-async function enviarConfirmacao(
+async function enviarAcesso(
   deps: CaptureDeps,
   input: {
     to: string;
     nome: string;
-    token: string;
     requestId: string;
     log: (e: Record<string, unknown>) => void;
     emailHabilitado: boolean;
   },
 ): Promise<void> {
   if (!input.emailHabilitado) {
-    // Flag email.enabled=false (default fail secure): lead permanece
-    // pending_confirmation + fallback manual Everton (runbook S-08).
+    // Flag EMAIL_ENABLED=false (default fail secure): lead registrado, sem e-mail.
+    input.log({ event: "email_desligado", request_id: input.requestId });
     return;
   }
-  const apiBase =
-    (deps.apiBaseUrl ? deps.apiBaseUrl() : getEnv("API_PUBLIC_BASE_URL")) ??
-    `${getEnv("SUPABASE_URL") ?? ""}/functions/v1`;
-  const link = `${apiBase}/confirmacao?token=${encodeURIComponent(input.token)}`;
-  const result = await deps.email.enviarConfirmacao({
-    to: input.to,
-    nome: sanitizarNome(input.nome),
-    link,
-  });
+  const nome = input.nome.replace(/[\r\n\u2028\u2029]/g, " ").replace(/\s+/g, " ").trim();
+  let result: { enviado: boolean };
+  try {
+    result = await deps.email.enviarAcesso({ to: input.to, nome, requestId: input.requestId });
+  } catch {
+    result = { enviado: false };
+  }
   if (!result.enviado) {
-    // Não quebra o fluxo: lead permanece pending + fallback manual (ADRV-08).
-    input.log({ event: "email_falha", request_id: input.requestId });
+    // Não quebra o fluxo: a resposta segue 202 genérica (M05).
+    input.log({ event: "email_nao_enviado", request_id: input.requestId });
   }
 }
 
@@ -340,17 +351,69 @@ async function chamarRpc(
   }
 }
 
-function criarEmailServico(): EmailServico {
-  const apiKey = getEnv("RESEND_API_KEY");
-  const from = getEnv("RESEND_FROM") ?? "Academy CyDef <academy@cydef.com.br>";
-  const transport: EmailTransport = apiKey
-    ? resendTransport(apiKey, from)
-    : devTransport();
+/**
+ * Produção: mesmo caminho de academy-acesso. Limite por e-mail compartilhado
+ * com o "Entrar" (3 a cada 15 min), elegibilidade no banco e entrega do link.
+ * Com ACADEMY_EMAIL_ENABLED=true e RESEND_API_KEY, sai pelo Resend com o modelo
+ * da CyDef; sem eles, o Supabase envia com o modelo do painel.
+ */
+export function criarEmailServico(): EmailServico {
+  const servidor = servidorSupabase(getEnv("SUPABASE_URL") ?? "", getEnv("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+  const apiKey = getEnv("RESEND_API_KEY") ?? "";
+  const resendLigado = getEnv("ACADEMY_EMAIL_ENABLED") === "true" && apiKey.length > 0;
+  const carteiro = resendLigado
+    ? carteiroResend(apiKey, getEnv("ACADEMY_EMAIL_FROM") ?? REMETENTE_PADRAO)
+    : undefined;
+  const academyUrl = getEnv("ACADEMY_URL") ?? "https://academy.cydef.com.br";
+  const pepper = getEnv("ACADEMY_HASH_PEPPER");
+  const log = (e: Record<string, unknown>) => console.log(JSON.stringify(e));
+  return criarEnvioAcesso({ servidor, carteiro, academyUrl, pepper, log });
+}
+
+/** Envio do link com dependências injetáveis (testado em index.test.ts). */
+export function criarEnvioAcesso(deps: {
+  servidor: Parameters<typeof entregarLink>[0]["servidor"];
+  carteiro?: Parameters<typeof entregarLink>[0]["carteiro"];
+  academyUrl: string;
+  pepper: string | undefined;
+  log?: (e: Record<string, unknown>) => void;
+}): EmailServico {
+  const log = deps.log ?? (() => undefined);
   return {
-    async enviarConfirmacao(input) {
-      const mail = montarEmailConfirmacao(input);
-      const r = await transport.send(mail);
-      return { enviado: r.ok };
+    async enviarAcesso({ to, requestId }) {
+      const email = to.trim().toLowerCase();
+      if (!deps.pepper || deps.pepper.length < 32 || !/^https:\/\//.test(deps.academyUrl)) {
+        log({ event: "acesso_config_incompleta", request_id: requestId });
+        return { enviado: false };
+      }
+      try {
+        const chave = await chaveLimiteEmail(deps.pepper, email);
+        const ok = await deps.servidor.limite(chave, LIMITE_POR_EMAIL.limite, LIMITE_POR_EMAIL.janelaSeg);
+        if (!ok) {
+          log({ event: "acesso_limite", request_id: requestId, por: "email" });
+          return { enviado: false };
+        }
+        const el = await deps.servidor.elegibilidade(email);
+        if (!el.elegivel) {
+          log({ event: "acesso_nao_elegivel", request_id: requestId });
+          return { enviado: false };
+        }
+        await entregarLink(
+          { servidor: deps.servidor, carteiro: deps.carteiro, academyUrl: deps.academyUrl, log },
+          email,
+          el,
+          requestId,
+          "pre_inscricao",
+        );
+        return { enviado: true };
+      } catch (err) {
+        log({
+          event: "acesso_entrega_falhou",
+          request_id: requestId,
+          razao: err instanceof Error ? err.message.slice(0, 60) : "desconhecido",
+        });
+        return { enviado: false };
+      }
     },
   };
 }
