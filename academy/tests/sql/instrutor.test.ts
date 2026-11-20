@@ -68,7 +68,7 @@ beforeEach(async () => {
 describe("quem pode usar o painel", () => {
   it("academy_adm_eu: null para aluno, papel e cursos para a equipe", async () => {
     expect(await rpc(aluno, `public.academy_adm_eu()`)).toBeNull();
-    expect(await rpc(instrutor, `public.academy_adm_eu()`)).toEqual({ papel: "instrutor", cursos: [SOC] });
+    expect(await rpc(instrutor, `public.academy_adm_eu()`)).toEqual({ papel: "instrutor", aprova_materiais: false, cursos: [SOC] });
     const eu = await rpc<{ papel: string; cursos: string[] }>(admin, `public.academy_adm_eu()`);
     expect(eu.papel).toBe("admin");
     expect(eu.cursos).toContain(CF);

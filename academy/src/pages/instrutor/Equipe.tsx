@@ -55,9 +55,14 @@ function Conteudo() {
                 </p>
                 {m.nome && <p className="m-0 truncate text-[13px] text-muted">{m.email}</p>}
               </div>
-              <p className="m-0 min-w-0 flex-1 basis-56 text-sm text-muted">
-                {m.papel === "admin" ? "Admin, todos os cursos" : `Instrutor: ${m.cursos.map(titulo).join(", ")}`}
-              </p>
+              <div className="min-w-0 flex-1 basis-56">
+                <p className="m-0 text-sm text-muted">{m.papel === "admin" ? "Admin, todos os cursos" : `Instrutor: ${m.cursos.map(titulo).join(", ")}`}</p>
+                {m.papel === "admin" ? (
+                  <p className="m-0 text-[13px] text-dim">Aprova materiais</p>
+                ) : (
+                  m.aprova_materiais !== undefined && <Aprovador membro={m} />
+                )}
+              </div>
               <Botao variante="contorno" className="h-9 px-3 text-sm" onClick={() => setEditando(m)} aria-label={`Editar acesso de ${m.nome ?? m.email}`}>
                 Editar
               </Botao>
@@ -66,6 +71,22 @@ function Conteudo() {
         </ul>
       )}
     </>
+  );
+}
+
+function Aprovador({ membro }: { membro: MembroEquipe }) {
+  const marcar = useAcao((sb, aprova: boolean) => chamar<MembroEquipe[]>(sb, "academy_adm_definir_aprovador", { p_user_id: membro.user_id, p_aprova: aprova }));
+  return (
+    <label className="mt-1 flex items-center gap-2 text-[13px] text-muted">
+      <input
+        type="checkbox"
+        checked={Boolean(membro.aprova_materiais)}
+        disabled={marcar.isPending}
+        onChange={(e) => marcar.mutate(e.target.checked)}
+        className="size-4 accent-ink"
+      />
+      Aprova materiais de outras pessoas
+    </label>
   );
 }
 

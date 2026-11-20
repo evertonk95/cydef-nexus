@@ -26,6 +26,7 @@ const QuestaoInstrutor = lazy(() => import("@/pages/instrutor/Questao"));
 const BoletimInstrutor = lazy(() => import("@/pages/instrutor/Boletim"));
 const EquipeInstrutor = lazy(() => import("@/pages/instrutor/Equipe"));
 const PerfilInstrutor = lazy(() => import("@/pages/instrutor/Perfil"));
+const AprovacoesInstrutor = lazy(() => import("@/pages/instrutor/Aprovacoes"));
 const ValidarCertificado = lazy(() => import("@/pages/ValidarCertificado"));
 const Entrar = lazy(() => import("@/pages/Entrar"));
 const Retorno = lazy(() => import("@/pages/Retorno"));
@@ -61,6 +62,7 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                         <Route path="boletim" element={<BoletimInstrutor />} />
                         <Route path="equipe" element={<EquipeInstrutor />} />
                         <Route path="perfil" element={<PerfilInstrutor />} />
+                        <Route path="aprovacoes" element={<AprovacoesInstrutor />} />
                       </Route>
                       <Route path="*" element={<NaoEncontrado />} />
                     </Route>

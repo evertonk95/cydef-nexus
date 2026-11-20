@@ -102,6 +102,72 @@ function novoEstado() {
     escritasAdm: [],
     nomeAluno: "Everton Nascimento",
     validacaoPublica: true,
+    // Fase 11: quem está "logado" no fake (1 envia, 2 aprova) e os materiais.
+    pessoa: 1,
+    materiais: [],
+    arquivos: {},
+  };
+}
+
+/** Pega o arquivo de um corpo multipart (como o supabase-js envia File). */
+function arquivoDoMultipart(req, bytes) {
+  const m = /boundary=(.+)$/.exec(req.headers["content-type"] ?? "");
+  if (!m) return bytes;
+  const limite = Buffer.from(`--${m[1]}`);
+  let i = 0;
+  while ((i = bytes.indexOf(limite, i)) >= 0) {
+    const ini = bytes.indexOf("\r\n\r\n", i);
+    if (ini < 0) break;
+    const cab = bytes.subarray(i, ini).toString();
+    const fim = bytes.indexOf(limite, ini);
+    if (/filename=|name=""/.test(cab)) return bytes.subarray(ini + 4, fim - 2);
+    i = fim;
+  }
+  return bytes;
+}
+
+const CORS_ST = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*", "Access-Control-Allow-Methods": "*" };
+
+/** Storage do Supabase: upload, link assinado, download e remoção. */
+function storage(req, res, u, bytes, bruto) {
+  const json = (c, st = 200) => {
+    res.writeHead(st, { "Content-Type": "application/json", ...CORS_ST });
+    res.end(JSON.stringify(c));
+  };
+  const resto = decodeURIComponent(u.pathname.replace(/^\/storage\/v1\//, ""));
+  let m;
+  if (req.method === "POST" && (m = /^object\/sign\/academy-materiais\/(.+)$/.exec(resto))) {
+    if (!estado.arquivos[m[1]]) return json({ message: "Object not found" }, 400);
+    return json({ signedURL: `/object/sign/academy-materiais/${m[1]}?token=e2e` });
+  }
+  if (req.method === "GET" && (m = /^object\/sign\/academy-materiais\/(.+)$/.exec(resto))) {
+    const a = estado.arquivos[m[1]];
+    if (!a) return json({ message: "Object not found" }, 404);
+    const nome = u.searchParams.get("download");
+    res.writeHead(200, { "Content-Type": a.tipo, ...(nome !== null ? { "Content-Disposition": `attachment; filename="${nome || m[1].split("/").pop()}"` } : {}), ...CORS_ST });
+    return res.end(a.dados);
+  }
+  if (req.method === "POST" && (m = /^object\/academy-materiais\/(.+)$/.exec(resto))) {
+    const mat = estado.materiais.find((x) => x.caminho === m[1] && x.status === "enviando");
+    if (!mat) return json({ statusCode: "403", message: "new row violates row-level security policy" }, 400);
+    estado.arquivos[m[1]] = { dados: arquivoDoMultipart(req, bytes), tipo: mat.mime };
+    return json({ Key: `academy-materiais/${m[1]}`, Id: m[1] });
+  }
+  if (req.method === "DELETE") {
+    let corpo = {};
+    try { corpo = JSON.parse(bruto); } catch { corpo = {}; }
+    for (const p of corpo.prefixes ?? []) delete estado.arquivos[p];
+    return json([]);
+  }
+  return json({ message: `storage não simulado: ${req.method} ${resto}` }, 404);
+}
+
+function materialJson(m) {
+  const mod = CURSO.modulos.find((x) => x.id === m.modulo_id);
+  return {
+    ...m, curso_titulo: CURSO.titulo, modulo_titulo: mod?.titulo ?? null, modulo_ordem: mod?.ordem ?? null,
+    enviado_por_nome: "Everton Nascimento", enviado_por_mim: m.enviado_por === estado.pessoa,
+    revisado_por_nome: m.revisado_por ? "Revisor" : null,
   };
 }
 
@@ -186,9 +252,12 @@ http
       res.end(corpo === undefined ? "" : JSON.stringify(corpo));
     };
     if (req.method === "OPTIONS") return enviar(undefined, 204);
-    let bruto = "";
-    req.on("data", (c) => (bruto += c));
+    const pedacos = [];
+    req.on("data", (c) => pedacos.push(c));
     req.on("end", () => {
+      const bytes = Buffer.concat(pedacos);
+      const bruto = bytes.toString("utf8");
+      if (u.pathname.startsWith("/storage/v1/")) return storage(req, res, u, bytes, bruto);
       let corpo = {};
       try {
         corpo = bruto ? JSON.parse(bruto) : {};
@@ -207,6 +276,7 @@ http
           if (corpo.aulas_concluidas) for (const a of AULAS) estado.progresso[a.id] = { posicao_seg: a.duracao_seg, concluida_em: "2026-11-18T12:00:00Z" };
           if (corpo.modulo_aprovado) estado.moduloAprovado = true;
           if (corpo.equipe) estado.equipe = corpo.equipe;
+          if (corpo.pessoa) estado.pessoa = corpo.pessoa;
           return enviar({ ok: true });
         case "/functions/v1/academy-acesso":
           estado.pedidosAcesso.push(corpo);
@@ -274,7 +344,7 @@ http
           estado.certificado ??= { codigo: "CYD-1A2B-3C4D-5E6F-7A8B", nome: corpo.p_nome, concluido_em: "2026-11-18" };
           return enviar({ ...estado.certificado, curso_titulo: CURSO.titulo, carga_horaria_h: 6 });
         case "/rest/v1/rpc/academy_adm_eu":
-          return enviar(estado.equipe ? { papel: estado.equipe, cursos: [CURSO.slug] } : null);
+          return enviar(estado.equipe ? { papel: estado.equipe, cursos: [CURSO.slug], aprova_materiais: estado.equipe === "admin" } : null);
         case "/rest/v1/rpc/academy_adm_boletim":
           if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
           return enviar([
@@ -287,6 +357,40 @@ http
             { user_id: USUARIO.id, email: USUARIO.email, nome: "Everton Nascimento", papel: "admin", eu: true, cursos: [] },
             { user_id: "u2", email: "matheus@exemplo.com", nome: "Matheus", papel: "instrutor", eu: false, cursos: [CURSO.slug] },
           ]);
+        case "/rest/v1/rpc/academy_adm_registrar_material": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const d = corpo.p_dados ?? {};
+          const id = `00000000-0000-4000-8000-${String(900 + estado.materiais.length).padStart(12, "0")}`;
+          const nome = String(d.nome_arquivo).replace(/[^A-Za-z0-9._-]+/g, "-");
+          const m = { id, curso_slug: corpo.p_curso, modulo_id: d.modulo_id ?? null, titulo: d.titulo, descricao: d.descricao ?? "", nome_arquivo: nome,
+            extensao: nome.split(".").pop(), mime: d.mime, tamanho: d.tamanho, sha256: d.sha256, caminho: `${corpo.p_curso}/${id}/${nome}`,
+            status: "enviando", ordem: estado.materiais.length + 1, enviado_em: "2026-11-19T12:00:00Z", enviado_por: estado.pessoa,
+            revisado_em: null, revisado_por: null, motivo_recusa: null };
+          estado.materiais.push(m);
+          return enviar({ id, caminho: m.caminho, mime: m.mime });
+        }
+        case "/rest/v1/rpc/academy_adm_confirmar_envio": {
+          const m = estado.materiais.find((x) => x.id === corpo.p_id);
+          const a = m && estado.arquivos[m.caminho];
+          if (!a) return enviar({ message: "arquivo_ausente" }, 400);
+          if (a.dados.length !== m.tamanho) return enviar({ message: "arquivo_divergente" }, 400);
+          m.status = "pendente";
+          return enviar(materialJson(m));
+        }
+        case "/rest/v1/rpc/academy_adm_materiais":
+          return enviar(estado.materiais.filter((m) => m.status !== "enviando").map(materialJson));
+        case "/rest/v1/rpc/academy_adm_aprovacoes":
+          return enviar(estado.materiais.filter((m) => m.status === "pendente").map(materialJson));
+        case "/rest/v1/rpc/academy_adm_revisar_material": {
+          const m = estado.materiais.find((x) => x.id === corpo.p_id && x.status === "pendente");
+          if (!m) return enviar({ message: "material_inexistente" }, 400);
+          if (m.enviado_por === estado.pessoa) return enviar({ message: "mesma_pessoa" }, 400);
+          Object.assign(m, { status: corpo.p_aprovar ? "aprovado" : "recusado", revisado_por: estado.pessoa, revisado_em: "2026-11-19T13:00:00Z", motivo_recusa: corpo.p_motivo ?? null });
+          return enviar(estado.materiais.filter((x) => x.status === "pendente").map(materialJson));
+        }
+        case "/rest/v1/rpc/academy_materiais_curso":
+          return enviar(estado.materiais.filter((m) => m.status === "aprovado" && m.curso_slug === corpo.p_curso)
+            .map(({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho }) => ({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho })));
         case "/rest/v1/rpc/academy_adm_instrutores": {
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
           const p = (v) => ({ ...v.instrutores, da_equipe: v.papel === "instrutor", eu: v.instrutores.id === "i1" });

@@ -11,6 +11,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
+- Material complementar com quarentena e aprovação em duas pessoas: o instrutor envia, outra pessoa confere e aprova, e só então o aluno baixa (fase 11).
 - Minha conta em `/conta`: nome, certificados com a validação pública ligada ou desligada, sair de todos os dispositivos, cópia dos dados e pedido de exclusão (fase 12).
 - Certificado em PDF (modelos Clássico claro e Técnico), botão do LinkedIn e validação pública em `/certificado/CODIGO` (fase 10).
 - Painel do instrutor em `/instrutor`, só para a equipe: cursos, módulos, aulas, vídeos, questões, regras do certificado, Boletim do SOC e equipe (fase 13).
@@ -151,6 +152,21 @@ update public.certificados set validacao_publica = false where codigo = 'CYD-...
 | `/cursos/<curso>/certificado` | Conferência do nome (vem do cadastro, editável, mesmas regras do banco), confirmação e emissão. Depois, os dados e o código de validação. |
 
 Na página do curso e na sala de aula, a linha "Questões do módulo" e o cadeado de módulo bloqueado só aparecem quando o módulo tem questões publicadas. O cartão da avaliação final só aparece quando ela existe para o aluno (liberada, em espera, em andamento ou aprovada) e o do certificado só quando ele está liberado ou emitido. Curso sem questões fica igual a antes. Se a consulta `academy_situacao_curso` falhar, a página do curso e a sala de aula seguem normais.
+
+## Material complementar (fase 11, migração 0019)
+
+Regra do Everton: só quem é da equipe do curso envia arquivo, e todo arquivo passa por uma **segunda pessoa** antes de chegar ao aluno (dupla checagem, como no CyDef Inora). Quem enviou nunca aprova o próprio arquivo, nem sendo admin; o banco garante isso por função e por restrição na tabela.
+
+- **Quem aprova:** os admins e quem o admin marcar em Equipe como "Aprova materiais de outras pessoas". A página `/instrutor/aprovacoes` só aparece para eles.
+- **Tipos e tamanhos:** PDF, DOCX, XLSX, XLS, PPTX, CSV, MD, TXT e ZIP. Documentos até 25 MB e ZIP até 50 MB. O teto de 50 MB é o limite de arquivo do plano Free do Supabase; no Pro, o ZIP pode ir a 100 MB mudando `academy__limite_material` e o `file_size_limit` do bucket numa migração nova.
+- **Camadas:**
+  1. No navegador, antes do envio: tipo conferido pelo conteúdo (assinatura do arquivo, não só a extensão), tamanho, Office com macro recusado (procura `vbaProject.bin`), texto só em UTF-8 sem binário, e SHA-256 calculado.
+  2. Banco e bucket repetem a regra de tipo e tamanho. O bucket `academy-materiais` é privado e só aceita os MIME da lista.
+  3. O arquivo só pode ser gravado no caminho criado pelo registro, por quem registrou, enquanto o estado é "enviando" (política do Storage). Na confirmação, o banco confere o tamanho gravado.
+  4. Quarentena: aluno não lê arquivo pendente. O aprovador baixa pelo painel, o navegador confere o SHA-256 com o do envio e lista o conteúdo de ZIP e Office, destacando executáveis e scripts. Aprovar só fica disponível depois dessa conferência. Há um link para consultar o hash no VirusTotal (só o hash sai, não o arquivo). Recusa exige motivo, que quem enviou vê no painel.
+  5. Aluno matriculado em curso publicado baixa por link assinado de 60 segundos, como anexo.
+- **Depois de aprovado:** título, descrição e módulo mudam sem nova aprovação (o arquivo não muda). Para trocar o arquivo, envie um novo e tire o antigo do ar.
+- Toda etapa vai para `academy_auditoria` (registrado, enviado, aprovado ou recusado, salvo, arquivado).
 
 ## Minha conta (fase 12, migração 0018)
 

@@ -12,6 +12,7 @@ import { Barra } from "@/components/ui/Barra";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { cn } from "@/lib/cn";
 import { SobreCurso } from "@/components/curso/SobreCurso";
+import { MaterialComplementar } from "@/components/curso/MaterialComplementar";
 import { FalhaCarregamento, NaoEncontrado } from "./Estados";
 
 export default function Curso() {
@@ -131,6 +132,7 @@ export default function Curso() {
               );
             })}
           </ol>
+          <MaterialComplementar curso={c} />
           <SobreCurso curso={c} />
         </div>
         <aside className="flex min-w-0 flex-[1_1_320px] flex-col gap-4 lg:sticky lg:top-24">

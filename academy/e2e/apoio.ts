@@ -20,7 +20,10 @@ export async function resetar(request: APIRequestContext) {
 }
 
 /** Atalho para os testes da avaliação final: aulas concluídas e módulo aprovado. */
-export async function cenario(request: APIRequestContext, c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean; equipe?: "admin" | "instrutor" }) {
+export async function cenario(
+  request: APIRequestContext,
+  c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean; equipe?: "admin" | "instrutor"; pessoa?: 1 | 2 },
+) {
   await request.post(`${API}/__cenario`, { data: c });
 }
 
