@@ -1,3 +1,4 @@
+import type { MissaoResumo } from "./missoes";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface ContinuarAula {
@@ -48,6 +49,8 @@ export interface Painel {
   cursos: CursoResumo[];
   formacoes: FormacaoResumo[];
   competencias: Competencia[];
+  /** 0026: próxima missão (liberada e não concluída, ou a próxima a liberar). */
+  missao?: MissaoResumo | null;
   dias_estudo: string[];
   hoje: string;
 }

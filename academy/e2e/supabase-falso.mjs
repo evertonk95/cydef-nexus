@@ -13,6 +13,7 @@
  * O Módulo 1 tem questões (a primeira alternativa é sempre a certa) e a
  * avaliação final tem um banco de 4 questões, com nota mínima de 75%.
  */
+import { readFileSync } from "node:fs";
 import http from "node:http";
 
 const PORTA = Number(process.env.PORTA ?? 54399);
@@ -119,6 +120,9 @@ function novoEstado() {
     // Fase 17: empresas. Começa vazio; /__cenario { empresa: "convite" } cria o convite do aluno.
     empresas: [],
     membros: [],
+    // Fase 15: missões. Começa sem; /__cenario { missao: true } publica a MSN-001.
+    missoes: [],
+    tentativasMissao: [],
     enviosConvite: [],
     trilhas: [
       { slug: "soc", titulo: "SOC", descricao: "Para quem quer trabalhar em um Centro de Operações de Segurança.", publicado: true, formacao: null },
@@ -304,10 +308,69 @@ function painel() {
     cursos: [{ slug: CURSO.slug, titulo: CURSO.titulo, total: AULAS.length, concluidas: feitas, ultimo_acesso: "2026-11-18T10:00:00Z" }],
     formacoes: [{ slug: "analista-soc", titulo: "Formação Analista SOC", aulas_total: AULAS.length, aulas_concluidas: feitas,
       trilhas: [{ slug: "fundamentos", titulo: "Fundamentos", total: AULAS.length, concluidas: feitas }] }],
-    competencias: [{ slug: "fundamentos-seguranca", titulo: "Fundamentos de segurança", percentual: 25 }],
+    competencias: competenciasFalsas(),
+    missao: proximaMissao(),
     dias_estudo: ["2026-11-17", "2026-11-18"],
     hoje: "2026-11-18",
   };
+}
+
+// Fase 15: missões ---------------------------------------------------------------
+
+const MISSAO_EXEMPLO = JSON.parse(readFileSync(new URL("../src/test/missao-exemplo.json", import.meta.url), "utf8"));
+
+const aprovadaM = (m) => estado.tentativasMissao.some((t) => t.missao === m.id && t.aprovado);
+
+function competenciasFalsas() {
+  const base = [{ slug: "fundamentos-seguranca", titulo: "Fundamentos de segurança", percentual: 25 }];
+  if (estado.missoes.length === 0) return base;
+  return [...base, { slug: "triagem-alertas", titulo: "Triagem de alertas", percentual: estado.missoes.some(aprovadaM) ? 70 : 60 }];
+}
+
+function missaoResumo(m) {
+  const notas = estado.tentativasMissao.filter((t) => t.missao === m.id).map((t) => t.nota);
+  return {
+    id: m.id, codigo: m.codigo, slug: m.slug, titulo: m.titulo, severidade: m.severidade, mitre: m.mitre, briefing: m.briefing, selo: m.selo,
+    requisito: m.requisito, curso: m.curso, curso_titulo: CURSO.titulo, perguntas_total: m.perguntas.length,
+    competencias: [{ slug: "triagem-alertas", titulo: "Triagem de alertas" }],
+    situacao: "liberada", aulas_total: AULAS.length, aulas_concluidas: AULAS.length,
+    melhor_nota: notas.length ? Math.max(...notas) : null, aprovada: aprovadaM(m), tentativas: notas.length,
+  };
+}
+
+function proximaMissao() {
+  const m = estado.missoes.find((x) => x.publicado && !aprovadaM(x));
+  return m ? missaoResumo(m) : null;
+}
+
+function missaoAluno(m) {
+  const ts = estado.tentativasMissao.filter((t) => t.missao === m.id);
+  const ultima = [...ts].reverse().find((t) => t.enviada_em) ?? null;
+  const aberta = ts.find((t) => !t.enviada_em) ?? null;
+  return {
+    ...missaoResumo(m), encerramento: ultima ? m.encerramento : "", evidencias: m.evidencias,
+    perguntas: m.perguntas.map((p) => ({ id: p.id, enunciado: p.enunciado, dica: p.dica, alternativas: p.alternativas, multipla: p.corretas.length > 1 })),
+    aberta: aberta ? { iniciada_em: aberta.iniciada_em } : null,
+    ultima: ultima ? ultima.json : null,
+  };
+}
+
+function corrigirMissao(m, t, respostas, evidencias) {
+  const correcao = m.perguntas.map((p) => {
+    const esc = [...new Set((respostas[p.id] ?? []).map(Number))].sort((a, b) => a - b);
+    const cor = [...p.corretas].sort((a, b) => a - b);
+    return { id: p.id, enunciado: p.enunciado, alternativas: p.alternativas, escolhidas: esc, corretas: cor, explicacao: p.explicacao, acertou: JSON.stringify(esc) === JSON.stringify(cor) };
+  });
+  const acertos = correcao.filter((c) => c.acertou).length;
+  const nota = Math.round((acertos * 100) / correcao.length);
+  const antes = estado.missoes.some(aprovadaM) ? 70 : 60;
+  Object.assign(t, { enviada_em: "2026-11-20T12:07:05Z", nota, aprovado: nota >= 80 });
+  t.json = {
+    id: t.id, enviada_em: t.enviada_em, acertos, total: correcao.length, nota, aprovado: nota >= 80, duracao_seg: 425, evidencias: evidencias.slice(0, 30),
+    correcao, encerramento: m.encerramento,
+    competencias: [{ slug: "triagem-alertas", titulo: "Triagem de alertas", antes, depois: nota >= 80 ? 70 : antes }],
+  };
+  return t.json;
 }
 
 // Fase 17: empresas --------------------------------------------------------------
@@ -392,12 +455,48 @@ http
           if (corpo.equipe) estado.equipe = corpo.equipe;
           if (corpo.pessoa) estado.pessoa = corpo.pessoa;
           if (corpo.empresa === "convite") criarEmpresaComConvite();
+          if (corpo.missao) estado.missoes = [{ ...MISSAO_EXEMPLO, curso: CURSO.slug, publicado: true }];
           return enviar({ ok: true });
         case "/functions/v1/academy-empresa": {
           const pend = estado.membros.filter((m) => m.empresa_id === corpo.empresa_id && m.situacao === "convidado" && !m.convite_enviado_em);
           for (const m of pend) m.convite_enviado_em = "2026-11-20T12:00:00Z";
           estado.enviosConvite.push({ empresa_id: corpo.empresa_id, emails: pend.map((m) => m.email) });
           return enviar({ enviados: pend.length, falhas: 0, pendentes: 0, email: "ligado" });
+        }
+        case "/rest/v1/rpc/academy_minhas_missoes":
+          return enviar(estado.missoes.filter((m) => m.publicado).map(missaoResumo));
+        case "/rest/v1/rpc/academy_minhas_competencias":
+          return enviar(competenciasFalsas());
+        case "/rest/v1/rpc/academy_missao": {
+          const m = estado.missoes.find((x) => x.slug === String(corpo.p_slug).toLowerCase() && x.publicado);
+          return m ? enviar(missaoAluno(m)) : enviar({ message: "missao_inexistente" }, 400);
+        }
+        case "/rest/v1/rpc/academy_iniciar_missao": {
+          const m = estado.missoes.find((x) => x.slug === String(corpo.p_slug).toLowerCase() && x.publicado);
+          if (!m) return enviar({ message: "missao_inexistente" }, 400);
+          let t = estado.tentativasMissao.find((x) => x.missao === m.id && !x.enviada_em);
+          if (!t) estado.tentativasMissao.push((t = { id: `t${estado.tentativasMissao.length + 1}`, missao: m.id, iniciada_em: new Date(Date.now() - 65_000).toISOString(), enviada_em: null }));
+          return enviar({ iniciada_em: t.iniciada_em });
+        }
+        case "/rest/v1/rpc/academy_enviar_missao": {
+          const m = estado.missoes.find((x) => x.slug === String(corpo.p_slug).toLowerCase());
+          const t = m && estado.tentativasMissao.find((x) => x.missao === m.id && !x.enviada_em);
+          if (!t) return enviar({ message: "missao_nao_iniciada" }, 400);
+          estado.escritasAdm.push({ fn: "academy_enviar_missao", p_dados: corpo });
+          return enviar(corrigirMissao(m, t, corpo.p_respostas ?? {}, corpo.p_evidencias ?? []));
+        }
+        case "/rest/v1/rpc/academy_adm_missoes":
+          return enviar({
+            missoes: estado.missoes.filter((m) => m.curso === corpo.p_curso).map((m) => ({ ...m, tentativas: estado.tentativasMissao.filter((t) => t.missao === m.id && t.enviada_em).length, aprovados: aprovadaM(m) ? 1 : 0 })),
+            competencias: [{ slug: "triagem-alertas", titulo: "Triagem de alertas" }, { slug: "analise-logs", titulo: "Análise de logs" }, { slug: "mitre-attack", titulo: "MITRE ATT&CK" }],
+          });
+        case "/rest/v1/rpc/academy_adm_salvar_missao": {
+          const d = corpo.p_dados ?? {};
+          estado.escritasAdm.push({ fn: "academy_adm_salvar_missao", p_dados: d });
+          const atual = estado.missoes.find((m) => m.id === d.id);
+          const nova = { ...(atual ?? { id: `m${estado.missoes.length + 1}`, ordem: 1, atualizado_em: "2026-11-20T12:00:00Z" }), ...d, curso: corpo.p_curso, slug: String(d.codigo).toLowerCase() };
+          estado.missoes = atual ? estado.missoes.map((m) => (m.id === d.id ? nova : m)) : [...estado.missoes, nova];
+          return enviar({ missoes: estado.missoes.filter((m) => m.curso === corpo.p_curso).map((m) => ({ ...m, tentativas: 0, aprovados: 0 })), competencias: [] });
         }
         case "/rest/v1/rpc/academy_minhas_empresas":
           return enviar(minhasEmpresas());

@@ -42,3 +42,20 @@ for (const [nome, caminho] of [
     expect(largura).toBeLessThanOrEqual(tela!);
   });
 }
+
+// Fase 15: missões, inclusive a investigação aberta.
+for (const [nome, caminho, iniciar] of [
+  ["lista de missões", "/missoes", false],
+  ["investigação da missão", "/missoes/msn-001", true],
+  ["missões no painel do instrutor", "/instrutor/cursos/cybersecurity-fundamentals?aba=missoes", false],
+] as const) {
+  test(`celular sem rolagem lateral: ${nome}`, async ({ page, request }) => {
+    await cenario(request, { missao: true, equipe: "admin" });
+    await entrar(page);
+    await page.goto(caminho);
+    if (iniciar) await page.getByRole("button", { name: "Iniciar investigação" }).click();
+    await page.waitForLoadState("networkidle");
+    const [largura, tela] = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
+    expect(largura).toBeLessThanOrEqual(tela!);
+  });
+}

@@ -250,6 +250,20 @@ const MENSAGENS: Record<string, string> = {
   aguarde_reenvio: "O convite acabou de ser enviado. Espere 10 minutos para reenviar.",
   no_aviso_vigente: "Não foi possível registrar o aceite agora. Tente de novo em alguns minutos.",
   sem_cadastro: "Este login não tem cadastro de aluno.",
+  missao_inexistente: "Missão não encontrada.",
+  missao_bloqueada: "Esta missão ainda não foi liberada para você.",
+  missao_nao_iniciada: "Esta investigação já foi enviada. Para tentar de novo, comece outra vez.",
+  codigo_invalido: "Use um código como MSN-002: letras maiúsculas, hífen e três números.",
+  codigo_em_uso: "Já existe uma missão com esse código.",
+  severidade_invalida: "Escolha a severidade.",
+  briefing_invalido: "O briefing precisa ter entre 20 e 1.200 caracteres.",
+  requisito_invalido: "Escolha quando a missão é liberada.",
+  texto_longo: "Algum texto passou do tamanho máximo.",
+  evidencias_invalidas: "Confira as evidências: cada uma precisa de título e conteúdo completo, e as linhas da tabela, do mesmo número de colunas.",
+  perguntas_invalidas: "Confira as perguntas: enunciado, de 2 a 8 alternativas, pelo menos uma certa e a explicação.",
+  competencias_invalidas: "Confira as competências e os pesos (de 1 a 10).",
+  missao_incompleta: "Para publicar, a missão precisa de pelo menos uma evidência e uma pergunta.",
+  missao_com_tentativas: "Alunos já fizeram esta missão. Tire da publicação em vez de excluir.",
 };
 
 export class ErroPainel extends Error {
