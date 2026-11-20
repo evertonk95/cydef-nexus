@@ -2,12 +2,14 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
-import { Award, BadgeCheck, Copy, Lock } from "lucide-react";
+import { Award, BadgeCheck, Copy, Download, ExternalLink, Lock } from "lucide-react";
 import { useCurso, usePainel, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
+  buscarMeuCertificado,
   caminhoAvaliacao,
   dataPorExtenso,
+  linkLinkedin,
   emitirCertificado,
   ErroAvaliacao,
   nomeValido,
@@ -85,7 +87,7 @@ export default function Certificado() {
         className="mx-auto max-w-3xl"
       >
         {cert ? (
-          <Emitido cert={cert} novo={Boolean(emitido)} />
+          <Emitido cert={cert} novo={Boolean(emitido)} slug={slug} />
         ) : s.certificado.elegivel ? (
           <Emitir
             curso={c.titulo}
@@ -222,8 +224,36 @@ function Emitir({
   );
 }
 
-function Emitido({ cert, novo }: { cert: TCertificado; novo: boolean }) {
+function Emitido({ cert, novo, slug }: { cert: TCertificado; novo: boolean; slug: string }) {
   const avisar = useAvisos();
+  const { sb } = usePortal();
+  const [gerando, setGerando] = useState(false);
+  const [erroPdf, setErroPdf] = useState(false);
+  const origem = window.location.origin;
+  // O gerador (pdf-lib e fontes) só é baixado quando o aluno pede o PDF.
+  const baixarPdf = async () => {
+    setGerando(true);
+    setErroPdf(false);
+    try {
+      const dados = await buscarMeuCertificado(sb, slug);
+      if (!dados) throw new Error("sem_certificado");
+      const { gerarCertificadoNoNavegador, nomeArquivo } = await import("@/lib/certificado-pdf");
+      const blob = await gerarCertificadoNoNavegador(dados);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = nomeArquivo(dados);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      avisar({ tipo: "ok", titulo: "PDF baixado", texto: a.download });
+    } catch {
+      setErroPdf(true);
+    } finally {
+      setGerando(false);
+    }
+  };
   const copiar = async () => {
     try {
       await navigator.clipboard.writeText(cert.codigo);
@@ -254,7 +284,38 @@ function Emitido({ cert, novo }: { cert: TCertificado; novo: boolean }) {
             </Botao>
           </dd>
         </dl>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Botao onClick={() => void baixarPdf()} disabled={gerando} aria-busy={gerando} className="px-5 py-3 text-[15px]">
+            <Download className="size-4" aria-hidden="true" /> {gerando ? "Gerando o PDF…" : "Baixar PDF"}
+          </Botao>
+          <a
+            href={linkLinkedin(cert, origem)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-line-hi px-5 py-3 text-[15px] font-semibold transition-colors duration-150 hover:border-muted"
+          >
+            Adicionar ao LinkedIn <ExternalLink className="size-3.5" aria-hidden="true" />
+            <span className="sr-only">(abre em nova aba)</span>
+          </a>
+          <a
+            href={`/certificado/${cert.codigo}`}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-[10px] px-3 py-3 text-[15px] font-medium text-muted transition-colors duration-150 hover:text-ink"
+          >
+            Ver página de validação <ExternalLink className="size-3.5" aria-hidden="true" />
+            <span className="sr-only">(abre em nova aba)</span>
+          </a>
+        </div>
+        {erroPdf && (
+          <p role="alert" className="m-0 mt-4 text-sm text-ink">
+            Não foi possível gerar o PDF. Confira a conexão e tente de novo.
+          </p>
+        )}
       </section>
+      <p className="m-0 mt-4 text-sm leading-relaxed text-muted">
+        Quem receber o certificado confere pelo QR code ou digitando o código em {origem.replace(/^https?:\/\//, "")}/certificado. A página mostra só o nome, o curso, a carga horária e a data.
+      </p>
     </>
   );
 }

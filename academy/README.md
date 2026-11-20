@@ -11,6 +11,7 @@ O site institucional (raiz do repositório) não muda com este portal. Os dois u
 - Meus cursos e a página de cada curso, com módulos, aulas e progresso.
 - Busca com Ctrl+K.
 - Questões no fim de cada módulo, avaliação final e emissão do certificado (telas da 06b).
+- Certificado em PDF (modelos Clássico claro e Técnico), botão do LinkedIn e validação pública em `/certificado/CODIGO` (fase 10).
 - Painel do instrutor em `/instrutor`, só para a equipe: cursos, módulos, aulas, vídeos, questões, regras do certificado, Boletim do SOC e equipe (fase 13).
 - Sobre o curso na página de cada curso: objetivos, para quem é, pré-requisitos, ementa por módulo e quem ensina, editados no painel (fase 13b).
 
@@ -124,7 +125,17 @@ select q.id, x.ordem, x.texto, x.correta from q, (values
   (4, 'Autenticidade', false)) as x(ordem, texto, correta);
 ```
 
-Certificado: o aluno confere o nome antes de emitir; depois de emitido, correção só pela CyDef. O código tem o formato `CYD-XXXX-XXXX-XXXX-XXXX` e é validado em `academy.cydef.com.br/certificado/CODIGO`, que mostra só nome, curso, carga horária e data. A pedido do aluno (Aviso de Privacidade, item 4), desative a validação pública:
+Certificado: o aluno confere o nome antes de emitir; depois de emitido, correção só pela CyDef. O código tem o formato `CYD-XXXX-XXXX-XXXX-XXXX`.
+
+#### PDF e validação pública (fase 10, migração 0017)
+
+- **Modelos:** curso gratuito usa o B, Clássico claro; curso pago usa o C, Técnico, com os módulos do curso. O A, Noturno, fica para o certificado de formação (etapa futura). O instrutor pode fixar o modelo do curso na aba Certificado do painel; vazio é o automático. Selo da CyDef Academy, sem assinatura e sem nota.
+- **Na emissão** o banco grava no certificado o modelo e os títulos dos módulos com aula publicada. Mudar o curso depois não muda certificado já emitido.
+- **PDF:** gerado no navegador do aluno (`src/lib/certificado-pdf.ts`, com pdf-lib), em A4 deitado, com texto e QR code em vetor. Fontes em `src/assets/certificado/` (SIL OFL 1.1, licença no `OFL.txt`). O gerador e as fontes só são baixados quando o aluno clica em "Baixar PDF". Os dados vêm de `academy_meu_certificado`, que só responde ao dono.
+- **LinkedIn:** o botão "Adicionar ao LinkedIn" abre o formulário de certificação do LinkedIn já preenchido com curso, CyDef Academy, mês e ano, código e o link de validação.
+- **Validação:** `academy.cydef.com.br/certificado/CODIGO`, sem login, e `/certificado` com um campo para digitar o código (aceita minúsculas e sem hífen). Mostra só nome, curso, carga horária e data, como diz o Aviso de Privacidade (v2026.3, item 4). Código inexistente e validação desativada recebem a mesma resposta.
+
+A pedido do aluno (Aviso de Privacidade, item 4), desative a validação pública:
 
 ```sql
 update public.certificados set validacao_publica = false where codigo = 'CYD-....';

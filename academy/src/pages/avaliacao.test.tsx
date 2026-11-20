@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import QuestoesModulo from "./QuestoesModulo";
@@ -8,7 +8,13 @@ import Curso from "./Curso";
 import Aula from "./Aula";
 import { renderizar } from "@/test/utilidades";
 import { violacoesGraves } from "@/test/axe";
-import { dataPorExtenso, mostraConclusao, nomeValido, normalizarNome, quandoLibera, buscarSituacao, type Situacao } from "@/lib/avaliacao";
+import { linkLinkedin, normalizarCodigo, dataPorExtenso, mostraConclusao, nomeValido, normalizarNome, quandoLibera, buscarSituacao, type Situacao } from "@/lib/avaliacao";
+
+const gerarPdf = vi.fn<(d: unknown) => Promise<Blob>>(async () => new Blob(["%PDF"], { type: "application/pdf" }));
+vi.mock("@/lib/certificado-pdf", () => ({
+  gerarCertificadoNoNavegador: (d: unknown) => gerarPdf(d),
+  nomeArquivo: () => "certificado-cybersecurity-fundamentals-CYD-AAAA-BBBB-CCCC-DDDD.pdf",
+}));
 
 const M0 = "00000000-0000-4000-8000-0000000000a0";
 const M1 = "00000000-0000-4000-8000-0000000000a1";
@@ -332,6 +338,54 @@ describe("certificado", () => {
     expect(await screen.findByText("CYD-AAAA-BBBB-CCCC-DDDD")).toBeInTheDocument();
     expect(screen.queryByLabelText("Nome no certificado")).not.toBeInTheDocument();
   });
+
+  it("já emitido: baixa o PDF com os dados do banco e oferece LinkedIn e validação", async () => {
+    const meu = {
+      codigo: "CYD-AAAA-BBBB-CCCC-DDDD",
+      nome: "Ana Souza",
+      curso_titulo: "Cybersecurity Fundamentals",
+      carga_horaria_h: 6,
+      concluido_em: "2026-11-19",
+      modelo: "claro",
+      conteudo: ["Princípios de segurança"],
+    };
+    const { sb, chamadas } = sbAvaliacao({
+      academy_situacao_curso: () => ({
+        data: situacao({ final: { situacao: "aprovado" }, certificado: { codigo: meu.codigo, nome: meu.nome, concluido_em: meu.concluido_em } }),
+      }),
+      academy_meu_painel: () => ({ data: { nome: "Ana Souza" } }),
+      academy_meu_certificado: () => ({ data: meu }),
+    });
+    const criar = vi.fn(() => "blob:certificado");
+    Object.assign(URL, { createObjectURL: criar, revokeObjectURL: vi.fn() });
+    const clique = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    abrir(sb);
+    const linkedin = await screen.findByRole("link", { name: /Adicionar ao LinkedIn/ });
+    const url = new URL(linkedin.getAttribute("href")!);
+    expect(url.origin + url.pathname).toBe("https://www.linkedin.com/profile/add");
+    expect(Object.fromEntries(url.searchParams)).toMatchObject({ startTask: "CERTIFICATION_NAME", name: "Cybersecurity Fundamentals", certId: meu.codigo, issueYear: "2026", issueMonth: "11" });
+    expect(screen.getByRole("link", { name: /Ver página de validação/ })).toHaveAttribute("href", `/certificado/${meu.codigo}`);
+
+    fireEvent.click(screen.getByRole("button", { name: /Baixar PDF/ }));
+    await waitFor(() => expect(gerarPdf).toHaveBeenCalledWith(expect.objectContaining({ codigo: meu.codigo, modelo: "claro" })));
+    expect(chamadas.find((c) => c.nome === "academy_meu_certificado")?.args).toEqual({ p_curso: CURSO.slug });
+    await waitFor(() => expect(clique).toHaveBeenCalled());
+    expect(criar).toHaveBeenCalled();
+    clique.mockRestore();
+  });
+
+  it("falha ao gerar o PDF avisa sem sair da tela", async () => {
+    const { sb } = sbAvaliacao({
+      academy_situacao_curso: () => ({
+        data: situacao({ final: { situacao: "aprovado" }, certificado: { codigo: "CYD-AAAA-BBBB-CCCC-DDDD", nome: "Ana Souza", concluido_em: "2026-11-19" } }),
+      }),
+      academy_meu_painel: () => ({ data: { nome: "Ana Souza" } }),
+      academy_meu_certificado: () => ({ error: { message: "boom" } }),
+    });
+    abrir(sb);
+    fireEvent.click(await screen.findByRole("button", { name: /Baixar PDF/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível gerar o PDF");
+  });
 });
 
 describe("curso e sala de aula com questões", () => {
@@ -411,5 +465,22 @@ describe("regras de apoio", () => {
   it("resposta fora do formato vira erro, não tela quebrada", async () => {
     const { sb } = sbAvaliacao({ academy_situacao_curso: () => ({ data: { final: { situacao: "qualquer" } } }) });
     await expect(buscarSituacao(sb, CURSO.slug)).rejects.toMatchObject({ codigo: "falha" });
+  });
+});
+
+describe("código e LinkedIn", () => {
+  it("normaliza o código do jeito que a pessoa digitar", () => {
+    expect(normalizarCodigo("cyd-7f3a-29c1-b84e-0d56")).toBe("CYD-7F3A-29C1-B84E-0D56");
+    expect(normalizarCodigo(" 7F3A 29C1 B84E 0D56 ")).toBe("CYD-7F3A-29C1-B84E-0D56");
+    expect(normalizarCodigo("CYD7F3A29C1B84E0D56")).toBe("CYD-7F3A-29C1-B84E-0D56");
+    expect(normalizarCodigo("CYD-1234")).toBeNull();
+    expect(normalizarCodigo("CYD-ZZZZ-29C1-B84E-0D56")).toBeNull();
+  });
+
+  it("link do LinkedIn aponta para a validação", () => {
+    const u = new URL(linkLinkedin({ codigo: "CYD-1", curso_titulo: "Curso", concluido_em: "2026-03-05" }, "https://academy.cydef.com.br/"));
+    expect(u.searchParams.get("certUrl")).toBe("https://academy.cydef.com.br/certificado/CYD-1");
+    expect(u.searchParams.get("organizationName")).toBe("CyDef Academy");
+    expect(u.searchParams.get("issueMonth")).toBe("3");
   });
 });
