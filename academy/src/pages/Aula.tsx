@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check, CircleCheck, ClipboardCheck, ListChecks, 
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { caminhoAvaliacao, caminhoQuestoes, moduloPendente, mostraConclusao } from "@/lib/avaliacao";
 import { usePortal } from "@/lib/portal";
+import { TextoFormatado } from "@/components/ui/TextoFormatado";
 import { caminhoAula, localizarAula, numeroAula, proximoModuloEmProducao, registrarProgresso, resumoDoCurso, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
 import type { CursoDetalhe } from "@/lib/cursos";
 import { useAvisos } from "@/components/ui/avisos-ctx";
@@ -191,7 +192,7 @@ export default function Aula() {
             {aula.resumo && (
               <section aria-labelledby="h-sobre" className="max-w-[68ch] border-t border-line pt-7">
                 <h2 id="h-sobre" className="m-0 mb-2.5 font-display text-xl font-semibold">Sobre a aula</h2>
-                <p className="m-0 leading-relaxed text-[#d4d4d4]">{aula.resumo}</p>
+                <TextoFormatado texto={aula.resumo} />
               </section>
             )}
           </motion.div>

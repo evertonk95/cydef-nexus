@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import Aula from "./Aula";
 import Curso from "./Curso";
@@ -20,7 +20,7 @@ const CURSO = {
       id: "m0",
       ordem: 0,
       titulo: "Introdução",
-      aulas: [{ id: "a1", ordem: 1, numero: 1, titulo: "Boas-vindas ao curso", resumo: "O que vamos estudar.", duracao_seg: 122 }],
+      aulas: [{ id: "a1", ordem: 1, numero: 1, titulo: "Boas-vindas ao curso", resumo: "Nesta aula você vê:\n• o que é o curso;\n• como estudar.\n\nBoas-vindas!", duracao_seg: 122 }],
     },
     {
       id: "m1",
@@ -160,6 +160,15 @@ describe("sala de aula", () => {
     const { sb } = sbAula({ matriculado: false });
     abrir(1, sb);
     expect(await screen.findByText("Este curso ainda não está na sua conta")).toBeInTheDocument();
+  });
+
+  it("mostra o resumo com os parágrafos e a lista que o instrutor digitou", async () => {
+    const { sb } = sbAula();
+    abrir(1, sb);
+    const sobre = await screen.findByRole("region", { name: "Sobre a aula" });
+    expect(within(sobre).getByText("Nesta aula você vê:").tagName).toBe("P");
+    expect(within(sobre).getAllByRole("listitem").map((li) => li.textContent)).toEqual(["o que é o curso;", "como estudar."]);
+    expect(within(sobre).getByText("Boas-vindas!").tagName).toBe("P");
   });
 
   it("aula que não existe cai na página de não encontrado", async () => {
