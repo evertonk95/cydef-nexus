@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { Plus } from "lucide-react";
+import { Plus, ShieldCheck } from "lucide-react";
 import { chamar, useAcao, useCursosAdm, useEquipeAdm, useEu, type MembroEquipe, type Papel } from "@/lib/instrutor";
+import { useDono } from "@/lib/admin";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
@@ -16,6 +17,7 @@ export default function EquipeInstrutor() {
 function Conteudo() {
   const equipe = useEquipeAdm();
   const cursos = useCursosAdm();
+  const dono = useDono();
   const [editando, setEditando] = useState<MembroEquipe | "novo" | null>(null);
   const titulo = (slug: string) => cursos.data?.find((c) => c.slug === slug)?.titulo ?? slug;
   if (equipe.isError) return <FalhaCarregamento tentar={() => void equipe.refetch()} />;
@@ -63,9 +65,17 @@ function Conteudo() {
                   m.aprova_materiais !== undefined && <Aprovador membro={m} />
                 )}
               </div>
-              <Botao variante="contorno" className="h-9 px-3 text-sm" onClick={() => setEditando(m)} aria-label={`Editar acesso de ${m.nome ?? m.email}`}>
-                Editar
-              </Botao>
+              <div className="flex shrink-0 sm:w-44 sm:justify-end">
+                {m.user_id === dono.data?.user_id ? (
+                  <p className="m-0 flex items-center gap-2 text-[13px] text-muted">
+                    <ShieldCheck className="size-4 shrink-0 text-ink" aria-hidden="true" /> Dono da plataforma
+                  </p>
+                ) : (
+                  <Botao variante="contorno" className="h-9 px-3 text-sm" onClick={() => setEditando(m)} aria-label={`Editar acesso de ${m.nome ?? m.email}`}>
+                    Editar
+                  </Botao>
+                )}
+              </div>
             </li>
           ))}
         </ul>

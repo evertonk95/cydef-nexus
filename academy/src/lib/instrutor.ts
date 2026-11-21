@@ -199,6 +199,8 @@ const MENSAGENS: Record<string, string> = {
   invalid_payload: "Algum campo veio em formato inválido.",
   // 0032: ficha de pessoa no painel do admin.
   pessoa_inexistente: "Pessoa não encontrada.",
+  conta_protegida: "Esta é a conta do dono da plataforma. Só ele pode alterá-la.",
+  dono_sempre_admin: "A conta do dono da plataforma continua admin sempre.",
   objetivos_invalidos: "Use até 10 objetivos, com até 200 caracteres cada.",
   publico_invalido: "O texto de público passa de 600 caracteres.",
   pre_requisitos_invalidos: "Os pré-requisitos passam de 600 caracteres.",

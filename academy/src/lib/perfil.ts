@@ -82,6 +82,8 @@ const MENSAGENS: Record<string, string> = {
   sem_cadastro: "Este login não tem cadastro de aluno.",
   sem_permissao: "Seu acesso não permite essa alteração.",
   pessoa_inexistente: "Pessoa não encontrada.",
+  conta_protegida: "Esta é a conta do dono da plataforma. Só ele pode alterá-la.",
+  dono_sempre_admin: "A conta do dono da plataforma continua admin sempre.",
   nao_autenticado: "Sua sessão expirou. Entre de novo.",
 };
 

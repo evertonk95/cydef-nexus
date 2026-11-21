@@ -694,6 +694,10 @@ http
             certificados: [], missoes: { tentativas: 0, aprovadas: 0 },
           });
         }
+        // Fase 21: o dono da plataforma é a conta logada (o Everton).
+        case "/rest/v1/rpc/academy_adm_dono":
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          return enviar({ user_id: USUARIO.id, eu: true });
         case "/rest/v1/rpc/academy_adm_equipe":
           if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
           return enviar([

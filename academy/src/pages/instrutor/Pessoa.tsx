@@ -1,11 +1,11 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { usePortal } from "@/lib/portal";
 import { chamar, useAcao, useCursosAdm, useEu, type ErroPainel } from "@/lib/instrutor";
-import { PERFIS_DECLARADOS, pct, salvarPerfilAdm, usePessoa, type FichaPessoa } from "@/lib/admin";
-import type { ErroPerfil, PerfilForm } from "@/lib/perfil";
+import { PERFIS_DECLARADOS, pct, salvarPerfilAdm, useDono, usePessoa, type FichaPessoa } from "@/lib/admin";
+import { AREAS, EXPERIENCIAS, type ErroPerfil, type Perfil, type PerfilForm } from "@/lib/perfil";
 import { dataCurta } from "@/lib/formato";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
@@ -24,6 +24,7 @@ export default function PessoaAdm() {
 function Conteudo() {
   const { id } = useParams();
   const ficha = usePessoa(id);
+  const dono = useDono();
   if (ficha.isError) {
     return (ficha.error as ErroPainel).codigo === "pessoa_inexistente" ? <NaoEncontrado /> : <FalhaCarregamento tentar={() => void ficha.refetch()} />;
   }
@@ -32,13 +33,13 @@ function Conteudo() {
       <Link to="/instrutor/pessoas" className="mb-6 inline-flex items-center gap-2 text-sm text-muted hover:text-ink">
         <ArrowLeft className="size-4" aria-hidden="true" /> Pessoas
       </Link>
-      {!ficha.data ? (
+      {!ficha.data || dono.isPending ? (
         <div aria-busy="true" aria-label="Carregando a ficha" className="flex flex-col gap-4">
           <Esqueleto className="h-10 w-72" />
           <Esqueleto className="h-96 w-full" />
         </div>
       ) : (
-        <Ficha f={ficha.data} />
+        <Ficha f={ficha.data} dono={ficha.data.user_id === dono.data?.user_id} euSouDono={Boolean(dono.data?.eu)} />
       )}
     </>
   );
@@ -57,7 +58,9 @@ function Bloco({ id, titulo, children }: { id: string; titulo: string; children:
   );
 }
 
-function Ficha({ f }: { f: FichaPessoa }) {
+function Ficha({ f, dono, euSouDono }: { f: FichaPessoa; dono: boolean; euSouDono: boolean }) {
+  // A conta do dono só muda pelas mãos dele (0033). Os outros admins veem, mas não editam.
+  const bloqueada = dono && !euSouDono;
   const { sb } = usePortal();
   const qc = useQueryClient();
   const aviso = useAvisos();
@@ -81,7 +84,7 @@ function Ficha({ f }: { f: FichaPessoa }) {
           <p className="m-0 mt-1 break-all text-muted">{f.perfil.email}</p>
         </div>
         <p className="m-0 text-sm text-muted sm:ml-auto">
-          {rotuloPapel(f.papel)}, na Academy desde {dataCurta(f.criado_em)}
+          {dono ? "Dono da plataforma" : rotuloPapel(f.papel)}, na Academy desde {dataCurta(f.criado_em)}
           {f.ultimo_acesso_em ? `, último acesso em ${dataCurta(f.ultimo_acesso_em)}` : ", ainda não entrou"}
         </p>
       </div>
@@ -91,16 +94,27 @@ function Ficha({ f }: { f: FichaPessoa }) {
           <h2 id="h-perfil" className="m-0 font-display text-xl font-semibold">
             Perfil
           </h2>
-          <FormularioPerfil
-            key={f.perfil.atualizado_em ?? "novo"}
-            perfil={f.perfil}
-            salvar={salvar}
-            visao="admin"
-          />
+          {bloqueada ? (
+            <PerfilLeitura perfil={f.perfil} />
+          ) : (
+            <FormularioPerfil key={f.perfil.atualizado_em ?? "novo"} perfil={f.perfil} salvar={salvar} visao="admin" />
+          )}
         </section>
 
         <div className="flex min-w-0 flex-col gap-6">
-          <PapelPessoa f={f} />
+          {dono ? (
+            <Bloco id="h-papel-pessoa" titulo="Papel">
+              <p className="m-0 flex gap-3 text-sm text-muted">
+                <ShieldCheck className="mt-0.5 size-[18px] shrink-0 text-ink" aria-hidden="true" />
+                <span>
+                  Admin, sempre. {euSouDono ? "Você é o dono da plataforma" : "Esta é a conta do dono da plataforma"} e o papel dela não muda pelo
+                  painel.
+                </span>
+              </p>
+            </Bloco>
+          ) : (
+            <PapelPessoa f={f} />
+          )}
 
           <Bloco id="h-cursos-pessoa" titulo="Cursos">
             {f.cursos.length === 0 ? (
@@ -162,6 +176,44 @@ function Ficha({ f }: { f: FichaPessoa }) {
         </div>
       </div>
     </>
+  );
+}
+
+/** Perfil do dono, visto por outro admin: só leitura. */
+function PerfilLeitura({ perfil }: { perfil: Perfil }) {
+  const rotulo = (lista: { valor: string; rotulo: string }[], v: string | null) => lista.find((o) => o.valor === v)?.rotulo ?? v;
+  const nascimento = perfil.data_nascimento?.split("-").reverse().join("/") ?? null;
+  const campos: [string, string | null][] = [
+    ["Nome completo", perfil.nome],
+    ["E-mail", perfil.email],
+    ["Data de nascimento", nascimento],
+    ["Telefone", perfil.telefone],
+    ["Cidade", perfil.cidade],
+    ["País", perfil.pais],
+    ["Empresa onde trabalha", perfil.empresa],
+    ["Cargo", perfil.cargo],
+    ["Área de atuação", rotulo(AREAS, perfil.area)],
+    ["Tempo de experiência na área", rotulo(EXPERIENCIAS, perfil.experiencia)],
+    ["Bio", perfil.bio],
+    ["LinkedIn", perfil.linkedin],
+  ];
+  return (
+    <div className="painel-card flex flex-col gap-5 p-6">
+      <p className="m-0 flex gap-3 text-sm text-muted">
+        <ShieldCheck className="mt-0.5 size-[18px] shrink-0 text-ink" aria-hidden="true" />
+        <span>Esta é a conta do dono da plataforma. Só ele altera esses dados, pela página Meu perfil.</span>
+      </p>
+      <dl className="m-0 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+        {campos
+          .filter(([, v]) => v)
+          .map(([r, v]) => (
+            <div key={r} className={r === "Bio" ? "sm:col-span-2" : undefined}>
+              <dt className="text-[13px] text-dim">{r}</dt>
+              <dd className="m-0 break-words whitespace-pre-line">{v}</dd>
+            </div>
+          ))}
+      </dl>
+    </div>
   );
 }
 
