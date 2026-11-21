@@ -23,13 +23,15 @@ export default function AreaInstrutor() {
 
   const abas = [
     { para: "/instrutor", rotulo: "Cursos", fim: false, admin: false },
+    { para: "/instrutor/indicadores", rotulo: "Indicadores", fim: true, admin: true },
+    { para: "/instrutor/pessoas", rotulo: "Pessoas", fim: false, admin: true },
     { para: "/instrutor/aprovacoes", rotulo: "Aprovações", fim: true, admin: false, aprovador: true },
     { para: "/instrutor/trilhas", rotulo: "Trilhas", fim: true, admin: true },
     { para: "/instrutor/vendas", rotulo: "Vendas", fim: true, admin: true },
     { para: "/instrutor/empresas", rotulo: "Empresas", fim: true, admin: true },
     { para: "/instrutor/boletim", rotulo: "Boletim do SOC", fim: true, admin: true },
     { para: "/instrutor/equipe", rotulo: "Equipe", fim: true, admin: true },
-    { para: "/instrutor/perfil", rotulo: "Meu perfil", fim: true, admin: false },
+    { para: "/instrutor/perfil", rotulo: "Perfil de instrutor", fim: true, admin: false },
   ].filter((a) => (!a.admin || eu.data!.papel === "admin") && (!("aprovador" in a) || eu.data!.aprova_materiais));
 
   return (
@@ -46,7 +48,7 @@ export default function AreaInstrutor() {
               end={a.fim}
               className={({ isActive }) => {
                 // "Cursos" fica ativo em /instrutor e em /instrutor/cursos/*.
-                const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(trilhas|vendas|empresas|boletim|equipe|perfil|aprovacoes)/.test(pathname) : isActive;
+                const ativo = a.para === "/instrutor" ? isActive && !/\/instrutor\/(indicadores|pessoas|trilhas|vendas|empresas|boletim|equipe|perfil|aprovacoes)/.test(pathname) : isActive;
                 return cn(
                   "whitespace-nowrap border-b-2 pb-3 text-[15px] font-medium transition-colors duration-150",
                   ativo ? "border-orange text-ink" : "border-transparent text-muted hover:text-ink",

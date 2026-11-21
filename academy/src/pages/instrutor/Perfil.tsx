@@ -16,7 +16,7 @@ export default function PerfilInstrutor() {
 
   return (
     <>
-      <h1 className="m-0 mb-3 font-display text-[clamp(28px,3vw,40px)] leading-tight font-semibold tracking-tight">Meu perfil</h1>
+      <h1 className="m-0 mb-3 font-display text-[clamp(28px,3vw,40px)] leading-tight font-semibold tracking-tight">Perfil de instrutor</h1>
       <p className="m-0 mb-8 max-w-2xl text-muted">É assim que você aparece para o aluno na página dos cursos em que ensina.</p>
       {!perfil.data ? (
         <div aria-busy="true" aria-label="Carregando o perfil" className="flex max-w-3xl flex-col gap-5">

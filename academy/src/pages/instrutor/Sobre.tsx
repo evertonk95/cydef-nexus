@@ -196,7 +196,7 @@ function Instrutores({ slug }: { slug: string }) {
           {typeof modo === "object" && (
             <div className="painel-card p-6">
               <h3 className="m-0 mb-4 font-display text-base font-semibold">Perfil de {modo.editar.instrutor.nome}</h3>
-              {modo.editar.instrutor.eu && <p className="m-0 mb-4 text-sm text-muted">Este é o seu perfil. Ele também fica em Meu perfil.</p>}
+              {modo.editar.instrutor.eu && <p className="m-0 mb-4 text-sm text-muted">Este é o seu perfil. Ele também fica em Perfil de instrutor.</p>}
               <FormPerfil
                 inicial={modo.editar.instrutor}
                 salvar={(d) => salvarPerfil.mutate({ id: modo.editar.instrutor.id, dados: d })}

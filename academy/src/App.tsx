@@ -20,6 +20,9 @@ const QuestoesModulo = lazy(() => import("@/pages/QuestoesModulo"));
 const Avaliacao = lazy(() => import("@/pages/Avaliacao"));
 const Certificado = lazy(() => import("@/pages/Certificado"));
 const AreaInstrutor = lazy(() => import("@/pages/instrutor/Area"));
+const IndicadoresAdm = lazy(() => import("@/pages/instrutor/Indicadores"));
+const PessoasAdm = lazy(() => import("@/pages/instrutor/Pessoas"));
+const PessoaAdm = lazy(() => import("@/pages/instrutor/Pessoa"));
 const CursosInstrutor = lazy(() => import("@/pages/instrutor/Cursos"));
 const CursoInstrutor = lazy(() => import("@/pages/instrutor/Curso"));
 const AulaInstrutor = lazy(() => import("@/pages/instrutor/Aula"));
@@ -80,6 +83,9 @@ export function App({ config, sb, queryClient }: { config: Config; sb: SupabaseC
                         <Route path="cursos/:slug/questoes/:id" element={<QuestaoInstrutor />} />
                         <Route path="boletim" element={<BoletimInstrutor />} />
                         <Route path="equipe" element={<EquipeInstrutor />} />
+                        <Route path="indicadores" element={<IndicadoresAdm />} />
+                        <Route path="pessoas" element={<PessoasAdm />} />
+                        <Route path="pessoas/:id" element={<PessoaAdm />} />
                         <Route path="perfil" element={<PerfilInstrutor />} />
                         <Route path="aprovacoes" element={<AprovacoesInstrutor />} />
                         <Route path="trilhas" element={<TrilhasInstrutor />} />
