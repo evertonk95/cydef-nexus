@@ -32,3 +32,16 @@ test("Minha conta: corrige o nome, baixa a cópia dos dados e prepara o pedido d
   await expect(exclusao).toHaveAttribute("href", /^mailto:contato@cydef\.com\.br\?subject=LGPD/);
   await expect(page.getByText(/Você ainda não tem certificado/)).toBeVisible();
 });
+
+test("Minha conta: liga o aviso de aula nova e o certificado emitido chega sempre", async ({ page }) => {
+  await page.goto("/conta");
+  const bloco = page.getByRole("region", { name: "Avisos por e-mail" });
+  await expect(bloco.getByText(/certificado emitido chega sempre/)).toBeVisible();
+  const chave = bloco.getByRole("checkbox", { name: /Avisar quando sair aula nova/ });
+  await expect(chave).not.toBeChecked();
+  await chave.click();
+  await expect(chave).toBeChecked();
+  await expect(bloco.getByText(/Ligado desde 20 de novembro de 2026/)).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("region", { name: "Avisos por e-mail" }).getByRole("checkbox", { name: /Avisar quando sair aula nova/ })).toBeChecked();
+});

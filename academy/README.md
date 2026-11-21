@@ -211,6 +211,14 @@ Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`
 - **Aviso de Privacidade v2026.4:** inclui a compra pela Hotmart (item 2.5), as bases legais de execução de contrato e de exercício regular de direitos, a Hotmart como controladora do pagamento e a guarda dos registros de compra por até 5 anos depois do fim do acesso. A 0022 marca a v2026.4 como vigente e o portal passa a apontar para ela. O registro de quem se inscreveu antes continua com a versão que aceitou; a CyDef avisa essas pessoas por e-mail da mudança.
 - **Minha conta:** a exportação de dados inclui `acessos_pagos` (`academy_meus_acessos`), com o que foi comprado ou liberado e a validade. Sem a 0023 no banco, a exportação sai sem esse bloco.
 
+## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
+
+- **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.
+- **Aula nova:** só para quem ligar "Avisar quando sair aula nova" em Minha conta (começa desligado). Um e-mail por aluno e curso, com a lista das aulas novas e o botão para a primeira. Entra a aula publicada há pelo menos 30 minutos (tempo para desfazer) e há no máximo 14 dias, em curso publicado, para quem já estava matriculado e com o aviso ligado antes da publicação. Aulas publicadas antes da 0028 não geram aviso (`aulas.publicada_em` nasce vazia nelas).
+- **Quando sai:** na rotina diária `academy-avisos` (workflow `academy-avisos.yml`, 41 11 UTC), depois dos avisos de vencimento. A aula nova tem teto de 40 e-mails por dia (`LIMITES_AVISOS.aulaNovaPorDia`), para deixar folga no plano gratuito do Resend para o link de login; o que passar sai no dia seguinte. Cada aula e cada certificado é avisado uma vez só (`academy_avisos_enviados`, chaves `certificado:<código>` e `aula:<id>`).
+- **Sem a 0028 no banco,** a função pula essas duas partes e o vencimento segue normal; em Minha conta, o bloco "Avisos por e-mail" não aparece.
+- **Aviso de Privacidade v2026.7:** item 2.2 (a preferência), item 3 (certificado por execução de contrato; aula nova por consentimento, ligado em Minha conta) e item 8 (registro desses envios por até 12 meses).
+
 ## Missões de SOC (fase 15, migrações 0026 e 0027)
 
 - **O que é:** um caso prático no fim de um curso. O aluno examina as evidências em abas (e-mail, cabeçalhos, tabela de logs, alerta do SIEM ou texto), fixa as linhas que provam o caso, responde a investigação e recebe a correção com a explicação de cada pergunta. Referência visual: `prototipo-missao-soc-animado-v1.html`, aprovado em 17/11/2026, no padrão da identidade da fase 08.

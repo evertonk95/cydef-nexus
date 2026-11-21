@@ -72,6 +72,36 @@ describe("Minha conta", () => {
     expect(within(bloco).queryByRole("link", { name: /Página de validação/ })).not.toBeInTheDocument();
   });
 
+  it("avisos por e-mail: aula nova começa desligada e liga; certificado chega sempre", async () => {
+    let args: Record<string, unknown> | undefined;
+    abrir({
+      academy_meu_painel: painelTeste(),
+      academy_meus_certificados: [],
+      academy_meus_avisos: { aula_nova: false, aula_nova_desde: null },
+      academy_definir_aviso_aula_nova: (a) => {
+        args = a;
+        return { data: { aula_nova: true, aula_nova_desde: "2026-11-20T17:00:00Z" } };
+      },
+    });
+    const bloco = await screen.findByRole("region", { name: "Avisos por e-mail" });
+    const chave = await within(bloco).findByRole("checkbox", { name: /Avisar quando sair aula nova/ });
+    expect(chave).not.toBeChecked();
+    expect(within(bloco).getByText(/certificado emitido chega sempre/)).toBeInTheDocument();
+    await userEvent.click(chave);
+    await waitFor(() => expect(args).toEqual({ p_ligado: true }));
+    expect(await within(bloco).findByText(/Ligado desde 20 de novembro de 2026/)).toBeInTheDocument();
+  });
+
+  it("antes da migração 0028, o bloco de avisos não aparece", async () => {
+    abrir({
+      academy_meu_painel: painelTeste(),
+      academy_meus_certificados: [],
+      academy_meus_avisos: () => ({ error: { message: "Could not find the function public.academy_meus_avisos" } }),
+    });
+    await screen.findByRole("region", { name: "Certificados" });
+    await waitFor(() => expect(screen.queryByRole("region", { name: "Avisos por e-mail" })).not.toBeInTheDocument());
+  });
+
   it("sem certificado, explica quando ele aparece", async () => {
     abrir({ academy_meu_painel: painelTeste(), academy_meus_certificados: [] });
     expect(await screen.findByText(/Você ainda não tem certificado/)).toBeInTheDocument();

@@ -3,14 +3,25 @@
  * e-mails de vencimento e registro do que foi enviado.
  */
 import { describe, expect, it, vi } from "vitest";
-import { createAvisosHandler, type AvisosDeps, type BancoAvisos } from "./index.ts";
-import { montarAviso, type AvisoVencimento } from "./email.ts";
+import { createAvisosHandler, LIMITES_AVISOS, type AvisosDeps, type BancoAvisos } from "./index.ts";
+import { montarAulasNovas, montarAviso, montarCertificado, type AvisoAulas, type AvisoCertificado, type AvisoVencimento } from "./email.ts";
 
 const TOKEN = "token-do-agendamento-com-32-caracteres-ou-mais";
 
 const plano: AvisoVencimento = {
   chave: "concessao:0b7e2c1a-1111-4222-8333-444455556666:30d", email: "bia@exemplo.com", nome: "Bia Souza",
   tipo: "plano", acesso: "Plataforma toda", fim: "2027-05-31", dias: 20, renovar_url: "https://pay.hotmart.com/P1234567Q",
+};
+const cert: AvisoCertificado = {
+  chave: "certificado:CYD-1A2B-3C4D-5E6F-7A8B", email: "bia@exemplo.com", nome: "Bia Souza", curso: "Cybersecurity Fundamentals",
+  curso_slug: "cybersecurity-fundamentals", codigo: "CYD-1A2B-3C4D-5E6F-7A8B", carga_horaria_h: 6, concluido_em: "2026-11-20", validacao_publica: true,
+};
+const grupo: AvisoAulas = {
+  email: "ana@exemplo.com", nome: "Ana Lima", curso: "Cybersecurity Fundamentals", curso_slug: "cybersecurity-fundamentals",
+  aulas: [
+    { chave: "aula:0b7e2c1a-1111-4222-8333-000000000004", numero: 4, titulo: "Risco, ameaça, vulnerabilidade e impacto" },
+    { chave: "aula:0b7e2c1a-1111-4222-8333-000000000005", numero: 5, titulo: "Defesa em profundidade" },
+  ],
 };
 const membro: AvisoVencimento = { ...plano, chave: "concessao:0b7e2c1a-1111-4222-8333-444455556667:7d", email: "ana@banco.com", tipo: "membro", acesso: "Banco Exemplo", dias: 5, renovar_url: null };
 
@@ -19,6 +30,8 @@ function deps(over: Partial<AvisosDeps> = {}) {
   const banco = {
     expirar: vi.fn<BancoAvisos["expirar"]>().mockResolvedValue(3),
     pendentes: vi.fn<BancoAvisos["pendentes"]>().mockResolvedValue([plano, membro]),
+    certificados: vi.fn<BancoAvisos["certificados"]>().mockResolvedValue([]),
+    aulas: vi.fn<BancoAvisos["aulas"]>().mockResolvedValue([]),
     registrar: vi.fn<BancoAvisos["registrar"]>().mockResolvedValue(1),
   };
   const carteiro = { enviar: vi.fn().mockResolvedValue(true) };
@@ -46,7 +59,7 @@ describe("academy-avisos", () => {
     carteiro.enviar.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
     const res = await createAvisosHandler(d)(post());
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ recalculados: 3, enviados: 1, falhas: 1, email: "ligado" });
+    expect(await res.json()).toEqual({ recalculados: 3, enviados: 1, falhas: 1, por_tipo: { vencimento: 1, certificado: 0, aula: 0 }, email: "ligado" });
     expect(banco.registrar).toHaveBeenCalledWith([{ chave: plano.chave, email: plano.email }]);
     expect(JSON.stringify(logs)).not.toMatch(/@/);
   });
@@ -55,6 +68,40 @@ describe("academy-avisos", () => {
     const { d, banco } = deps({ carteiro: undefined });
     expect(await (await createAvisosHandler(d)(post())).json()).toEqual({ recalculados: 3, enviados: 0, falhas: 0, pendentes: 2, email: "desligado" });
     expect(banco.registrar).not.toHaveBeenCalled();
+  });
+
+  it("fase 18: certificado e aula nova saem na mesma rodada e cada aula do e-mail é registrada", async () => {
+    const { d, banco, carteiro } = deps();
+    banco.pendentes.mockResolvedValue([]);
+    banco.certificados.mockResolvedValue([cert]);
+    banco.aulas.mockResolvedValue([grupo]);
+    const res = await createAvisosHandler({ ...d, academyUrl: "https://academy.cydef.com.br" })(post());
+    expect(await res.json()).toMatchObject({ enviados: 2, falhas: 0, por_tipo: { vencimento: 0, certificado: 1, aula: 1 } });
+    expect(banco.aulas).toHaveBeenCalledWith(LIMITES_AVISOS.aulaNovaPorDia);
+    expect(carteiro.enviar).toHaveBeenCalledTimes(2);
+    expect(banco.registrar).toHaveBeenCalledWith([
+      { chave: cert.chave, email: cert.email },
+      { chave: grupo.aulas[0]!.chave, email: grupo.email },
+      { chave: grupo.aulas[1]!.chave, email: grupo.email },
+    ]);
+  });
+
+  it("fase 18: banco sem a 0028 não derruba o vencimento", async () => {
+    const { d, banco, logs } = deps();
+    banco.certificados.mockRejectedValue(new Error("rpc_academy_avisos_certificados_404"));
+    banco.aulas.mockRejectedValue(new Error("rpc_academy_avisos_aulas_404"));
+    const res = await createAvisosHandler(d)(post());
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ enviados: 2, por_tipo: { vencimento: 2, certificado: 0, aula: 0 } });
+    expect(logs.filter((l) => l.event === "avisos_fonte_falhou")).toHaveLength(2);
+  });
+
+  it("fase 18: aula nova respeita o teto diário mesmo se o banco mandar mais", async () => {
+    const { d, banco, carteiro } = deps();
+    banco.pendentes.mockResolvedValue([]);
+    banco.aulas.mockResolvedValue(Array.from({ length: LIMITES_AVISOS.aulaNovaPorDia + 5 }, (_, i) => ({ ...grupo, email: `p${i}@exemplo.com` })));
+    await createAvisosHandler(d)(post());
+    expect(carteiro.enviar).toHaveBeenCalledTimes(LIMITES_AVISOS.aulaNovaPorDia);
   });
 
   it("falha do banco: 500 para o agendamento acusar", async () => {
@@ -83,5 +130,49 @@ describe("modelos de vencimento", () => {
     expect(g.subject).toBe("O contrato da Banco <i>X</i> com a CyDef Academy termina em 30 dias");
     expect(g.html).toContain("Banco &lt;i&gt;X&lt;/i&gt;");
     expect(g.text).toContain("deixa de ver o progresso");
+  });
+});
+
+describe("modelos da fase 18", () => {
+  const URL = "https://academy.cydef.com.br";
+
+  it("certificado: código, link do certificado e da validação pública", () => {
+    const m = montarCertificado(cert, URL)!;
+    expect(m.subject).toBe("Seu certificado da CyDef Academy: Cybersecurity Fundamentals");
+    expect(m.html).toContain("https://academy.cydef.com.br/cursos/cybersecurity-fundamentals/certificado");
+    expect(m.html).toContain("academy.cydef.com.br/certificado/CYD-1A2B-3C4D-5E6F-7A8B");
+    expect(m.text).toContain("6 horas");
+    expect(m.text).toContain("20/11/2026");
+    expect(m.html).toContain("LinkedIn");
+  });
+
+  it("certificado com validação pública desligada não leva o link de validação", () => {
+    const m = montarCertificado({ ...cert, validacao_publica: false }, URL)!;
+    expect(m.html).not.toContain("/certificado/CYD-");
+    expect(m.text).not.toContain("/certificado/CYD-");
+  });
+
+  it("certificado com código ou curso fora do formato não é montado", () => {
+    expect(montarCertificado({ ...cert, codigo: "CYD-<script>" }, URL)).toBeNull();
+    expect(montarCertificado({ ...cert, curso_slug: "../conta" }, URL)).toBeNull();
+  });
+
+  it("aula nova: lista as aulas, abre a primeira e diz como desligar", () => {
+    const m = montarAulasNovas(grupo, URL)!;
+    expect(m.subject).toBe("2 aulas novas em Cybersecurity Fundamentals");
+    expect(m.html).toContain("Aula 04: Risco, ameaça, vulnerabilidade e impacto");
+    expect(m.html).toContain("Aula 05: Defesa em profundidade");
+    expect(m.html).toContain("https://academy.cydef.com.br/cursos/cybersecurity-fundamentals/aulas/4");
+    expect(m.html).toContain("https://academy.cydef.com.br/conta");
+    expect(m.text).toContain("desligue");
+    const uma = montarAulasNovas({ ...grupo, aulas: [grupo.aulas[1]!] }, URL)!;
+    expect(uma.subject).toBe("Aula nova em Cybersecurity Fundamentals: Defesa em profundidade");
+  });
+
+  it("aula nova escapa título e não monta sem aula válida", () => {
+    const m = montarAulasNovas({ ...grupo, aulas: [{ chave: "aula:x", numero: 6, titulo: "<img src=x onerror=alert(1)>" }] }, URL)!;
+    expect(m.html).not.toContain("<img");
+    expect(m.html).toContain("&lt;img");
+    expect(montarAulasNovas({ ...grupo, aulas: [] }, URL)).toBeNull();
   });
 });
