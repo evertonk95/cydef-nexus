@@ -14,6 +14,7 @@ for (const [nome, caminho] of [
   ["curso", "/cursos/cybersecurity-fundamentals"],
   ["aula", "/cursos/cybersecurity-fundamentals/aulas/2"],
   ["minha conta", "/conta"],
+  ["meu perfil", "/perfil"],
   ["catálogo", "/catalogo"],
   ["curso do catálogo", "/catalogo/soc-analyst"],
   ["validação do certificado", "/certificado/CYD-0000-0000-0000-0000"],

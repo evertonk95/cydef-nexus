@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Download, ExternalLink, LogOut, Mail } from "lucide-react";
@@ -8,7 +8,6 @@ import { urlAviso } from "@/lib/privacidade";
 import { dataPorExtenso } from "@/lib/avaliacao";
 import {
   arquivoDados,
-  atualizarNome,
   baixarArquivo,
   definirAvisoAulaNova,
   definirValidacao,
@@ -25,7 +24,7 @@ import { dia, useMinhasEmpresas, type MinhaEmpresa } from "@/lib/empresas";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
-import { Campo, ErroFormulario } from "@/components/instrutor/Campos";
+import { ErroFormulario } from "@/components/instrutor/Campos";
 import { FalhaCarregamento, SemCadastro } from "./Estados";
 
 export default function Conta() {
@@ -68,48 +67,27 @@ function Bloco({ id, titulo, children }: { id: string; titulo: string; children:
   );
 }
 
-function Dados({ nome: atual }: { nome: string }) {
-  const { sb, sessao } = usePortal();
-  const qc = useQueryClient();
-  const aviso = useAvisos();
-  const [nome, setNome] = useState(atual);
-  const salvar = useMutation<{ nome: string }, ErroConta, string>({
-    mutationFn: (n) => atualizarNome(sb, n),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["painel"] });
-      aviso({ tipo: "ok", titulo: "Nome salvo" });
-    },
-  });
-  const enviar = (e: FormEvent) => {
-    e.preventDefault();
-    salvar.mutate(nome);
-  };
-  const mudou = nome.trim().replace(/\s+/g, " ") !== atual;
-
+function Dados({ nome }: { nome: string }) {
+  const { sessao } = usePortal();
   return (
-    <form onSubmit={enviar} className="painel-card flex flex-col gap-5 p-6">
-      <Campo
-        rotulo="Nome"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-        limite={80}
-        required
-        minLength={2}
-        autoComplete="name"
-        ajuda="É o nome que aparece no portal e que vem preenchido na emissão do certificado. Certificado já emitido não muda."
-      />
+    <div className="painel-card flex flex-col gap-5 p-6">
+      <div className="flex flex-col gap-1.5">
+        <p className="m-0 text-sm font-medium">Nome</p>
+        <p className="m-0 text-[15px] text-ink">{nome}</p>
+      </div>
       <div className="flex flex-col gap-1.5">
         <p className="m-0 text-sm font-medium">E-mail</p>
-        <p className="m-0 text-[15px] text-ink">{sessao?.user.email}</p>
+        <p className="m-0 text-[15px] break-all text-ink">{sessao?.user.email}</p>
         <p className="m-0 text-[13px] text-muted">O e-mail é o seu login. Para trocar, escreva para contato@cydef.com.br.</p>
       </div>
-      <ErroFormulario erro={salvar.error} />
-      <div>
-        <Botao type="submit" className="h-11 px-5" disabled={!mudou || salvar.isPending}>
-          {salvar.isPending ? "Salvando…" : "Salvar nome"}
-        </Botao>
-      </div>
-    </form>
+      <p className="m-0 border-t border-line pt-4 text-sm leading-relaxed text-muted">
+        Nome, contato, trabalho e bio ficam em{" "}
+        <Link to="/perfil" className="text-ink underline underline-offset-4">
+          Meu perfil
+        </Link>
+        .
+      </p>
+    </div>
   );
 }
 

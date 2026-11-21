@@ -211,6 +211,15 @@ Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`
 - **Aviso de Privacidade v2026.4:** inclui a compra pela Hotmart (item 2.5), as bases legais de execução de contrato e de exercício regular de direitos, a Hotmart como controladora do pagamento e a guarda dos registros de compra por até 5 anos depois do fim do acesso. A 0022 marca a v2026.4 como vigente e o portal passa a apontar para ela. O registro de quem se inscreveu antes continua com a versão que aceitou; a CyDef avisa essas pessoas por e-mail da mudança.
 - **Minha conta:** a exportação de dados inclui `acessos_pagos` (`academy_meus_acessos`), com o que foi comprado ou liberado e a validade. Sem a 0023 no banco, a exportação sai sem esse bloco.
 
+## Meu perfil (fase 19, migrações 0030 e 0031)
+
+- **Página `/perfil`**, no menu da conta, para qualquer papel. Só o nome é obrigatório; data de nascimento (16 anos ou mais), telefone, cidade, país, empresa, cargo, área de atuação, tempo de experiência, bio (até 600 caracteres) e LinkedIn são opcionais. Campo vazio apaga o valor. O e-mail é o login e aparece só para leitura.
+- **"Minha conta"** deixa de editar o nome: o bloco "Seus dados" mostra nome e e-mail e leva para Meu perfil.
+- **Banco:** tabela `academy_perfis`, fechada; leitura e gravação só por `academy_meu_perfil` e `academy_salvar_meu_perfil`. A validação fica em `academy__salvar_perfil(user, dados)`, que a fase 20 (painel do admin) reaproveita. Apagar a conta apaga o perfil.
+- **Quem vê:** o próprio aluno e, a partir da fase 20, os administradores, que editam tudo menos o e-mail. Instrutores e gestão de empresa não veem.
+- **Cópia dos dados** (Minha conta) inclui o perfil.
+- **Aviso de Privacidade v2026.8:** item 2.8 (o perfil e quem vê), item 3 (consentimento, campo a campo) e item 8 (prazo).
+
 ## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
 
 - **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.

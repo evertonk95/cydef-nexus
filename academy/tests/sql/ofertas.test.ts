@@ -32,7 +32,7 @@ beforeEach(async () => {
   await db.query(`insert into public.academy_equipe (user_id, papel) values ($1, 'admin')`, [admin]);
 }, 60_000);
 
-describe("Aviso de Privacidade: só a última versão vigente (0022, 0025, 0027, 0029)", () => {
+describe("Aviso de Privacidade: só a última versão vigente (0022, 0025, 0027, 0029, 0031)", () => {
   it("só a última versão fica vigente e as anteriores ficam como histórico", async () => {
     const r = await db.query<{ versao: string; vigente: boolean }>(`select versao, vigente from public.aviso_privacidade order by versao`);
     expect(r.rows).toEqual([
@@ -42,7 +42,8 @@ describe("Aviso de Privacidade: só a última versão vigente (0022, 0025, 0027,
       { versao: "v2026.4", vigente: false },
       { versao: "v2026.5", vigente: false },
       { versao: "v2026.6", vigente: false },
-      { versao: "v2026.7", vigente: true },
+      { versao: "v2026.7", vigente: false },
+      { versao: "v2026.8", vigente: true },
     ]);
   });
 });

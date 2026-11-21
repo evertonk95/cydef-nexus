@@ -47,7 +47,7 @@ export const definirValidacao = (sb: SupabaseClient, codigo: string, ativa: bool
 export const meusAvisos = (sb: SupabaseClient) => chamar<MeusAvisos>(sb, "academy_meus_avisos");
 export const definirAvisoAulaNova = (sb: SupabaseClient, ligado: boolean) =>
   chamar<MeusAvisos>(sb, "academy_definir_aviso_aula_nova", { p_ligado: ligado });
-/** Cópia dos dados. Desde a 0023 inclui os acessos pagos (compras e liberações); desde a 0024, as empresas e convites; desde a 0028, a preferência de avisos por e-mail. */
+/** Cópia dos dados. Desde a 0023 inclui os acessos pagos (compras e liberações); desde a 0024, as empresas e convites; desde a 0028, a preferência de avisos por e-mail; desde a 0030, o perfil. */
 export async function meusDados(sb: SupabaseClient): Promise<Record<string, unknown>> {
   const dados = await chamar<Record<string, unknown>>(sb, "academy_meus_dados");
   try {
@@ -64,6 +64,11 @@ export async function meusDados(sb: SupabaseClient): Promise<Record<string, unkn
     dados.avisos_por_email = await meusAvisos(sb);
   } catch {
     // Banco antes da 0028: a cópia sai sem a preferência de avisos.
+  }
+  try {
+    dados.perfil = await chamar(sb, "academy_meu_perfil");
+  } catch {
+    // Banco antes da 0030: a cópia sai sem o perfil.
   }
   return dados;
 }

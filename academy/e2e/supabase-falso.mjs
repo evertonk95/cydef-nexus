@@ -826,6 +826,20 @@ http
           if (u.pathname.endsWith("validacao_publica") && estado.certificado) estado.validacaoPublica = Boolean(corpo.p_ativa);
           return enviar(estado.certificado ? [{ ...estado.certificado, curso_slug: CURSO.slug, curso_titulo: CURSO.titulo, carga_horaria_h: 6, validacao_publica: estado.validacaoPublica }] : []);
         }
+        case "/rest/v1/rpc/academy_meu_perfil":
+        case "/rest/v1/rpc/academy_salvar_meu_perfil": {
+          const base = { nome: estado.nomeAluno ?? "Everton Nascimento", email: "aluno@exemplo.com", data_nascimento: null, telefone: null, cidade: null, pais: null,
+            empresa: null, cargo: null, area: null, experiencia: null, bio: null, linkedin: null, atualizado_em: null };
+          if (u.pathname.endsWith("salvar_meu_perfil")) {
+            const d = corpo.p_dados ?? {};
+            if (typeof d.nome !== "string" || d.nome.trim().length < 2) return enviar({ message: "nome_invalido" }, 400);
+            const limpo = Object.fromEntries(Object.keys(base).filter((k) => k in d).map((k) => [k, String(d[k]).trim() || null]));
+            limpo.nome = String(d.nome).trim().replace(/\s+/g, " ");
+            estado.nomeAluno = limpo.nome;
+            estado.perfil = { ...base, ...(estado.perfil ?? {}), ...limpo, email: base.email, atualizado_em: "2026-11-21T15:00:00Z" };
+          }
+          return enviar({ ...(estado.perfil ?? base), nome: estado.nomeAluno ?? base.nome });
+        }
         case "/rest/v1/rpc/academy_meus_avisos":
         case "/rest/v1/rpc/academy_definir_aviso_aula_nova": {
           if (u.pathname.endsWith("definir_aviso_aula_nova")) {
