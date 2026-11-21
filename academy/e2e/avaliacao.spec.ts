@@ -32,7 +32,7 @@ test("questões do módulo: erra, vê a explicação, refaz e libera", async ({ 
   await expect(page.getByRole("heading", { name: "Ainda não foi desta vez" })).toBeVisible();
   await expect(page.getByText('A resposta certa é "Confidencialidade".')).toBeVisible();
 
-  await page.getByRole("button", { name: /Responder de novo/ }).click();
+  await page.getByRole("button", { name: /Responder novamente/ }).click();
   await expect(page.getByText("0 de 3 respondidas")).toBeVisible();
   await responder(page, true);
   await page.getByRole("button", { name: /Enviar respostas/ }).click();
