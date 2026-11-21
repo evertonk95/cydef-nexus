@@ -120,7 +120,7 @@ export default function Aula() {
         <span aria-hidden="true" className="text-[#4a4a4a]">/</span>
         <Link to={`/cursos/${c.slug}`} className="hover:text-ink">{c.titulo}</Link>
         <span aria-hidden="true" className="text-[#4a4a4a]">/</span>
-        <span aria-current="page" className="text-ink">Aula {numeroAula(aula.numero)}</span>
+        <span aria-current="page" className="text-ink">Aula {numeroAula(indice)}</span>
       </nav>
 
       <div className="flex flex-wrap items-start gap-8">
@@ -218,7 +218,7 @@ export default function Aula() {
             </Link>
           )}
           <p className="sr-only">
-            Aula {indice} de {total} do curso, {rotuloModulo(modulo.ordem, modulo.titulo)}.
+            Aula {indice} de {total} {modulo.ordem === 0 ? "da" : "do"} {rotuloModulo(modulo.ordem, modulo.titulo)}.
           </p>
         </aside>
       </div>

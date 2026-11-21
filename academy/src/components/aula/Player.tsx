@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Clock, Loader2, Play, RotateCcw } from "lucide-react";
 import { usePortal } from "@/lib/portal";
-import { buscarVideo, ErroAula, numeroAula } from "@/lib/aula";
+import { buscarVideo, ErroAula } from "@/lib/aula";
 import { ESTADO, ouvirPlayer, urlEmbed, type LeituraPlayer } from "@/lib/youtube";
 import { duracao, relogio } from "@/lib/formato";
 import type { AulaLista } from "@/lib/cursos";
@@ -105,7 +105,7 @@ export function Player({
         <iframe
           ref={iframe}
           src={src}
-          title={`Vídeo da aula ${numeroAula(aula.numero)}: ${aula.titulo}`}
+          title={`Vídeo da aula: ${aula.titulo}`}
           allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
@@ -140,7 +140,7 @@ export function Player({
               type="button"
               onClick={() => video.data && setSrc(urlEmbed(video.data.ref, { inicio, origem: window.location.origin }))}
               disabled={!video.data}
-              aria-label={video.data ? `Assistir à aula ${numeroAula(aula.numero)}: ${aula.titulo}` : "Preparando o vídeo"}
+              aria-label={video.data ? `Assistir à aula: ${aula.titulo}` : "Preparando o vídeo"}
               className="grid size-16 place-items-center rounded-full bg-orange text-orange-ink transition-colors duration-150 hover:bg-orange-hi disabled:cursor-wait sm:size-20"
             >
               {video.data ? (

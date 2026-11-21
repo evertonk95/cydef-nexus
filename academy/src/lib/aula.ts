@@ -63,8 +63,19 @@ export function caminhoAula(slug: string, numero: number): string {
   return `/cursos/${slug}/aulas/${numero}`;
 }
 
+/** Formata o número com dois dígitos: 3 vira "03". */
 export function numeroAula(numero: number): string {
   return String(numero).padStart(2, "0");
+}
+
+/**
+ * Número da aula dentro do módulo, na mesma contagem dos vídeos ("Módulo 1,
+ * aula 03"). O número do endereço (`aula.numero`) continua sendo o do curso,
+ * para os links antigos não quebrarem.
+ */
+export function numeroNoModulo(modulo: { aulas: { id: string }[] }, aula: { id: string }): number {
+  const i = modulo.aulas.findIndex((a) => a.id === aula.id);
+  return i === -1 ? 0 : i + 1;
 }
 
 export interface PosicaoNoCurso {
@@ -72,11 +83,13 @@ export interface PosicaoNoCurso {
   modulo: ModuloLista;
   anterior: AulaLista | null;
   proxima: AulaLista | null;
+  /** Posição da aula dentro do módulo (1 = primeira). */
   indice: number;
+  /** Aulas publicadas no módulo. */
   total: number;
 }
 
-/** Acha a aula pelo número e devolve vizinhas na ordem do curso. */
+/** Acha a aula pelo número do endereço e devolve vizinhas na ordem do curso; a posição é contada dentro do módulo. */
 export function localizarAula(curso: CursoDetalhe, numero: number): PosicaoNoCurso | null {
   const sequencia = curso.modulos.flatMap((m) => m.aulas.map((a) => ({ a, m })));
   const i = sequencia.findIndex((x) => x.a.numero === numero);
@@ -87,8 +100,8 @@ export function localizarAula(curso: CursoDetalhe, numero: number): PosicaoNoCur
     modulo: atual.m,
     anterior: sequencia[i - 1]?.a ?? null,
     proxima: sequencia[i + 1]?.a ?? null,
-    indice: i + 1,
-    total: sequencia.length,
+    indice: numeroNoModulo(atual.m, atual.a),
+    total: atual.m.aulas.length,
   };
 }
 

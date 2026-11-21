@@ -74,7 +74,7 @@ describe("sala de aula", () => {
     const { sb } = sbAula();
     abrir(2, sb);
     expect(await screen.findByRole("heading", { level: 1, name: "Confidencialidade, integridade e disponibilidade" })).toBeInTheDocument();
-    expect(screen.getByText(/Módulo 1, aula 2 de 3/)).toBeInTheDocument();
+    expect(screen.getByText(/Módulo 1, aula 1 de 2/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Aula anterior/ })).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/1`);
     expect(screen.getAllByRole("link", { name: /Próxima aula/ })[0]).toHaveAttribute("href", `/cursos/${CURSO.slug}/aulas/3`);
     expect(screen.getByRole("link", { current: "page" })).toHaveTextContent("Você está aqui");
@@ -85,8 +85,8 @@ describe("sala de aula", () => {
     const { sb } = sbAula({ progresso: [{ aula_id: "a1", posicao_seg: 40, concluida_em: null }] });
     abrir(1, sb);
     expect(await screen.findByText("Continuar de 00:40")).toBeInTheDocument();
-    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula 01/ }));
-    const iframe = await screen.findByTitle("Vídeo da aula 01: Boas-vindas ao curso");
+    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula: Boas-vindas/ }));
+    const iframe = await screen.findByTitle("Vídeo da aula: Boas-vindas ao curso");
     const src = new URL(iframe.getAttribute("src")!);
     expect(src.origin).toBe(ORIGEM_YOUTUBE);
     expect(src.pathname).toBe("/embed/AKtr_lmAB6Y");
@@ -97,8 +97,8 @@ describe("sala de aula", () => {
   it("grava a conclusão quando o player passa de 92% e ignora mensagem de outra origem", async () => {
     const { sb, chamadas } = sbAula();
     abrir(1, sb);
-    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula 01/ }));
-    const iframe = (await screen.findByTitle(/Vídeo da aula 01/)) as HTMLIFrameElement;
+    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula: Boas-vindas/ }));
+    const iframe = (await screen.findByTitle(/Vídeo da aula: Boas-vindas/)) as HTMLIFrameElement;
     const enviar = (origin: string, info: Record<string, number>) =>
       act(() => {
         window.dispatchEvent(new MessageEvent("message", { origin, source: iframe.contentWindow, data: JSON.stringify({ event: "infoDelivery", info }) }));
@@ -113,8 +113,8 @@ describe("sala de aula", () => {
   it("gravar o progresso não recarrega o vídeo (o endereço do player fica fixo)", async () => {
     const { sb, chamadas } = sbAula({ progresso: [{ aula_id: "a2", posicao_seg: 40, concluida_em: null }] });
     abrir(2, sb);
-    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula 02/ }));
-    const iframe = (await screen.findByTitle(/Vídeo da aula 02/)) as HTMLIFrameElement;
+    fireEvent.click(await screen.findByRole("button", { name: /Assistir à aula: Confidencialidade/ }));
+    const iframe = (await screen.findByTitle(/Vídeo da aula: Confidencialidade/)) as HTMLIFrameElement;
     const srcInicial = iframe.getAttribute("src");
     expect(new URL(srcInicial!).searchParams.get("start")).toBe("40");
     const enviar = (info: Record<string, number>) =>
@@ -127,7 +127,7 @@ describe("sala de aula", () => {
     // conclusão aos 92%: a aula passa a concluída na página
     enviar({ currentTime: 960, duration: 1020, playerState: 1 });
     expect(await screen.findByText("Aula concluída")).toBeInTheDocument();
-    const depois = screen.getByTitle(/Vídeo da aula 02/);
+    const depois = screen.getByTitle(/Vídeo da aula: Confidencialidade/);
     expect(depois).toBe(iframe);
     expect(depois.getAttribute("src")).toBe(srcInicial);
   });
@@ -206,7 +206,8 @@ describe("canal com o YouTube e ordem das aulas", () => {
     const p = localizarAula(curso, 2)!;
     expect(p.anterior?.numero).toBe(1);
     expect(p.proxima?.numero).toBe(3);
-    expect(p.indice).toBe(2);
+    expect([p.indice, p.total]).toEqual([1, 2]);
+    expect([localizarAula(curso, 3)!.indice, localizarAula(curso, 1)!.total]).toEqual([2, 1]);
     expect(localizarAula(curso, 1)!.anterior).toBeNull();
     expect(localizarAula(curso, 4)).toBeNull();
     expect(rotuloModulo(0, "Introdução")).toBe("Introdução");

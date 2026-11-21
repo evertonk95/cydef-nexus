@@ -160,8 +160,9 @@ describe("modelos da fase 18", () => {
   it("aula nova: lista as aulas, abre a primeira e diz como desligar", () => {
     const m = montarAulasNovas(grupo, URL)!;
     expect(m.subject).toBe("2 aulas novas em Cybersecurity Fundamentals");
-    expect(m.html).toContain("Aula 04: Risco, ameaça, vulnerabilidade e impacto");
-    expect(m.html).toContain("Aula 05: Defesa em profundidade");
+    expect(m.html).toContain("<li>Risco, ameaça, vulnerabilidade e impacto</li>");
+    expect(m.html).toContain("<li>Defesa em profundidade</li>");
+    expect(m.text).not.toMatch(/Aula 0\d/);
     expect(m.html).toContain("https://academy.cydef.com.br/cursos/cybersecurity-fundamentals/aulas/4");
     expect(m.html).toContain("https://academy.cydef.com.br/conta");
     expect(m.text).toContain("desligue");

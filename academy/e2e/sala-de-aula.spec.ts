@@ -18,8 +18,8 @@ test("a ação principal do painel leva à próxima aula do curso", async ({ pag
 test("o vídeo carrega uma vez, grava o progresso e conclui sem recarregar", async ({ page, request }) => {
   await page.goto("/cursos/cybersecurity-fundamentals/aulas/2");
   await expect(page.locator("iframe")).toHaveCount(0);
-  await page.getByRole("button", { name: /Assistir à aula 02/ }).click();
-  await expect(page.locator('iframe[title^="Vídeo da aula 02"]')).toBeVisible();
+  await page.getByRole("button", { name: /Assistir à aula: Confidencialidade/ }).click();
+  await expect(page.locator('iframe[title^="Vídeo da aula: Confidencialidade"]')).toBeVisible();
   await expect(page.getByText("Aula concluída").first()).toBeVisible({ timeout: 15_000 });
 
   const e = await estado(request);

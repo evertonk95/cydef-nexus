@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { BookOpen, Layers, LayoutGrid, LibraryBig, LogOut, PlayCircle, Search } from "lucide-react";
 import { useCursosDetalhados, usePainel } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
-import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
+import { caminhoAula, numeroAula, rotuloModulo, rotuloModuloCurto } from "@/lib/aula";
 import { fracao, normalizar } from "@/lib/formato";
 
 interface Item {
@@ -39,7 +39,7 @@ function Conteudo({ fechar }: { fechar: () => void }) {
     const l: Item[] = [];
     const c = painel.data?.continuar;
     if (c) {
-      l.push({ id: "continuar", grupo: "Continuar", titulo: `Aula ${String(c.aula_numero).padStart(2, "0")}: ${c.aula_titulo}`, detalhe: c.curso_titulo, icone: PlayCircle, acao: ir(`/cursos/${c.curso_slug}/aulas/${c.aula_numero}`) });
+      l.push({ id: "continuar", grupo: "Continuar", titulo: c.aula_titulo, detalhe: `${c.curso_titulo}, ${rotuloModuloCurto(c.modulo_ordem, c.modulo_titulo)}`, icone: PlayCircle, acao: ir(`/cursos/${c.curso_slug}/aulas/${c.aula_numero}`) });
     }
     for (const curso of painel.data?.cursos ?? []) {
       l.push({ id: `curso-${curso.slug}`, grupo: "Cursos", titulo: curso.titulo, detalhe: fracao(curso.concluidas, curso.total, "aula", "aulas"), icone: BookOpen, acao: ir(`/cursos/${curso.slug}`) });
@@ -50,8 +50,8 @@ function Conteudo({ fechar }: { fechar: () => void }) {
       }
     }
     for (const curso of detalhes) {
-      for (const a of curso.modulos.flatMap((m) => m.aulas)) {
-        l.push({ id: `aula-${a.id}`, grupo: "Aulas", titulo: `Aula ${numeroAula(a.numero)}: ${a.titulo}`, detalhe: curso.titulo, icone: PlayCircle, acao: ir(caminhoAula(curso.slug, a.numero)), soBusca: true });
+      for (const m of curso.modulos) for (const [i, a] of m.aulas.entries()) {
+        l.push({ id: `aula-${a.id}`, grupo: "Aulas", titulo: `Aula ${numeroAula(i + 1)}: ${a.titulo}`, detalhe: `${curso.titulo}, ${rotuloModuloCurto(m.ordem, m.titulo)}`, icone: PlayCircle, acao: ir(caminhoAula(curso.slug, a.numero)), soBusca: true });
       }
     }
     l.push({ id: "painel", grupo: "Páginas", titulo: "Meu painel", icone: LayoutGrid, acao: ir("/") });
