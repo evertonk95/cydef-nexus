@@ -51,6 +51,15 @@ node scripts/gerar-posts-meta.mjs && node scripts/gen-sitemap.mjs   # artigo nov
 
 Nunca rodar `npx tsc --noEmit` puro: em tsconfig solution-style ele passa em falso.
 
+Build local em máquina mais lenta que o runner do CI: o prerender mata a rota que passa de 20 s e o build reprova com `prerender: BLOQUEADO` e "tempo esgotado". Aumente o limite só na sua sessão, sem mudar o CI:
+
+```
+$env:PRERENDER_TIMEOUT_MS = "90000"   # PowerShell; no bash: PRERENDER_TIMEOUT_MS=90000 npm run build
+npm run build
+```
+
+`PRERENDER_CONCURRENCY` (padrão 4, de 1 a 16) controla quantas rotas renderizam ao mesmo tempo; baixar para 2 também ajuda em máquina com pouca CPU. Detalhes no cabeçalho de `scripts/prerender.mjs`.
+
 ## Regras de conteúdo
 
 - Marca sempre **CyDef** (nunca "Cydef" em texto exibido).
