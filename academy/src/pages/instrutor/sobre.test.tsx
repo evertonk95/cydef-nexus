@@ -210,7 +210,7 @@ describe("aba Sobre o curso no painel", () => {
   });
 });
 
-describe("Meu perfil", () => {
+describe("Perfil de instrutor", () => {
   it("cria o perfil a partir do nome do cadastro", async () => {
     let args: Record<string, unknown> | undefined;
     painel(`/instrutor/perfil`, {
@@ -221,7 +221,7 @@ describe("Meu perfil", () => {
         return { data: perfil("p1", "Matheus Lima") };
       },
     });
-    expect(await screen.findByRole("link", { name: "Meu perfil" })).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: "Perfil de instrutor" })).toBeInTheDocument();
     const nome = await screen.findByLabelText("Nome público");
     expect(nome).toHaveValue("Matheus");
     await userEvent.type(nome, " Lima");

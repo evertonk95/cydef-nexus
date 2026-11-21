@@ -197,6 +197,8 @@ const MENSAGENS: Record<string, string> = {
   cursos_invalidos: "Escolha ao menos um curso para o instrutor.",
   ultimo_admin: "A Academy precisa de pelo menos um admin.",
   invalid_payload: "Algum campo veio em formato inválido.",
+  // 0032: ficha de pessoa no painel do admin.
+  pessoa_inexistente: "Pessoa não encontrada.",
   objetivos_invalidos: "Use até 10 objetivos, com até 200 caracteres cada.",
   publico_invalido: "O texto de público passa de 600 caracteres.",
   pre_requisitos_invalidos: "Os pré-requisitos passam de 600 caracteres.",

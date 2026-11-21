@@ -80,6 +80,8 @@ const MENSAGENS: Record<string, string> = {
   bio_invalida: "A bio pode ter até 600 caracteres.",
   campo_invalido: "Algum campo passou do tamanho ou tem um valor que não está na lista.",
   sem_cadastro: "Este login não tem cadastro de aluno.",
+  sem_permissao: "Seu acesso não permite essa alteração.",
+  pessoa_inexistente: "Pessoa não encontrada.",
   nao_autenticado: "Sua sessão expirou. Entre de novo.",
 };
 
@@ -89,12 +91,13 @@ export class ErroPerfil extends Error {
   }
 }
 
-async function chamar<T>(sb: SupabaseClient, fn: string, args?: Record<string, unknown>): Promise<T> {
+/** Chamada com as mensagens do perfil (também usada pelo admin na fase 20). */
+export async function chamarPerfil<T>(sb: SupabaseClient, fn: string, args?: Record<string, unknown>): Promise<T> {
   const { data, error } = await sb.rpc(fn, args);
   if (error) throw new ErroPerfil(Object.keys(MENSAGENS).find((c) => error.message?.includes(c)) ?? "falha");
   return data as T;
 }
 
-export const meuPerfil = (sb: SupabaseClient) => chamar<Perfil>(sb, "academy_meu_perfil");
+export const meuPerfil = (sb: SupabaseClient) => chamarPerfil<Perfil>(sb, "academy_meu_perfil");
 export const salvarMeuPerfil = (sb: SupabaseClient, dados: PerfilForm) =>
-  chamar<Perfil>(sb, "academy_salvar_meu_perfil", { p_dados: dados });
+  chamarPerfil<Perfil>(sb, "academy_salvar_meu_perfil", { p_dados: dados });

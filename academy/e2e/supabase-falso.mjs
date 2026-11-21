@@ -634,6 +634,66 @@ http
             { id: "b1", tipo: "aula", titulo: "Módulo 1 completo: defesa em profundidade e menor privilégio", link: null, publicado: true, publicado_em: "2026-11-18T10:00:00Z" },
             { id: "b2", tipo: "ameaca", titulo: "Campanha de phishing com QR code mirando bancos", link: "https://www.cydef.com.br/blog", publicado: false, publicado_em: "2026-11-17T09:00:00Z" },
           ]);
+        // Fase 20: indicadores e pessoas (só admin).
+        case "/rest/v1/rpc/academy_adm_indicadores": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          const por_dia = Array.from({ length: 30 }, (_, i) => ({
+            dia: new Date(Date.UTC(2026, 9, 23 + i)).toISOString().slice(0, 10),
+            pre_inscricoes: [2, 0, 1, 3][i % 4],
+            contas: i % 3 === 0 ? 1 : 0,
+          }));
+          return enviar({
+            gerado_em: "2026-11-21T15:00:00Z",
+            pre_inscricoes: { total: 42, ult_7: 9, ult_30: 30 },
+            contas: { total: 25, ult_7: 6, ult_30: 20 },
+            ativos: { ult_7: 11, ult_30: 19 },
+            certificados: { total: 3, ult_30: 3 },
+            funil: { pre_inscritos: 42, entraram: 25, comecaram: 18, concluiram_curso: 4, certificados: 3 },
+            por_dia,
+            perfil_declarado: { iniciante: 20, transicao: 12, profissional: 7, estudante: 3 },
+            areas: { seguranca: 6, infraestrutura: 3, suporte: 2 },
+            experiencia: { menos_1: 4, "1_3": 5, "3_5": 2 },
+            cursos: [
+              { slug: CURSO.slug, titulo: CURSO.titulo, gratuito: true, aulas: 5, matriculados: 25, comecaram: 18, concluiram: 4, media_conclusao: 37, aprovados_final: 3, certificados: 3 },
+              { slug: "fundamentos-para-soc", titulo: "Fundamentos para SOC", gratuito: true, aulas: 0, matriculados: 25, comecaram: 0, concluiram: 0, media_conclusao: 0, aprovados_final: 0, certificados: 0 },
+            ],
+          });
+        }
+        case "/rest/v1/rpc/academy_adm_pessoas": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          estado.pessoaAdm ??= { papel: null, empresa: null, cursos: [] };
+          const todas = [
+            { tipo: "conta", user_id: USUARIO.id, lead_id: "l1", nome: estado.nomeAluno, email: USUARIO.email, papel: "admin", perfil_declarado: "profissional", cadastro_em: "2026-11-17T12:00:00Z", ultimo_acesso_em: "2026-11-21T12:00:00Z", cursos: 2, certificados: 0 },
+            { tipo: "conta", user_id: "00000000-0000-4000-8000-0000000000a1", lead_id: "l2", nome: "Ana Souza", email: "ana@exemplo.com", papel: estado.pessoaAdm.papel, perfil_declarado: "iniciante", cadastro_em: "2026-11-20T12:00:00Z", ultimo_acesso_em: "2026-11-21T10:00:00Z", cursos: 2, certificados: 0 },
+            { tipo: "pre_inscricao", user_id: null, lead_id: "l3", nome: "Bia Lima", email: "bia@exemplo.com", papel: null, perfil_declarado: "transicao", cadastro_em: "2026-11-21T09:00:00Z", ultimo_acesso_em: null, cursos: 0, certificados: 0 },
+          ];
+          const b = String(corpo.p_busca ?? "").toLowerCase();
+          const f = corpo.p_filtro ?? "todos";
+          const itens = todas.filter((p) => (!b || p.nome.toLowerCase().includes(b) || p.email.includes(b))
+            && (f === "todos" || (f === "contas" && p.tipo === "conta") || (f === "sem_conta" && p.tipo === "pre_inscricao") || (f === "equipe" && p.papel)));
+          return enviar({ total: itens.length, itens });
+        }
+        case "/rest/v1/rpc/academy_adm_pessoa":
+        case "/rest/v1/rpc/academy_adm_salvar_perfil":
+        case "/rest/v1/rpc/academy_adm_definir_equipe":
+        case "/rest/v1/rpc/academy_adm_remover_equipe": {
+          if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
+          estado.pessoaAdm ??= { papel: null, empresa: null, cursos: [] };
+          const pa = estado.pessoaAdm;
+          if (u.pathname.endsWith("salvar_perfil")) pa.empresa = String(corpo.p_dados?.empresa ?? "").trim() || null;
+          if (u.pathname.endsWith("definir_equipe")) Object.assign(pa, { papel: corpo.p_papel, cursos: corpo.p_cursos ?? [] });
+          if (u.pathname.endsWith("remover_equipe")) Object.assign(pa, { papel: null, cursos: [] });
+          if (u.pathname.endsWith("definir_equipe") || u.pathname.endsWith("remover_equipe")) return enviar([]);
+          return enviar({
+            user_id: "00000000-0000-4000-8000-0000000000a1",
+            perfil: { nome: "Ana Souza", email: "ana@exemplo.com", data_nascimento: null, telefone: null, cidade: "Recife", pais: "Brasil", empresa: pa.empresa, cargo: null,
+              area: null, experiencia: null, bio: null, linkedin: null, atualizado_em: pa.empresa ? "2026-11-21T16:00:00Z" : null },
+            criado_em: "2026-11-20T12:00:00Z", ultimo_acesso_em: "2026-11-21T10:00:00Z", papel: pa.papel, eu: false, cursos_equipe: pa.cursos,
+            pre_inscricao: { perfil: "iniciante", criado_em: "2026-11-20T11:00:00Z", status: "confirmed" },
+            cursos: [{ slug: CURSO.slug, titulo: CURSO.titulo, origem: "gratuito", matriculado_em: "2026-11-20T12:00:00Z", progresso: { aulas: 5, concluidas: 2, ultima_atividade: "2026-11-21T10:00:00Z" } }],
+            certificados: [], missoes: { tentativas: 0, aprovadas: 0 },
+          });
+        }
         case "/rest/v1/rpc/academy_adm_equipe":
           if (estado.equipe !== "admin") return enviar({ message: "sem_permissao" }, 400);
           return enviar([

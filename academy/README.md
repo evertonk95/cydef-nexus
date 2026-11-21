@@ -220,6 +220,17 @@ Todo acesso pago é uma **concessão** (`academy_concessoes`): origem (`hotmart`
 - **Cópia dos dados** (Minha conta) inclui o perfil.
 - **Aviso de Privacidade v2026.8:** item 2.8 (o perfil e quem vê), item 3 (consentimento, campo a campo) e item 8 (prazo).
 
+## Indicadores e pessoas no painel do admin (fase 20, migração 0032)
+
+Duas abas novas no painel, visíveis só para admin. Instrutor não vê as abas e recebe "página não encontrada" se abrir o endereço.
+
+- **Indicadores (`/instrutor/indicadores`):** pré-inscrições, contas no portal, quem estudou nos últimos 7 e 30 dias e certificados emitidos; funil da pré-inscrição ao certificado; gráfico dos últimos 30 dias; tabela por curso (matriculados, começaram, concluíram, média de conclusão, aprovados na avaliação final e certificados); e a distribuição do perfil declarado na pré-inscrição, da área e do tempo de experiência informados em Meu perfil. Pré-inscrições inválidas ou descartadas não entram na conta.
+- **Pessoas (`/instrutor/pessoas`):** todo mundo que tem conta e quem só fez a pré-inscrição, com e-mail, papel, perfil declarado, data de cadastro, último acesso, cursos e certificados. Busca por nome ou e-mail e filtros Todas, Com conta, Só pré-inscrição e Equipe, 50 por página. Quem fez a pré-inscrição e já tem conta aparece uma vez só.
+- **Ficha da pessoa (`/instrutor/pessoas/:id`):** o admin edita todo o perfil com a mesma validação do aluno, menos o e-mail. Na mesma ficha define o papel (aluno, instrutor com os cursos que ensina, ou admin) sem precisar digitar o e-mail; por trás usa `academy_adm_definir_equipe` e `academy_adm_remover_equipe`, as mesmas da aba Equipe. Mostra ainda o progresso em cada curso, os certificados, as missões e a pré-inscrição.
+- **Banco:** `academy_adm_indicadores`, `academy_adm_pessoas`, `academy_adm_pessoa` e `academy_adm_salvar_perfil`, todas com `academy__exigir_admin`. Cada edição de perfil feita pelo admin grava `perfil_editado` na auditoria, só com os nomes dos campos alterados, nunca os valores.
+- **"Meu perfil" do instrutor** passou a se chamar **"Perfil de instrutor"**, para não confundir com o Meu perfil da conta.
+- **Fora desta fase:** bloquear acesso e exportar a lista em CSV.
+
 ## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
 
 - **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.
