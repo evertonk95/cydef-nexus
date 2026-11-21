@@ -8,25 +8,26 @@ test.beforeEach(async ({ context, request, page }) => {
   await entrar(page);
 });
 
-test("Minha conta: corrige o nome, baixa a cópia dos dados e prepara o pedido de exclusão", async ({ page }) => {
+test("Minha conta: o nome corrigido em Meu perfil aparece, baixa a cópia dos dados e prepara o pedido de exclusão", async ({ page }) => {
+  await page.goto("/perfil");
+  await page.getByLabel("Nome completo").fill("Everton Igor Lima do Nascimento");
+  await page.getByRole("button", { name: "Salvar perfil" }).click();
+  await expect(page.getByText("Perfil salvo")).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1, name: /, Everton\.$/ })).toBeVisible();
+
   await page.getByRole("button", { name: "Menu da conta" }).click();
   await page.getByRole("menuitem", { name: "Minha conta" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Minha conta" })).toBeVisible();
-
-  const nome = page.getByLabel("Nome", { exact: true });
-  await expect(nome).toHaveValue("Everton Nascimento");
-  await nome.fill("Everton Igor Lima do Nascimento");
-  await page.getByRole("button", { name: "Salvar nome" }).click();
-  await expect(page.getByText("Nome salvo")).toBeVisible();
-  await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1, name: /, Everton\.$/ })).toBeVisible();
-  await page.goto("/conta");
-  await expect(page.getByLabel("Nome", { exact: true })).toHaveValue("Everton Igor Lima do Nascimento");
+  const dadosBloco = page.getByRole("region", { name: "Seus dados" });
+  await expect(dadosBloco.getByText("Everton Igor Lima do Nascimento")).toBeVisible();
+  await expect(dadosBloco.getByRole("link", { name: "Meu perfil" })).toHaveAttribute("href", "/perfil");
 
   const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: /Baixar meus dados/ }).click()]);
   expect(download.suggestedFilename()).toMatch(/^meus-dados-cydef-academy-\d{4}-\d{2}-\d{2}\.json$/);
   const dados = JSON.parse(readFileSync((await download.path())!, "utf8"));
   expect(dados.conta.nome).toBe("Everton Igor Lima do Nascimento");
+  expect(dados.perfil).toMatchObject({ nome: "Everton Igor Lima do Nascimento", email: "aluno@exemplo.com" });
 
   const exclusao = page.getByRole("link", { name: /Pedir a exclusão por e-mail/ });
   await expect(exclusao).toHaveAttribute("href", /^mailto:contato@cydef\.com\.br\?subject=LGPD/);

@@ -30,25 +30,12 @@ function abrir(rpcs: Rpcs, sb?: SupabaseClient) {
 }
 
 describe("Minha conta", () => {
-  it("corrige o nome e avisa que certificado emitido não muda", async () => {
-    let args: Record<string, unknown> | undefined;
-    abrir({
-      academy_meu_painel: painelTeste(),
-      academy_meus_certificados: [],
-      academy_atualizar_nome: (a) => {
-        args = a;
-        return { data: { nome: "Ana Maria Souza" } };
-      },
-    });
-    const nome = await screen.findByLabelText("Nome");
-    expect(nome).toHaveValue("Ana Souza");
-    expect(screen.getByText(/Certificado já emitido não muda/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Salvar nome" })).toBeDisabled();
-    await userEvent.clear(nome);
-    await userEvent.type(nome, "Ana Maria Souza");
-    await userEvent.click(screen.getByRole("button", { name: "Salvar nome" }));
-    await waitFor(() => expect(args).toEqual({ p_nome: "Ana Maria Souza" }));
-    expect(screen.getByText("ana@empresa.com.br")).toBeInTheDocument();
+  it("mostra nome e e-mail e leva para Meu perfil", async () => {
+    abrir({ academy_meu_painel: painelTeste(), academy_meus_certificados: [] });
+    const bloco = await screen.findByRole("region", { name: "Seus dados" });
+    expect(await within(bloco).findByText("Ana Souza")).toBeInTheDocument();
+    expect(within(bloco).getByText("ana@empresa.com.br")).toBeInTheDocument();
+    expect(within(bloco).getByRole("link", { name: "Meu perfil" })).toHaveAttribute("href", "/perfil");
   });
 
   it("lista certificados e desliga a validação pública", async () => {

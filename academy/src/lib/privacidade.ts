@@ -3,7 +3,7 @@
  * Ao publicar uma versão nova em src/lib/academy/consent.ts (raiz do repo),
  * atualize esta constante no mesmo PR.
  */
-export const VERSAO_AVISO = "v2026.7";
+export const VERSAO_AVISO = "v2026.8";
 
 export function urlAviso(siteUrl: string): string {
   return `${siteUrl}/academy/privacidade/${VERSAO_AVISO}`;

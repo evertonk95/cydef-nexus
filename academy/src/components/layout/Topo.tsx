@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import { BookOpen, Building2, ChevronDown, Crosshair, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
+import { BookOpen, Building2, ChevronDown, Crosshair, IdCard, LibraryBig, LogOut, PencilRuler, Search, ShieldCheck, UserRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { usePortal } from "@/lib/portal";
 import { usePainel } from "@/lib/consultas";
@@ -116,6 +116,9 @@ export function Topo({ abrirBusca }: { abrirBusca: () => void }) {
                   <PencilRuler className="size-4" aria-hidden="true" /> Painel do instrutor
                 </NavLink>
               )}
+              <NavLink role="menuitem" to="/perfil" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
+                <IdCard className="size-4" aria-hidden="true" /> Meu perfil
+              </NavLink>
               <NavLink role="menuitem" to="/conta" onClick={() => setMenu(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
                 <UserRound className="size-4" aria-hidden="true" /> Minha conta
               </NavLink>
