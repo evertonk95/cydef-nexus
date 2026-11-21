@@ -51,7 +51,9 @@ describe("busca da Academy", () => {
 
     await userEvent.clear(campo);
     await userEvent.type(campo, "introducao");
-    expect(await screen.findByRole("option", { name: /Introdução/ })).toBeInTheDocument();
+    // O módulo e a aula dele aparecem: a aula leva o módulo no detalhe.
+    expect(await screen.findByRole("option", { name: /^Introdução/ })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: /Aula 01: Boas-vindas ao curso.*Introdução/ })).toBeInTheDocument();
 
     await userEvent.clear(campo);
     await userEvent.type(campo, "boas-vindas");

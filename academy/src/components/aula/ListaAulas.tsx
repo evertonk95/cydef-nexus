@@ -72,7 +72,7 @@ export function ListaAulas({
                     className="m-0 list-none p-0 pb-2"
                   >
                     {bloqueado && <AvisoBloqueio pendente={pendente} />}
-                    {m.aulas.map((a) => {
+                    {m.aulas.map((a, i) => {
                       const eAtual = a.id === atual;
                       return (
                         <li key={a.id}>
@@ -87,7 +87,7 @@ export function ListaAulas({
                             <span className={cn("grid size-[20px] flex-none place-items-center rounded-full border-[1.5px]", a.concluida ? "border-ok text-ok" : "border-line-hi")}>
                               {a.concluida && <Check className="size-3" strokeWidth={3.5} aria-hidden="true" />}
                             </span>
-                            <span className="w-6 text-[13px] text-dim">{numeroAula(a.numero)}</span>
+                            <span className="w-6 text-[13px] text-dim">{numeroAula(i + 1)}</span>
                             <span className="min-w-0 flex-1">
                               <span className="block">{a.titulo}</span>
                               {eAtual && <span className="block text-xs text-orange-hi">Você está aqui</span>}

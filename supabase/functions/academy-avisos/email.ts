@@ -134,7 +134,9 @@ export function montarAulasNovas(g: AvisoAulas, academyUrl: string): EmailAcadem
   const primeira = aulas[0]!;
   const assistir = `${base(academyUrl)}/cursos/${g.curso_slug}/aulas/${primeira.numero}`;
   const conta = `${base(academyUrl)}/conta`;
-  const rotulo = (a: { numero: number; titulo: string }) => `Aula ${String(a.numero).padStart(2, "0")}: ${linha(a.titulo, 140)}`;
+  // Sem número: o portal conta as aulas dentro do módulo, e o número que vem
+  // do banco é o do endereço (contado no curso inteiro).
+  const rotulo = (a: { numero: number; titulo: string }) => linha(a.titulo, 140);
   const assunto = aulas.length === 1 ? `Aula nova em ${curso}: ${linha(primeira.titulo, 80)}` : `${aulas.length} aulas novas em ${curso}`;
   const sair = "Você recebe este aviso porque ligou o aviso de aula nova em Minha conta. Para não receber mais, desligue no mesmo lugar.";
   return {

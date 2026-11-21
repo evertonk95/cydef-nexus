@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Play } from "lucide-react";
 import { relogio } from "@/lib/formato";
-import { caminhoAula, numeroAula, rotuloModulo } from "@/lib/aula";
+import { caminhoAula, rotuloModulo } from "@/lib/aula";
 import type { Painel } from "@/lib/painel";
 
 /** A ação principal do painel: voltar para a aula onde o aluno parou. */
@@ -30,7 +30,7 @@ export function CartaoContinuar({ painel }: { painel: Painel }) {
         {c.curso_titulo}, {rotuloModulo(c.modulo_ordem, c.modulo_titulo)}
       </p>
       <h2 id="h-continuar" className="m-0 max-w-[26ch] font-display text-[30px] leading-tight font-semibold tracking-tight">
-        Aula {numeroAula(c.aula_numero)}: {c.aula_titulo}
+        {c.aula_titulo}
       </h2>
       {c.posicao_seg > 0 && (
         <div className="flex max-w-[480px] flex-col gap-2">

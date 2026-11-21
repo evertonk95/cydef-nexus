@@ -96,10 +96,10 @@ export function MatrizFormacao({
                       {m.aulas.length === 0 ? (
                         <span className={cn(BLOCO, "justify-center border border-dashed border-[#4a4a4a] text-dim")}>A publicar</span>
                       ) : (
-                        m.aulas.map((a) => {
+                        m.aulas.map((a, i) => {
                           const estado: Estado =
                             atual && atual.curso_slug === curso.slug && atual.aula_numero === a.numero ? "atual" : a.concluida ? "concluida" : "disponivel";
-                          const numero = numeroAula(a.numero);
+                          const numero = numeroAula(i + 1);
                           return (
                             <Link
                               key={a.id}

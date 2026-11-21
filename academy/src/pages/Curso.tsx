@@ -109,13 +109,13 @@ export default function Curso() {
                       >
                         {m.resumo && <li className="mx-2 px-3 pb-2 text-sm leading-relaxed text-muted">{m.resumo}</li>}
                         {bloqueado && <AvisoBloqueio pendente={pendente} />}
-                        {m.aulas.map((a) => (
+                        {m.aulas.map((a, i) => (
                           <li key={a.id}>
                             <Link to={caminhoAula(c.slug, a.numero)} className="mx-2 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-white/[0.04]">
                               <span className={cn("grid size-[20px] flex-none place-items-center rounded-full border-[1.5px]", a.concluida ? "border-ok text-ok" : "border-line-hi")}>
                                 {a.concluida && <Check className="size-3" strokeWidth={3.5} aria-hidden="true" />}
                               </span>
-                              <span className="w-6 text-[13px] text-dim">{numeroAula(a.numero)}</span>
+                              <span className="w-6 text-[13px] text-dim">{numeroAula(i + 1)}</span>
                               <span className="flex-1">
                                 {a.titulo}
                                 <span className="sr-only">{a.concluida ? ", concluída" : ""}</span>
