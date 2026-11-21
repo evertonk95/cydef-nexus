@@ -121,6 +121,22 @@ export function usePessoa(id: string | undefined) {
   });
 }
 
+/** Quem é o dono da plataforma (0033). A conta dele só muda pelas mãos dele. */
+export interface Dono {
+  user_id: string | null;
+  eu: boolean;
+}
+
+export function useDono() {
+  const { sb } = usePortal();
+  return useQuery({
+    queryKey: ["adm-dono"],
+    queryFn: () => chamar<Dono>(sb, "academy_adm_dono"),
+    staleTime: Infinity,
+    retry: false,
+  });
+}
+
 /** Edita o perfil de outra pessoa; os erros de campo vêm com as mensagens do perfil. */
 export const salvarPerfilAdm = (sb: Parameters<typeof chamar>[0], id: string, dados: PerfilForm) =>
   chamarPerfil<FichaPessoa>(sb, "academy_adm_salvar_perfil", { p_user_id: id, p_dados: dados });

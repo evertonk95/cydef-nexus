@@ -231,6 +231,18 @@ Duas abas novas no painel, visíveis só para admin. Instrutor não vê as abas 
 - **"Meu perfil" do instrutor** passou a se chamar **"Perfil de instrutor"**, para não confundir com o Meu perfil da conta.
 - **Fora desta fase:** bloquear acesso e exportar a lista em CSV.
 
+## Conta do dono da plataforma (fase 21, migração 0033)
+
+Regra do Everton: a conta dele é absoluta. Dentro da plataforma ninguém além dele altera essa conta.
+
+- **Quem é o dono:** `academy_dono`, uma linha só. A 0033 marca o primeiro admin cadastrado. Trocar o dono só por SQL no painel do Supabase; não existe função para isso.
+- **O que fica protegido:** papel na equipe e aprovação de materiais, nome, Meu perfil, cartão de instrutor ligado à conta e os acessos comprados ou liberados manualmente. Outra pessoa logada recebe `conta_protegida`.
+- **Onde está a regra:** em gatilhos nas tabelas (`academy_equipe`, `academy_equipe_cursos`, `alunos`, `academy_perfis`, `academy_concessoes`, `instrutores`), então vale para as funções de hoje e para as que vierem.
+- **O dono continua admin sempre:** nem ele mesmo se rebaixa ou sai da equipe pelo painel (`dono_sempre_admin`).
+- **Fora da plataforma** (webhook da Hotmart, tarefas agendadas, SQL no painel do Supabase, tudo sem usuário logado) o gatilho não interfere.
+- **Empresas clientes:** o vínculo com uma empresa e as concessões de origem `empresa` seguem o contrato e ficam de fora.
+- **Na tela:** na Equipe, a linha do dono mostra "Dono da plataforma" no lugar de Editar. Na ficha em Pessoas, outro admin vê o perfil do dono só para leitura; o próprio dono edita o perfil normalmente. O papel aparece como "Admin, sempre". A tela pergunta quem é o dono por `academy_adm_dono` (só admin).
+
 ## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
 
 - **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.

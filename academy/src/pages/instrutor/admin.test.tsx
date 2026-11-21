@@ -10,6 +10,7 @@ import AreaInstrutor from "./Area";
 import IndicadoresAdm from "./Indicadores";
 import PessoasAdm from "./Pessoas";
 import PessoaAdm from "./Pessoa";
+import EquipeInstrutor from "./Equipe";
 
 type Rpcs = NonNullable<NonNullable<Parameters<typeof sbFalso>[0]>["rpcs"]>;
 
@@ -71,6 +72,7 @@ function painel(rota: string, rpcs: Rpcs, papel: "admin" | "instrutor" = "admin"
           <Route path="indicadores" element={<IndicadoresAdm />} />
           <Route path="pessoas" element={<PessoasAdm />} />
           <Route path="pessoas/:id" element={<PessoaAdm />} />
+          <Route path="equipe" element={<EquipeInstrutor />} />
         </Route>
       </Routes>
     </ProvedorAvisos>,
@@ -166,6 +168,55 @@ describe("painel do admin: indicadores e pessoas", () => {
     await userEvent.click(within(papel).getByRole("button", { name: "Salvar papel" }));
     await waitFor(() => expect(papeis).toEqual([{ p_email: "ana@exemplo.com", p_papel: "instrutor", p_cursos: ["fundamentos-para-soc"] }]));
     expect(await violacoesGraves(container)).toEqual([]);
+  });
+
+  it("conta do dono vista por outro admin: só leitura, sem papel para trocar", async () => {
+    const { container } = painel("/instrutor/pessoas/u-ana", {
+      academy_adm_pessoa: { ...ficha, papel: "admin" },
+      academy_adm_dono: { user_id: "u-ana", eu: false },
+    });
+    expect(await screen.findByRole("heading", { level: 1, name: "Ana Souza" })).toBeInTheDocument();
+    expect(screen.getByText(/Dono da plataforma, na Academy desde/)).toBeInTheDocument();
+    expect(screen.getByText("Esta é a conta do dono da plataforma. Só ele altera esses dados, pela página Meu perfil.")).toBeInTheDocument();
+    expect(screen.getByText("Recife")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Salvar perfil" })).toBeNull();
+    expect(screen.queryByRole("form", { name: "Papel" })).toBeNull();
+    expect(screen.queryByRole("radio")).toBeNull();
+    expect(screen.getByText(/Esta é a conta do dono da plataforma e o papel dela não muda/)).toBeInTheDocument();
+    expect(await violacoesGraves(container)).toEqual([]);
+  });
+
+  it("o dono edita o próprio perfil, mas o papel continua admin", async () => {
+    painel("/instrutor/pessoas/u-ana", {
+      academy_adm_pessoa: { ...ficha, papel: "admin", eu: true },
+      academy_adm_dono: { user_id: "u-ana", eu: true },
+    });
+    expect(await screen.findByRole("button", { name: "Salvar perfil" })).toBeInTheDocument();
+    expect(screen.queryByRole("radio")).toBeNull();
+    expect(screen.getByText(/Você é o dono da plataforma e o papel dela não muda/)).toBeInTheDocument();
+  });
+
+  it("erro de conta protegida aparece com a mensagem certa", async () => {
+    painel("/instrutor/pessoas/u-ana", {
+      academy_adm_pessoa: ficha,
+      academy_adm_salvar_perfil: () => ({ error: { message: "conta_protegida" } }),
+    });
+    await userEvent.type(await screen.findByLabelText("Cargo"), "Analista");
+    await userEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
+    expect(await screen.findByText("Esta é a conta do dono da plataforma. Só ele pode alterá-la.")).toBeInTheDocument();
+  });
+
+  it("na Equipe, a linha do dono não tem botão de editar", async () => {
+    painel("/instrutor/equipe", {
+      academy_adm_dono: { user_id: "u1", eu: false },
+      academy_adm_equipe: [
+        { user_id: "u1", email: "dono@cydef.com.br", nome: "Everton", papel: "admin", eu: false, cursos: [], aprova_materiais: true },
+        { user_id: "u2", email: "matheus@exemplo.com", nome: "Matheus", papel: "admin", eu: true, cursos: [], aprova_materiais: true },
+      ],
+    });
+    expect(await screen.findByText("Dono da plataforma")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Editar acesso de Everton" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Editar acesso de Matheus" })).toBeInTheDocument();
   });
 
   it("ficha de quem não existe vira 404", async () => {

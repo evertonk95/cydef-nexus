@@ -39,3 +39,10 @@ test("admin acha a pessoa sem saber o e-mail, edita o perfil e a torna instrutor
   await page.getByRole("button", { name: "Equipe" }).click();
   await expect(page.getByText("2 pessoas")).toBeVisible();
 });
+
+test("na Equipe, a conta do dono aparece protegida", async ({ page }) => {
+  await page.goto("/instrutor/equipe");
+  await expect(page.getByText("Dono da plataforma")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Editar acesso de Everton Nascimento" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Editar acesso de Matheus" })).toBeVisible();
+});
