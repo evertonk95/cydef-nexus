@@ -107,6 +107,8 @@ function novoEstado() {
     pessoa: 1,
     materiais: [],
     arquivos: {},
+    // Fase 22: materiais que o aluno baixou (o download é o check no módulo).
+    baixados: [],
     // Fase 14: vitrine do curso pago de exemplo e trilhas.
     vitrine: { situacao: "em_breve", checkout_url: null, hotmart_produto_id: null, preco_centavos: null, preco_observacao: "", preco_conferido_em: null, trilhas: ["soc"] },
     // Fase 16: acessos pagos e produtos da Hotmart.
@@ -456,6 +458,12 @@ http
           if (corpo.pessoa) estado.pessoa = corpo.pessoa;
           if (corpo.empresa === "convite") criarEmpresaComConvite();
           if (corpo.missao) estado.missoes = [{ ...MISSAO_EXEMPLO, curso: CURSO.slug, publicado: true }];
+          if (corpo.material_modulo) {
+            const caminho = `${CURSO.slug}/mat-m1/material-modulo-1.pdf`;
+            estado.materiais.push({ id: "mat-m1", curso_slug: CURSO.slug, modulo_id: "m1", titulo: "Material complementar do Módulo 1", descricao: "Resumo das aulas.",
+              nome_arquivo: "material-modulo-1.pdf", extensao: "pdf", mime: "application/pdf", tamanho: 9, sha256: "a".repeat(64), caminho, status: "aprovado" });
+            estado.arquivos[caminho] = { dados: Buffer.from("%PDF-1.4\n"), tipo: "application/pdf" };
+          }
           return enviar({ ok: true });
         case "/functions/v1/academy-empresa": {
           const pend = estado.membros.filter((m) => m.empresa_id === corpo.empresa_id && m.situacao === "convidado" && !m.convite_enviado_em);
@@ -597,6 +605,9 @@ http
           return enviar(situacao());
         case "/rest/v1/rpc/academy_questoes_modulo":
           if (corpo.p_modulo_id !== "m1") return enviar({ message: "sem_questoes" }, 400);
+          if (!estado.moduloAprovado && estado.materiais.some((m) => m.modulo_id === "m1" && m.status === "aprovado" && !estado.baixados.includes(m.id))) {
+            return enviar({ message: "material_pendente" }, 400);
+          }
           return enviar({ modulo_id: "m1", nota_minima: 70, aprovado: estado.moduloAprovado, questoes: QUESTOES_M1.map(publica) });
         case "/rest/v1/rpc/academy_responder_modulo": {
           estado.respostasModulo.push(corpo.p_respostas);
@@ -737,7 +748,13 @@ http
         }
         case "/rest/v1/rpc/academy_materiais_curso":
           return enviar(estado.materiais.filter((m) => m.status === "aprovado" && m.curso_slug === corpo.p_curso)
-            .map(({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho }) => ({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho })));
+            .map(({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho }) => ({ id, modulo_id, titulo, descricao, nome_arquivo, extensao, tamanho, sha256, caminho, baixado: estado.baixados.includes(id) })));
+        case "/rest/v1/rpc/academy_registrar_material": {
+          const mat = estado.materiais.find((m) => m.id === corpo.p_material && m.status === "aprovado");
+          if (!mat) return enviar({ message: "material_indisponivel" }, 400);
+          if (!estado.baixados.includes(mat.id)) estado.baixados.push(mat.id);
+          return enviar({ material_id: mat.id, baixado_em: "2026-11-22T18:00:00Z" });
+        }
         case "/rest/v1/rpc/academy_adm_instrutores": {
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
           const p = (v) => ({ ...v.instrutores, da_equipe: v.papel === "instrutor", eu: v.instrutores.id === "i1" });

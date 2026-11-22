@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { CircleCheck, ListChecks, Lock, RotateCcw } from "lucide-react";
+import { CircleCheck, Download, ListChecks, Lock, RotateCcw } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
@@ -24,6 +24,8 @@ import { Botao } from "@/components/ui/Botao";
 import { Cartao } from "@/components/ui/Cartao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
 import { cn } from "@/lib/cn";
+import { materiaisPendentes } from "@/lib/materiais";
+import { useBaixarMaterial, useMateriaisCurso } from "@/lib/useMateriais";
 import { FalhaCarregamento, NaoEncontrado } from "./Estados";
 
 const link =
@@ -32,6 +34,7 @@ const link =
 const MENSAGEM_ENVIO: Partial<Record<ErroAvaliacao["codigo"], string>> = {
   muitas_tentativas: "Foram muitas tentativas em pouco tempo. Espere alguns minutos e tente de novo.",
   modulo_bloqueado: "Este módulo ainda está bloqueado.",
+  material_pendente: "Baixe o material complementar do módulo para liberar as questões.",
 };
 
 export default function QuestoesModulo() {
@@ -42,6 +45,8 @@ export default function QuestoesModulo() {
   const reduzir = useReducedMotion();
   const curso = useCurso(slug);
   const situacao = useSituacao(slug);
+  const materiais = useMateriaisCurso(curso.data);
+  const baixa = useBaixarMaterial(slug);
   const [rodada, setRodada] = useState(0);
   const [respostas, setRespostas] = useState<Respostas>({});
   const [resultado, setResultado] = useState<ResultadoModulo | null>(null);
@@ -138,6 +143,46 @@ export default function QuestoesModulo() {
 
   if (questoes.isError) {
     const codigo = questoes.error instanceof ErroAvaliacao ? questoes.error.codigo : "falha";
+    if (codigo === "material_pendente") {
+      // Fase 22: o material complementar do módulo vem antes das questões.
+      const pendentes = materiaisPendentes(Array.isArray(materiais.data) ? materiais.data : [], modulo.id);
+      return (
+        <>
+          {trilha}
+          <Cartao className="mx-auto max-w-xl">
+            <h1 className="m-0 mb-2 font-display text-2xl font-semibold">Antes das questões, baixe o material</h1>
+            <p className="m-0 mb-5 text-muted">
+              As questões do {rotuloModuloCurto(modulo.ordem, modulo.titulo)} abrem assim que você baixar o material complementar do módulo. Depois de baixar, elas aparecem aqui.
+            </p>
+            {pendentes.length > 0 ? (
+              <ul className="m-0 mb-5 flex list-none flex-col gap-2.5 p-0">
+                {pendentes.map((m) => (
+                  <li key={m.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-line px-4 py-3">
+                    <span className="min-w-0 flex-1 basis-48 font-medium">{m.titulo}</span>
+                    <Botao onClick={() => void baixa.baixar(m)} disabled={baixa.baixando === m.id} className="h-10 px-4 text-sm">
+                      <Download className="size-4" aria-hidden="true" /> {baixa.baixando === m.id ? "Preparando…" : "Baixar"}
+                      <span className="sr-only">{m.titulo}</span>
+                    </Botao>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Botao variante="contorno" onClick={() => void questoes.refetch()} className="mb-5">
+                Já baixei, atualizar
+              </Botao>
+            )}
+            {baixa.erro && (
+              <p role="alert" className="m-0 mb-4 text-sm">
+                Não foi possível baixar agora. Tente de novo em instantes.
+              </p>
+            )}
+            <Link to={`/cursos/${c.slug}`} className={cn(link, "border border-line-hi hover:border-muted")}>
+              Voltar ao curso
+            </Link>
+          </Cartao>
+        </>
+      );
+    }
     if (codigo === "modulo_bloqueado" || codigo === "sem_questoes") {
       // A situação mudou entre as duas consultas (questão despublicada, por exemplo).
       return (

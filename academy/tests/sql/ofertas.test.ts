@@ -43,7 +43,8 @@ describe("Aviso de Privacidade: só a última versão vigente (0022, 0025, 0027,
       { versao: "v2026.5", vigente: false },
       { versao: "v2026.6", vigente: false },
       { versao: "v2026.7", vigente: false },
-      { versao: "v2026.8", vigente: true },
+      { versao: "v2026.8", vigente: false },
+      { versao: "v2026.9", vigente: true },
     ]);
   });
 });

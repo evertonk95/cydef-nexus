@@ -67,6 +67,8 @@ export interface MaterialAluno {
   tamanho: number;
   sha256: string;
   caminho: string;
+  /** Fase 22: o aluno já baixou (o download é o check do material no módulo). */
+  baixado: boolean;
 }
 
 export function extensaoDe(nome: string): Extensao | null {
@@ -217,6 +219,21 @@ export async function linkDownload(sb: SupabaseClient, m: Pick<MaterialAluno, "c
   const { data, error } = await sb.storage.from(BUCKET).createSignedUrl(m.caminho, 60, { download: m.nome_arquivo });
   if (error || !data) throw new ErroPainel("falha_download");
   return data.signedUrl;
+}
+
+/**
+ * Download do aluno (fase 22): registra no banco antes de gerar o link, porque
+ * o download é o que marca o material como visto e libera as questões do
+ * módulo. Se o registro falhar, o download não acontece.
+ */
+export async function baixarMaterial(sb: SupabaseClient, m: Pick<MaterialAluno, "id" | "caminho" | "nome_arquivo">): Promise<string> {
+  await chamar(sb, "academy_registrar_material", { p_material: m.id });
+  return linkDownload(sb, m);
+}
+
+/** Materiais do módulo que o aluno ainda não baixou. */
+export function materiaisPendentes(lista: MaterialAluno[] | undefined, moduloId: string): MaterialAluno[] {
+  return (lista ?? []).filter((m) => m.modulo_id === moduloId && !m.baixado);
 }
 
 /** Remove o objeto do Storage (descartado, recusado ou fora do ar). */

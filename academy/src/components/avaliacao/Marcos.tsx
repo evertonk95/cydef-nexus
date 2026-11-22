@@ -1,16 +1,76 @@
 import { Link } from "react-router";
-import { Award, Check, ClipboardCheck, Hourglass, ListChecks, Lock } from "lucide-react";
+import { Award, Check, ClipboardCheck, Download, Hourglass, ListChecks, Lock } from "lucide-react";
 import { caminhoAvaliacao, caminhoCertificado, caminhoQuestoes, mostraConclusao, quandoLibera, type ModuloSituacao, type Situacao } from "@/lib/avaliacao";
 import { Cartao } from "@/components/ui/Cartao";
 import { cn } from "@/lib/cn";
+import type { MaterialAluno } from "@/lib/materiais";
+
+/**
+ * Material complementar dentro do bloco do módulo (fase 22). O check vem do
+ * download: baixou, está feito. Enquanto faltar, as questões do módulo esperam.
+ */
+export function LinhaMaterial({
+  material,
+  baixar,
+  baixando,
+  compacta = false,
+}: {
+  material: MaterialAluno;
+  baixar: (m: MaterialAluno) => void;
+  baixando: boolean;
+  compacta?: boolean;
+}) {
+  const feito = material.baixado;
+  return (
+    <li className="border-t border-[#1a1a1d]">
+      <button
+        type="button"
+        onClick={() => baixar(material)}
+        disabled={baixando}
+        className={cn(
+          "flex w-full items-center gap-3 text-left text-sm transition-colors duration-150 hover:bg-white/[0.03] disabled:opacity-60",
+          compacta ? "px-3.5 py-3" : "px-4 py-3",
+        )}
+      >
+        <span
+          className={cn(
+            "grid size-[22px] flex-none place-items-center rounded-full border-[1.5px]",
+            feito ? "border-ok bg-ok text-[#052e13]" : "border-orange text-orange",
+          )}
+        >
+          {feito ? <Check className="size-3" strokeWidth={3.5} aria-hidden="true" /> : <Download className="size-3" aria-hidden="true" />}
+        </span>
+        {!compacta && <span className="w-6" aria-hidden="true" />}
+        <span className="min-w-0 flex-1">
+          <span className="block font-semibold">Material complementar</span>
+          <span className="block truncate text-[13px] text-muted">{material.titulo}</span>
+        </span>
+        <span className={cn("text-[13px] whitespace-nowrap", feito ? "text-ok" : "text-orange-hi")}>
+          {baixando ? "Preparando…" : feito ? "Baixado" : "Baixar"}
+        </span>
+      </button>
+    </li>
+  );
+}
 
 /**
  * Linha "Questões do módulo" no fim da lista de aulas de um módulo. Só aparece
  * quando o módulo tem questões cadastradas: curso sem questões fica como antes.
+ * Com material do módulo ainda não baixado, ela espera o material (fase 22).
  */
-export function LinhaQuestoes({ slug, modulo, compacta = false }: { slug: string; modulo: ModuloSituacao; compacta?: boolean }) {
+export function LinhaQuestoes({
+  slug,
+  modulo,
+  compacta = false,
+  materialPendente = false,
+}: {
+  slug: string;
+  modulo: ModuloSituacao;
+  compacta?: boolean;
+  materialPendente?: boolean;
+}) {
   if (!modulo.tem_questoes) return null;
-  const estado = modulo.aprovado ? "aprovado" : modulo.liberado ? "pendente" : "bloqueado";
+  const estado = modulo.aprovado ? "aprovado" : !modulo.liberado ? "bloqueado" : materialPendente ? "material" : "pendente";
   return (
     <li className="border-t border-[#1a1a1d]">
       <Link
@@ -25,7 +85,7 @@ export function LinhaQuestoes({ slug, modulo, compacta = false }: { slug: string
         >
           {estado === "aprovado" ? (
             <Check className="size-3" strokeWidth={3.5} aria-hidden="true" />
-          ) : estado === "bloqueado" ? (
+          ) : estado === "bloqueado" || estado === "material" ? (
             <Lock className="size-3" aria-hidden="true" />
           ) : (
             <ListChecks className="size-3" aria-hidden="true" />
@@ -39,7 +99,7 @@ export function LinhaQuestoes({ slug, modulo, compacta = false }: { slug: string
             estado === "aprovado" ? "text-ok" : estado === "pendente" ? "text-orange-hi" : "text-dim",
           )}
         >
-          {estado === "aprovado" ? "Aprovado" : estado === "pendente" ? "Responder" : "Bloqueado"}
+          {estado === "aprovado" ? "Aprovado" : estado === "pendente" ? "Responder" : estado === "material" ? "Depois do material" : "Bloqueado"}
         </span>
       </Link>
     </li>

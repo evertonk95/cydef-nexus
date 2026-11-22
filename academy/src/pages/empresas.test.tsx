@@ -122,7 +122,7 @@ describe("convite recebido", () => {
     expect(within(cartao).getByText("Libera todos os cursos pagos da Academy até 19/11/2027.")).toBeInTheDocument();
     expect(within(cartao).getByText("se você passou na avaliação final de cada curso;")).toBeInTheDocument();
     expect(within(cartao).getByText("suas notas e respostas;")).toBeInTheDocument();
-    expect(within(cartao).getByRole("link", { name: "Aviso de Privacidade" })).toHaveAttribute("href", expect.stringMatching(/\/academy\/privacidade\/v2026\.8$/));
+    expect(within(cartao).getByRole("link", { name: "Aviso de Privacidade" })).toHaveAttribute("href", expect.stringMatching(/\/academy\/privacidade\/v2026\.9$/));
     expect(await violacoesGraves(container)).toEqual([]);
     await userEvent.click(within(cartao).getByRole("button", { name: "Aceitar convite" }));
     expect(await screen.findByText("meus cursos")).toBeInTheDocument();
