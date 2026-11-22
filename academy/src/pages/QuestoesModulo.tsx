@@ -6,6 +6,7 @@ import { CircleCheck, ListChecks, Lock, RotateCcw } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { usePortal } from "@/lib/portal";
 import {
+  acertosMinimos,
   buscarQuestoesModulo,
   caminhoAvaliacao,
   caminhoQuestoes,
@@ -157,6 +158,7 @@ export default function QuestoesModulo() {
 
   const q = questoes.data;
   const total = q?.questoes.length ?? 0;
+  const notaMinima = q?.nota_minima ?? s.requisitos.nota_minima_modulo;
   const respondidas = q ? q.questoes.filter((x) => respostas[x.id]).length : 0;
   const completo = total > 0 && respondidas === total;
   const proximoModulo = c.modulos.find((m) => m.ordem > modulo.ordem && m.aulas.length > 0);
@@ -179,15 +181,21 @@ export default function QuestoesModulo() {
           <h1 ref={tituloRef} tabIndex={-1} className="m-0 mb-3 font-display text-[clamp(26px,2.8vw,36px)] leading-tight font-semibold tracking-tight outline-none">
             {rotuloModulo(modulo.ordem, modulo.titulo)}
           </h1>
-          {!resultado && (
-            <p className="m-0 max-w-[68ch] leading-relaxed text-[#d6d6d6]">
-              {total > 0 ? `${total} questões de múltipla escolha. ` : ""}
-              Acerte pelo menos {q?.nota_minima ?? s.requisitos.nota_minima_modulo}% para liberar o próximo módulo. Se não der, você vê a explicação de cada questão e pode responder de novo na hora.
-            </p>
+          {!resultado && total > 0 && (
+            <ul aria-label="Como funciona" className="m-0 flex max-w-[68ch] list-disc flex-col gap-1.5 pl-5 leading-relaxed text-[#d6d6d6] marker:text-dim">
+              <li>{total} questões de múltipla escolha, sorteadas a cada tentativa</li>
+              <li>
+                Para passar: acertar {acertosMinimos(total, notaMinima)} de {total} ({notaMinima}%)
+              </li>
+              <li>
+                {proximoModulo ? `Passou: o ${rotuloModuloCurto(proximoModulo.ordem, proximoModulo.titulo)} é liberado` : "Passou: o módulo fica concluído"}
+              </li>
+              <li>Não passou: leia a explicação de cada questão e responda novamente</li>
+            </ul>
           )}
           {!resultado && modulo.aprovado && (
             <p className="m-0 mt-4 inline-flex items-center gap-2 rounded-xl border border-ok/30 bg-ok/10 px-4 py-2.5 text-[14.5px] font-semibold text-ok">
-              <CircleCheck className="size-[18px]" aria-hidden="true" /> Você já passou neste módulo. Pode responder de novo para revisar.
+              <CircleCheck className="size-[18px]" aria-hidden="true" /> Você já passou neste módulo. Pode responder novamente para revisar.
             </p>
           )}
         </header>
@@ -219,7 +227,7 @@ export default function QuestoesModulo() {
                     ? proximoModulo
                       ? `O ${rotuloModuloCurto(proximoModulo.ordem, proximoModulo.titulo)} está liberado.`
                       : "Você passou nas questões do último módulo."
-                    : "Leia a explicação das questões que você errou e responda de novo. As questões e a ordem das alternativas mudam a cada tentativa."}
+                    : "Leia a explicação das questões que você errou e responda novamente. As questões e a ordem das alternativas mudam a cada tentativa."}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {resultado.aprovado ? (
@@ -234,7 +242,7 @@ export default function QuestoesModulo() {
                     )
                   ) : (
                     <Botao onClick={novaRodada} className="px-4 py-2.5 text-[15px]">
-                      <RotateCcw className="size-4" aria-hidden="true" /> Responder de novo
+                      <RotateCcw className="size-4" aria-hidden="true" /> Responder novamente
                     </Botao>
                   )}
                   {!resultado.aprovado && primeiraAula && (

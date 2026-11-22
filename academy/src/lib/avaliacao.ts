@@ -383,6 +383,15 @@ export function nomeValido(nome: string): boolean {
 }
 
 /** Caminhos das telas novas. O módulo vai pela ordem, que é estável e legível. */
+/**
+ * Menor número de acertos que passa, com a mesma conta do banco:
+ * nota = round(acertos * 100 / total), aprovado com nota >= mínima.
+ */
+export function acertosMinimos(total: number, notaMinima: number): number {
+  for (let a = 0; a <= total; a++) if (Math.round((a * 100) / total) >= notaMinima) return a;
+  return total;
+}
+
 export const caminhoQuestoes = (slug: string, ordem: number) => `/cursos/${slug}/modulos/${ordem}/questoes`;
 export const caminhoAvaliacao = (slug: string) => `/cursos/${slug}/avaliacao`;
 export const caminhoCertificado = (slug: string) => `/cursos/${slug}/certificado`;

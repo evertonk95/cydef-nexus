@@ -8,7 +8,7 @@ import Curso from "./Curso";
 import Aula from "./Aula";
 import { renderizar } from "@/test/utilidades";
 import { violacoesGraves } from "@/test/axe";
-import { linkLinkedin, normalizarCodigo, dataPorExtenso, mostraConclusao, nomeValido, normalizarNome, quandoLibera, buscarSituacao, type Situacao } from "@/lib/avaliacao";
+import { acertosMinimos, linkLinkedin, normalizarCodigo, dataPorExtenso, mostraConclusao, nomeValido, normalizarNome, quandoLibera, buscarSituacao, type Situacao } from "@/lib/avaliacao";
 
 const gerarPdf = vi.fn<(d: unknown) => Promise<Blob>>(async () => new Blob(["%PDF"], { type: "application/pdf" }));
 vi.mock("@/lib/certificado-pdf", () => ({
@@ -136,6 +136,11 @@ describe("questões do módulo", () => {
     rotaQuestoes(1, sb);
     expect(await screen.findByRole("heading", { level: 1, name: "Módulo 1: Princípios de segurança" })).toBeInTheDocument();
     await screen.findByText("Pergunta 1 sobre segurança?");
+    const regras = within(screen.getByRole("list", { name: "Como funciona" }));
+    expect(regras.getByText("5 questões de múltipla escolha, sorteadas a cada tentativa")).toBeInTheDocument();
+    expect(regras.getByText("Para passar: acertar 4 de 5 (70%)")).toBeInTheDocument();
+    expect(regras.getByText(/^Passou: o Módulo 2 é liberado$/)).toBeInTheDocument();
+    expect(regras.getByText("Não passou: leia a explicação de cada questão e responda novamente")).toBeInTheDocument();
     const enviar = screen.getByRole("button", { name: /Enviar respostas/ });
     expect(enviar).toBeDisabled();
     expect(screen.getByText("0 de 5 respondidas")).toBeInTheDocument();
@@ -153,7 +158,7 @@ describe("questões do módulo", () => {
     expect(envio.args.p_modulo_id).toBe(M1);
     expect((envio.args.p_respostas as { questao: string }[]).map((r) => r.questao)).toEqual(qs.map((q) => q.id));
 
-    fireEvent.click(screen.getByRole("button", { name: /Responder de novo/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Responder novamente/ }));
     await waitFor(() => expect(chamadas.filter((c) => c.nome === "academy_questoes_modulo")).toHaveLength(2));
     expect(await screen.findByText("0 de 5 respondidas")).toBeInTheDocument();
   });
@@ -482,5 +487,15 @@ describe("código e LinkedIn", () => {
     expect(u.searchParams.get("certUrl")).toBe("https://academy.cydef.com.br/certificado/CYD-1");
     expect(u.searchParams.get("organizationName")).toBe("CyDef Academy");
     expect(u.searchParams.get("issueMonth")).toBe("3");
+  });
+});
+
+describe("acertosMinimos", () => {
+  it("usa a mesma conta do banco (nota arredondada)", () => {
+    expect(acertosMinimos(5, 70)).toBe(4);
+    expect(acertosMinimos(20, 80)).toBe(16);
+    expect(acertosMinimos(3, 70)).toBe(3);
+    expect(acertosMinimos(8, 70)).toBe(6);
+    expect(acertosMinimos(10, 0)).toBe(0);
   });
 });
