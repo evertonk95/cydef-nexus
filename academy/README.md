@@ -243,6 +243,15 @@ Regra do Everton: a conta dele é absoluta. Dentro da plataforma ninguém além 
 - **Empresas clientes:** o vínculo com uma empresa e as concessões de origem `empresa` seguem o contrato e ficam de fora.
 - **Na tela:** na Equipe, a linha do dono mostra "Dono da plataforma" no lugar de Editar. Na ficha em Pessoas, outro admin vê o perfil do dono só para leitura; o próprio dono edita o perfil normalmente. O papel aparece como "Admin, sempre". A tela pergunta quem é o dono por `academy_adm_dono` (só admin).
 
+## Material complementar dentro do módulo (fase 22, migrações 0034 e 0035)
+
+Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece também dentro do bloco do módulo, como um item com check, e é uma etapa antes das questões.
+
+- **Na tela:** na página do curso e na lateral da sala de aula, o material do módulo entra entre as aulas e as "Questões do módulo". Clicar baixa o arquivo e marca o check ("Baixado"). Enquanto faltar material, a linha das questões mostra "Depois do material" e a tela de questões pede o download, com o botão ali mesmo. A lista "Material complementar" do fim da página continua, com o mesmo check.
+- **A regra está no banco:** `academy_registrar_material` grava o primeiro download em `academy_materiais_baixados` (fechada; some com a conta e com o material) antes de o portal gerar o link. `academy_questoes_modulo` e `academy_responder_modulo` recusam com `material_pendente` enquanto houver material aprovado do módulo não baixado. Quem já passou no módulo não é travado de novo. Material pendente, recusado ou fora do ar não conta; material do "Curso todo" não trava nada.
+- **Cópia dos dados** do aluno inclui os materiais baixados e a data.
+- **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
+
 ## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
 
 - **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.

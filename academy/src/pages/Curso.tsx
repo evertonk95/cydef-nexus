@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown, Clock, Lock, Play, PlayCircle } from "lucide-react";
 import { useCurso, useSituacao } from "@/lib/consultas";
 import { moduloPendente } from "@/lib/avaliacao";
-import { AvisoBloqueio, CartaoConclusao, LinhaQuestoes } from "@/components/avaliacao/Marcos";
+import { AvisoBloqueio, CartaoConclusao, LinhaMaterial, LinhaQuestoes } from "@/components/avaliacao/Marcos";
+import { useBaixarMaterial, useMateriaisCurso } from "@/lib/useMateriais";
 import { NIVEL } from "@/lib/cursos";
 import { aulaParaContinuar, caminhoAula, numeroAula, resumoDoCurso, rotuloModulo } from "@/lib/aula";
 import { contagem, duracao } from "@/lib/formato";
@@ -21,6 +22,8 @@ export default function Curso() {
   const [abertos, setAbertos] = useState<Record<string, boolean>>({});
   // Complementar: se falhar, a página do curso segue como antes.
   const situacao = useSituacao(slug, Boolean(curso.data?.matriculado));
+  const materiais = useMateriaisCurso(curso.data);
+  const baixa = useBaixarMaterial(slug);
   const sit = situacao.data;
 
   if (curso.isError) return <FalhaCarregamento tentar={() => void curso.refetch()} />;
@@ -79,6 +82,7 @@ export default function Curso() {
               const completo = ok === m.aulas.length;
               const ms = sit?.modulos.find((x) => x.id === m.id);
               const bloqueado = ms ? !ms.liberado : false;
+              const mats = (Array.isArray(materiais.data) ? materiais.data : []).filter((x) => x.modulo_id === m.id);
               return (
                 <li key={m.id} className={cn(borda)}>
                   <h2 className="m-0">
@@ -124,7 +128,15 @@ export default function Curso() {
                             </Link>
                           </li>
                         ))}
-                        {ms && <LinhaQuestoes slug={c.slug} modulo={ms} />}
+                        {mats.map((x) => (
+                          <LinhaMaterial key={x.id} material={x} baixar={(mm) => void baixa.baixar(mm)} baixando={baixa.baixando === x.id} />
+                        ))}
+                        {baixa.erro && mats.length > 0 && (
+                          <li role="alert" className="border-t border-[#1a1a1d] px-4 py-2.5 text-[13px]">
+                            Não foi possível baixar agora. Tente de novo em instantes.
+                          </li>
+                        )}
+                        {ms && <LinhaQuestoes slug={c.slug} modulo={ms} materialPendente={mats.some((x) => !x.baixado)} />}
                       </motion.ul>
                     )}
                   </AnimatePresence>

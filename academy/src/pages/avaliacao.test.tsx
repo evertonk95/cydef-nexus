@@ -499,3 +499,90 @@ describe("acertosMinimos", () => {
     expect(acertosMinimos(10, 0)).toBe(0);
   });
 });
+
+describe("material complementar no módulo (fase 22)", () => {
+  const MAT = { id: uuid(900), modulo_id: M1, titulo: "Material do Módulo 1", descricao: "", nome_arquivo: "m1.pdf", extensao: "pdf", tamanho: 600_000, sha256: "a".repeat(64), caminho: `${CURSO.slug}/m/m1.pdf` };
+  const URL_ASSINADA = "https://proj.supabase.co/storage/v1/object/sign/m1?token=t";
+
+  function comDownload(sb: SupabaseClient) {
+    const assinar = vi.fn(async () => ({ data: { signedUrl: URL_ASSINADA }, error: null }));
+    (sb as unknown as { storage: unknown }).storage = { from: () => ({ createSignedUrl: assinar }) };
+    const ir = vi.fn();
+    vi.stubGlobal("location", { ...window.location, assign: ir });
+    return { assinar, ir };
+  }
+
+  it("aparece dentro do módulo; baixar dá o check e libera as questões", async () => {
+    let baixado = false;
+    const { sb, chamadas } = sbAvaliacao({
+      academy_situacao_curso: () => ({ data: situacao() }),
+      academy_materiais_curso: () => ({ data: [{ ...MAT, baixado }] }),
+      academy_registrar_material: () => {
+        baixado = true;
+        return { data: { material_id: MAT.id, baixado_em: "2026-11-22T18:00:00Z" } };
+      },
+    });
+    const { assinar, ir } = comDownload(sb);
+    renderizar(<Curso />, { rota: `/cursos/${CURSO.slug}`, caminho: "/cursos/:slug", sb });
+    fireEvent.click(await screen.findByRole("button", { name: /Módulo 1: Princípios de segurança/ }));
+    const modulo = within(document.body);
+    const linha = await modulo.findByRole("button", { name: /Material complementar.*Material do Módulo 1.*Baixar/ });
+    expect(screen.getByRole("link", { name: /Questões do módulo.*Depois do material/ })).toBeInTheDocument();
+
+    fireEvent.click(linha);
+    await waitFor(() => expect(ir).toHaveBeenCalledWith(URL_ASSINADA));
+    expect(chamadas.find((c) => c.nome === "academy_registrar_material")?.args).toEqual({ p_material: MAT.id });
+    expect(assinar).toHaveBeenCalledWith(MAT.caminho, 60, { download: MAT.nome_arquivo });
+    expect(await modulo.findByRole("button", { name: /Material complementar.*Baixado/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Questões do módulo.*Responder/ })).toBeInTheDocument();
+    vi.unstubAllGlobals();
+  });
+
+  it("se o registro falhar, não baixa e avisa", async () => {
+    const { sb } = sbAvaliacao({
+      academy_situacao_curso: () => ({ data: situacao() }),
+      academy_materiais_curso: () => ({ data: [{ ...MAT, baixado: false }] }),
+      academy_registrar_material: () => ({ error: { message: "material_indisponivel" } }),
+    });
+    const { ir } = comDownload(sb);
+    renderizar(<Curso />, { rota: `/cursos/${CURSO.slug}`, caminho: "/cursos/:slug", sb });
+    fireEvent.click(await screen.findByRole("button", { name: /Módulo 1: Princípios de segurança/ }));
+    fireEvent.click(await screen.findByRole("button", { name: /Material complementar.*Baixar/ }));
+    expect((await screen.findAllByRole("alert")).some((a) => a.textContent?.includes("Não foi possível baixar agora"))).toBe(true);
+    expect(ir).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("tela de questões com material pendente pede o download e abre as questões depois", async () => {
+    let baixado = false;
+    const qs = questoes(5);
+    const { sb } = sbAvaliacao({
+      academy_situacao_curso: () => ({ data: situacao() }),
+      academy_materiais_curso: () => ({ data: [{ ...MAT, baixado }] }),
+      academy_registrar_material: () => {
+        baixado = true;
+        return { data: { material_id: MAT.id, baixado_em: "2026-11-22T18:00:00Z" } };
+      },
+      academy_questoes_modulo: () => (baixado ? { data: { modulo_id: M1, nota_minima: 70, aprovado: false, questoes: qs } } : { error: { message: "material_pendente" } }),
+    });
+    const { ir } = comDownload(sb);
+    const { container } = rotaQuestoes(1, sb);
+    expect(await screen.findByRole("heading", { name: "Antes das questões, baixe o material" })).toBeInTheDocument();
+    expect(await violacoesGraves(container)).toEqual([]);
+    fireEvent.click(await screen.findByRole("button", { name: /Baixar.*Material do Módulo 1/ }));
+    await waitFor(() => expect(ir).toHaveBeenCalledWith(URL_ASSINADA));
+    expect(await screen.findByText(qs[0]!.enunciado)).toBeInTheDocument();
+    vi.unstubAllGlobals();
+  });
+
+  it("a lateral da sala de aula também mostra o material do módulo", async () => {
+    const { sb } = sbAvaliacao({
+      academy_situacao_curso: () => ({ data: situacao() }),
+      academy_materiais_curso: () => ({ data: [{ ...MAT, baixado: true }] }),
+    });
+    renderizar(<Aula />, { rota: `/cursos/${CURSO.slug}/aulas/2`, caminho: "/cursos/:slug/aulas/:numero", sb });
+    const lateral = within(await screen.findByRole("navigation", { name: `Aulas de ${CURSO.titulo}` }));
+    expect(await lateral.findByRole("button", { name: /Material complementar.*Baixado/ })).toBeInTheDocument();
+    expect(lateral.getByRole("link", { name: /Questões do módulo.*Responder/ })).toBeInTheDocument();
+  });
+});

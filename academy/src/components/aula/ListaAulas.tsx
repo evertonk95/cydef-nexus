@@ -7,7 +7,8 @@ import { duracao } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { CursoDetalhe } from "@/lib/cursos";
 import { moduloPendente, type Situacao } from "@/lib/avaliacao";
-import { AvisoBloqueio, LinhaQuestoes } from "@/components/avaliacao/Marcos";
+import { AvisoBloqueio, LinhaMaterial, LinhaQuestoes } from "@/components/avaliacao/Marcos";
+import { useBaixarMaterial, useMateriaisCurso } from "@/lib/useMateriais";
 
 /** Módulos e aulas do curso, com a aula atual destacada. */
 export function ListaAulas({
@@ -22,6 +23,8 @@ export function ListaAulas({
   situacao?: Situacao;
 }) {
   const pendente = situacao ? moduloPendente(situacao) : null;
+  const materiais = useMateriaisCurso(curso);
+  const baixa = useBaixarMaterial(curso.slug);
   const [abertos, setAbertos] = useState<Record<string, boolean>>({});
   const aberto = (id: string) => abertos[id] ?? id === moduloAtual;
 
@@ -43,6 +46,7 @@ export function ListaAulas({
           const completo = feitas === m.aulas.length;
           const ms = situacao?.modulos.find((x) => x.id === m.id);
           const bloqueado = ms ? !ms.liberado : false;
+          const mats = (Array.isArray(materiais.data) ? materiais.data : []).filter((x) => x.modulo_id === m.id);
           return (
             <li key={m.id} className={cn(borda)}>
               <h3 className="m-0">
@@ -98,7 +102,15 @@ export function ListaAulas({
                         </li>
                       );
                     })}
-                    {ms && <LinhaQuestoes slug={curso.slug} modulo={ms} compacta />}
+                    {mats.map((x) => (
+                      <LinhaMaterial key={x.id} material={x} baixar={(mm) => void baixa.baixar(mm)} baixando={baixa.baixando === x.id} compacta />
+                    ))}
+                    {baixa.erro && mats.length > 0 && (
+                      <li role="alert" className="border-t border-[#1a1a1d] px-4 py-2.5 text-[13px]">
+                        Não foi possível baixar agora. Tente de novo em instantes.
+                      </li>
+                    )}
+                    {ms && <LinhaQuestoes slug={curso.slug} modulo={ms} compacta materialPendente={mats.some((x) => !x.baixado)} />}
                   </motion.ul>
                 )}
               </AnimatePresence>

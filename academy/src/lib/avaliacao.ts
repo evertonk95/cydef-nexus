@@ -13,6 +13,7 @@ export type CodigoErroAvaliacao =
   | "curso_indisponivel"
   | "modulo_bloqueado"
   | "sem_questoes"
+  | "material_pendente"
   | "muitas_tentativas"
   | "prova_indisponivel"
   | "prova_ja_enviada"
@@ -30,6 +31,7 @@ const CODIGOS: CodigoErroAvaliacao[] = [
   "curso_indisponivel",
   "modulo_bloqueado",
   "sem_questoes",
+  "material_pendente",
   "muitas_tentativas",
   "prova_indisponivel",
   "prova_ja_enviada",

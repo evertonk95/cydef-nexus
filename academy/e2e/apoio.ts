@@ -9,6 +9,7 @@ export interface EstadoFalso {
   acessosRegistrados: number;
   gravacoes: { p_aula_id: string; p_posicao: number; p_concluida: boolean }[];
   pedidosVideo: string[];
+  baixados: string[];
   respostasModulo: { questao: string; alternativa: string }[][];
   provas: { nota: number; aprovado: boolean }[];
   certificado: { codigo: string; nome: string } | null;
@@ -22,7 +23,7 @@ export async function resetar(request: APIRequestContext) {
 /** Atalho para os testes da avaliação final: aulas concluídas e módulo aprovado. */
 export async function cenario(
   request: APIRequestContext,
-  c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean; equipe?: "admin" | "instrutor"; pessoa?: 1 | 2; empresa?: "convite"; missao?: boolean },
+  c: { aulas_concluidas?: boolean; modulo_aprovado?: boolean; equipe?: "admin" | "instrutor"; pessoa?: 1 | 2; empresa?: "convite"; missao?: boolean; material_modulo?: boolean },
 ) {
   await request.post(`${API}/__cenario`, { data: c });
 }

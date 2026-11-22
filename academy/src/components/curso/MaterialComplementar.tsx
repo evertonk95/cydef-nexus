@@ -1,43 +1,23 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Download, FileText } from "lucide-react";
-import { usePortal } from "@/lib/portal";
-import { chamar } from "@/lib/instrutor";
-import { linkDownload, tamanhoLegivel, TIPOS, type MaterialAluno } from "@/lib/materiais";
+import { Check, Download, FileText } from "lucide-react";
+import { tamanhoLegivel, TIPOS } from "@/lib/materiais";
 import { rotuloModulo } from "@/lib/aula";
+import { useBaixarMaterial, useMateriaisCurso } from "@/lib/useMateriais";
 import type { CursoDetalhe } from "@/lib/cursos";
 
 /**
  * Material complementar aprovado do curso. Complementar: se a consulta
- * falhar, a página do curso segue normal e o bloco não aparece.
+ * falhar, a página do curso segue normal e o bloco não aparece. O material de
+ * um módulo também aparece dentro do bloco do módulo (fase 22); os dois lugares
+ * usam a mesma consulta e mostram o mesmo check.
  */
 export function MaterialComplementar({ curso }: { curso: CursoDetalhe }) {
-  const { sb, sessao } = usePortal();
-  const lista = useQuery({
-    queryKey: ["materiais", curso.slug, sessao?.user.id],
-    queryFn: () => chamar<MaterialAluno[]>(sb, "academy_materiais_curso", { p_curso: curso.slug }),
-    enabled: Boolean(sessao && curso.matriculado),
-    retry: false,
-    staleTime: 60_000,
-  });
-  const [baixando, setBaixando] = useState<string | null>(null);
-  const [erro, setErro] = useState(false);
+  const lista = useMateriaisCurso(curso);
+  const { baixar, baixando, erro } = useBaixarMaterial(curso.slug);
   if (!Array.isArray(lista.data) || lista.data.length === 0) return null;
 
   const modulo = (id: string | null) => {
     const m = id ? curso.modulos.find((x) => x.id === id) : null;
     return m ? rotuloModulo(m.ordem, m.titulo) : "Curso todo";
-  };
-  const baixar = async (m: MaterialAluno) => {
-    setBaixando(m.id);
-    setErro(false);
-    try {
-      window.location.assign(await linkDownload(sb, m));
-    } catch {
-      setErro(true);
-    } finally {
-      setBaixando(null);
-    }
   };
 
   return (
@@ -57,13 +37,18 @@ export function MaterialComplementar({ curso }: { curso: CursoDetalhe }) {
                 </p>
                 {m.descricao && <p className="m-0 mt-1 text-sm text-[#d4d4d4]">{m.descricao}</p>}
               </div>
+              {m.baixado && (
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-ok">
+                  <Check className="size-3.5" strokeWidth={3} aria-hidden="true" /> Baixado
+                </span>
+              )}
               <button
                 type="button"
                 onClick={() => void baixar(m)}
                 disabled={baixando === m.id}
                 className="inline-flex h-10 items-center gap-2 rounded-[10px] border border-line-hi px-4 text-sm font-semibold transition-colors duration-150 hover:border-muted disabled:opacity-60"
               >
-                <Download className="size-4" aria-hidden="true" /> {baixando === m.id ? "Preparando…" : "Baixar"}
+                <Download className="size-4" aria-hidden="true" /> {baixando === m.id ? "Preparando…" : m.baixado ? "Baixar novamente" : "Baixar"}
                 <span className="sr-only">{m.titulo}</span>
               </button>
             </div>
