@@ -19,8 +19,10 @@ import { fortinetRcePostEn } from "./posts.fortinet-rce.en";
 import { windowsBitlockerBypassPostEn } from "./posts.windows-bitlocker-bypass.en";
 import { apacheHttp2RcePostEn } from "./posts.apache-http2-rce.en";
 import { noisytcpLinuxPostEn } from "./posts.noisytcp-linux.en";
+import { whatsappAndroid3FalhasPostEn } from "./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.en";
 
 export const blogPostsEn: BlogPost[] = [
+  whatsappAndroid3FalhasPostEn,
   wordpress715CorrecoesSegurancaPostEn,
   chrome158CorrecoesSegurancaPostEn,
   stingybasiliskSmbPipesPostEn,

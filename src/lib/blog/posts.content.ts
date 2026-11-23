@@ -1,4 +1,5 @@
 import { extraPosts } from "./posts-extra.generated";
+import { whatsappAndroid3FalhasPost } from "./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos";
 import { stingybasiliskSmbPipesPost } from "./posts.stingybasilisk-smb-pipes-nomeados-espionagem";
 import { firefox160CorrecoesSegurancaPost } from "./posts.firefox-160-correcoes-seguranca";
 import { chrome158CorrecoesSegurancaPost } from "./posts.chrome-158-correcoes-seguranca";
@@ -31,6 +32,7 @@ import type { Lang } from "@/i18n";
  * para o chunk inicial e o LCP regride. Se precisar só de listagem, use meta.
  */
 export const blogPosts: BlogPost[] = [
+  whatsappAndroid3FalhasPost,
   wordpress715CorrecoesSegurancaPost,
   chrome158CorrecoesSegurancaPost,
   stingybasiliskSmbPipesPost,

@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
+    "title": "WhatsApp fixes three Android flaws, including IP exposure and local file deletion",
+    "category": "Threat Intelligence",
+    "excerpt": "WhatsApp's November 2026 security advisory describes three flaws: a SQL injection on Android that can delete files stored by the app after the recipient taps an order details message, a flaw that exposes the user's IP address when the app displays messages with external media links in replies tied to Click to WhatsApp ads, and an incomplete validation of servers used by Meta AI's Private Processing.",
+    "date": "November 23, 2026",
+    "dateISO": "2026-11-23",
+    "readTime": "7 min",
+    "image": "/assets/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos-capa.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "wordpress-7-1-5-correcoes-seguranca",
     "title": "WordPress 7.1.5 fixes 20 flaws, including privilege escalation and potential code execution",
     "category": "Threat Intelligence",
@@ -306,6 +317,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
+    "title": "WhatsApp corrige três falhas no Android, incluindo exposição de IP e exclusão de arquivos locais",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "O aviso de segurança de novembro de 2026 do WhatsApp descreve três falhas: uma injeção SQL no Android que pode apagar arquivos armazenados pelo aplicativo depois que o destinatário toca em uma mensagem de detalhes de pedido, uma falha que expõe o endereço IP ao exibir mensagens com link de mídia externo em respostas de anúncios Click to WhatsApp e uma validação incompleta dos servidores do Private Processing da Meta AI.",
+    "date": "23 de Novembro, 2026",
+    "dateISO": "2026-11-23",
+    "readTime": "7 min",
+    "image": "/assets/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos-capa.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "wordpress-7-1-5-correcoes-seguranca",
     "title": "WordPress 7.1.5 corrige 20 falhas, incluindo escalada de privilégios e possível execução de código",
     "category": "Inteligência de Ameaças",
@@ -605,6 +627,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
+    "title": "WhatsApp corrige tres fallas en Android, incluida la exposicion de IP y la eliminacion de archivos locales",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "El aviso de seguridad de noviembre de 2026 de WhatsApp describe tres fallas: una inyeccion SQL en Android que puede eliminar archivos almacenados por la aplicacion despues de que el destinatario toca un mensaje de detalles de pedido, una falla que expone la direccion IP al mostrar mensajes con enlace de medios externo en respuestas de anuncios Click to WhatsApp y una validacion incompleta de los servidores del Private Processing de Meta AI.",
+    "date": "23 de Noviembre, 2026",
+    "dateISO": "2026-11-23",
+    "readTime": "7 min",
+    "image": "/assets/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos-capa.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "wordpress-7-1-5-correcoes-seguranca",
     "title": "WordPress 7.1.5 corrige 20 fallas, incluidas escalada de privilegios y posible ejecución de código",
