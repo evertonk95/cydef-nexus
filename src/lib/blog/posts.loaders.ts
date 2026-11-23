@@ -16,6 +16,10 @@ type Loader = () => Promise<BlogPost>;
  */
 const loaders: Record<string, Loader> = {
   // --- PT ---
+  "pt:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
+    import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos").then(
+      (m) => m.whatsappAndroid3FalhasPost,
+    ),
   "pt:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
     import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem").then((m) => m.stingybasiliskSmbPipesPost),
   "pt:firefox-160-correcoes-seguranca": () =>
@@ -73,6 +77,10 @@ const loaders: Record<string, Loader> = {
     import("./posts.noisytcp-linux").then((m) => m.noisytcpLinuxPost),
 
   // --- EN ---
+  "en:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
+    import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.en").then(
+      (m) => m.whatsappAndroid3FalhasPostEn,
+    ),
   "en:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
     import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem.en").then((m) => m.stingybasiliskSmbPipesPostEn),
   "en:firefox-160-correcoes-seguranca": () =>
@@ -133,6 +141,10 @@ const loaders: Record<string, Loader> = {
     ),
 
   // --- ES ---
+  "es:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
+    import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.es").then(
+      (m) => m.whatsappAndroid3FalhasPostEs,
+    ),
   "es:stingybasilisk-smb-pipes-nomeados-espionagem": () =>
     import("./posts.stingybasilisk-smb-pipes-nomeados-espionagem.es").then((m) => m.stingybasiliskSmbPipesPostEs),
   "es:firefox-160-correcoes-seguranca": () =>
