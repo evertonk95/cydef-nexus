@@ -13,7 +13,7 @@ import { iniciais } from "@/lib/formato";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
 import { Esqueleto } from "@/components/ui/Esqueleto";
-import { AreaTexto, ErroFormulario, Selecao } from "@/components/instrutor/Campos";
+import { AreaTexto, ErroFormulario, Marcador, Selecao } from "@/components/instrutor/Campos";
 import { FormPerfil, type DadosPerfil } from "@/components/instrutor/FormPerfil";
 import { FalhaCarregamento } from "../Estados";
 
@@ -112,12 +112,22 @@ function Instrutores({ slug }: { slug: string }) {
   const lista = useInstrutoresAdm(slug);
   const aviso = useAvisos();
   const [modo, setModo] = useState<"nenhum" | "convidar" | { editar: VinculoInstrutor }>("nenhum");
-  const [escolhido, setEscolhido] = useState("");
+  const [marcados, setMarcados] = useState<string[]>([]);
   const [papel, setPapel] = useState<PapelNoCurso>("instrutor");
 
+  // Chave "c:<cartão>" para quem já tem perfil e "p:<conta>" para quem é da Equipe e ainda não tem.
   const vincular = useAcao(
-    (sb, a: { id: string; papel: PapelNoCurso }) => chamar<InstrutoresDoCurso>(sb, "academy_adm_vincular_instrutor", { p_curso: slug, p_instrutor: a.id, p_papel: a.papel }),
-    () => setEscolhido(""),
+    (sb, a: { chaves: string[]; papel: PapelNoCurso }) =>
+      chamar<InstrutoresDoCurso>(sb, "academy_adm_acrescentar_instrutores", {
+        p_curso: slug,
+        p_instrutores: a.chaves.filter((k) => k.startsWith("c:")).map((k) => k.slice(2)),
+        p_pessoas: a.chaves.filter((k) => k.startsWith("p:")).map((k) => k.slice(2)),
+        p_papel: a.papel,
+      }),
+    (_r, a) => {
+      setMarcados([]);
+      aviso({ titulo: a.chaves.length === 1 ? "Acrescentado ao curso" : `${a.chaves.length} pessoas acrescentadas ao curso`, tipo: "ok" });
+    },
   );
   const desvincular = useAcao((sb, id: string) => chamar<InstrutoresDoCurso>(sb, "academy_adm_desvincular_instrutor", { p_curso: slug, p_instrutor: id }));
   const mover = useAcao((sb, a: { id: string; direcao: number }) =>
@@ -232,39 +242,26 @@ function Instrutores({ slug }: { slug: string }) {
           ) : (
             modo === "nenhum" && (
               <div className="flex flex-col gap-4 rounded-2xl border border-dashed border-line-hi p-5">
-                {lista.data.disponiveis.length > 0 && (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (escolhido) vincular.mutate({ id: escolhido, papel });
-                    }}
-                    className="flex flex-wrap items-end gap-3"
-                  >
-                    <div className="min-w-56 flex-1">
-                      <Selecao rotulo="Acrescentar ao curso" value={escolhido} onChange={(e) => setEscolhido(e.target.value)}>
-                        <option value="">Escolha um perfil</option>
-                        {lista.data.disponiveis.map((p) => (
-                          <option key={p.id} value={p.id}>
-                            {p.nome}
-                            {p.eu ? " (você)" : p.da_equipe ? "" : " (convidado)"}
-                          </option>
-                        ))}
-                      </Selecao>
-                    </div>
-                    <div className="w-40">
-                      <Selecao rotulo="Papel" value={papel} onChange={(e) => setPapel(e.target.value as PapelNoCurso)}>
-                        {PAPEIS.map((p) => (
-                          <option key={p.valor} value={p.valor}>
-                            {p.rotulo}
-                          </option>
-                        ))}
-                      </Selecao>
-                    </div>
-                    <Botao type="submit" variante="contorno" className="h-11 px-4" disabled={!escolhido || ocupado}>
-                      Acrescentar
-                    </Botao>
-                  </form>
-                )}
+                <FormAcrescentar
+                  opcoes={[
+                    ...(lista.data.equipe_sem_perfil ?? []).map((p) => ({
+                      chave: `p:${p.id}`,
+                      nome: p.eu ? `${p.nome} (você)` : p.nome,
+                      ajuda: "Da Equipe, ainda sem perfil de instrutor. O perfil é criado com o nome da conta.",
+                    })),
+                    ...lista.data.disponiveis.map((p) => ({
+                      chave: `c:${p.id}`,
+                      nome: p.eu ? `${p.nome} (você)` : p.nome,
+                      ajuda: p.da_equipe ? (p.cargo ?? undefined) : `Convidado${p.cargo ? `, ${p.cargo}` : ""}`,
+                    })),
+                  ].sort((x, y) => x.nome.localeCompare(y.nome, "pt-BR"))}
+                  marcados={marcados}
+                  setMarcados={setMarcados}
+                  papel={papel}
+                  setPapel={setPapel}
+                  enviar={() => vincular.mutate({ chaves: marcados, papel })}
+                  ocupado={ocupado}
+                />
                 <button
                   type="button"
                   onClick={() => setModo("convidar")}
@@ -278,6 +275,71 @@ function Instrutores({ slug }: { slug: string }) {
         </>
       )}
     </section>
+  );
+}
+
+interface OpcaoInstrutor {
+  chave: string;
+  nome: string;
+  ajuda?: string;
+}
+
+function FormAcrescentar({
+  opcoes,
+  marcados,
+  setMarcados,
+  papel,
+  setPapel,
+  enviar,
+  ocupado,
+}: {
+  opcoes: OpcaoInstrutor[];
+  marcados: string[];
+  setMarcados: (m: string[]) => void;
+  papel: PapelNoCurso;
+  setPapel: (p: PapelNoCurso) => void;
+  enviar: () => void;
+  ocupado: boolean;
+}) {
+  if (opcoes.length === 0) {
+    return <p className="m-0 text-sm text-muted">Todo mundo da Equipe já está neste curso.</p>;
+  }
+  const n = marcados.length;
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (n > 0) enviar();
+      }}
+      className="flex flex-col gap-4"
+    >
+      <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
+        <legend className="mb-3 p-0 text-[15px] font-medium text-ink">Acrescentar ao curso</legend>
+        {opcoes.map((o) => (
+          <Marcador
+            key={o.chave}
+            rotulo={o.nome}
+            ajuda={o.ajuda}
+            checked={marcados.includes(o.chave)}
+            onChange={(e) => setMarcados(e.target.checked ? [...marcados, o.chave] : marcados.filter((k) => k !== o.chave))}
+          />
+        ))}
+      </fieldset>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="w-40">
+          <Selecao rotulo="Papel" value={papel} onChange={(e) => setPapel(e.target.value as PapelNoCurso)}>
+            {PAPEIS.map((p) => (
+              <option key={p.valor} value={p.valor}>
+                {p.rotulo}
+              </option>
+            ))}
+          </Selecao>
+        </div>
+        <Botao type="submit" variante="contorno" className="h-11 px-4" disabled={n === 0 || ocupado}>
+          {n > 1 ? `Acrescentar ${n} pessoas` : "Acrescentar"}
+        </Botao>
+      </div>
+    </form>
   );
 }
 

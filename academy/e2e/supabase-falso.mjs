@@ -109,6 +109,12 @@ function novoEstado() {
     arquivos: {},
     // Fase 22: materiais que o aluno baixou (o download é o check no módulo).
     baixados: [],
+    // Fase 23: "Quem ensina" do curso no painel. Matheus e Ana são da Equipe e ainda não têm perfil de instrutor.
+    quemEnsina: {
+      vinculos: CURSO.cursos_instrutores.map((v) => ({ papel: v.papel, ordem: v.ordem, id: v.instrutores.id })),
+      cartoes: CURSO.cursos_instrutores.map((v) => ({ ...v.instrutores, da_equipe: v.papel === "instrutor", eu: v.instrutores.id === "i1" })),
+      semPerfil: [{ id: "u-matheus", nome: "Matheus Inacio", eu: false }, { id: "u-ana", nome: "Ana Souza", eu: false }],
+    },
     // Fase 14: vitrine do curso pago de exemplo e trilhas.
     vitrine: { situacao: "em_breve", checkout_url: null, hotmart_produto_id: null, preco_centavos: null, preco_observacao: "", preco_conferido_em: null, trilhas: ["soc"] },
     // Fase 16: acessos pagos e produtos da Hotmart.
@@ -755,10 +761,32 @@ http
           if (!estado.baixados.includes(mat.id)) estado.baixados.push(mat.id);
           return enviar({ material_id: mat.id, baixado_em: "2026-11-22T18:00:00Z" });
         }
-        case "/rest/v1/rpc/academy_adm_instrutores": {
+        case "/rest/v1/rpc/academy_adm_instrutores":
+        case "/rest/v1/rpc/academy_adm_acrescentar_instrutores": {
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
-          const p = (v) => ({ ...v.instrutores, da_equipe: v.papel === "instrutor", eu: v.instrutores.id === "i1" });
-          return enviar({ do_curso: CURSO.cursos_instrutores.map((v) => ({ papel: v.papel, ordem: v.ordem, instrutor: p(v) })), disponiveis: [] });
+          const q = estado.quemEnsina;
+          if (u.pathname.endsWith("acrescentar_instrutores")) {
+            const ids = [...(corpo.p_instrutores ?? [])];
+            for (const pessoa of corpo.p_pessoas ?? []) {
+              const sp = q.semPerfil.find((x) => x.id === pessoa);
+              if (!sp) return enviar({ message: "fora_da_equipe" }, 400);
+              q.cartoes.push({ id: `card-${pessoa}`, nome: sp.nome, cargo: "", bio: "", linkedin: null, site: null, da_equipe: true, eu: sp.eu });
+              q.semPerfil = q.semPerfil.filter((x) => x.id !== pessoa);
+              ids.push(`card-${pessoa}`);
+            }
+            for (const cid of ids) {
+              const v = q.vinculos.find((x) => x.id === cid);
+              if (v) v.papel = corpo.p_papel;
+              else q.vinculos.push({ id: cid, papel: corpo.p_papel, ordem: Math.max(0, ...q.vinculos.map((x) => x.ordem)) + 1 });
+            }
+            estado.escritasAdm.push({ fn: "academy_adm_acrescentar_instrutores", ...corpo });
+          }
+          const card = (cid) => q.cartoes.find((c) => c.id === cid);
+          return enviar({
+            do_curso: [...q.vinculos].sort((a, b) => a.ordem - b.ordem).map((v) => ({ papel: v.papel, ordem: v.ordem, instrutor: card(v.id) })),
+            disponiveis: q.cartoes.filter((c) => !q.vinculos.some((v) => v.id === c.id)),
+            equipe_sem_perfil: q.semPerfil,
+          });
         }
         case "/rest/v1/rpc/academy_adm_meu_perfil":
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);

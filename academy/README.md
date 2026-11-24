@@ -252,6 +252,14 @@ Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece 
 - **Cópia dos dados** do aluno inclui os materiais baixados e a data.
 - **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
 
+## Quem ensina com a Equipe e vários de uma vez (fase 23, migração 0036)
+
+Pedido do Everton (24/11/2026): o Matheus, instrutor da Equipe, não aparecia para ser escolhido em "Quem ensina" do Fundamentos para SOC, e a lista deixava acrescentar uma pessoa por vez.
+
+- **Na tela:** em "Acrescentar ao curso" aparece, além dos perfis que ainda não estão no curso, quem está na Equipe e ainda não tem perfil de instrutor ("Da Equipe, ainda sem perfil de instrutor"). Cada pessoa tem uma caixa de marcar; escolhe o papel e clica em "Acrescentar" (ou "Acrescentar N pessoas"). Quando não sobra ninguém, aparece "Todo mundo da Equipe já está neste curso." O botão "Convidar alguém de fora da equipe" continua igual.
+- **No banco:** `academy_adm_instrutores` devolve também `equipe_sem_perfil` (só id e nome da conta). `academy_adm_acrescentar_instrutores(curso, cartões, pessoas, papel)` acrescenta até 20 de uma vez; para quem é da Equipe e não tem cartão, cria o cartão ligado à conta, com o nome de Meu perfil (ou o começo do e-mail). Cargo, bio e links a pessoa completa em "Perfil de instrutor". Recusa quem não é da Equipe (`fora_da_equipe`) e grava uma linha `instrutores_acrescentados` na auditoria.
+- `academy_adm_vincular_instrutor` continua existindo, sem mudança.
+
 ## E-mails de certificado emitido e de aula nova (fase 18, migrações 0028 e 0029)
 
 - **Certificado emitido:** vai sempre para o aluno, com o código de validação, o botão para abrir o certificado (PDF e LinkedIn) e, se a validação pública estiver ligada, o endereço de validação. Certificados emitidos antes da 0028 ficam marcados como avisados e não geram e-mail.
