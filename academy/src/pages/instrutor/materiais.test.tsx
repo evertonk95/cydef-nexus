@@ -200,6 +200,20 @@ describe("aba Materiais", () => {
     expect(chamadas[2]![1]).toEqual({ p_id: "mat2" });
   });
 
+  it("material que entrou por carga direta no banco mostra \"Carga direta\" no lugar de quem enviou (fase 25)", async () => {
+    painel(`/instrutor/cursos/${SLUG}?aba=materiais`, {
+      academy_adm_eu: { papel: "instrutor", cursos: [SLUG], aprova_materiais: false },
+      academy_adm_curso: cursoAdm,
+      academy_adm_materiais: [
+        material({ status: "aprovado", enviado_por_nome: null }),
+        material({ id: "mat2", titulo: "Planilha do módulo", status: "aprovado", enviado_por_nome: "Matheus" }),
+      ],
+    });
+    expect(await screen.findByText(/^Carga direta em /)).toBeInTheDocument();
+    expect(screen.getByText(/^Enviado por Matheus em /)).toBeInTheDocument();
+    expect(screen.queryByText(/Enviado por {2}em/)).not.toBeInTheDocument();
+  });
+
   it("arquivo recusado no navegador nem chega ao banco", async () => {
     const registrar = vi.fn(() => ({ data: null }));
     painel(`/instrutor/cursos/${SLUG}?aba=materiais`, {

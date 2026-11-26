@@ -282,7 +282,7 @@ function Modulo({
         <ol className="m-0 list-none p-0">
           {m.aulas.map((a, i) => (
             <li key={a.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-line px-5 py-3 last:border-b-0">
-              <span className="w-8 shrink-0 font-display text-sm text-dim">{numeroAula(a.numero)}</span>
+              <span className="w-8 shrink-0 font-display text-sm text-dim">{numeroAula(i + 1)}</span>
               <Link to={`/instrutor/cursos/${curso.slug}/aulas/${a.id}`} className="min-w-0 flex-1 basis-56 truncate font-medium hover:text-orange-hi">
                 {a.titulo}
               </Link>
@@ -291,10 +291,10 @@ function Modulo({
                 <Situacao estado={estadoAula(a)} />
               </span>
               <span className="flex items-center gap-1">
-                <BotaoIcone rotulo={`Subir aula ${numeroAula(a.numero)}`} onClick={() => mover(a.id, -1, "academy_adm_mover_aula")} disabled={i === 0 || ocupado}>
+                <BotaoIcone rotulo={`Subir aula ${numeroAula(i + 1)}`} onClick={() => mover(a.id, -1, "academy_adm_mover_aula")} disabled={i === 0 || ocupado}>
                   <ArrowUp className="size-4" aria-hidden="true" />
                 </BotaoIcone>
-                <BotaoIcone rotulo={`Descer aula ${numeroAula(a.numero)}`} onClick={() => mover(a.id, 1, "academy_adm_mover_aula")} disabled={i === m.aulas.length - 1 || ocupado}>
+                <BotaoIcone rotulo={`Descer aula ${numeroAula(i + 1)}`} onClick={() => mover(a.id, 1, "academy_adm_mover_aula")} disabled={i === m.aulas.length - 1 || ocupado}>
                   <ArrowDown className="size-4" aria-hidden="true" />
                 </BotaoIcone>
               </span>

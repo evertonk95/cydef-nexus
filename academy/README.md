@@ -252,6 +252,13 @@ Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece 
 - **Cópia dos dados** do aluno inclui os materiais baixados e a data.
 - **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
 
+## Ajustes do painel do instrutor (fase 25, sem migração)
+
+Pedido do Everton (25/11/2026), dois ajustes que ficaram para trás:
+
+- **Carga direta nos materiais:** material que entrou direto pelo banco (sem envio pelo painel, como o do Módulo 1 do Cybersecurity Fundamentals) aparecia como "Enviado por  em ...", com o nome em branco. Agora aparece "Carga direta em ..." na aba Materiais e "Carga direta" no campo "Enviado por" das Aprovações.
+- **Número da aula dentro do módulo:** a estrutura do curso e o título da tela da aula mostravam o número contado no curso inteiro (aula 07). Agora o painel usa a mesma numeração do aluno: "01, 02, 03" dentro de cada módulo e, no título, "Módulo 2, aula 01". O endereço da aula para o aluno continua com o número do curso.
+
 ## Banco de questões: publicar em lote e filtro que não se perde (fase 24, migração 0037)
 
 Pedido do Everton (25/11/2026): publicar era uma questão por vez (entrar, marcar, salvar), e ao voltar da questão a lista mostrava tudo de novo, sem o módulo que estava filtrado.

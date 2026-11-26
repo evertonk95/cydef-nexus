@@ -30,14 +30,14 @@ test("admin cria uma aula com link do YouTube, publica e reordena", async ({ pag
   await page.getByLabel("Aula publicada").check();
   await page.getByRole("button", { name: "Criar aula" }).click();
 
-  await expect(page.getByRole("heading", { level: 1, name: "Aula 05" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Módulo 1, aula 04" })).toBeVisible();
   await expect(page.getByText("Publicada", { exact: true })).toBeVisible();
 
   await page.getByRole("link", { name: "Cybersecurity Fundamentals" }).click();
   await expect(modulo.getByRole("link", { name: "Autenticação e autorização" })).toBeVisible();
-  await modulo.getByRole("button", { name: "Subir aula 05" }).click();
+  await modulo.getByRole("button", { name: "Subir aula 04" }).click();
   await expect(modulo.getByRole("listitem").nth(2)).toContainText("Autenticação e autorização");
-  await expect(modulo.getByRole("listitem").nth(2)).toContainText("04");
+  await expect(modulo.getByRole("listitem").nth(2)).toContainText("03");
 
   const e = await estado(request);
   expect(e.escritasAdm[0]).toMatchObject({

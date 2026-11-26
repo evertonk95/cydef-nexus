@@ -198,7 +198,9 @@ describe("estrutura do curso", () => {
     expect(within(linhas[0]!).getByText("Publicada")).toBeInTheDocument();
     expect(within(linhas[1]!).getByText("Rascunho")).toBeInTheDocument();
     expect(within(linhas[2]!).getByText("Sem vídeo")).toBeInTheDocument();
-    expect(within(modulo).getByRole("button", { name: "Subir aula 02" })).toBeDisabled();
+    expect(within(modulo).getByRole("button", { name: "Subir aula 01" })).toBeDisabled();
+    // Numeração dentro do módulo, como o aluno vê.
+    expect(linhas.map((l) => l.querySelector("span")?.textContent)).toEqual(["01", "02", "03"]);
     expect(within(modulo).getByRole("link", { name: /Nova aula no módulo 1/ })).toHaveAttribute("href", `/instrutor/cursos/${SLUG}/aulas/nova?modulo=m1`);
     // Introdução não sobe nem desce; módulo com conteúdo não tem excluir.
     expect(screen.queryByRole("button", { name: "Subir Introdução" })).not.toBeInTheDocument();
@@ -216,7 +218,8 @@ describe("estrutura do curso", () => {
         return { data: cursoAdm() };
       },
     });
-    await userEvent.click(await screen.findByRole("button", { name: "Descer aula 02" }));
+    const modulo = await screen.findByRole("region", { name: "Módulo 1: O SOC por dentro" });
+    await userEvent.click(within(modulo).getByRole("button", { name: "Descer aula 01" }));
     await waitFor(() => expect(args).toEqual({ p_id: "a2", p_direcao: 1 }));
   });
 

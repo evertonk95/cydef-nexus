@@ -257,7 +257,8 @@ function materialJson(m) {
   const mod = CURSO.modulos.find((x) => x.id === m.modulo_id);
   return {
     ...m, curso_titulo: CURSO.titulo, modulo_titulo: mod?.titulo ?? null, modulo_ordem: mod?.ordem ?? null,
-    enviado_por_nome: "Everton Nascimento", enviado_por_mim: m.enviado_por === estado.pessoa,
+    // Fase 25: material de carga direta (sem enviado_por) volta sem nome, como no banco.
+    enviado_por_nome: m.enviado_por ? "Everton Nascimento" : null, enviado_por_mim: m.enviado_por === estado.pessoa,
     revisado_por_nome: m.revisado_por ? "Revisor" : null,
   };
 }
@@ -473,7 +474,7 @@ http
           if (corpo.material_modulo) {
             const caminho = `${CURSO.slug}/mat-m1/material-modulo-1.pdf`;
             estado.materiais.push({ id: "mat-m1", curso_slug: CURSO.slug, modulo_id: "m1", titulo: "Material complementar do Módulo 1", descricao: "Resumo das aulas.",
-              nome_arquivo: "material-modulo-1.pdf", extensao: "pdf", mime: "application/pdf", tamanho: 9, sha256: "a".repeat(64), caminho, status: "aprovado" });
+              nome_arquivo: "material-modulo-1.pdf", extensao: "pdf", mime: "application/pdf", tamanho: 9, sha256: "a".repeat(64), caminho, status: "aprovado", enviado_em: "2026-11-21T12:00:00Z" });
             estado.arquivos[caminho] = { dados: Buffer.from("%PDF-1.4\n"), tipo: "application/pdf" };
           }
           return enviar({ ok: true });
