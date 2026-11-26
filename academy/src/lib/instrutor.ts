@@ -76,6 +76,15 @@ export interface Requisitos {
   certificado_ativo: boolean;
   /** 0017. Vazio: automático (gratuito usa claro, pago usa tecnico). */
   modelo_certificado?: "claro" | "tecnico" | null;
+  /** 0038. Como a avaliação final é montada: sorteio do banco ou prova escolhida pelo instrutor. */
+  final_modo?: "sorteio" | "fixa";
+}
+
+/** Prova montada pelo instrutor (0038): as escolhidas e quantas valem para o aluno. */
+export interface ProvaFinalAdm {
+  modo: "sorteio" | "fixa";
+  questoes: string[];
+  validas: number;
 }
 
 export interface CursoAdm {
@@ -411,6 +420,15 @@ export function useQuestoesAdm(slug: string) {
   return useQuery({
     queryKey: ["adm", "questoes", slug],
     queryFn: () => chamar<QuestaoAdm[]>(sb, "academy_adm_questoes", { p_curso: slug }),
+    enabled: Boolean(slug),
+  });
+}
+
+export function useProvaFinalAdm(slug: string) {
+  const { sb } = usePortal();
+  return useQuery({
+    queryKey: ["adm", "prova-final", slug],
+    queryFn: () => chamar<ProvaFinalAdm>(sb, "academy_adm_prova_final", { p_curso: slug }),
     enabled: Boolean(slug),
   });
 }

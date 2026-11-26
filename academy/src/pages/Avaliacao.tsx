@@ -385,7 +385,11 @@ function Estado({
       <ClipboardCheck className="mb-3 size-9 text-muted" aria-hidden="true" />
       <h2 className="m-0 mb-2 font-display text-2xl font-semibold">{f.prova_aberta ? "Você tem uma avaliação em andamento" : "Sua avaliação final está liberada"}</h2>
       <ul className="m-0 mb-6 flex list-disc flex-col gap-2 pl-5 text-[15px] text-[#d6d6d6] marker:text-dim">
-        <li>{r.questoes_final} questões de múltipla escolha sorteadas de um banco</li>
+        <li>
+          {r.final_modo === "fixa"
+            ? `${r.questoes_final} questões de múltipla escolha escolhidas pelo instrutor, em ordem diferente a cada tentativa`
+            : `${r.questoes_final} questões de múltipla escolha sorteadas de um banco`}
+        </li>
         <li>Sem cronômetro: dá para fechar e voltar depois</li>
         <li>Para passar: {r.nota_minima_final}% de acerto</li>
         <li>

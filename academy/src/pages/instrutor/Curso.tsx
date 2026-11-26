@@ -9,7 +9,7 @@ import {
   NIVEIS,
   useAcao,
   useCursoAdm,
-  useQuestoesAdm,
+  useQuestoesAdm, useProvaFinalAdm, type ProvaFinalAdm,
   type CursoAdm,
   type ModuloAdm,
   type Nivel,
@@ -356,6 +356,7 @@ interface ResultadoLote {
 
 function Questoes({ curso }: { curso: CursoAdm }) {
   const questoes = useQuestoesAdm(curso.slug);
+  const prova = useProvaFinalAdm(curso.slug);
   const aviso = useAvisos();
   const [busca, setBusca] = useSearchParams();
   const pedido = busca.get("mostrar") ?? "todas";
@@ -397,6 +398,21 @@ function Questoes({ curso }: { curso: CursoAdm }) {
     },
   );
 
+  // Fase 26: pôr ou tirar questões da avaliação final montada pelo instrutor.
+  const definirProva = useAcao(
+    (sb, a: { ids: string[]; incluir: boolean }) =>
+      chamar<ProvaFinalAdm>(sb, "academy_adm_definir_prova_final", { p_curso: curso.slug, p_questoes: a.ids, p_incluir: a.incluir }),
+    (_r, a) => {
+      setMarcadas([]);
+      aviso({
+        titulo: a.incluir
+          ? `${contagem(a.ids.length, "questão entrou", "questões entraram")} na prova`
+          : `${contagem(a.ids.length, "questão saiu", "questões saíram")} da prova`,
+        tipo: "ok",
+      });
+    },
+  );
+
   if (questoes.isError) return <FalhaCarregamento tentar={() => void questoes.refetch()} />;
   const lista = (questoes.data ?? [])
     .filter((q) => (filtro === "todas" ? true : filtro === "final" ? q.modulo_id === null : q.modulo_id === filtro))
@@ -412,7 +428,12 @@ function Questoes({ curso }: { curso: CursoAdm }) {
     const m = curso.modulos.find((x) => x.id === q.modulo_id);
     return m ? rotuloModulo(m.ordem, m.titulo) : "";
   };
-  const faltamFinal = req ? Math.max(0, req.questoes_final - curso.questoes_final_publicadas) : 0;
+  const fixa = req?.final_modo === "fixa";
+  const naProva = new Set(prova.data?.questoes ?? []);
+  const faltamFinal = req && !fixa ? Math.max(0, req.questoes_final - curso.questoes_final_publicadas) : 0;
+  const selFinal = lista.filter((q) => selecao.includes(q.id) && q.modulo_id === null);
+  const selPorNaProva = selFinal.filter((q) => !naProva.has(q.id)).map((q) => q.id);
+  const selTirarDaProva = selFinal.filter((q) => naProva.has(q.id)).map((q) => q.id);
   const ate = filtrosQuestoes(busca);
   const sufixo = ate ? `?${ate}` : "";
   const novaQ = new URLSearchParams(ate);
@@ -446,6 +467,17 @@ function Questoes({ curso }: { curso: CursoAdm }) {
           <Plus className="size-4" aria-hidden="true" /> Nova questão
         </Link>
       </div>
+
+      {fixa && (filtro === "todas" || filtro === "final") && prova.data && (
+        <p className={`m-0 rounded-[10px] border px-4 py-3 text-sm text-ink ${prova.data.validas === 0 ? "border-warn/30 bg-warn/5" : "border-line"}`}>
+          A avaliação final é a prova montada: {contagem(prova.data.questoes.length, "questão escolhida", "questões escolhidas")}
+          {prova.data.validas !== prova.data.questoes.length ? `, ${contagem(prova.data.validas, "publicada", "publicadas")}` : ""}. Todo aluno recebe as
+          mesmas questões, em ordem diferente.
+          {prova.data.validas === 0
+            ? " Enquanto nenhuma escolhida estiver publicada, a avaliação final fica indisponível para o aluno."
+            : " Para mudar, marque questões da avaliação final e use \"Pôr na prova\" ou \"Tirar da prova\"."}
+        </p>
+      )}
 
       {req && faltamFinal > 0 && (filtro === "todas" || filtro === "final") && (
         <p className="m-0 rounded-[10px] border border-warn/30 bg-warn/5 px-4 py-3 text-sm text-ink">
@@ -507,11 +539,31 @@ function Questoes({ curso }: { curso: CursoAdm }) {
                   >
                     Voltar {selPublicada.length > 0 ? contagem(selPublicada.length, "questão", "questões") : ""} para rascunho
                   </Botao>
+                  {fixa && selPorNaProva.length > 0 && (
+                    <Botao
+                      variante="contorno"
+                      className="h-10 px-4 text-sm"
+                      disabled={definirProva.isPending}
+                      onClick={() => definirProva.mutate({ ids: selPorNaProva, incluir: true })}
+                    >
+                      Pôr {contagem(selPorNaProva.length, "questão", "questões")} na prova
+                    </Botao>
+                  )}
+                  {fixa && selTirarDaProva.length > 0 && (
+                    <Botao
+                      variante="contorno"
+                      className="h-10 px-4 text-sm"
+                      disabled={definirProva.isPending}
+                      onClick={() => definirProva.mutate({ ids: selTirarDaProva, incluir: false })}
+                    >
+                      Tirar {contagem(selTirarDaProva.length, "questão", "questões")} da prova
+                    </Botao>
+                  )}
                 </>
               )}
             </div>
           </div>
-          <ErroFormulario erro={lote.error} />
+          <ErroFormulario erro={lote.error ?? definirProva.error} />
           <ul className="m-0 flex list-none flex-col gap-3 p-0">
             {lista.map((q, i) => (
               <li key={q.id} className="painel-card group flex items-start gap-4 p-5 hover:border-line-hi">
@@ -529,6 +581,7 @@ function Questoes({ curso }: { curso: CursoAdm }) {
                   </div>
                   <div className="flex flex-col gap-1 sm:w-36 sm:items-end sm:text-right">
                     <Situacao estado={q.publicado ? "publicada" : "rascunho"} />
+                    {fixa && naProva.has(q.id) && <span className="text-[13px] font-medium text-ink">Na prova</span>}
                     {q.em_uso && <span className="text-[13px] text-dim">Já respondida</span>}
                   </div>
                 </Link>
@@ -575,6 +628,7 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
     tentativas_final_max: r.tentativas_final_max === null ? "" : String(r.tentativas_final_max),
     carga_horaria_h: r.carga_horaria_h === null ? "" : String(r.carga_horaria_h).replace(".", ","),
     modelo_certificado: r.modelo_certificado ?? "",
+    final_modo: r.final_modo ?? "sorteio",
   }));
   const salvar = useAcao(
     (sb, dados: Record<string, unknown>) => chamar<CursoAdm>(sb, "academy_adm_salvar_requisitos", { p_curso: curso.slug, p_dados: dados }),
@@ -600,6 +654,7 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
       tentativas_final_max: inteiro(f.tentativas_final_max),
       carga_horaria_h: inteiro(f.carga_horaria_h.replace(",", ".")),
       ...(r.modelo_certificado !== undefined ? { modelo_certificado: f.modelo_certificado } : {}),
+      ...(r.final_modo !== undefined ? { final_modo: f.final_modo } : {}),
     });
   };
 
@@ -625,8 +680,25 @@ function FormRequisitos({ curso }: { curso: CursoAdm }) {
 
       <fieldset className="m-0 grid gap-5 border-0 p-0 sm:grid-cols-2">
         <legend className="mb-4 p-0 font-display text-lg font-semibold">Avaliação final</legend>
+        {r.final_modo !== undefined && (
+          <div className="sm:col-span-2">
+            <Selecao
+              rotulo="Como a prova é montada"
+              value={f.final_modo}
+              onChange={(e) => setF((x) => ({ ...x, final_modo: e.target.value as "sorteio" | "fixa" }))}
+              ajuda={
+                f.final_modo === "fixa"
+                  ? "Todo aluno recebe as questões que você escolher em Questões, Avaliação final, em ordem diferente para cada um."
+                  : "Cada aluno recebe questões sorteadas do banco da avaliação final."
+              }
+            >
+              <option value="sorteio">Sorteio do banco de questões</option>
+              <option value="fixa">Prova montada pelo instrutor</option>
+            </Selecao>
+          </div>
+        )}
         <Campo rotulo="Nota mínima (%)" type="number" min={0} max={100} required {...num("nota_minima_final")} />
-        <Campo rotulo="Questões sorteadas" type="number" min={1} max={100} required {...num("questoes_final")} />
+        {f.final_modo !== "fixa" && <Campo rotulo="Questões sorteadas" type="number" min={1} max={100} required {...num("questoes_final")} />}
         <Campo rotulo="Espera entre tentativas (horas)" type="number" min={0} max={720} required {...num("espera_final_horas")} />
         <Campo rotulo="Máximo de tentativas" type="number" min={1} max={50} ajuda="Deixe em branco para não limitar." {...num("tentativas_final_max")} />
       </fieldset>

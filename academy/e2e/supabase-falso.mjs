@@ -115,6 +115,8 @@ function novoEstado() {
       explicacao: "", atualizado_em: "2026-11-25T10:00:00Z", em_uso: false,
       alternativas: [{ ordem: 1, texto: "O alerta e o contexto", correta: true }, { ordem: 2, texto: "Nada", correta: false }],
     })),
+    // Fase 26: avaliação final montada pelo instrutor (começa em sorteio, sem escolhidas).
+    provaFinal: { modo: "sorteio", questoes: [] },
     // Fase 23: "Quem ensina" do curso no painel. Matheus e Ana são da Equipe e ainda não têm perfil de instrutor.
     quemEnsina: {
       vinculos: CURSO.cursos_instrutores.map((v) => ({ papel: v.papel, ordem: v.ordem, id: v.instrutores.id })),
@@ -274,7 +276,7 @@ function cursoAdm() {
     slug: CURSO.slug, titulo: CURSO.titulo, descricao: CURSO.descricao, nivel: CURSO.nivel, gratuito: true, publicado: estado.adm.publicado, ordem: 1,
     eh_admin: estado.equipe === "admin",
     requisitos: { exige_todas_aulas: true, exige_modulos: true, nota_minima_modulo: 70, questoes_modulo: 5, nota_minima_final: 75, questoes_final: 4,
-      espera_final_horas: 24, tentativas_final_max: null, carga_horaria_h: 6, certificado_ativo: true },
+      espera_final_horas: 24, tentativas_final_max: null, carga_horaria_h: 6, certificado_ativo: true, final_modo: estado.provaFinal.modo },
     questoes_final: QUESTOES_FINAL.length, questoes_final_publicadas: QUESTOES_FINAL.length,
     objetivos: CURSO.objetivos, publico: CURSO.publico, pre_requisitos: CURSO.pre_requisitos,
     modulos: estado.adm.modulos,
@@ -885,6 +887,26 @@ http
             Object.assign(estado.trilhas.find((t) => t.slug === corpo.p_slug), d);
           }
           return enviar(trilhasAdm());
+        }
+        case "/rest/v1/rpc/academy_adm_salvar_requisitos": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          if (corpo.p_dados?.final_modo) estado.provaFinal.modo = corpo.p_dados.final_modo;
+          estado.escritasAdm.push({ fn: "academy_adm_salvar_requisitos", ...corpo });
+          return enviar(cursoAdm());
+        }
+        case "/rest/v1/rpc/academy_adm_prova_final":
+        case "/rest/v1/rpc/academy_adm_definir_prova_final": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const pf = estado.provaFinal;
+          if (u.pathname.endsWith("definir_prova_final")) {
+            for (const id of corpo.p_questoes) {
+              if (corpo.p_incluir && !pf.questoes.includes(id)) pf.questoes.push(id);
+              if (!corpo.p_incluir) pf.questoes = pf.questoes.filter((x) => x !== id);
+            }
+            estado.escritasAdm.push({ fn: "academy_adm_definir_prova_final", ...corpo });
+          }
+          const validas = pf.questoes.filter((id) => estado.questoesAdm.find((q) => q.id === id)?.publicado).length;
+          return enviar({ modo: pf.modo, questoes: pf.questoes, validas });
         }
         case "/rest/v1/rpc/academy_adm_publicar_questoes": {
           if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);

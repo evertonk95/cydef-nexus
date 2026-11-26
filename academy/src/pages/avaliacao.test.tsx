@@ -42,7 +42,7 @@ const CURSO = {
   ],
 };
 
-function situacao(over: { modulos?: Partial<Situacao["modulos"][number]>[]; final?: Partial<Situacao["final"]>; certificado?: Partial<Situacao["certificado"]>; aulas?: Situacao["aulas"] } = {}): Situacao {
+function situacao(over: { modulos?: Partial<Situacao["modulos"][number]>[]; final?: Partial<Situacao["final"]>; certificado?: Partial<Situacao["certificado"]>; aulas?: Situacao["aulas"]; requisitos?: Partial<Situacao["requisitos"]> } = {}): Situacao {
   const base = [
     { id: M0, ordem: 0, titulo: "Introdução", tem_questoes: false, aprovado: false, liberado: true },
     { id: M1, ordem: 1, titulo: "Princípios de segurança", tem_questoes: true, aprovado: false, liberado: true },
@@ -55,9 +55,11 @@ function situacao(over: { modulos?: Partial<Situacao["modulos"][number]>[]; fina
       nota_minima_modulo: 70,
       nota_minima_final: 80,
       questoes_final: 20,
+      final_modo: "sorteio",
       espera_final_horas: 24,
       tentativas_final_max: null,
       carga_horaria_h: 6,
+      ...over.requisitos,
     },
     aulas: over.aulas ?? { total: 4, concluidas: 1 },
     modulos: base.map((m, i) => ({ ...m, ...(over.modulos?.[i] ?? {}) })),
@@ -277,6 +279,18 @@ describe("avaliação final", () => {
     const envio = chamadas.find((c) => c.nome === "academy_enviar_final")!;
     expect(envio.args.p_prova_id).toBe(prova);
     expect(envio.args.p_respostas).toHaveLength(4);
+  });
+
+  it("explica ao aluno se a prova é sorteada ou montada pelo instrutor (fase 26)", async () => {
+    const sorteio = sbAvaliacao({ academy_situacao_curso: () => ({ data: situacao({ final: { situacao: "disponivel" } }) }) });
+    const { unmount } = abrir(sorteio.sb);
+    expect(await screen.findByText("20 questões de múltipla escolha sorteadas de um banco")).toBeInTheDocument();
+    unmount();
+    const fixa = sbAvaliacao({
+      academy_situacao_curso: () => ({ data: situacao({ final: { situacao: "disponivel" }, requisitos: { final_modo: "fixa", questoes_final: 12 } }) }),
+    });
+    abrir(fixa.sb);
+    expect(await screen.findByText("12 questões de múltipla escolha escolhidas pelo instrutor, em ordem diferente a cada tentativa")).toBeInTheDocument();
   });
 
   it("retoma a prova aberta com as respostas que estavam no navegador", async () => {
