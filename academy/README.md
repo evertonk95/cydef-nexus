@@ -252,6 +252,14 @@ Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece 
 - **Cópia dos dados** do aluno inclui os materiais baixados e a data.
 - **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
 
+## Banco de questões: publicar em lote e filtro que não se perde (fase 24, migração 0037)
+
+Pedido do Everton (25/11/2026): publicar era uma questão por vez (entrar, marcar, salvar), e ao voltar da questão a lista mostrava tudo de novo, sem o módulo que estava filtrado.
+
+- **Filtros na URL:** "Mostrar" (módulo ou avaliação final) e o novo "Situação" (todas, em rascunho, publicadas) ficam no endereço (`?aba=questoes&mostrar=<módulo>&situacao=rascunho`). O link de cada questão leva os filtros junto, e "Voltar", o atalho do topo e a exclusão voltam para o mesmo recorte.
+- **Em lote:** cada questão tem uma caixa de marcar, e a barra acima da lista tem "Marcar as N". Sem nada marcado, o atalho "Publicar as N em rascunho" publica todas as em rascunho do recorte. Com questões marcadas, aparecem "Publicar N questões" e "Voltar N questões para rascunho". Editar continua sendo uma a uma, na tela da questão.
+- **No banco:** `academy_adm_publicar_questoes(curso, questões, publicar)` publica ou volta para rascunho até 200 questões do curso. Para publicar vale a mesma regra de salvar (2 a 8 alternativas e uma correta); a que não cumpre fica em rascunho e volta em `ignoradas`, e o painel avisa quantas ficaram. Uma linha `questoes_publicadas` ou `questoes_despublicadas` na auditoria por chamada.
+
 ## Quem ensina com a Equipe e vários de uma vez (fase 23, migração 0036)
 
 Pedido do Everton (24/11/2026): o Matheus, instrutor da Equipe, não aparecia para ser escolhido em "Quem ensina" do Fundamentos para SOC, e a lista deixava acrescentar uma pessoa por vez.

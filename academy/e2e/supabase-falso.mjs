@@ -109,6 +109,12 @@ function novoEstado() {
     arquivos: {},
     // Fase 22: materiais que o aluno baixou (o download é o check no módulo).
     baixados: [],
+    // Fase 24: banco de questões do painel. Avaliação final com 2 publicadas; Módulo 1 com 3 em rascunho e 1 publicada.
+    questoesAdm: [[null, true], [null, true], ["m1", false], ["m1", false], ["m1", false], ["m1", true]].map(([modulo_id, publicado], i) => ({
+      id: `qa${i + 1}`, modulo_id, publicado, enunciado: `Questão ${i + 1} ${modulo_id ? "do Módulo 1" : "da avaliação final"}: o que o analista confere primeiro?`,
+      explicacao: "", atualizado_em: "2026-11-25T10:00:00Z", em_uso: false,
+      alternativas: [{ ordem: 1, texto: "O alerta e o contexto", correta: true }, { ordem: 2, texto: "Nada", correta: false }],
+    })),
     // Fase 23: "Quem ensina" do curso no painel. Matheus e Ana são da Equipe e ainda não têm perfil de instrutor.
     quemEnsina: {
       vinculos: CURSO.cursos_instrutores.map((v) => ({ papel: v.papel, ordem: v.ordem, id: v.instrutores.id })),
@@ -879,6 +885,23 @@ http
           }
           return enviar(trilhasAdm());
         }
+        case "/rest/v1/rpc/academy_adm_publicar_questoes": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const alvo = estado.questoesAdm.filter((q) => corpo.p_questoes.includes(q.id));
+          for (const q of alvo) q.publicado = corpo.p_publicar;
+          estado.escritasAdm.push({ fn: "academy_adm_publicar_questoes", ...corpo });
+          return enviar({ alteradas: alvo.length, ignoradas: [], questoes: estado.questoesAdm });
+        }
+        case "/rest/v1/rpc/academy_adm_salvar_questao": {
+          if (!estado.equipe) return enviar({ message: "sem_permissao" }, 400);
+          const q = estado.questoesAdm.find((x) => x.id === corpo.p_id);
+          if (!q) return enviar({ message: "questao_inexistente" }, 400);
+          const d = corpo.p_dados ?? {};
+          Object.assign(q, { enunciado: d.enunciado ?? q.enunciado, explicacao: d.explicacao ?? q.explicacao, publicado: Boolean(d.publicado),
+            alternativas: (d.alternativas ?? []).map((a, i) => ({ ordem: i + 1, texto: a.texto, correta: Boolean(a.correta) })) });
+          estado.escritasAdm.push({ fn: "academy_adm_salvar_questao", ...corpo });
+          return enviar(estado.questoesAdm);
+        }
         case "/rest/v1/rpc/academy_adm_cursos":
         case "/rest/v1/rpc/academy_adm_curso":
         case "/rest/v1/rpc/academy_adm_questoes":
@@ -899,7 +922,7 @@ http
               objetivos: PAGO.objetivos, publico: PAGO.publico, pre_requisitos: PAGO.pre_requisitos,
               modulos: PAGO.modulos.map((m) => ({ id: `p${m.ordem}`, ordem: m.ordem, titulo: m.titulo, resumo: m.resumo, questoes: 0, questoes_publicadas: 0, aulas: [] })) });
           if (fn === "academy_adm_curso") return corpo.p_slug === CURSO.slug ? enviar(cursoAdm()) : enviar({ message: "curso_inexistente" }, 400);
-          if (fn === "academy_adm_questoes") return enviar([]);
+          if (fn === "academy_adm_questoes") return enviar(estado.questoesAdm);
           estado.escritasAdm.push({ fn, ...corpo });
           if (fn === "academy_adm_mover_aula") {
             const m = estado.adm.modulos.find((x) => x.aulas.some((a) => a.id === corpo.p_id));
