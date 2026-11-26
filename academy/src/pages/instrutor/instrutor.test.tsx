@@ -492,3 +492,83 @@ describe("banco de questões: filtros na URL e publicar em lote (fase 24)", () =
     expect(screen.getByRole("link", { name: "Voltar" })).toHaveAttribute("href", destino);
   });
 });
+
+describe("avaliação final montada pelo instrutor (fase 26)", () => {
+  const qf = (id: string, publicado: boolean, enunciado: string): QuestaoAdm => ({
+    id,
+    modulo_id: null,
+    enunciado,
+    explicacao: "",
+    publicado,
+    atualizado_em: "2026-11-26T10:00:00Z",
+    em_uso: false,
+    alternativas: [
+      { ordem: 1, texto: "Certa", correta: true },
+      { ordem: 2, texto: "Errada", correta: false },
+    ],
+  });
+  const banco = [qf("f1", true, "Final um: o que é um SIEM?"), qf("f2", true, "Final dois: o que é um IOC?"), qf("f3", false, "Final três: o que é TLP?")];
+  const comModo = (modo: "sorteio" | "fixa") => {
+    const c = cursoAdm();
+    c.requisitos = { ...c.requisitos!, final_modo: modo };
+    return c;
+  };
+
+  it("no Certificado, escolhe como a prova é montada e esconde as questões sorteadas", async () => {
+    let args: Record<string, unknown> | undefined;
+    const c = comModo("sorteio");
+    abrir(`/instrutor/cursos/${SLUG}?aba=requisitos`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: c,
+      academy_adm_salvar_requisitos: (a) => {
+        args = a;
+        return { data: c };
+      },
+    });
+    const modo = await screen.findByLabelText("Como a prova é montada");
+    expect(screen.getByLabelText("Questões sorteadas")).toBeInTheDocument();
+    await userEvent.selectOptions(modo, "fixa");
+    expect(screen.queryByLabelText("Questões sorteadas")).not.toBeInTheDocument();
+    expect(screen.getByText(/Todo aluno recebe as questões que você escolher/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Salvar regras" }));
+    await waitFor(() => expect((args!.p_dados as Record<string, unknown>).final_modo).toBe("fixa"));
+  });
+
+  it("no banco de questões, mostra a prova montada e põe ou tira questões dela", async () => {
+    const chamadas: Record<string, unknown>[] = [];
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=final`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: comModo("fixa"),
+      academy_adm_questoes: banco,
+      academy_adm_prova_final: { modo: "fixa", questoes: ["f1", "f3"], validas: 1 },
+      academy_adm_definir_prova_final: (a) => {
+        chamadas.push(a);
+        return { data: { modo: "fixa", questoes: ["f1", "f2", "f3"], validas: 2 } };
+      },
+    });
+    expect(await screen.findByText(/A avaliação final é a prova montada: 2 questões escolhidas, 1 publicada\./)).toBeInTheDocument();
+    expect(screen.getAllByText("Na prova")).toHaveLength(2);
+    expect(screen.queryByText(/A avaliação final sorteia/)).not.toBeInTheDocument();
+
+    const barra = screen.getByRole("toolbar", { name: "Ações nas questões marcadas" });
+    await userEvent.click(within(barra).getByLabelText("Marcar as 3"));
+    await userEvent.click(within(barra).getByRole("button", { name: "Pôr 1 questão na prova" }));
+    await waitFor(() => expect(chamadas[0]).toEqual({ p_curso: SLUG, p_questoes: ["f2"], p_incluir: true }));
+
+    await userEvent.click(await screen.findByLabelText(/Marcar questão 1:/));
+    await userEvent.click(within(barra).getByRole("button", { name: "Tirar 1 questão da prova" }));
+    await waitFor(() => expect(chamadas[1]).toEqual({ p_curso: SLUG, p_questoes: ["f1"], p_incluir: false }));
+  });
+
+  it("no sorteio, não aparece nada da prova montada", async () => {
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=final`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: comModo("sorteio"),
+      academy_adm_questoes: banco,
+      academy_adm_prova_final: { modo: "sorteio", questoes: ["f1"], validas: 1 },
+    });
+    expect(await screen.findByRole("link", { name: /Final um/ })).toBeInTheDocument();
+    expect(screen.queryByText("Na prova")).not.toBeInTheDocument();
+    expect(screen.queryByText(/prova montada/)).not.toBeInTheDocument();
+  });
+});

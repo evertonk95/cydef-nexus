@@ -252,6 +252,18 @@ Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece 
 - **Cópia dos dados** do aluno inclui os materiais baixados e a data.
 - **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
 
+## Avaliação final montada pelo instrutor (fase 26, migração 0038)
+
+Pedido do Everton (21/11/2026), definido em 26/11/2026. O padrão continua sendo o sorteio do banco de questões, com rotação por aluno. Em cada curso, o instrutor escolhe como a avaliação final é montada:
+
+- **Sorteio do banco de questões** (padrão): cada aluno recebe questões sorteadas do banco da avaliação final, como antes.
+- **Prova montada pelo instrutor:** todo aluno recebe as mesmas questões, escolhidas pelo instrutor, com a ordem das questões e das alternativas embaralhada a cada tentativa. As questões de módulo continuam sempre sorteadas.
+
+- **Onde se escolhe o modo:** aba Certificado, em "Avaliação final", no campo "Como a prova é montada". No modo montado some o campo "Questões sorteadas".
+- **Onde se escolhem as questões:** aba Questões, filtro "Avaliação final". Marque as questões e use "Pôr N na prova" ou "Tirar N da prova"; as escolhidas mostram "Na prova", e o aviso do topo diz quantas estão escolhidas e quantas valem para o aluno (publicadas).
+- **Para o aluno:** a tela da avaliação diz "N questões de múltipla escolha escolhidas pelo instrutor, em ordem diferente a cada tentativa". A avaliação abre quando há pelo menos uma escolhida publicada; questão despublicada sai da prova sozinha.
+- **No banco:** `cursos_requisitos.final_modo` ('sorteio' ou 'fixa', padrão 'sorteio'); tabela `cursos_prova_final` (fechada, só questões do banco da final do próprio curso, até 100); `academy__prova_fixa` (interna); `academy_situacao_curso`, `academy_iniciar_final` e `academy_adm_salvar_requisitos` redefinidas com o corpo atual mais a mudança; `academy_adm_prova_final` e `academy_adm_definir_prova_final` para o painel, com auditoria `prova_final_incluidas` e `prova_final_retiradas`. Voltar para sorteio não apaga as escolhidas.
+
 ## Ajustes do painel do instrutor (fase 25, sem migração)
 
 Pedido do Everton (25/11/2026), dois ajustes que ficaram para trás:

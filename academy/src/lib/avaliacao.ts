@@ -72,6 +72,8 @@ export interface Situacao {
     nota_minima_modulo: number;
     nota_minima_final: number;
     questoes_final: number;
+    /** 0038: "fixa" quando o instrutor montou a prova; padrão é o sorteio. */
+    final_modo: "sorteio" | "fixa";
     espera_final_horas: number;
     tentativas_final_max: number | null;
     carga_horaria_h: number | null;
@@ -201,6 +203,7 @@ export async function buscarSituacao(sb: SupabaseClient, curso: string): Promise
       nota_minima_modulo: ehNum(r.nota_minima_modulo) ? r.nota_minima_modulo : 70,
       nota_minima_final: ehNum(r.nota_minima_final) ? r.nota_minima_final : 80,
       questoes_final: ehNum(r.questoes_final) ? r.questoes_final : 20,
+      final_modo: r.final_modo === "fixa" ? "fixa" : "sorteio",
       espera_final_horas: ehNum(r.espera_final_horas) ? r.espera_final_horas : 24,
       tentativas_final_max: ehNum(r.tentativas_final_max) ? r.tentativas_final_max : null,
       carga_horaria_h: ehNum(r.carga_horaria_h) ? r.carga_horaria_h : null,
