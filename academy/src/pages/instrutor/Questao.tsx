@@ -9,6 +9,7 @@ import { Esqueleto } from "@/components/ui/Esqueleto";
 import { AreaTexto, ErroFormulario, Marcador, Selecao, Situacao } from "@/components/instrutor/Campos";
 import { cn } from "@/lib/cn";
 import { FalhaCarregamento, NaoEncontrado } from "../Estados";
+import { filtrosQuestoes } from "./filtros-questoes";
 
 const LETRAS = "ABCDEFGH";
 
@@ -48,7 +49,9 @@ interface Alt {
 function Formulario({ curso, questao, moduloInicial }: { curso: CursoAdm; questao: QuestaoAdm | null; moduloInicial: string }) {
   const navegar = useNavigate();
   const aviso = useAvisos();
-  const voltar = `/instrutor/cursos/${curso.slug}?aba=questoes`;
+  const [busca] = useSearchParams();
+  const filtros = filtrosQuestoes(busca);
+  const voltar = `/instrutor/cursos/${curso.slug}?aba=questoes${filtros ? `&${filtros}` : ""}`;
   const [modulo, setModulo] = useState(moduloInicial);
   const [enunciado, setEnunciado] = useState(questao?.enunciado ?? "");
   const [explicacao, setExplicacao] = useState(questao?.explicacao ?? "");
@@ -68,7 +71,7 @@ function Formulario({ curso, questao, moduloInicial }: { curso: CursoAdm; questa
       aviso({ titulo: questao ? "Questão salva" : "Questão criada", tipo: "ok" });
       if (!questao) {
         const criada = lista.reduce<QuestaoAdm | undefined>((u, q) => (!u || q.atualizado_em > u.atualizado_em ? q : u), undefined);
-        navegar(criada ? `/instrutor/cursos/${curso.slug}/questoes/${criada.id}` : voltar, { replace: true });
+        navegar(criada ? `/instrutor/cursos/${curso.slug}/questoes/${criada.id}${filtros ? `?${filtros}` : ""}` : voltar, { replace: true });
       }
     },
   );

@@ -397,3 +397,95 @@ describe("Boletim do SOC", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("O link precisa começar com https://.");
   });
 });
+
+describe("banco de questões: filtros na URL e publicar em lote (fase 24)", () => {
+  const q = (id: string, modulo_id: string | null, publicado: boolean, enunciado: string): QuestaoAdm => ({
+    id,
+    modulo_id,
+    enunciado,
+    explicacao: "",
+    publicado,
+    atualizado_em: "2026-11-25T10:00:00Z",
+    em_uso: false,
+    alternativas: [
+      { ordem: 1, texto: "Certa", correta: true },
+      { ordem: 2, texto: "Errada", correta: false },
+    ],
+  });
+  const banco = [
+    ...questoesAdm,
+    q("r1", "m2", false, "Rascunho um do módulo 2 sobre triagem"),
+    q("r2", "m2", false, "Rascunho dois do módulo 2 sobre triagem"),
+    q("p1", "m2", true, "Publicada do módulo 2 sobre triagem"),
+    q("r3", "m1", false, "Rascunho do módulo 1 que não deve aparecer"),
+  ];
+
+  it("o filtro fica na URL e vai junto para a questão", async () => {
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=m2&situacao=rascunho`, { academy_adm_eu: admin, academy_adm_curso: cursoAdm(), academy_adm_questoes: banco });
+    expect(await screen.findByRole("link", { name: /Rascunho um do módulo 2/ })).toHaveAttribute(
+      "href",
+      `/instrutor/cursos/${SLUG}/questoes/r1?mostrar=m2&situacao=rascunho`,
+    );
+    expect(screen.getByLabelText("Mostrar")).toHaveValue("m2");
+    expect(screen.getByLabelText("Situação")).toHaveValue("rascunho");
+    expect(screen.queryByText(/Publicada do módulo 2/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/não deve aparecer/)).not.toBeInTheDocument();
+  });
+
+  it("publica de uma vez todas as questões em rascunho do recorte", async () => {
+    let args: Record<string, unknown> | undefined;
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=m2`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: cursoAdm(),
+      academy_adm_questoes: banco,
+      academy_adm_publicar_questoes: (a) => {
+        args = a;
+        return { data: { alteradas: 2, ignoradas: [], questoes: banco } };
+      },
+    });
+    await userEvent.click(await screen.findByRole("button", { name: "Publicar as 2 em rascunho" }));
+    await waitFor(() => expect(args).toEqual({ p_curso: SLUG, p_questoes: ["r1", "r2"], p_publicar: true }));
+    expect(await screen.findByText("2 questões publicadas")).toBeInTheDocument();
+  });
+
+  it("marca questões, publica as em rascunho e volta as publicadas para rascunho", async () => {
+    const chamadas: Record<string, unknown>[] = [];
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=m2`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: cursoAdm(),
+      academy_adm_questoes: banco,
+      academy_adm_publicar_questoes: (a) => {
+        chamadas.push(a);
+        return { data: { alteradas: 1, ignoradas: [], questoes: banco } };
+      },
+    });
+    const barra = await screen.findByRole("toolbar", { name: "Ações nas questões marcadas" });
+    await userEvent.click(within(barra).getByLabelText("Marcar as 3"));
+    expect(within(barra).getByText("3 marcadas de 3")).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText(/Marcar questão 1:/));
+    await userEvent.click(within(barra).getByRole("button", { name: "Publicar 1 questão" }));
+    await waitFor(() => expect(chamadas[0]).toEqual({ p_curso: SLUG, p_questoes: ["r2"], p_publicar: true }));
+
+    await userEvent.click(await screen.findByLabelText(/Marcar questão 3:/));
+    await userEvent.click(within(barra).getByRole("button", { name: "Voltar 1 questão para rascunho" }));
+    await waitFor(() => expect(chamadas[1]).toEqual({ p_curso: SLUG, p_questoes: ["p1"], p_publicar: false }));
+  });
+
+  it("avisa quando alguma questão não pôde ser publicada", async () => {
+    abrir(`/instrutor/cursos/${SLUG}?aba=questoes&mostrar=m2`, {
+      academy_adm_eu: admin,
+      academy_adm_curso: cursoAdm(),
+      academy_adm_questoes: banco,
+      academy_adm_publicar_questoes: () => ({ data: { alteradas: 1, ignoradas: ["r2"], questoes: banco } }),
+    });
+    await userEvent.click(await screen.findByRole("button", { name: "Publicar as 2 em rascunho" }));
+    expect(await screen.findByText(/1 questão ficou em rascunho/)).toBeInTheDocument();
+  });
+
+  it("voltar da questão cai no mesmo recorte", async () => {
+    abrir(`/instrutor/cursos/${SLUG}/questoes/q1?mostrar=m1&situacao=publicadas`, { academy_adm_eu: admin, academy_adm_curso: cursoAdm(), academy_adm_questoes: banco });
+    const destino = `/instrutor/cursos/${SLUG}?aba=questoes&mostrar=m1&situacao=publicadas`;
+    expect(await screen.findByRole("link", { name: /Questões de/ })).toHaveAttribute("href", destino);
+    expect(screen.getByRole("link", { name: "Voltar" })).toHaveAttribute("href", destino);
+  });
+});

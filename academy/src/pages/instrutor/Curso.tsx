@@ -28,6 +28,7 @@ import { AbaSobre } from "./Sobre";
 import { AbaMateriais } from "./Materiais";
 import { AbaVitrine } from "./Vitrine";
 import { AbaMissoes } from "./Missoes";
+import { filtrosQuestoes } from "./filtros-questoes";
 
 type Aba = "estrutura" | "sobre" | "questoes" | "missoes" | "materiais" | "requisitos" | "vitrine" | "dados";
 const ABAS: { id: Aba; rotulo: string; admin?: boolean }[] = [
@@ -345,25 +346,83 @@ function NovoModulo({ slug, aoCriar }: { slug: string; aoCriar: () => void }) {
 
 // Questões ------------------------------------------------------------------
 
+type FiltroSituacao = "todas" | "rascunho" | "publicadas";
+
+interface ResultadoLote {
+  alteradas: number;
+  ignoradas: string[];
+  questoes: QuestaoAdm[];
+}
+
 function Questoes({ curso }: { curso: CursoAdm }) {
   const questoes = useQuestoesAdm(curso.slug);
-  const [filtro, setFiltro] = useState("todas");
+  const aviso = useAvisos();
+  const [busca, setBusca] = useSearchParams();
+  const pedido = busca.get("mostrar") ?? "todas";
+  const filtro = pedido === "final" || curso.modulos.some((m) => m.id === pedido) ? pedido : "todas";
+  const situacao: FiltroSituacao = busca.get("situacao") === "rascunho" ? "rascunho" : busca.get("situacao") === "publicadas" ? "publicadas" : "todas";
+  const [marcadas, setMarcadas] = useState<string[]>([]);
   const req = curso.requisitos;
 
+  const filtrar = (mudanca: { mostrar?: string; situacao?: FiltroSituacao }) => {
+    const n = new URLSearchParams(busca);
+    for (const [k, v] of Object.entries(mudanca)) {
+      if (v === "todas") n.delete(k);
+      else n.set(k, v);
+    }
+    setBusca(n, { replace: true });
+    setMarcadas([]);
+  };
+
+  const lote = useAcao(
+    (sb, a: { ids: string[]; publicar: boolean }) =>
+      chamar<ResultadoLote>(sb, "academy_adm_publicar_questoes", { p_curso: curso.slug, p_questoes: a.ids, p_publicar: a.publicar }),
+    (r, a) => {
+      setMarcadas([]);
+      const feitas = r.alteradas;
+      aviso({
+        titulo: a.publicar
+          ? feitas === 1
+            ? "1 questão publicada"
+            : `${feitas} questões publicadas`
+          : feitas === 1
+            ? "1 questão voltou para rascunho"
+            : `${feitas} questões voltaram para rascunho`,
+        texto:
+          r.ignoradas.length > 0
+            ? `${contagem(r.ignoradas.length, "questão ficou", "questões ficaram")} em rascunho porque precisa de 2 a 8 alternativas e uma correta. Abra e corrija.`
+            : undefined,
+        tipo: r.ignoradas.length > 0 ? "info" : "ok",
+      });
+    },
+  );
+
   if (questoes.isError) return <FalhaCarregamento tentar={() => void questoes.refetch()} />;
-  const lista = (questoes.data ?? []).filter((q) => (filtro === "todas" ? true : filtro === "final" ? q.modulo_id === null : q.modulo_id === filtro));
+  const lista = (questoes.data ?? [])
+    .filter((q) => (filtro === "todas" ? true : filtro === "final" ? q.modulo_id === null : q.modulo_id === filtro))
+    .filter((q) => (situacao === "todas" ? true : situacao === "publicadas" ? q.publicado : !q.publicado));
+  const visiveis = new Set(lista.map((q) => q.id));
+  const selecao = marcadas.filter((id) => visiveis.has(id));
+  const rascunhos = lista.filter((q) => !q.publicado);
+  const selRascunho = lista.filter((q) => selecao.includes(q.id) && !q.publicado).map((q) => q.id);
+  const selPublicada = lista.filter((q) => selecao.includes(q.id) && q.publicado).map((q) => q.id);
+  const todasMarcadas = lista.length > 0 && selecao.length === lista.length;
   const nomeDe = (q: QuestaoAdm) => {
     if (!q.modulo_id) return "Avaliação final";
     const m = curso.modulos.find((x) => x.id === q.modulo_id);
     return m ? rotuloModulo(m.ordem, m.titulo) : "";
   };
   const faltamFinal = req ? Math.max(0, req.questoes_final - curso.questoes_final_publicadas) : 0;
+  const ate = filtrosQuestoes(busca);
+  const sufixo = ate ? `?${ate}` : "";
+  const novaQ = new URLSearchParams(ate);
+  if (filtro !== "todas") novaQ.set("modulo", filtro);
 
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end gap-4">
         <div className="w-full max-w-xs">
-          <Selecao rotulo="Mostrar" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
+          <Selecao rotulo="Mostrar" value={filtro} onChange={(e) => filtrar({ mostrar: e.target.value })}>
             <option value="todas">Todas as questões</option>
             <option value="final">Avaliação final</option>
             {curso.modulos.map((m) => (
@@ -373,8 +432,15 @@ function Questoes({ curso }: { curso: CursoAdm }) {
             ))}
           </Selecao>
         </div>
+        <div className="w-44">
+          <Selecao rotulo="Situação" value={situacao} onChange={(e) => filtrar({ situacao: e.target.value as FiltroSituacao })}>
+            <option value="todas">Todas</option>
+            <option value="rascunho">Em rascunho</option>
+            <option value="publicadas">Publicadas</option>
+          </Selecao>
+        </div>
         <Link
-          to={`/instrutor/cursos/${curso.slug}/questoes/nova${filtro !== "todas" ? `?modulo=${filtro}` : ""}`}
+          to={`/instrutor/cursos/${curso.slug}/questoes/nova${novaQ.toString() ? `?${novaQ.toString()}` : ""}`}
           className="ml-auto inline-flex h-11 items-center gap-2 rounded-[10px] bg-orange px-4 font-semibold text-orange-ink transition-colors duration-150 hover:bg-orange-hi"
         >
           <Plus className="size-4" aria-hidden="true" /> Nova questão
@@ -395,24 +461,81 @@ function Questoes({ curso }: { curso: CursoAdm }) {
           ))}
         </div>
       ) : lista.length === 0 ? (
-        <p className="m-0 text-muted">Nenhuma questão aqui ainda.</p>
+        <p className="m-0 text-muted">{situacao === "rascunho" ? "Nenhuma questão em rascunho aqui." : "Nenhuma questão aqui ainda."}</p>
       ) : (
-        <ul className="m-0 flex list-none flex-col gap-3 p-0">
-          {lista.map((q) => (
-            <li key={q.id}>
-              <Link to={`/instrutor/cursos/${curso.slug}/questoes/${q.id}`} className="painel-card group flex flex-wrap items-start gap-x-6 gap-y-2 p-5 hover:border-line-hi">
-                <div className="min-w-0 flex-1 basis-80">
-                  <p className="m-0 mb-1 text-[13px] text-dim">{nomeDe(q)}</p>
-                  <p className="m-0 line-clamp-2 font-medium group-hover:text-orange-hi">{q.enunciado}</p>
-                </div>
-                <div className="flex w-36 flex-col items-end gap-1 text-right">
-                  <Situacao estado={q.publicado ? "publicada" : "rascunho"} />
-                  {q.em_uso && <span className="text-[13px] text-dim">Já respondida</span>}
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <>
+          <div role="toolbar" aria-label="Ações nas questões marcadas" className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-[10px] border border-line px-4 py-3">
+            <label className="inline-flex items-center gap-2 text-sm font-medium">
+              <input
+                type="checkbox"
+                className="size-[18px] accent-ink"
+                checked={todasMarcadas}
+                ref={(el) => {
+                  if (el) el.indeterminate = selecao.length > 0 && !todasMarcadas;
+                }}
+                onChange={(e) => setMarcadas(e.target.checked ? lista.map((q) => q.id) : [])}
+              />
+              {selecao.length > 0 ? `${contagem(selecao.length, "marcada", "marcadas")} de ${lista.length}` : `Marcar as ${lista.length}`}
+            </label>
+            <div className="ml-auto flex flex-wrap gap-2">
+              {selecao.length === 0 ? (
+                rascunhos.length > 0 && (
+                  <Botao
+                    variante="contorno"
+                    className="h-10 px-4 text-sm"
+                    disabled={lote.isPending}
+                    onClick={() => lote.mutate({ ids: rascunhos.map((q) => q.id), publicar: true })}
+                  >
+                    {rascunhos.length === 1 ? "Publicar a questão em rascunho" : `Publicar as ${rascunhos.length} em rascunho`}
+                  </Botao>
+                )
+              ) : (
+                <>
+                  <Botao
+                    variante="contorno"
+                    className="h-10 px-4 text-sm"
+                    disabled={lote.isPending || selRascunho.length === 0}
+                    onClick={() => lote.mutate({ ids: selRascunho, publicar: true })}
+                  >
+                    Publicar {selRascunho.length > 0 ? contagem(selRascunho.length, "questão", "questões") : ""}
+                  </Botao>
+                  <Botao
+                    variante="contorno"
+                    className="h-10 px-4 text-sm"
+                    disabled={lote.isPending || selPublicada.length === 0}
+                    onClick={() => lote.mutate({ ids: selPublicada, publicar: false })}
+                  >
+                    Voltar {selPublicada.length > 0 ? contagem(selPublicada.length, "questão", "questões") : ""} para rascunho
+                  </Botao>
+                </>
+              )}
+            </div>
+          </div>
+          <ErroFormulario erro={lote.error} />
+          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+            {lista.map((q, i) => (
+              <li key={q.id} className="painel-card group flex items-start gap-4 p-5 hover:border-line-hi">
+                <input
+                  type="checkbox"
+                  aria-label={`Marcar questão ${i + 1}: ${q.enunciado.slice(0, 80)}`}
+                  className="mt-1 size-[18px] flex-none accent-ink"
+                  checked={selecao.includes(q.id)}
+                  onChange={(e) => setMarcadas(e.target.checked ? [...selecao, q.id] : selecao.filter((x) => x !== q.id))}
+                />
+                <Link to={`/instrutor/cursos/${curso.slug}/questoes/${q.id}${sufixo}`} className="flex min-w-0 flex-1 flex-wrap items-start gap-x-6 gap-y-2">
+                  <div className="min-w-0 flex-1 basis-72">
+                    <p className="m-0 mb-1 text-[13px] text-dim">{nomeDe(q)}</p>
+                    <p className="m-0 line-clamp-2 font-medium group-hover:text-orange-hi">{q.enunciado}</p>
+                  </div>
+                  <div className="flex flex-col gap-1 sm:w-36 sm:items-end sm:text-right">
+                    <Situacao estado={q.publicado ? "publicada" : "rascunho"} />
+                    {q.em_uso && <span className="text-[13px] text-dim">Já respondida</span>}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
