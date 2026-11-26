@@ -89,7 +89,7 @@ function Item({ m }: { m: MaterialAdm }) {
             {m.modulo_titulo !== null && m.modulo_ordem !== null ? `, ${rotuloModulo(m.modulo_ordem, m.modulo_titulo)}` : ", curso todo"}
           </p>
           <p className="m-0 text-[13px] text-dim">
-            Enviado por {m.enviado_por_mim ? "você" : m.enviado_por_nome} em {data.format(new Date(m.enviado_em))}
+            {m.enviado_por_mim ? "Enviado por você" : m.enviado_por_nome ? `Enviado por ${m.enviado_por_nome}` : "Carga direta"} em {data.format(new Date(m.enviado_em))}
             {m.revisado_por_nome && m.revisado_em ? `. Revisado por ${m.revisado_por_nome} em ${data.format(new Date(m.revisado_em))}` : ""}
           </p>
         </div>

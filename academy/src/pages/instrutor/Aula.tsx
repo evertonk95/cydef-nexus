@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { CheckCircle2, ChevronLeft, ExternalLink } from "lucide-react";
 import { chamar, semAcesso, ErroPainel, estadoAula, escreverDuracao, extrairYoutube, lerDuracao, useAcao, useCursoAdm, type AulaAdm, type CursoAdm } from "@/lib/instrutor";
-import { rotuloModulo, numeroAula } from "@/lib/aula";
+import { rotuloModulo, rotuloModuloCurto, numeroAula, numeroNoModulo } from "@/lib/aula";
 import { contagem } from "@/lib/formato";
 import { useAvisos } from "@/components/ui/avisos-ctx";
 import { Botao } from "@/components/ui/Botao";
@@ -106,7 +106,7 @@ function Formulario({ curso, aula, moduloInicial }: { curso: CursoAdm; aula: Aul
       </Link>
       <div className="mb-8 flex flex-wrap items-center gap-x-6 gap-y-2">
         <h1 className="m-0 font-display text-[clamp(26px,2.6vw,34px)] leading-tight font-semibold tracking-tight">
-          {aula ? `Aula ${numeroAula(aula.numero)}` : "Nova aula"}
+          {aula ? tituloAula(curso, aula) : "Nova aula"}
         </h1>
         {aula && <Situacao estado={estadoAula(aula)} />}
         {aula && aula.alunos_com_progresso > 0 && (
@@ -216,4 +216,11 @@ function ExcluirAula({ aoConfirmar, ocupado }: { aoConfirmar: () => void; ocupad
       Excluir rascunho
     </button>
   );
+}
+
+/** "Módulo 2, aula 01": a mesma numeração que o aluno vê, contada dentro do módulo. */
+function tituloAula(curso: CursoAdm, aula: { id: string; numero: number }): string {
+  const m = curso.modulos.find((x) => x.aulas.some((a) => a.id === aula.id));
+  if (!m) return `Aula ${numeroAula(aula.numero)}`;
+  return `${rotuloModuloCurto(m.ordem, m.titulo)}, aula ${numeroAula(numeroNoModulo(m, aula))}`;
 }

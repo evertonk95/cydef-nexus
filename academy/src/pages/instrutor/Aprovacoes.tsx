@@ -109,7 +109,7 @@ function Revisao({ m }: { m: MaterialAdm }) {
         <div>
           <dt className="text-muted">Enviado por</dt>
           <dd className="m-0">
-            {m.enviado_por_mim ? "Você" : m.enviado_por_nome}, {data.format(new Date(m.enviado_em))}
+            {m.enviado_por_mim ? "Você" : (m.enviado_por_nome ?? "Carga direta")}, {data.format(new Date(m.enviado_em))}
           </dd>
         </div>
         <div className="sm:col-span-2">
