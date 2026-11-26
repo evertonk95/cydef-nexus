@@ -20,8 +20,10 @@ import { windowsBitlockerBypassPostEs } from "./posts.windows-bitlocker-bypass.e
 import { apacheHttp2RcePostEs } from "./posts.apache-http2-rce.es";
 import { noisytcpLinuxPostEs } from "./posts.noisytcp-linux.es";
 import { whatsappAndroid3FalhasPostEs } from "./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.es";
+import { windowsAtualizacaoNovembroNtlmPostEs } from "./posts.windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737.es";
 
 export const blogPostsEs: BlogPost[] = [
+  windowsAtualizacaoNovembroNtlmPostEs,
   whatsappAndroid3FalhasPostEs,
   wordpress715CorrecoesSegurancaPostEs,
   chrome158CorrecoesSegurancaPostEs,

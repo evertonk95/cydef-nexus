@@ -16,6 +16,10 @@ type Loader = () => Promise<BlogPost>;
  */
 const loaders: Record<string, Loader> = {
   // --- PT ---
+  "pt:windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737": () =>
+    import("./posts.windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737").then(
+      (m) => m.windowsAtualizacaoNovembroNtlmPost,
+    ),
   "pt:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
     import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos").then(
       (m) => m.whatsappAndroid3FalhasPost,
@@ -77,6 +81,10 @@ const loaders: Record<string, Loader> = {
     import("./posts.noisytcp-linux").then((m) => m.noisytcpLinuxPost),
 
   // --- EN ---
+  "en:windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737": () =>
+    import("./posts.windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737.en").then(
+      (m) => m.windowsAtualizacaoNovembroNtlmPostEn,
+    ),
   "en:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
     import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.en").then(
       (m) => m.whatsappAndroid3FalhasPostEn,
@@ -141,6 +149,10 @@ const loaders: Record<string, Loader> = {
     ),
 
   // --- ES ---
+  "es:windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737": () =>
+    import("./posts.windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737.es").then(
+      (m) => m.windowsAtualizacaoNovembroNtlmPostEs,
+    ),
   "es:whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos": () =>
     import("./posts.whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos.es").then(
       (m) => m.whatsappAndroid3FalhasPostEs,

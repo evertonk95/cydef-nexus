@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.cydef.com.br/en/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/about/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/academy/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/academy/catalogo/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/academy/gratuito/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/blog/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/about/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/academy/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/academy/catalogo/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/academy/gratuito/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
@@ -31,22 +31,23 @@
   <url><loc>https://www.cydef.com.br/en/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos/</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/windows-active-directory-rce-cve-2026-119948/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/windows-bitlocker-bypass-cve-2026-97015/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/wordpress-7-1-5-correcoes-seguranca/</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://www.cydef.com.br/en/blog/wp2shell-wordpress-admin-web-shell/</loc><lastmod>2026-10-21</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/consulting/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/contact/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/inora/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/labs/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/privacy/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/research/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/en/terms/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/academy/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/academy/catalogo/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/academy/gratuito/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/blog/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/consulting/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/contact/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/inora/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/labs/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/privacy/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/research/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/en/terms/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/academy/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/academy/catalogo/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/academy/gratuito/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
@@ -72,23 +73,24 @@
   <url><loc>https://www.cydef.com.br/es/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos/</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/windows-active-directory-rce-cve-2026-119948/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/windows-bitlocker-bypass-cve-2026-97015/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/wordpress-7-1-5-correcoes-seguranca/</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://www.cydef.com.br/es/blog/wp2shell-wordpress-admin-web-shell/</loc><lastmod>2026-10-21</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/consultoria/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/contacto/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/inora/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/labs/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/nosotros/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/privacidad/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/research/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/es/terminos/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/academy/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/academy/catalogo/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/academy/gratuito/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/blog/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/consultoria/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/contacto/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/inora/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/labs/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/nosotros/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/privacidad/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/research/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/es/terminos/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/academy/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/academy/catalogo/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/academy/gratuito/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/blog/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/analise-de-logs-comportamentos-maliciosos/</loc><lastmod>2026-08-24</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/apache-http-server-2-4-69-vulnerabilidades/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/apache-http-server-mod-http2-rce-cve-2026-119618/</loc><lastmod>2026-11-13</lastmod></url>
@@ -114,22 +116,23 @@
   <url><loc>https://www.cydef.com.br/pt/blog/wazuh-em-movimento/</loc><lastmod>2026-09-04</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos/</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/windows-active-directory-rce-cve-2026-119948/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737/</loc><lastmod>2026-11-26</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/windows-bitlocker-bypass-cve-2026-97015/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/wordpress-7-1-5-correcoes-seguranca/</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://www.cydef.com.br/pt/blog/wp2shell-wordpress-admin-web-shell/</loc><lastmod>2026-10-21</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/consultoria/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/contato/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/blue-team-advanced/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/incident-investigation/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/malware-analysis/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/sc-900-prep/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/security-plus-prep/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/cursos/soc-analyst/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/inora/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/labs/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/privacidade/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/research/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/sobre/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://www.cydef.com.br/pt/termos/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/consultoria/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/contato/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/blue-team-advanced/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/incident-investigation/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/malware-analysis/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/sc-900-prep/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/security-plus-prep/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/cursos/soc-analyst/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/inora/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/labs/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/labs/siem-health-maturity-framework/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/privacidade/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/research/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/sobre/</loc><lastmod>2026-11-26</lastmod></url>
+  <url><loc>https://www.cydef.com.br/pt/termos/</loc><lastmod>2026-11-26</lastmod></url>
 </urlset>
