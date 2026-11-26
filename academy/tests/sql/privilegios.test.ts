@@ -167,6 +167,7 @@ const ESPERADO: Record<string, { anon: boolean; autenticado: boolean; servico: b
   academy_definir_aviso_aula_nova: { anon: false, autenticado: true, servico: true },
   academy_avisos_certificados: { anon: false, autenticado: false, servico: true },
   academy_avisos_aulas: { anon: false, autenticado: false, servico: true },
+  academy_avisos_privacidade: { anon: false, autenticado: false, servico: true },
   academy__texto_opcional: { anon: false, autenticado: false, servico: true },
   academy__perfil: { anon: false, autenticado: false, servico: true },
   academy__salvar_perfil: { anon: false, autenticado: false, servico: true },

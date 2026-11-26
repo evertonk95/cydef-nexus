@@ -14,7 +14,10 @@
  *      para deixar folga no limite do Resend para o link de login. O que
  *      passar do teto sai no dia seguinte. Se o banco ainda não tiver a 0028,
  *      essas duas partes são puladas e o vencimento segue normal.
- *   5. Cada e-mail enviado é registrado; o que falhar sai no dia seguinte.
+ *   5. Fase 27: e-mail de nova versão do Aviso de Privacidade, uma vez por
+ *      conta e por versão, só para a versão vigente que tem resumo cadastrado
+ *      (aviso_privacidade_comunicado), com teto diário. Sem a 0039, é pulado.
+ *   6. Cada e-mail enviado é registrado; o que falhar sai no dia seguinte.
  *      Com o e-mail desligado, nada é registrado.
  *
  * Logs: evento, quantidades e request_id. Nunca e-mail, nome ou token.
@@ -26,8 +29,10 @@ import {
   montarAulasNovas,
   montarAviso,
   montarCertificado,
+  montarPrivacidade,
   type AvisoAulas,
   type AvisoCertificado,
+  type AvisoPrivacidade,
   type AvisoVencimento,
 } from "./email.ts";
 import type { EmailAcademy } from "../_shared/academy-email.ts";
@@ -36,6 +41,8 @@ export const LIMITES_AVISOS = {
   tokenMin: 32,
   /** Teto diário de e-mails de aula nova (o plano gratuito do Resend tem limite diário). */
   aulaNovaPorDia: 40,
+  /** Fase 27: teto diário do aviso de nova versão do Aviso de Privacidade; o resto sai nos dias seguintes. */
+  privacidadePorDia: 40,
   /** Tamanho máximo de cada registro (academy_avisos_registrar aceita até 300). */
   registroPorVez: 300,
 } as const;
@@ -49,6 +56,8 @@ export interface BancoAvisos {
   certificados(): Promise<AvisoCertificado[]>;
   /** Fase 18 (0028): no máximo `limite` e-mails (um por aluno e curso). */
   aulas(limite: number): Promise<AvisoAulas[]>;
+  /** Fase 27 (0039): no máximo `limite` contas que ainda não receberam o aviso da versão vigente. */
+  privacidade(limite: number): Promise<AvisoPrivacidade[]>;
   registrar(itens: Item[]): Promise<number>;
 }
 
@@ -107,17 +116,21 @@ export function createAvisosHandler(deps: AvisosDeps) {
     }
     const certificados = await fonte("certificados", () => deps.banco.certificados());
     const aulas = await fonte("aulas", () => deps.banco.aulas(LIMITES_AVISOS.aulaNovaPorDia));
+    const privacidade = await fonte("privacidade", () => deps.banco.privacidade(LIMITES_AVISOS.privacidadePorDia));
 
-    const fila: { tipo: "vencimento" | "certificado" | "aula"; mail: EmailAcademy | null; itens: Item[] }[] = [
+    const fila: { tipo: "vencimento" | "certificado" | "aula" | "privacidade"; mail: EmailAcademy | null; itens: Item[] }[] = [
       ...avisos.map((a) => ({ tipo: "vencimento" as const, mail: montarAviso(a), itens: [{ chave: a.chave, email: a.email }] })),
       ...certificados.map((c) => ({ tipo: "certificado" as const, mail: montarCertificado(c, academyUrl), itens: [{ chave: c.chave, email: c.email }] })),
       ...aulas
         .slice(0, LIMITES_AVISOS.aulaNovaPorDia)
         .map((g) => ({ tipo: "aula" as const, mail: montarAulasNovas(g, academyUrl), itens: g.aulas.map((x) => ({ chave: x.chave, email: g.email })) })),
+      ...privacidade
+        .slice(0, LIMITES_AVISOS.privacidadePorDia)
+        .map((p) => ({ tipo: "privacidade" as const, mail: montarPrivacidade(p), itens: [{ chave: p.chave, email: p.email }] })),
     ];
 
     const enviados: Item[] = [];
-    const porTipo = { vencimento: 0, certificado: 0, aula: 0 };
+    const porTipo = { vencimento: 0, certificado: 0, aula: 0, privacidade: 0 };
     let falhas = 0;
     for (const f of fila) {
       if (!f.mail) {
@@ -139,10 +152,10 @@ export function createAvisosHandler(deps: AvisosDeps) {
         }
       } catch (err) {
         log({ event: "avisos_registro_falhou", request_id: requestId, razao: err instanceof Error ? err.message.slice(0, 60) : "desconhecido" });
-        return json({ erro: "registro_falhou", enviados: porTipo.vencimento + porTipo.certificado + porTipo.aula }, 500);
+        return json({ erro: "registro_falhou", enviados: porTipo.vencimento + porTipo.certificado + porTipo.aula + porTipo.privacidade }, 500);
       }
     }
-    const total = porTipo.vencimento + porTipo.certificado + porTipo.aula;
+    const total = porTipo.vencimento + porTipo.certificado + porTipo.aula + porTipo.privacidade;
     log({ event: "avisos_enviados", request_id: requestId, recalculados, enviados: total, falhas, por_tipo: porTipo });
     return json({ recalculados, enviados: total, falhas, por_tipo: porTipo, email: "ligado" }, 200);
   };
@@ -174,6 +187,7 @@ export function bancoSupabase(url: string, serviceKey: string, fetchImpl: typeof
     pendentes: () => rpc<AvisoVencimento[]>("academy_avisos_vencimento", {}),
     certificados: () => rpc<AvisoCertificado[]>("academy_avisos_certificados", {}),
     aulas: (limite) => rpc<AvisoAulas[]>("academy_avisos_aulas", { p_limite: limite }),
+    privacidade: (limite) => rpc<AvisoPrivacidade[]>("academy_avisos_privacidade", { p_limite: limite }),
     registrar: (itens) => rpc<number>("academy_avisos_registrar", { p_itens: itens }),
   };
 }
