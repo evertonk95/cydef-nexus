@@ -150,3 +150,52 @@ ${botao(assistir, aulas.length === 1 ? "Assistir à aula" : "Assistir à primeir
 <p ${NOTA}>${sair} <a href="${escaparHtml(conta)}" style="color:#d6d6d6">Minha conta</a></p>`),
   };
 }
+
+// ---------------------------------------------------------------------------
+// Fase 27: nova versão do Aviso de Privacidade (uma vez por conta e por versão)
+// ---------------------------------------------------------------------------
+
+export interface AvisoPrivacidade {
+  chave: string;
+  email: string;
+  nome: string;
+  versao: string;
+  publicado_em: string;
+  /** Endereço estável da versão, relativo ao site: /academy/privacidade/v2026.9 */
+  url: string;
+  /** Uma mudança por linha, como cadastrada em aviso_privacidade_comunicado. */
+  resumo: string;
+}
+
+const VERSAO = /^v[0-9]{4}\.[0-9]{1,3}$/;
+const URL_AVISO = /^\/academy\/privacidade\/v[0-9]{4}\.[0-9]{1,3}$/;
+
+/** null quando a versão ou o endereço não têm o formato esperado, ou não há resumo: nada é enviado. */
+export function montarPrivacidade(a: AvisoPrivacidade, siteUrl = "https://www.cydef.com.br"): EmailAcademy | null {
+  if (!VERSAO.test(a.versao) || !URL_AVISO.test(a.url) || a.chave !== `privacidade:${a.versao}`) return null;
+  const mudancas = a.resumo
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .slice(0, 8)
+    .map((x) => x.slice(0, 400));
+  if (mudancas.length === 0) return null;
+  const s = saudacao(a.nome);
+  const data = dataBr(a.publicado_em);
+  const ler = `${base(siteUrl)}/pt${a.url}/`;
+  const vigor = `A versão em vigor agora é a ${a.versao}${data ? `, de ${data}` : ""}.`;
+  const resto = "O restante continua igual: não recebemos dados de pagamento, não enviamos e-mails de divulgação sem o seu consentimento e você pode pedir acesso, correção ou exclusão dos seus dados a qualquer momento.";
+  const contato = 'Para dúvidas ou pedidos sobre os seus dados, escreva para contato@cydef.com.br com o assunto "LGPD: Solicitação de titular".';
+  return {
+    to: a.email,
+    subject: "Atualizamos o Aviso de Privacidade da CyDef Academy",
+    text: `${s.texto}\n\nAtualizamos o Aviso de Privacidade da CyDef Academy. ${vigor}\n\nO que mudou:\n\n${mudancas.map((m) => `- ${m}`).join("\n\n")}\n\n${resto}\n\nTexto completo: ${ler}\n\n${contato}\n\nCyDef Academy`,
+    html: moldura(`${s.html}
+<p ${P}>Atualizamos o Aviso de Privacidade da CyDef Academy. ${escaparHtml(vigor)}</p>
+<p ${P}>O que mudou:</p>
+<ul style="margin:0 0 16px;padding-left:20px;font-size:15px;line-height:1.7;color:#d6d6d6">${mudancas.map((m) => `<li style="margin-bottom:8px">${escaparHtml(m)}</li>`).join("")}</ul>
+<p ${P}>${escaparHtml(resto)}</p>
+${botao(ler, "Ler o aviso completo")}
+<p ${NOTA}>${escaparHtml(contato)}</p>`),
+  };
+}

@@ -252,6 +252,16 @@ Pedido do Everton (22/11/2026): o material complementar de cada módulo aparece 
 - **Cópia dos dados** do aluno inclui os materiais baixados e a data.
 - **Aviso de Privacidade v2026.9 (0035):** o item 2.3 passa a citar os materiais baixados e a data do primeiro download.
 
+## E-mail de nova versão do Aviso de Privacidade (fase 27, migração 0039)
+
+Pedido do Everton (26/11/2026). O Aviso de Privacidade promete que, "quando houver mudança relevante, publicamos uma nova versão e avisamos por e-mail quem tem conta na Academy", mas não havia como mandar esse aviso com o layout da Academy.
+
+- **Quem envia:** a rotina diária do `academy-avisos`, a mesma dos e-mails de certificado e de aula nova, com o layout da Academy. O e-mail traz a versão em vigor e a data, a lista do que mudou, o botão "Ler o aviso completo" (página da versão no site) e o contato para pedidos de titular.
+- **Para quem:** contas criadas antes da publicação da versão vigente (quem entrou depois já viu a versão nova). Uma vez por conta e por versão, pela chave `privacidade:<versão>` em `academy_avisos_enviados`. Teto de 40 por dia; o resto sai nos dias seguintes.
+- **Trava:** só a versão que tem resumo cadastrado em `aviso_privacidade_comunicado` gera e-mail, uma mudança por linha. Versão nova sem resumo não dispara nada. A 0039 já cadastra o resumo da v2026.9 (itens 2.3 e 2.8).
+- **No banco:** tabela `aviso_privacidade_comunicado` (fechada), `academy_avisos_privacidade(limite)` (só `service_role`) e `academy_avisos_registrar` aceitando a chave nova.
+- **Próximas versões:** ao publicar uma versão nova do aviso, a migração dela cadastra também o resumo, e o e-mail sai sozinho na rodada seguinte.
+
 ## Avaliação final montada pelo instrutor (fase 26, migração 0038)
 
 Pedido do Everton (21/11/2026), definido em 26/11/2026. O padrão continua sendo o sorteio do banco de questões, com rotação por aluno. Em cada curso, o instrutor escolhe como a avaliação final é montada:

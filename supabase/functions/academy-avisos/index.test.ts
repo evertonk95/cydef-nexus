@@ -4,7 +4,7 @@
  */
 import { describe, expect, it, vi } from "vitest";
 import { createAvisosHandler, LIMITES_AVISOS, type AvisosDeps, type BancoAvisos } from "./index.ts";
-import { montarAulasNovas, montarAviso, montarCertificado, type AvisoAulas, type AvisoCertificado, type AvisoVencimento } from "./email.ts";
+import { montarAulasNovas, montarAviso, montarCertificado, montarPrivacidade, type AvisoAulas, type AvisoCertificado, type AvisoPrivacidade, type AvisoVencimento } from "./email.ts";
 
 const TOKEN = "token-do-agendamento-com-32-caracteres-ou-mais";
 
@@ -32,6 +32,7 @@ function deps(over: Partial<AvisosDeps> = {}) {
     pendentes: vi.fn<BancoAvisos["pendentes"]>().mockResolvedValue([plano, membro]),
     certificados: vi.fn<BancoAvisos["certificados"]>().mockResolvedValue([]),
     aulas: vi.fn<BancoAvisos["aulas"]>().mockResolvedValue([]),
+    privacidade: vi.fn<BancoAvisos["privacidade"]>().mockResolvedValue([]),
     registrar: vi.fn<BancoAvisos["registrar"]>().mockResolvedValue(1),
   };
   const carteiro = { enviar: vi.fn().mockResolvedValue(true) };
@@ -59,7 +60,7 @@ describe("academy-avisos", () => {
     carteiro.enviar.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
     const res = await createAvisosHandler(d)(post());
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ recalculados: 3, enviados: 1, falhas: 1, por_tipo: { vencimento: 1, certificado: 0, aula: 0 }, email: "ligado" });
+    expect(await res.json()).toEqual({ recalculados: 3, enviados: 1, falhas: 1, por_tipo: { vencimento: 1, certificado: 0, aula: 0, privacidade: 0 }, email: "ligado" });
     expect(banco.registrar).toHaveBeenCalledWith([{ chave: plano.chave, email: plano.email }]);
     expect(JSON.stringify(logs)).not.toMatch(/@/);
   });
@@ -175,5 +176,53 @@ describe("modelos da fase 18", () => {
     expect(m.html).not.toContain("<img");
     expect(m.html).toContain("&lt;img");
     expect(montarAulasNovas({ ...grupo, aulas: [] }, URL)).toBeNull();
+  });
+});
+
+const priv: AvisoPrivacidade = {
+  chave: "privacidade:v2026.9", email: "bia@exemplo.com", nome: "Bia Souza", versao: "v2026.9", publicado_em: "2026-11-22T10:00:00Z",
+  url: "/academy/privacidade/v2026.9",
+  resumo: "Material complementar: registramos os materiais que você baixou (item 2.3).\nMeu perfil: dados opcionais em Meu perfil (item 2.8).",
+};
+
+describe("academy-avisos: nova versão do Aviso de Privacidade (fase 27)", () => {
+  it("envia o aviso com o layout da Academy, o que mudou e o link da versão, e registra a chave", async () => {
+    const { d, banco, carteiro } = deps();
+    banco.pendentes.mockResolvedValue([]);
+    banco.privacidade.mockResolvedValue([priv, { ...priv, email: "ana@exemplo.com", nome: "Ana" }]);
+    const res = await createAvisosHandler(d)(post());
+    expect(await res.json()).toMatchObject({ enviados: 2, falhas: 0, por_tipo: { privacidade: 2 } });
+    expect(banco.privacidade).toHaveBeenCalledWith(LIMITES_AVISOS.privacidadePorDia);
+    expect(banco.registrar).toHaveBeenCalledWith([
+      { chave: "privacidade:v2026.9", email: "bia@exemplo.com" },
+      { chave: "privacidade:v2026.9", email: "ana@exemplo.com" },
+    ]);
+    const mail = carteiro.enviar.mock.calls[0]![0];
+    expect(mail.subject).toBe("Atualizamos o Aviso de Privacidade da CyDef Academy");
+    expect(mail.html).toContain("CyDef <span style=\"color:#f97316\">Academy</span>");
+    expect(mail.html).toContain('href="https://www.cydef.com.br/pt/academy/privacidade/v2026.9/"');
+    expect(mail.html).toContain("<li style=\"margin-bottom:8px\">Meu perfil: dados opcionais em Meu perfil (item 2.8).</li>");
+    expect(mail.text).toContain("A versão em vigor agora é a v2026.9, de 22/11/2026.");
+    expect(mail.text).toContain("LGPD: Solicitação de titular");
+  });
+
+  it("sem a 0039 no banco, só esta parte é pulada", async () => {
+    const { d, banco, logs } = deps();
+    banco.privacidade.mockRejectedValue(new Error("rpc_academy_avisos_privacidade_404"));
+    const res = await createAvisosHandler(d)(post());
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ por_tipo: { vencimento: 2, privacidade: 0 } });
+    expect(logs.some((l) => l.event === "avisos_fonte_falhou" && l.fonte === "privacidade")).toBe(true);
+  });
+
+  it("não monta e-mail com versão, endereço ou chave fora do formato, nem sem resumo", () => {
+    expect(montarPrivacidade(priv)).not.toBeNull();
+    expect(montarPrivacidade({ ...priv, url: "https://outro.site/x" })).toBeNull();
+    expect(montarPrivacidade({ ...priv, versao: "v2026.9<script>" })).toBeNull();
+    expect(montarPrivacidade({ ...priv, chave: "privacidade:v2026.8" })).toBeNull();
+    expect(montarPrivacidade({ ...priv, resumo: "  \n " })).toBeNull();
+    const m = montarPrivacidade({ ...priv, nome: "<b>Bia</b>", resumo: "Mudança com <img src=x> no texto" })!;
+    expect(m.html).not.toContain("<img");
+    expect(m.html).toContain("&lt;img src=x&gt;");
   });
 });
