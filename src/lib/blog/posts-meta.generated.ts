@@ -6,6 +6,17 @@ import type { BlogPostMeta } from "./posts";
 
 export const blogPostsEnMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737",
+    "title": "Windows: November 2026 update may cause NTLM authentication failures in third-party apps and devices",
+    "category": "Threat Intelligence",
+    "excerpt": "After the Windows security updates of November 10, 2026, which include the NTLM signing improvements, some third-party applications and devices may fail to authenticate over NTLM. The issue affects authentication proxies, SSO and application wrapping solutions that send an empty or incomplete TargetInfo in the challenge, and does not affect Kerberos. Microsoft documented the problem in bulletin KB5135557, tied to CVE-2026-118737.",
+    "date": "November 26, 2026",
+    "dateISO": "2026-11-26",
+    "readTime": "6 min",
+    "image": "/assets/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737-capa.webp",
+    "author": "CyDef Team"
+  },
+  {
     "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
     "title": "WhatsApp fixes three Android flaws, including IP exposure and local file deletion",
     "category": "Threat Intelligence",
@@ -317,6 +328,17 @@ export const blogPostsEnMeta: BlogPostMeta[] = [
 
 export const blogPostsPtMeta: BlogPostMeta[] = [
   {
+    "slug": "windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737",
+    "title": "Windows: atualização de novembro de 2026 pode causar falhas de autenticação NTLM em aplicativos e dispositivos de terceiros",
+    "category": "Inteligência de Ameaças",
+    "excerpt": "Após as atualizações de segurança de 10 de novembro de 2026 do Windows, que incluem as melhorias de assinatura NTLM, alguns aplicativos e dispositivos de terceiros podem falhar ao autenticar por NTLM. O problema afeta soluções de proxy de autenticação, SSO e empacotamento de aplicativos que enviam TargetInfo vazio ou incompleto no desafio, e não afeta Kerberos. A Microsoft documentou o problema no boletim KB5135557, ligado à CVE-2026-118737.",
+    "date": "26 de Novembro, 2026",
+    "dateISO": "2026-11-26",
+    "readTime": "6 min",
+    "image": "/assets/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737-capa.webp",
+    "author": "Equipe CyDef"
+  },
+  {
     "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
     "title": "WhatsApp corrige três falhas no Android, incluindo exposição de IP e exclusão de arquivos locais",
     "category": "Inteligência de Ameaças",
@@ -627,6 +649,17 @@ export const blogPostsPtMeta: BlogPostMeta[] = [
 ];
 
 export const blogPostsEsMeta: BlogPostMeta[] = [
+  {
+    "slug": "windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737",
+    "title": "Windows: la actualización de noviembre de 2026 puede causar fallos de autenticación NTLM en aplicaciones y dispositivos de terceros",
+    "category": "Inteligencia de Amenazas",
+    "excerpt": "Tras las actualizaciones de seguridad de Windows del 10 de noviembre de 2026, que incluyen las mejoras de firma NTLM, algunas aplicaciones y dispositivos de terceros pueden fallar al autenticarse por NTLM. El problema afecta a soluciones de proxy de autenticación, SSO y empaquetado de aplicaciones que envían un TargetInfo vacío o incompleto en el desafío, y no afecta a Kerberos. Microsoft documentó el problema en el boletín KB5135557, vinculado a CVE-2026-118737.",
+    "date": "26 de noviembre de 2026",
+    "dateISO": "2026-11-26",
+    "readTime": "6 min",
+    "image": "/assets/blog/windows-atualizacao-novembro-ntlm-falhas-autenticacao-cve-2026-118737-capa.webp",
+    "author": "Equipo CyDef"
+  },
   {
     "slug": "whatsapp-android-3-falhas-exposicao-ip-exclusao-arquivos",
     "title": "WhatsApp corrige tres fallas en Android, incluida la exposicion de IP y la eliminacion de archivos locales",
