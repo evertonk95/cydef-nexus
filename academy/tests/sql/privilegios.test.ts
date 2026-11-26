@@ -90,6 +90,8 @@ const ESPERADO: Record<string, { anon: boolean; autenticado: boolean; servico: b
   academy_adm_definir_aprovador: { anon: false, autenticado: true, servico: true },
   academy_materiais_curso: { anon: false, autenticado: true, servico: true },
   academy_registrar_material: { anon: false, autenticado: true, servico: true },
+  academy_adm_acrescentar_instrutores: { anon: false, autenticado: true, servico: true },
+  academy__nome_da_conta: { anon: false, autenticado: false, servico: true },
   academy__material_pendente: { anon: false, autenticado: false, servico: true },
   academy__situacao_vitrine: { anon: false, autenticado: false, servico: true },
   academy__carga_horaria: { anon: false, autenticado: false, servico: true },

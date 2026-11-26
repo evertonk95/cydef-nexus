@@ -69,6 +69,7 @@ const instrutores: InstrutoresDoCurso = {
     { papel: "convidado", ordem: 2, instrutor: perfil("p2", "Ana Convidada", { da_equipe: false }) },
   ],
   disponiveis: [perfil("p3", "Everton Nascimento", { eu: true })],
+  equipe_sem_perfil: [{ id: "u9", nome: "Matheus Inacio", eu: false }],
 };
 
 describe("Sobre o curso, para o aluno", () => {
@@ -147,7 +148,7 @@ describe("aba Sobre o curso no painel", () => {
       academy_adm_eu: admin,
       academy_adm_curso: cursoAdm(),
       academy_adm_instrutores: instrutores,
-      academy_adm_vincular_instrutor: (a) => {
+      academy_adm_acrescentar_instrutores: (a) => {
         vinculo = a;
         return { data: instrutores };
       },
@@ -162,9 +163,15 @@ describe("aba Sobre o curso no painel", () => {
     expect(within(quem).queryByRole("button", { name: "Editar perfil de Matheus Lima" })).not.toBeInTheDocument();
     expect(within(quem).getByRole("button", { name: "Editar perfil de Ana Convidada" })).toBeInTheDocument();
 
-    await userEvent.selectOptions(within(quem).getByLabelText("Acrescentar ao curso"), "p3");
-    await userEvent.click(within(quem).getByRole("button", { name: "Acrescentar" }));
-    await waitFor(() => expect(vinculo).toEqual({ p_curso: SLUG, p_instrutor: "p3", p_papel: "instrutor" }));
+    // Quem é da Equipe sem perfil de instrutor também aparece, e dá para marcar vários de uma vez.
+    const lista = within(quem).getByRole("group", { name: "Acrescentar ao curso" });
+    expect(within(lista).getByText(/ainda sem perfil de instrutor/)).toBeInTheDocument();
+    expect(within(quem).getByRole("button", { name: "Acrescentar" })).toBeDisabled();
+    await userEvent.click(within(lista).getByLabelText("Everton Nascimento (você)"));
+    await userEvent.click(within(lista).getByLabelText("Matheus Inacio"));
+    await userEvent.selectOptions(within(quem).getByLabelText("Papel"), "convidado");
+    await userEvent.click(within(quem).getByRole("button", { name: "Acrescentar 2 pessoas" }));
+    await waitFor(() => expect(vinculo).toEqual({ p_curso: SLUG, p_instrutores: ["p3"], p_pessoas: ["u9"], p_papel: "convidado" }));
 
     await userEvent.click(within(quem).getByRole("button", { name: /Convidar alguém de fora da equipe/ }));
     await userEvent.type(within(quem).getByLabelText("Nome público"), "Rayllan");

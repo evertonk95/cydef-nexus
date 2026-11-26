@@ -121,6 +121,8 @@ export interface VinculoInstrutor {
 export interface InstrutoresDoCurso {
   do_curso: VinculoInstrutor[];
   disponiveis: (PerfilInstrutor & { id: string })[];
+  /** Quem está na Equipe e ainda não tem cartão de instrutor (fase 23). */
+  equipe_sem_perfil?: { id: string; nome: string; eu: boolean }[];
 }
 
 export interface AlternativaAdm {
